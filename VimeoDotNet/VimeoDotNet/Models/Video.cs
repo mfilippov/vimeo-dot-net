@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using VimeoDotNet.Enums;
 using VimeoDotNet.Helpers;
 
@@ -39,6 +40,50 @@ namespace VimeoDotNet.Models
         {
             get { return ModelHelpers.GetEnumValue<VideoStatusEnum>(status); }
             set { status = ModelHelpers.GetEnumString(value); }
+        }
+
+        public string MobileVideoLink
+        {
+            get { return GetFileQualityUrl(FileQualityEnum.Mobile, false); }
+        }
+        public string MobileVideoSecureLink
+        {
+            get { return GetFileQualityUrl(FileQualityEnum.Mobile, true); }
+        }
+
+        public string StandardVideoLink
+        {
+            get { return GetFileQualityUrl(FileQualityEnum.Standard, false); }
+        }
+        public string StandardVideoSecureLink
+        {
+            get { return GetFileQualityUrl(FileQualityEnum.Standard, true); }
+        }
+
+        public string HighDefinitionVideoLink
+        {
+            get { return GetFileQualityUrl(FileQualityEnum.HighDefinition, false); }
+        }
+        public string HighDefinitionVideoSecureLink
+        {
+            get { return GetFileQualityUrl(FileQualityEnum.HighDefinition, true); }
+        }
+
+        public string StreamingVideoLink
+        {
+            get { return GetFileQualityUrl(FileQualityEnum.Streaming, false); }
+        }
+        public string StreamingVideoSecureLink
+        {
+            get { return GetFileQualityUrl(FileQualityEnum.Streaming, true); }
+        }
+
+        private string GetFileQualityUrl(FileQualityEnum quality, bool secureLink)
+        {
+            if (files == null || files.Count == 0) { return null; }
+            var match = files.FirstOrDefault(f => f.FileQuality == quality);
+            if (match == null) { return null; }
+            return secureLink ? match.link_secure : match.link;
         }
     }
 }
