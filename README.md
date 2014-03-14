@@ -22,7 +22,7 @@ TODO
 
 REFERENCE
 ---------
-[API 3 Guide](https://developer.vimeo.com/api/start)
+[API 3 Guide](https://developer.vimeo.com/api/start)  
 [API 3 Endpoints](https://developer.vimeo.com/api/endpoints)
 
 Pushing to NuGet:  
