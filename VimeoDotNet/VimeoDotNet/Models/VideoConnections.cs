@@ -2,6 +2,7 @@
 
 namespace VimeoDotNet.Models
 {
+    [Serializable]
     public class VideoConnections
     {
         public string comments { get; set; }

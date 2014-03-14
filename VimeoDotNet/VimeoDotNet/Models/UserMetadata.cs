@@ -2,6 +2,7 @@
 
 namespace VimeoDotNet.Models
 {
+    [Serializable]
     public class UserMetadata
     {
         public UserConnections connections { get; set; }

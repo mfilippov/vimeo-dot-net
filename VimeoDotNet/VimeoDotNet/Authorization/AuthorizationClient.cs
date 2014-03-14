@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VimeoDotNet.Constants;
 using VimeoDotNet.Models;
+using VimeoDotNet.Net;
 
 namespace VimeoDotNet.Authorization
 {
@@ -29,7 +30,8 @@ namespace VimeoDotNet.Authorization
 
         public string GetAuthorizationEndpoint(string redirectUri, IEnumerable<string> scope, string state)
         {
-            if (string.IsNullOrWhiteSpace(ClientId)) {
+            if (string.IsNullOrWhiteSpace(ClientId))
+            {
                 throw new InvalidOperationException("Authorization.ClientId should be a non-null, non-whitespace string");
             }
             if (string.IsNullOrWhiteSpace(redirectUri))
@@ -43,9 +45,7 @@ namespace VimeoDotNet.Authorization
 
         public AccessTokenResponse GetAccessToken(string authorizationCode, string redirectUri)
         {
-            var request = BuildAccessTokenRequest(authorizationCode, redirectUri);
-            var result = request.ExecuteRequest<AccessTokenResponse>();
-            return result.Data;
+            return GetAccessTokenAsync(authorizationCode, redirectUri).Result;
         }
 
         public async Task<AccessTokenResponse> GetAccessTokenAsync(string authorizationCode, string redirectUri)

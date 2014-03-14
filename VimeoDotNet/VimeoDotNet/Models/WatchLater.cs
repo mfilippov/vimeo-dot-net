@@ -2,6 +2,7 @@
 
 namespace VimeoDotNet.Models
 {
+    [Serializable]
     public class WatchLater
     {
         public bool added { get; set; }

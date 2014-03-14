@@ -2,6 +2,7 @@
 
 namespace VimeoDotNet.Models
 {
+    [Serializable]
     public class UploadStatus
     {
         public string state { get; set; }

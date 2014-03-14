@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace VimeoDotNet.Models
 {
+    [Serializable]
     public class Paginated<T> where T : class
     {
         public List<T> data { get; set; }

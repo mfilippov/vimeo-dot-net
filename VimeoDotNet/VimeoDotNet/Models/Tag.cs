@@ -2,6 +2,7 @@
 
 namespace VimeoDotNet.Models
 {
+    [Serializable]
     public class Tag
     {
         public string name { get; set; }

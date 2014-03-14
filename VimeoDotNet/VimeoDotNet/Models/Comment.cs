@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace VimeoDotNet.Models
 {
+    [Serializable]
     public class Comment
     {
         public string uri { get; set; }

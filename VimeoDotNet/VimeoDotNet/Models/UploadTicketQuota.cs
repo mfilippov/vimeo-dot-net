@@ -2,6 +2,7 @@
 
 namespace VimeoDotNet.Models
 {
+    [Serializable]
     public class UploadTicketQuota
     {
         public bool sd { get; set; }

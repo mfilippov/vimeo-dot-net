@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using VimeoDotNet.Constants;
 
-namespace VimeoDotNet
+namespace VimeoDotNet.Net
 {
     public class ApiRequest
     {
@@ -14,6 +14,8 @@ namespace VimeoDotNet
         private readonly Dictionary<string, string> _urlSegments = new Dictionary<string, string>();
         private readonly Dictionary<string, string> _queryString = new Dictionary<string, string>();
         private readonly Dictionary<string, string> _hashValues = new Dictionary<string, string>();
+
+        private string _path;
 
         #endregion
 
@@ -28,10 +30,29 @@ namespace VimeoDotNet
         public int Port { get; set; }
         public IDictionary<string, string> Headers { get { return _headers; } }
         public Method Method { get; set; }
-        public string Path { get; set; }
+        public string Path {
+            get { return _path; }
+            set
+            {
+                Uri parsed;
+                if (Uri.TryCreate(value, UriKind.Absolute, out parsed))
+                {
+                    Protocol = parsed.Scheme;
+                    Host = parsed.Host;
+                    Path = parsed.PathAndQuery;
+                    Port = parsed.Port;
+                }
+                else
+                {
+                    _path = value;
+                }
+            }
+        }
         public object Body { get; set; }
         public IDictionary<string, string> Query { get { return _queryString; } }
         public IDictionary<string, string> UrlSegments { get { return _urlSegments; } }
+        public byte[] BinaryContent { get; set; }
+        public bool ExcludeAuthorizationHeader { get; set; }
 
         #endregion
 
@@ -52,7 +73,8 @@ namespace VimeoDotNet
             Port = Request.DefaultHttpsPort;
             Method = Request.DefaultMethod;
             ResponseType = ResponseTypes.Wildcard;
-            ApiVersion = ApiVersions.v2_5;
+            ApiVersion = ApiVersions.v3_0;
+            ExcludeAuthorizationHeader = false;
         }
 
         public ApiRequest(string clientId, string clientSecret)
@@ -140,15 +162,27 @@ namespace VimeoDotNet
         private RestRequest PrepareRequest() {
             SetDefaults();
             var client = GetClient();
-            client.Authenticator = GetAuthenticator();
+            if (!ExcludeAuthorizationHeader)
+            {
+                client.Authenticator = GetAuthenticator();
+            }
 
             var request = new RestRequest(Path, Method);
             SetHeaders(request);
             SetUrlSegments(request);
             SetQueryParams(request);
             SetBody(request);
+            SetJsonResponse(request);
 
             return request;
+        }
+
+        private void SetJsonResponse(IRestRequest request) {
+            request.OnBeforeDeserialization += (IRestResponse response) =>
+            {
+                // Switch response content type to allow deserializer to work properly.
+                response.ContentType = "application/json";
+            };
         }
 
         private IAuthenticator GetAuthenticator() {
@@ -191,11 +225,11 @@ namespace VimeoDotNet
         }
 
         private void SetHeaders(RestRequest request) {
-            if (Method == Method.POST || Method == Method.PATCH || Method == Method.PUT) {
-                Headers["Content-Type"] = "application/x-www-form-urlencoded";
+            if (!Headers.ContainsKey(Request.HeaderContentType) && (Method == Method.POST || Method == Method.PATCH || Method == Method.PUT)) {
+                Headers[Request.HeaderContentType] = "application/x-www-form-urlencoded";
             }
-            if (!Headers.ContainsKey("Accepts")) {
-                Headers.Add("Accepts", BuildAcceptsHeader());
+            if (!Headers.ContainsKey(Request.HeaderAccepts)) {
+                Headers.Add(Request.HeaderAccepts, BuildAcceptsHeader());
             }
             foreach(var header in Headers) {
                 request.AddHeader(header.Key, header.Value);
@@ -210,9 +244,15 @@ namespace VimeoDotNet
 
         private void SetBody(RestRequest request)
         {
-            if (Body == null) { return; }
-            request.AddBody(Body);
-            request.RequestFormat = DataFormat.Json;
+            if (Body != null)
+            {
+                request.AddBody(Body);
+                request.RequestFormat = DataFormat.Json;
+            }
+            else if (BinaryContent != null)
+            {
+                request.AddParameter("", BinaryContent, ParameterType.RequestBody);
+            }
         }
 
         private void SetDefaults()
@@ -220,7 +260,7 @@ namespace VimeoDotNet
             Protocol = string.IsNullOrWhiteSpace(Protocol) ? Request.DefaultProtocol : Protocol;
             Host = string.IsNullOrWhiteSpace(Host) ? Request.DefaultHostName : Host;
             ResponseType = string.IsNullOrWhiteSpace(ResponseType) ? ResponseTypes.Wildcard : ResponseType;
-            ApiVersion = string.IsNullOrWhiteSpace(ApiVersion) ? ApiVersions.v2_5 : ApiVersion;
+            ApiVersion = string.IsNullOrWhiteSpace(ApiVersion) ? ApiVersions.v3_0 : ApiVersion;
 
             Protocol = Protocol.ToLower();
             Host = Host.ToLower();
@@ -234,7 +274,7 @@ namespace VimeoDotNet
 
         private int GetDefaultPort(string protocol)
         {
-            if (Protocol == "https")
+            if (Protocol == Request.ProtocolHttps)
             {
                 return Request.DefaultHttpsPort;
             }
@@ -247,9 +287,9 @@ namespace VimeoDotNet
 
             if (Host.EndsWith("/"))
             {
-               
-            url += Host; Host = Host.Substring(0, Host.Length - 1);
+                Host = Host.Substring(0, Host.Length - 1);
             }
+            url += Host;
 
             if (Port != GetDefaultPort(Protocol))
             {
@@ -260,6 +300,5 @@ namespace VimeoDotNet
         }
 
         #endregion
-
     }
 }

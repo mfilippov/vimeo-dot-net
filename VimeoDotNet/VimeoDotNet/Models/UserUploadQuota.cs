@@ -2,6 +2,7 @@
 
 namespace VimeoDotNet.Models
 {
+    [Serializable]
     public class UserUploadQuota
     {
         public Space space { get; set; }

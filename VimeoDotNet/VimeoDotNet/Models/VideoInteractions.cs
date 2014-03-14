@@ -2,6 +2,7 @@
 
 namespace VimeoDotNet.Models
 {
+    [Serializable]
     public class VideoInteractions
     {
         public Like like { get; set; }

@@ -32,6 +32,7 @@ namespace VimeoDotNet.Constants
         public const string GroupUsers = "/groups/{groupId}/users";
 
         public const string UploadTicket = "/me/videos";
+        public const string UploadTicketReplace = "/me/videos/{clipId}";
         public const string UploadTicketStatus = "/uploadtickets/{ticketId}";
 
         public const string Users = "/users";
@@ -74,5 +75,9 @@ namespace VimeoDotNet.Constants
         public const string VideoAllowedDomain = "/videos/{clipId}/privacy/domains/{domain}";
         public const string VideoRelatedVideos = "/videos/{clipId}/related";
 
+        public static string GetCurrentUserEndpoint(string endpoint)
+        {
+            return endpoint.Replace("users/{userId}", "me");
+        }
     }
 }
