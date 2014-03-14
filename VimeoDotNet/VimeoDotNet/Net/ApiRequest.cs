@@ -180,6 +180,7 @@ namespace VimeoDotNet.Net
 
         protected void SetJsonResponse(IRestRequest request)
         {
+            request.DateFormat = "yyyy-MM-ddTHH:mm:sszzz";
             request.OnBeforeDeserialization += (IRestResponse response) =>
             {
                 // Switch response content type to allow deserializer to work properly.
