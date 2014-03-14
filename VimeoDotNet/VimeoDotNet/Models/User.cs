@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using VimeoDotNet.Enums;
 using VimeoDotNet.Helpers;
 
 namespace VimeoDotNet.Models
@@ -25,5 +26,11 @@ namespace VimeoDotNet.Models
         public UserStats stats { get; set; }
         public UserMetadata metadata { get; set; }
         public UserUploadQuota upload_quota { get; set; }
+
+        public AccountTypeEnum AccountType
+        {
+            get { return ModelHelpers.GetEnumValue<AccountTypeEnum>(account); }
+            set { account = ModelHelpers.GetEnumString(value); }
+        }
     }
 }

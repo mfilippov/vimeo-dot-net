@@ -5,7 +5,7 @@ namespace VimeoDotNet.Models
     [Serializable]
     public class UserQuota
     {
-        public int hd { get; set; }
-        public int sd { get; set; }
+        public bool hd { get; set; }
+        public bool sd { get; set; }
     }
 }

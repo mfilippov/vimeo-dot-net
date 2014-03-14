@@ -15,14 +15,13 @@ Features:
  - Video retrieval
  - Resumable video file upload</description>
         <summary />
-        <releaseNotes>v0.6.1 Initial Release</releaseNotes>
+        <releaseNotes>v0.6.2 Added factories and interfaces for IOC use.</releaseNotes>
         <copyright>Copyright © 2014, Stephen Commisso</copyright>
         <language>en-US</language>
         <tags>vimeo, async</tags>
         <dependencies>
             <group targetFramework=".NETFramework4.5">
                 <dependency id="RestSharp" version="104.4.0" />
-                <dependency id="Newtonsoft.Json" version="6.0.1" />
             </group>
         </dependencies>
     </metadata>

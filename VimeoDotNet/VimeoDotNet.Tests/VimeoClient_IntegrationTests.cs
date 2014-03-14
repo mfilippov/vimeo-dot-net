@@ -36,6 +36,7 @@ namespace VimeoDotNet.Tests
             // arrange
             long length;
             IUploadRequest completedRequest;
+            Video video;
             using (var file = new BinaryContent(GetFullPath(TESTFILEPATH)))
             {
                 length = file.Data.Length;
@@ -52,6 +53,7 @@ namespace VimeoDotNet.Tests
             Assert.AreEqual(length, completedRequest.BytesWritten);
             Assert.IsNotNull(completedRequest.ClipUri);
             Assert.IsTrue(completedRequest.ClipId > 0);
+
         }
 
         [TestMethod]
@@ -78,6 +80,20 @@ namespace VimeoDotNet.Tests
 
             // assert
             Assert.IsNotNull(videos);
+        }
+
+        [TestMethod]
+        public void Integration_VimeoClient_GetAccountVideo_RetrievesVideo()
+        {
+            // arrange
+            long clipId = 89133196; // Your video ID here
+            var client = CreateAuthenticatedClient();
+
+            // act
+            var video = client.GetAccountVideo(clipId);
+
+            // assert
+            Assert.IsNotNull(video);
         }
 
         private VimeoClient CreateUnauthenticatedClient()

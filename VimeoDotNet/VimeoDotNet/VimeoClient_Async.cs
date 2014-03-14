@@ -155,7 +155,7 @@ namespace VimeoDotNet
         public async Task<Paginated<Video>> GetAccountVideosAsync()
         {
             try {
-                var request = GenerateVideosRequest(null);
+                var request = GenerateVideosRequest();
                 var response = await request.ExecuteRequestAsync<Paginated<Video>>();
                 CheckStatusCodeError(response, "Error retrieving account videos.");
 
@@ -168,10 +168,27 @@ namespace VimeoDotNet
             }
         }
 
-        public async Task<Paginated<Video>> GetUserVideosAsync(string userId)
+        public async Task<Video> GetAccountVideoAsync(long clipId)
+        {
+            try
+            {
+                var request = GenerateVideosRequest(clipId: clipId);
+                var response = await request.ExecuteRequestAsync<Video>();
+                CheckStatusCodeError(response, "Error retrieving account video.");
+
+                return response.Data;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException) { throw; }
+                throw new VimeoApiException("Error retrieving account video.", ex);
+            }
+        }
+
+        public async Task<Paginated<Video>> GetUserVideosAsync(long userId)
         {
             try {
-                var request = GenerateVideosRequest(userId);
+                var request = GenerateVideosRequest(userId: userId);
                 var response = await request.ExecuteRequestAsync<Paginated<Video>>();
                 CheckStatusCodeError(response, "Error retrieving user videos.");
 
@@ -184,19 +201,40 @@ namespace VimeoDotNet
             }
         }
 
-        private IApiRequest GenerateVideosRequest(string userId)
+        public async Task<Video> GetUserVideoAsync(long userId, long clipId)
+        {
+            try
+            {
+                var request = GenerateVideosRequest(userId: userId, clipId: clipId);
+                var response = await request.ExecuteRequestAsync<Video>();
+                CheckStatusCodeError(response, "Error retrieving user video.");
+
+                return response.Data;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException) { throw; }
+                throw new VimeoApiException("Error retrieving user video.", ex);
+            }
+        }
+
+        private IApiRequest GenerateVideosRequest(long? userId = null, long? clipId = null)
         {
             ThrowIfUnauthorized();
 
             var request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = Method.GET;
-            request.Path = Endpoints.UserVideos;
+            request.Path = clipId.HasValue ? Endpoints.UserVideo : Endpoints.UserVideos;
 
-            if (userId != null) {
-                request.UrlSegments.Add("userId", userId);
+            if (userId.HasValue) {
+                request.UrlSegments.Add("userId", userId.ToString());
             }
             else {
                 request.Path = Endpoints.GetCurrentUserEndpoint(request.Path);
+            }
+            if (clipId.HasValue)
+            {
+                request.UrlSegments.Add("clipId", clipId.ToString());
             }
 
             return request;

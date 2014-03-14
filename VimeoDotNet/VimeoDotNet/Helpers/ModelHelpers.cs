@@ -19,5 +19,44 @@ namespace VimeoDotNet.Helpers
             }
             return null;
         }
+
+        public static T GetEnumValue<T>(string value, IDictionary<string, string> mappings = null) where T : struct
+        {
+            T enumVal;
+            if (!Enum.TryParse<T>(FindKeyMapping(value, mappings), true, out enumVal))
+            {
+                if (!Enum.TryParse<T>("Unknown", true, out enumVal))
+                {
+                    return default(T);
+                }
+            }
+            return enumVal;
+        }
+
+        public static string GetEnumString(Enum value, IDictionary<string, string> mappings = null)
+        {
+            string sVal = FindValueMapping(value.ToString(), mappings);
+            if (string.Compare(sVal, "Unknown", true) == 0) { return null; }
+            return sVal;
+        }
+
+        private static string FindKeyMapping(string key, IDictionary<string, string> mappings)
+        {
+            if (key == null || mappings == null) { return key; }
+            var found = mappings.Keys.FirstOrDefault(k => string.Compare(k, key, true) == 0);
+            if (found == null) {
+                if (!mappings.ContainsKey(key)) { return key; }
+                return mappings[key];
+            }
+            return mappings[found];
+        }
+
+        private static string FindValueMapping(string value, IDictionary<string, string> mappings)
+        {
+            if (value == null || mappings == null) { return value; }
+            var found = mappings.Keys.FirstOrDefault(k => string.Compare(mappings[k], value, true) == 0);
+            if (found == null) { return value; }
+            return found;
+        }
     }
 }

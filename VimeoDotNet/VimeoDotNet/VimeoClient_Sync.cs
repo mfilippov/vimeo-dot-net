@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.ExceptionServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using VimeoDotNet.Authorization;
@@ -30,7 +31,15 @@ namespace VimeoDotNet
 
         public User GetAccountInformation()
         {
-            return GetAccountInformationAsync().Result;
+            try
+            {
+                return GetAccountInformationAsync().Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
         }
 
         #endregion
@@ -39,12 +48,54 @@ namespace VimeoDotNet
 
         public Paginated<Video> GetAccountVideos()
         {
-            return GetAccountVideosAsync().Result;
+            try
+            {
+                return GetAccountVideosAsync().Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
         }
 
-        public Paginated<Video> GetUserVideos(string userId)
+        public Video GetAccountVideo(long clipId)
         {
-            return GetUserVideosAsync(userId).Result;
+            try
+            {
+                return GetAccountVideoAsync(clipId).Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
+        }
+
+        public Paginated<Video> GetUserVideos(long userId)
+        {
+            try
+            {
+                return GetUserVideosAsync(userId).Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
+        }
+
+        public Video GetUserVideo(long userId, long clipId)
+        {
+            try
+            {
+                return GetUserVideoAsync(userId, clipId).Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
         }
 
         #endregion
@@ -53,30 +104,77 @@ namespace VimeoDotNet
 
         public UploadTicket GetUploadTicket()
         {
-            return GetUploadTicketAsync().Result;
+            try
+            {
+                return GetUploadTicketAsync().Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
         }
 
         public IUploadRequest StartUploadFile(IBinaryContent fileContent, int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE)
         {
-            return StartUploadFileAsync(fileContent, chunkSize).Result;
+            try
+            {
+                return StartUploadFileAsync(fileContent, chunkSize).Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
         }
 
         public IUploadRequest UploadEntireFile(IBinaryContent fileContent, int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE)
         {
-            return UploadEntireFileAsync(fileContent, chunkSize).Result;
+            try
+            {
+                return UploadEntireFileAsync(fileContent, chunkSize).Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
         }
 
         public VerifyUploadResponse ContinueUploadFile(IUploadRequest uploadRequest)
         {
-            return ContinueUploadFileAsync(uploadRequest).Result;
+            try
+            {
+                return ContinueUploadFileAsync(uploadRequest).Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
         }
         
         public VerifyUploadResponse VerifyUploadFile(IUploadRequest uploadRequest) {
-            return VerifyUploadFileAsync(uploadRequest).Result;
+            try
+            {
+                return VerifyUploadFileAsync(uploadRequest).Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
         }
 
         public void CompleteFileUpload(IUploadRequest uploadRequest) {
-            CompleteFileUploadAsync(uploadRequest).RunSynchronously();
+            try
+            {
+                CompleteFileUploadAsync(uploadRequest).RunSynchronously();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+            }
         }
 
         #endregion

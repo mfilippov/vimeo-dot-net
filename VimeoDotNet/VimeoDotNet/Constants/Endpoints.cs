@@ -53,6 +53,7 @@ namespace VimeoDotNet.Constants
         public const string UserPresets = "/users/{userId}/presets";
         public const string UserPreset = "/users/{userId}/presets/{presetId}";
         public const string UserVideos = "/users/{userId}/videos";
+        public const string UserVideo = "/users/{userId}/videos/{clipId}";
         public const string UserPortfolios = "/users/{userId}/portfolios";
         public const string UserPortfolio = "/users/{userId}/portfolios/{portfolioId}";
         public const string UserPortfolioVideos = "/users/{userId}/portfolios/{portfolioId}/videos";
