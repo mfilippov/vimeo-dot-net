@@ -24,5 +24,5 @@ REFERENCE
 [API 3 Endpoints](https://developer.vimeo.com/api/endpoints)
 
 Pushing to NuGet:  
-`nuget pack VimeoDotNet.csproj -Prop Configuration=Release`
+`nuget pack VimeoDotNet.csproj -Prop Configuration=Release`  
 `nuget push VimeoDotNet.version.nupkg`
