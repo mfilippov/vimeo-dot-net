@@ -25,6 +25,8 @@ namespace VimeoDotNet
         System.Threading.Tasks.Task<VimeoDotNet.Models.Paginated<VimeoDotNet.Models.Video>> GetUserVideosAsync(long userId);
         VimeoDotNet.Net.IUploadRequest StartUploadFile(VimeoDotNet.Net.IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
         System.Threading.Tasks.Task<VimeoDotNet.Net.IUploadRequest> StartUploadFileAsync(VimeoDotNet.Net.IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
+        void UpdateVideoMetadata(long clipId, VimeoDotNet.Models.VideoUpdateMetadata metaData);
+        System.Threading.Tasks.Task UpdateVideoMetadataAsync(long clipId, VimeoDotNet.Models.VideoUpdateMetadata metaData);
         VimeoDotNet.Net.IUploadRequest UploadEntireFile(VimeoDotNet.Net.IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
         System.Threading.Tasks.Task<VimeoDotNet.Net.IUploadRequest> UploadEntireFileAsync(VimeoDotNet.Net.IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
         VimeoDotNet.Models.VerifyUploadResponse VerifyUploadFile(VimeoDotNet.Net.IUploadRequest uploadRequest);

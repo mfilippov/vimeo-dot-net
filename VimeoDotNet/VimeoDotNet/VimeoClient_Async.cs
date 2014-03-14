@@ -218,6 +218,21 @@ namespace VimeoDotNet
             }
         }
 
+        public async Task UpdateVideoMetadataAsync(long clipId, VideoUpdateMetadata metaData)
+        {
+            try
+            {
+                var request = GenerateVideoPatchRequest(clipId, metaData);
+                var response = await request.ExecuteRequestAsync();
+                CheckStatusCodeError(response, "Error updating user video metadata.");
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException) { throw; }
+                throw new VimeoApiException("Error updating user video metadata.", ex);
+            }
+        }
+
         private IApiRequest GenerateVideosRequest(long? userId = null, long? clipId = null)
         {
             ThrowIfUnauthorized();
@@ -236,6 +251,31 @@ namespace VimeoDotNet
             {
                 request.UrlSegments.Add("clipId", clipId.ToString());
             }
+
+            return request;
+        }
+
+        private IApiRequest GenerateVideoPatchRequest(long clipId, VideoUpdateMetadata metaData)
+        {
+            ThrowIfUnauthorized();
+
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
+            request.Method = Method.PATCH;
+            request.Path = Endpoints.Video;
+
+            request.UrlSegments.Add("clipId", clipId.ToString());
+            if (metaData.Name != null) {
+                request.Query.Add("name", metaData.Name.Trim());
+            }
+            if (metaData.Description != null)
+            {
+                request.Query.Add("description", metaData.Description.Trim());
+            }
+            if (metaData.Privacy != VideoPrivacyEnum.Unknown)
+            {
+                request.Query.Add("privacy", metaData.Privacy.ToString().ToLower());
+            }
+            request.Query.Add("review_link", metaData.ReviewLinkEnabled.ToString().ToLower());
 
             return request;
         }

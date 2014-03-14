@@ -42,22 +42,24 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Enums\AccountTypeEnum.cs" />
+    <Compile Include="Enums\VideoPrivacyEnum.cs" />
     <Compile Include="Enums\FileQualityEnum.cs" />
     <Compile Include="Enums\PictureTypeEnum.cs" />
     <Compile Include="Enums\VideoStatusEnum.cs" />
     <Compile Include="Helpers\MimeHelpers.cs" />
+    <Compile Include="IVimeoClient.cs" />
     <Compile Include="IVimeoClientFactory.cs" />
     <Compile Include="Models\Download.cs" />
     <Compile Include="Models\EmbedPresets.cs" />
     <Compile Include="Models\PresetButtons.cs" />
     <Compile Include="Models\PresetLogos.cs" />
     <Compile Include="Models\PresetSettings.cs" />
+    <Compile Include="Models\VideoUpdateMetadata.cs" />
     <Compile Include="VimeoClientFactory.cs" />
     <Compile Include="Authorization\AuthorizationClient.cs" />
     <Compile Include="Authorization\AuthorizationClientFactory.cs" />
     <Compile Include="Authorization\IAuthorizationClient.cs" />
     <Compile Include="Authorization\IAuthorizationClientFactory.cs" />
-    <Compile Include="IVimeoClient.cs" />
     <Compile Include="Net\ApiRequestFactory.cs" />
     <Compile Include="Net\IApiRequest.cs" />
     <Compile Include="Net\IApiRequestFactory.cs" />

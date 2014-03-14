@@ -15,7 +15,7 @@ Features:
  - Video retrieval
  - Resumable video file upload</description>
         <summary />
-        <releaseNotes>v0.6.2 Added factories and interfaces for IOC use.</releaseNotes>
+        <releaseNotes>v0.6.2 Added factories and interfaces for IOC use, as well as other updates.</releaseNotes>
         <copyright>Copyright © 2014, Stephen Commisso</copyright>
         <language>en-US</language>
         <tags>vimeo, async</tags>

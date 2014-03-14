@@ -98,6 +98,18 @@ namespace VimeoDotNet
             }
         }
 
+        public void UpdateVideoMetadata(long clipId, VideoUpdateMetadata metaData)
+        {
+            try
+            {
+                UpdateVideoMetadataAsync(clipId, metaData).Wait();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+            }
+        }
+
         #endregion
 
         #region Upload
@@ -169,7 +181,7 @@ namespace VimeoDotNet
         public void CompleteFileUpload(IUploadRequest uploadRequest) {
             try
             {
-                CompleteFileUploadAsync(uploadRequest).RunSynchronously();
+                CompleteFileUploadAsync(uploadRequest).Wait();
             }
             catch (AggregateException ex)
             {

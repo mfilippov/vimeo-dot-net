@@ -10,6 +10,7 @@ COMPLETED
 - Account video retrieval
 - User video retrieval
 - Chunked video upload with retry capability
+- Video metadata update
 
 TODO
 ----
