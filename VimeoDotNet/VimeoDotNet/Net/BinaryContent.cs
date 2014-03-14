@@ -2,17 +2,35 @@
 using System.IO;
 using System.Threading.Tasks;
 using System.Web;
+using VimeoDotNet.Helpers;
 
 namespace VimeoDotNet.Net
 {
     [Serializable]
-    public class BinaryContent : IDisposable
+    public class BinaryContent : IDisposable, IBinaryContent
     {
+        #region Private Fields
+
         private const int BUFFER_SIZE = 16384; //16k
+
+        [NonSerialized]
+        private Stream _data;
+
+        #endregion
+
+        #region Properties
 
         public string OriginalFileName { get; set; }
         public string ContentType { get; set; }
-        public Stream Data { get; set; }
+        public Stream Data
+        {
+            get { return _data; }
+            set { _data = value; } 
+        }
+
+        #endregion
+
+        #region Constructors
 
         public BinaryContent()
         {
@@ -21,7 +39,7 @@ namespace VimeoDotNet.Net
         public BinaryContent(string filePath)
         {
             OriginalFileName = Path.GetFileName(filePath);
-            ContentType = MimeMapping.GetMimeMapping(OriginalFileName);
+            ContentType = MimeHelpers.GetMimeMapping(OriginalFileName);
             Data = File.OpenRead(filePath);
         }
 
@@ -36,6 +54,10 @@ namespace VimeoDotNet.Net
             ContentType = contentType;
             Data = new MemoryStream(data);
         }
+
+        #endregion
+
+        #region Public Functions
 
         public byte[] Read(int startIndex, int endIndex)
         {
@@ -58,6 +80,19 @@ namespace VimeoDotNet.Net
             VerifyCanRead(startIndex);
             return await ReadDataStream(endIndex - startIndex);
         }
+
+        public void Dispose()
+        {
+            if (Data != null)
+            {
+                Data.Dispose();
+                Data = null;
+            }
+        }
+
+        #endregion
+
+        #region Helper Functions
 
         private void VerifyCanRead(long startIndex)
         {
@@ -87,13 +122,6 @@ namespace VimeoDotNet.Net
             }
         }
 
-        public void Dispose()
-        {
-            if (Data != null)
-            {
-                Data.Dispose();
-                Data = null;
-            }
-        }
+        #endregion
     }
 }

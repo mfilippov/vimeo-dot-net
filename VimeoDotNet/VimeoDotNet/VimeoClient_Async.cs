@@ -15,47 +15,84 @@ using VimeoDotNet.Net;
 
 namespace VimeoDotNet
 {
-    public partial class VimeoClient
+    public partial class VimeoClient : IVimeoClient
     {
-        #region Constants        
+        #region Constants
 
-        private const int DEFAULT_CHUNK_SIZE = 262144; // 256kb
-        private static readonly Regex _rangeRegex = new Regex(@"bytes\s*=\s*(?<start>\d+)-(?<end>\d+)", RegexOptions.IgnoreCase);
+        internal const int DEFAULT_UPLOAD_CHUNK_SIZE = 1048576; // 1MB
+        protected static readonly Regex _rangeRegex = new Regex(@"bytes\s*=\s*(?<start>\d+)-(?<end>\d+)", RegexOptions.IgnoreCase);
 
         #endregion
 
-        #region Private Fields
+        #region Fields
 
+        protected IAuthorizationClientFactory _authClientFactory;
+        protected IApiRequestFactory _apiRequestFactory;
 
         #endregion
 
         #region Properties
 
-        private string ClientId { get; set; }
-        private string ClientSecret { get; set; }
-        private string AccessToken { get; set; }
-        private AuthorizationClient OAuth2Client { get; set; }
+        protected string ClientId { get; set; }
+        protected string ClientSecret { get; set; }
+        protected string AccessToken { get; set; }
+
+        protected IAuthorizationClient OAuth2Client { get; set; }
 
         #endregion
 
         #region Constructors
 
+        protected VimeoClient()
+        {
+            _authClientFactory = new AuthorizationClientFactory();
+            _apiRequestFactory = new ApiRequestFactory();
+        }
+
+        /// <summary>
+        /// Multi-user application constructor, using user-level OAuth2
+        /// </summary>
+        /// <param name="accessToken">Your Vimeo API Access Token</param>
         public VimeoClient(string clientId, string clientSecret)
+            : this()
         {
             ClientId = clientId;
             ClientSecret = clientSecret;
             OAuth2Client = new AuthorizationClient(ClientId, ClientSecret);
         }
 
+        /// <summary>
+        /// Single-user application constructor, using account OAuth2 access token
+        /// </summary>
+        /// <param name="accessToken">Your Vimeo API Access Token</param>
         public VimeoClient(string accessToken)
+            : this()
         {
             AccessToken = accessToken;
         }
 
-        public VimeoClient(string clientId, string clientSecret, string accessToken)
-            :this(clientId, clientSecret)
+        /// <summary>
+        /// Multi-user Constructor for use with IVimeoClientFactory
+        /// </summary>
+        /// <param name="authClientFactory">The IAuthorizationClientFactory</param>
+        /// <param name="apiRequestFactory">The IApiRequestFactory</param>
+        internal VimeoClient(IAuthorizationClientFactory authClientFactory, IApiRequestFactory apiRequestFactory, string clientId, string clientSecret)
+            : this(clientId, clientSecret)
         {
-            AccessToken = accessToken;
+            _authClientFactory = authClientFactory;
+            _apiRequestFactory = apiRequestFactory;
+        }
+
+        /// <summary>
+        /// Single-user Constructor for use with IVimeoClientFactory
+        /// </summary>
+        /// <param name="authClientFactory">The IAuthorizationClientFactory</param>
+        /// <param name="apiRequestFactory">The IApiRequestFactory</param>
+        internal VimeoClient(IAuthorizationClientFactory authClientFactory, IApiRequestFactory apiRequestFactory, string accessToken)
+            : this(accessToken)
+        {
+            _authClientFactory = authClientFactory;
+            _apiRequestFactory = apiRequestFactory;
         }
 
         #endregion
@@ -76,7 +113,7 @@ namespace VimeoDotNet
 
         private void PrepAuthorizationClient() {
             if (OAuth2Client == null) {
-                OAuth2Client = new AuthorizationClient(ClientId, ClientSecret);
+                OAuth2Client = _authClientFactory.GetAuthorizationClient(ClientId, ClientSecret);
             }
         }
 
@@ -101,11 +138,11 @@ namespace VimeoDotNet
             }
         }
 
-        private ApiRequest GenerateAccountInformationRequest()
+        private IApiRequest GenerateAccountInformationRequest()
         {
             ThrowIfUnauthorized();
 
-            var request = new ApiRequest(AccessToken);
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = Method.GET;
             request.Path = Endpoints.GetCurrentUserEndpoint(Endpoints.User);
             return request;
@@ -147,11 +184,11 @@ namespace VimeoDotNet
             }
         }
 
-        private ApiRequest GenerateVideosRequest(string userId)
+        private IApiRequest GenerateVideosRequest(string userId)
         {
             ThrowIfUnauthorized();
 
-            var request = new ApiRequest(AccessToken);
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = Method.GET;
             request.Path = Endpoints.UserVideos;
 
@@ -169,7 +206,7 @@ namespace VimeoDotNet
 
         #region Upload
 
-        public async Task<UploadRequest> UploadEntireFileAsync(BinaryContent fileContent, int chunkSize = DEFAULT_CHUNK_SIZE)
+        public async Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent, int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE)
         {
             var uploadRequest = await StartUploadFileAsync(fileContent, chunkSize);
 
@@ -202,7 +239,7 @@ namespace VimeoDotNet
             return uploadRequest;
         }
 
-        public async Task<UploadRequest> StartUploadFileAsync(BinaryContent fileContent, int chunkSize = DEFAULT_CHUNK_SIZE)
+        public async Task<IUploadRequest> StartUploadFileAsync(IBinaryContent fileContent, int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE)
         {
             if (!fileContent.Data.CanRead)
             {
@@ -245,7 +282,7 @@ namespace VimeoDotNet
             }
         }
 
-        public async Task<VerifyUploadResponse> ContinueUploadFileAsync(UploadRequest uploadRequest)
+        public async Task<VerifyUploadResponse> ContinueUploadFileAsync(IUploadRequest uploadRequest)
         {
             if (uploadRequest.AllBytesWritten) {
                 // Already done, there's nothing to do.
@@ -260,8 +297,7 @@ namespace VimeoDotNet
                 var request = await GenerateFileStreamRequest(uploadRequest.File, uploadRequest.Ticket,
                     chunkSize: uploadRequest.ChunkSize, written: uploadRequest.BytesWritten);
                 var response = await request.ExecuteRequestAsync();
-                CheckStatusCodeError(uploadRequest, response, "Error uploading file chunk.",
-                    new[] { HttpStatusCode.OK, HttpStatusCode.BadRequest });
+                CheckStatusCodeError(uploadRequest, response, "Error uploading file chunk.", HttpStatusCode.BadRequest);
 
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
@@ -286,7 +322,7 @@ namespace VimeoDotNet
 
         }
         
-        public async Task<VerifyUploadResponse> VerifyUploadFileAsync(UploadRequest uploadRequest)
+        public async Task<VerifyUploadResponse> VerifyUploadFileAsync(IUploadRequest uploadRequest)
         {
             try
             {
@@ -332,7 +368,7 @@ namespace VimeoDotNet
             }
         }
 
-        public async Task CompleteFileUploadAsync(UploadRequest uploadRequest)
+        public async Task CompleteFileUploadAsync(IUploadRequest uploadRequest)
         {
             ThrowIfUnauthorized();
 
@@ -353,18 +389,18 @@ namespace VimeoDotNet
             }
         }
 
-        private ApiRequest GenerateUploadTicketRequest()
+        private IApiRequest GenerateUploadTicketRequest()
         {
             ThrowIfUnauthorized();
 
-            var request = new ApiRequest(AccessToken);
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = Method.POST;
             request.Path = Endpoints.UploadTicket;
             request.Query.Add("type", "streaming");
             return request;
         }
 
-        private async Task<ApiRequest> GenerateFileStreamRequest(BinaryContent fileContent, UploadTicket ticket, long written = 0, int? chunkSize = null, bool verifyOnly = false)
+        private async Task<IApiRequest> GenerateFileStreamRequest(IBinaryContent fileContent, UploadTicket ticket, long written = 0, int? chunkSize = null, bool verifyOnly = false)
         {
             if (ticket == null || string.IsNullOrWhiteSpace(ticket.ticket_id))
             {
@@ -375,7 +411,7 @@ namespace VimeoDotNet
                 throw new InvalidOperationException("User does not have enough free space to upload this video. Remaining space: " + ticket.quota.free_space + ".");
             }
 
-            var request = new ApiRequest();
+            var request = _apiRequestFactory.GetApiRequest();
             request.Method = Method.PUT;
             request.ExcludeAuthorizationHeader = true;
             request.Path = ticket.upload_link_secure;
@@ -403,9 +439,9 @@ namespace VimeoDotNet
             return request;
         }
 
-        private ApiRequest GenerateCompleteUploadRequest(UploadTicket ticket)
+        private IApiRequest GenerateCompleteUploadRequest(UploadTicket ticket)
         {
-            var request = new ApiRequest(AccessToken);
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = Method.DELETE;
             request.Path = ticket.complete_uri;
             return request;
@@ -423,7 +459,7 @@ namespace VimeoDotNet
             }
         }
 
-        private void CheckStatusCodeError(UploadRequest request, IRestResponse response, string message, params HttpStatusCode[] validStatusCodes)
+        private void CheckStatusCodeError(IUploadRequest request, IRestResponse response, string message, params HttpStatusCode[] validStatusCodes)
         {
             if (!IsSuccessStatusCode(response.StatusCode) && validStatusCodes != null && !validStatusCodes.Contains(response.StatusCode))
             {

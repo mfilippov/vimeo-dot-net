@@ -11,12 +11,12 @@ using VimeoDotNet.Net;
 
 namespace VimeoDotNet.Authorization
 {
-    public class AuthorizationClient
+    public class AuthorizationClient : IAuthorizationClient
     {
         #region Private Properties
 
-        private string ClientId { get; set; }
-        private string ClientSecret { get; set; }
+        protected string ClientId { get; set; }
+        protected string ClientSecret { get; set; }
 
         #endregion
 
@@ -59,7 +59,7 @@ namespace VimeoDotNet.Authorization
 
         #region Private Methods
 
-        private ApiRequest BuildAccessTokenRequest(string authorizationCode, string redirectUri)
+        protected ApiRequest BuildAccessTokenRequest(string authorizationCode, string redirectUri)
         {
             if (string.IsNullOrWhiteSpace(ClientId))
             {
@@ -86,19 +86,19 @@ namespace VimeoDotNet.Authorization
             return request;
         }
 
-        private string BuildUrl(string route, string queryString)
+        protected string BuildUrl(string route, string queryString)
         {
             return string.Format("{0}://{1}{2}{3}", Request.DefaultProtocol, Request.DefaultHostName, route, queryString);
         }
 
-        private void SetAccessTokenQueryParams(ApiRequest request, string authorizationCode, string redirectUri)
+        protected void SetAccessTokenQueryParams(ApiRequest request, string authorizationCode, string redirectUri)
         {
             request.Query.Add("grant_type", "authorization_code");
             request.Query.Add("code", authorizationCode);
             request.Query.Add("redirect_uri", redirectUri);
         }
 
-        private string BuildAuthorizeQueryString(string redirectUri, IEnumerable<string> scope, string state)
+        protected string BuildAuthorizeQueryString(string redirectUri, IEnumerable<string> scope, string state)
         {
             var qsParams = new Dictionary<string, string>() {
                 {"response_type", "code"},
@@ -120,7 +120,7 @@ namespace VimeoDotNet.Authorization
             return GetQueryString(qsParams);
         }
 
-        private string GetQueryString(IDictionary<string, string> queryParams)
+        protected string GetQueryString(IDictionary<string, string> queryParams)
         {
             var sb = new StringBuilder("");
             foreach (var qsParam in queryParams)

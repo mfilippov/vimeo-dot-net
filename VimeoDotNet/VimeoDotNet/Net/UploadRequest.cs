@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VimeoDotNet.Helpers;
-using VimeoDotNet.Net;
+using VimeoDotNet.Models;
 
-namespace VimeoDotNet.Models
+namespace VimeoDotNet.Net
 {
     [Serializable]
-    public class UploadRequest
+    public class UploadRequest : VimeoDotNet.Net.IUploadRequest
     {
         #region Private Fields
 
-        private BinaryContent _file;
+        private IBinaryContent _file;
         private long _fileLength;
 
         #endregion
@@ -26,7 +26,7 @@ namespace VimeoDotNet.Models
         public bool IsVerifiedComplete { get; set; }
         public string ClipUri { get; set; }
 
-        public BinaryContent File
+        public IBinaryContent File
         {
             get { return _file; }
             set {

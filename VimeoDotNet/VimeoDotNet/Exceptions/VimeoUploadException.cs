@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using VimeoDotNet.Models;
+using VimeoDotNet.Net;
 
 namespace VimeoDotNet.Exceptions
 {
     [Serializable]
     public class VimeoUploadException : VimeoApiException
     {
-        public UploadRequest Request { get; private set; }
+        [NonSerialized]
+        private IUploadRequest _request;
+
+        public IUploadRequest Request
+        {
+            get { return _request; }
+            set { _request = value; }
+        }
 
         public VimeoUploadException()
             : base()
         {
         }
 
-        public VimeoUploadException(UploadRequest request)
+        public VimeoUploadException(IUploadRequest request)
             : base()
         {
             Request = request;
@@ -25,7 +32,7 @@ namespace VimeoDotNet.Exceptions
         {
         }
 
-        public VimeoUploadException(string message, UploadRequest request)
+        public VimeoUploadException(string message, IUploadRequest request)
             : base(message)
         {
             Request = request;
@@ -36,7 +43,7 @@ namespace VimeoDotNet.Exceptions
         {
         }
 
-        public VimeoUploadException(string message, UploadRequest request, Exception innerException)
+        public VimeoUploadException(string message, IUploadRequest request, Exception innerException)
             : base(message, innerException)
         {
             Request = request;
@@ -45,19 +52,6 @@ namespace VimeoDotNet.Exceptions
         public VimeoUploadException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            if (info != null)
-            {
-                Request = info.GetValue("Request", typeof(UploadRequest)) as UploadRequest;
-            }
-        }
-        
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);            
-            if (info != null)
-            {
-                info.AddValue("Request", Request);
-            }
         }
     }
 }

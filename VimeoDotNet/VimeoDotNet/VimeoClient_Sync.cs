@@ -56,26 +56,26 @@ namespace VimeoDotNet
             return GetUploadTicketAsync().Result;
         }
 
-        public UploadRequest StartUploadFile(BinaryContent fileContent, int chunkSize = DEFAULT_CHUNK_SIZE)
+        public IUploadRequest StartUploadFile(IBinaryContent fileContent, int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE)
         {
             return StartUploadFileAsync(fileContent, chunkSize).Result;
         }
 
-        public UploadRequest UploadEntireFile(BinaryContent fileContent, int chunkSize = DEFAULT_CHUNK_SIZE)
+        public IUploadRequest UploadEntireFile(IBinaryContent fileContent, int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE)
         {
             return UploadEntireFileAsync(fileContent, chunkSize).Result;
         }
 
-        public VerifyUploadResponse ContinueUploadFile(UploadRequest uploadRequest)
+        public VerifyUploadResponse ContinueUploadFile(IUploadRequest uploadRequest)
         {
             return ContinueUploadFileAsync(uploadRequest).Result;
         }
         
-        public VerifyUploadResponse VerifyUploadFile(UploadRequest uploadRequest) {
+        public VerifyUploadResponse VerifyUploadFile(IUploadRequest uploadRequest) {
             return VerifyUploadFileAsync(uploadRequest).Result;
         }
 
-        public void CompleteFileUpload(UploadRequest uploadRequest) {
+        public void CompleteFileUpload(IUploadRequest uploadRequest) {
             CompleteFileUploadAsync(uploadRequest).RunSynchronously();
         }
 

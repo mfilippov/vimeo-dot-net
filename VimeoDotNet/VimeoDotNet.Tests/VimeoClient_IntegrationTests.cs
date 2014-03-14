@@ -3,16 +3,19 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VimeoDotNet.Net;
 using System.IO;
 using System.Reflection;
+using VimeoDotNet.Models;
 
 namespace VimeoDotNet.Tests
 {
     [TestClass]
-    [Ignore]
+    [Ignore] // Comment this line to run integration tests.
     public class VimeoClient_IntegrationTests
     {
         private const string CLIENTID = "<YOUR CLIENT ID HERE>";
         private const string CLIENTSECRET = "<YOUR CLIENT SECRET HERE>";
         private const string ACCESSTOKEN = "<YOUR ACCOUNT ACCESS TOKEN HERE>";
+
+        private const string TESTFILEPATH = @"Resources\test.mp4"; // http://download.wavetlan.com/SVV/Media/HTTP/http-mp4.htm
 
         [TestMethod]
         public void Integration_VimeoClient_GetUploadTicket_CanGenerateStreamingTicket()
@@ -31,12 +34,16 @@ namespace VimeoDotNet.Tests
         public void Integration_VimeoClient_UploadEntireFile_UploadsFile()
         {
             // arrange
-            var file = new BinaryContent(GetFullPath(@"Resources\test.mp4")); // http://download.wavetlan.com/SVV/Media/HTTP/http-mp4.htm
-            var length = file.Data.Length;
-            var client = CreateAuthenticatedClient();
+            long length;
+            IUploadRequest completedRequest;
+            using (var file = new BinaryContent(GetFullPath(TESTFILEPATH)))
+            {
+                length = file.Data.Length;
+                var client = CreateAuthenticatedClient();
 
-            // act
-            var completedRequest = client.UploadEntireFile(file);
+                // act
+                completedRequest = client.UploadEntireFile(file);
+            }
 
             // assert
             Assert.IsNotNull(completedRequest);

@@ -39,20 +39,31 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Helpers\MimeHelpers.cs" />
+    <Compile Include="IVimeoClientFactory.cs" />
+    <Compile Include="VimeoClientFactory.cs" />
     <Compile Include="Authorization\AuthorizationClient.cs" />
+    <Compile Include="Authorization\AuthorizationClientFactory.cs" />
+    <Compile Include="Authorization\IAuthorizationClient.cs" />
+    <Compile Include="Authorization\IAuthorizationClientFactory.cs" />
+    <Compile Include="IVimeoClient.cs" />
+    <Compile Include="Net\ApiRequestFactory.cs" />
+    <Compile Include="Net\IApiRequest.cs" />
+    <Compile Include="Net\IApiRequestFactory.cs" />
+    <Compile Include="Net\IBinaryContent.cs" />
+    <Compile Include="Net\IUploadRequest.cs" />
     <Compile Include="VimeoClient_Sync.cs" />
     <Compile Include="Enums\UploadStatusEnum.cs" />
     <Compile Include="Exceptions\VimeoUploadException.cs" />
     <Compile Include="Exceptions\VimeoApiException.cs" />
     <Compile Include="Helpers\ModelHelpers.cs" />
     <Compile Include="Models\VerifyUploadResponse.cs" />
-    <Compile Include="Models\UploadRequest.cs" />
+    <Compile Include="Net\UploadRequest.cs" />
     <Compile Include="Net\ApiRequest.cs" />
     <Compile Include="Constants\ApiVersions.cs" />
     <Compile Include="Constants\ResponseTypes.cs" />
