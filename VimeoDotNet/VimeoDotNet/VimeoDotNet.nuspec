@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>$id$</id>
+        <version>$version$</version>
+        <title>Vimeo-Dot-Net</title>
+        <authors>Stephen Commisso</authors>
+        <licenseUrl>https://github.com/scommisso/vimeo-dot-net/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/scommisso/vimeo-dot-net</projectUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>.NET 4.5 wrapper around Vimeo's REST API v3.0.
+
+Features:
+ - Account information retrieval
+ - Video retrieval
+ - Resumable video file upload</description>
+        <summary />
+        <releaseNotes>v0.6.1 Initial Release</releaseNotes>
+        <copyright>Copyright © 2014, Stephen Commisso</copyright>
+        <language>en-US</language>
+        <tags>vimeo, async</tags>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="RestSharp" version="104.4.0" />
+                <dependency id="Newtonsoft.Json" version="6.0.1" />
+            </group>
+        </dependencies>
+    </metadata>
+</package>
