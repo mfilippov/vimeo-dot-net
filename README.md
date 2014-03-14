@@ -1,9 +1,22 @@
 vimeo-dot-net
 =============
 
-A .NET wrapper for Vime API v3.0
+A .NET 4.5 wrapper for Vimeo API v3.0. Provides asynchronous API operations.
 
-TODO:
-=====
-https://developer.vimeo.com/api/docs/responses#channel
-Create models for Channel and down
+COMPLETED
+---------
+- Account Authentication (OAuth2)
+- Account information retrieval
+- Account video retrieval
+- User video retrieval
+- Chunked video upload with retry capability
+
+TODO
+----
+- Verify OAuth2 functionality for multi-user clients.
+- *Everything else...*
+
+REFERENCE
+---------
+[API 3 Guide](https://developer.vimeo.com/api/start)
+[API 3 Endpoints](https://developer.vimeo.com/api/endpoints)
