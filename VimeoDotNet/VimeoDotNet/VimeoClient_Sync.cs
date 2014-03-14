@@ -42,6 +42,19 @@ namespace VimeoDotNet
             }
         }
 
+        public User GetUserInformation(long userId)
+        {
+            try
+            {
+                return GetUserInformationAsync(userId).Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
+        }
+
         #endregion
 
         #region Videos

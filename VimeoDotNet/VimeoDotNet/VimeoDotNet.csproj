@@ -42,6 +42,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Enums\AccountTypeEnum.cs" />
+    <Compile Include="Enums\VideoEmbedPrivacyEnum.cs" />
     <Compile Include="Enums\VideoPrivacyEnum.cs" />
     <Compile Include="Enums\FileQualityEnum.cs" />
     <Compile Include="Enums\PictureTypeEnum.cs" />

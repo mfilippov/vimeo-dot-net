@@ -12,6 +12,8 @@ namespace VimeoDotNet
         System.Threading.Tasks.Task<VimeoDotNet.Models.AccessTokenResponse> GetAccessTokenAsync(string authorizationCode, string redirectUrl);
         VimeoDotNet.Models.User GetAccountInformation();
         System.Threading.Tasks.Task<VimeoDotNet.Models.User> GetAccountInformationAsync();
+        VimeoDotNet.Models.User GetUserInformation(long userId);
+        System.Threading.Tasks.Task<VimeoDotNet.Models.User> GetUserInformationAsync(long userId);
         VimeoDotNet.Models.Video GetAccountVideo(long clipId);
         System.Threading.Tasks.Task<VimeoDotNet.Models.Video> GetAccountVideoAsync(long clipId);
         VimeoDotNet.Models.Paginated<VimeoDotNet.Models.Video> GetAccountVideos();

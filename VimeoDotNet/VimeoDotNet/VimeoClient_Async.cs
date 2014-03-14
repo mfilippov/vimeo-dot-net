@@ -125,7 +125,7 @@ namespace VimeoDotNet
         {
             try
             {
-                var request = GenerateAccountInformationRequest();
+                var request = GenerateUserInformationRequest();
                 var response = await request.ExecuteRequestAsync<User>();
                 CheckStatusCodeError(response, "Error retrieving account information.");
 
@@ -138,13 +138,35 @@ namespace VimeoDotNet
             }
         }
 
-        private IApiRequest GenerateAccountInformationRequest()
+        public async Task<User> GetUserInformationAsync(long userId)
+        {
+            try
+            {
+                var request = GenerateUserInformationRequest(userId);
+                var response = await request.ExecuteRequestAsync<User>();
+                CheckStatusCodeError(response, "Error retrieving user information.", HttpStatusCode.NotFound);
+
+                if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
+                return response.Data;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException) { throw; }
+                throw new VimeoApiException("Error retrieving user information.", ex);
+            }
+        }
+
+        private IApiRequest GenerateUserInformationRequest(long? userId = null)
         {
             ThrowIfUnauthorized();
 
             var request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = Method.GET;
-            request.Path = Endpoints.GetCurrentUserEndpoint(Endpoints.User);
+            request.Path = userId.HasValue ? Endpoints.User : Endpoints.GetCurrentUserEndpoint(Endpoints.User);
+            if (userId.HasValue)
+            {
+                request.UrlSegments.Add("userId", userId.ToString());
+            }
             return request;
         }
 
@@ -174,8 +196,9 @@ namespace VimeoDotNet
             {
                 var request = GenerateVideosRequest(clipId: clipId);
                 var response = await request.ExecuteRequestAsync<Video>();
-                CheckStatusCodeError(response, "Error retrieving account video.");
+                CheckStatusCodeError(response, "Error retrieving account video.", HttpStatusCode.NotFound);
 
+                if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
                 return response.Data;
             }
             catch (Exception ex)
@@ -190,8 +213,16 @@ namespace VimeoDotNet
             try {
                 var request = GenerateVideosRequest(userId: userId);
                 var response = await request.ExecuteRequestAsync<Paginated<Video>>();
-                CheckStatusCodeError(response, "Error retrieving user videos.");
+                CheckStatusCodeError(response, "Error retrieving user videos.", HttpStatusCode.NotFound);
 
+                if (response.StatusCode == HttpStatusCode.NotFound) {
+                    return new Paginated<Video>()
+                    {
+                        data = new List<Video>(),
+                        page = 0,
+                        total = 0                        
+                    };
+                }
                 return response.Data;
             }
             catch (Exception ex)
@@ -207,8 +238,9 @@ namespace VimeoDotNet
             {
                 var request = GenerateVideosRequest(userId: userId, clipId: clipId);
                 var response = await request.ExecuteRequestAsync<Video>();
-                CheckStatusCodeError(response, "Error retrieving user video.");
+                CheckStatusCodeError(response, "Error retrieving user video.", HttpStatusCode.NotFound);
 
+                if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
                 return response.Data;
             }
             catch (Exception ex)
@@ -238,14 +270,12 @@ namespace VimeoDotNet
             ThrowIfUnauthorized();
 
             var request = _apiRequestFactory.GetApiRequest(AccessToken);
+            var endpoint = clipId.HasValue ? Endpoints.UserVideo : Endpoints.UserVideos;
             request.Method = Method.GET;
-            request.Path = clipId.HasValue ? Endpoints.UserVideo : Endpoints.UserVideos;
+            request.Path = userId.HasValue ? endpoint : Endpoints.GetCurrentUserEndpoint(endpoint);
 
             if (userId.HasValue) {
                 request.UrlSegments.Add("userId", userId.ToString());
-            }
-            else {
-                request.Path = Endpoints.GetCurrentUserEndpoint(request.Path);
             }
             if (clipId.HasValue)
             {

@@ -70,6 +70,21 @@ namespace VimeoDotNet.Tests
         }
 
         [TestMethod]
+        public void Integration_VimeoClient_GetUserInformation_RetrievesUserInfo()
+        {
+            // arrange
+            long userId = 8128214;
+            var client = CreateAuthenticatedClient();
+
+            // act
+            var user = client.GetUserInformation(userId);
+
+            // assert
+            Assert.IsNotNull(user);
+            Assert.AreEqual(userId, user.id.Value);
+        }
+
+        [TestMethod]
         public void Integration_VimeoClient_GetAccountVideos_RetrievesCurrentAccountVideos()
         {
             // arrange
