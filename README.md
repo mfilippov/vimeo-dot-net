@@ -15,6 +15,7 @@ COMPLETED
 
 TODO
 ----
+- Retrieve information on single video
 - Verify OAuth2 functionality for multi-user clients.
 - *Everything else...*
 
