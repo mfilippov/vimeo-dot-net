@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using VimeoDotNet.Enums;
@@ -9,6 +9,11 @@ namespace VimeoDotNet.Models
     [Serializable]
     public class Video
     {
+        private static readonly IDictionary<string, string> _statusMappings = new Dictionary<string, string>()
+        {
+            { "uploading_error", "UploadError" }
+        };
+
         public long? id
         {
             get { return ModelHelpers.ParseModelUriId(uri); }
@@ -38,8 +43,8 @@ namespace VimeoDotNet.Models
 
         public VideoStatusEnum VideoStatus
         {
-            get { return ModelHelpers.GetEnumValue<VideoStatusEnum>(status); }
-            set { status = ModelHelpers.GetEnumString(value); }
+            get { return ModelHelpers.GetEnumValue<VideoStatusEnum>(status, _statusMappings); }
+            set { status = ModelHelpers.GetEnumString(value, _statusMappings); }
         }
 
         public string MobileVideoLink
