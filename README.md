@@ -9,20 +9,20 @@ COMPLETED
 ---------
 - Account Authentication (OAuth2)
 - Account information retrieval
-- Account video list retrieval
-- User video list retrieval
+- Account video and video list retrieval
+- User information retrieval
+- User video and video list retrieval
 - Chunked video upload with retry capability
 - Video metadata update
 
 TODO
 ----
-- Retrieve information on single video
 - Verify OAuth2 functionality for multi-user clients.
 - *Everything else...*
 
 REFERENCE
 ---------
-[API 3 Guide](https://developer.vimeo.com/api/start)
+[API 3 Guide](https://developer.vimeo.com/api/start)  
 [API 3 Endpoints](https://developer.vimeo.com/api/endpoints)
 
 Pushing to NuGet:  
