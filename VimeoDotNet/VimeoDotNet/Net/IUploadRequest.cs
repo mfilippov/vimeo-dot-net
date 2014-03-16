@@ -1,4 +1,4 @@
-﻿using System;
+﻿using VimeoDotNet.Models;
 
 namespace VimeoDotNet.Net
 {
@@ -12,6 +12,6 @@ namespace VimeoDotNet.Net
         IBinaryContent File { get; set; }
         long FileLength { get; }
         bool IsVerifiedComplete { get; set; }
-        VimeoDotNet.Models.UploadTicket Ticket { get; set; }
+        UploadTicket Ticket { get; set; }
     }
 }

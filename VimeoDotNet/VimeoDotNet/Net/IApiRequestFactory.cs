@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VimeoDotNet.Net
+﻿namespace VimeoDotNet.Net
 {
     public interface IApiRequestFactory
     {

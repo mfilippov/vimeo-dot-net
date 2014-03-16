@@ -1,37 +1,48 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using VimeoDotNet.Models;
+using VimeoDotNet.Net;
 
 namespace VimeoDotNet
 {
     public interface IVimeoClient
     {
-        void CompleteFileUpload(VimeoDotNet.Net.IUploadRequest uploadRequest);
-        System.Threading.Tasks.Task CompleteFileUploadAsync(VimeoDotNet.Net.IUploadRequest uploadRequest);
-        VimeoDotNet.Models.VerifyUploadResponse ContinueUploadFile(VimeoDotNet.Net.IUploadRequest uploadRequest);
-        System.Threading.Tasks.Task<VimeoDotNet.Models.VerifyUploadResponse> ContinueUploadFileAsync(VimeoDotNet.Net.IUploadRequest uploadRequest);
-        VimeoDotNet.Models.AccessTokenResponse GetAccessToken(string authorizationCode, string redirectUrl);
-        System.Threading.Tasks.Task<VimeoDotNet.Models.AccessTokenResponse> GetAccessTokenAsync(string authorizationCode, string redirectUrl);
-        VimeoDotNet.Models.User GetAccountInformation();
-        System.Threading.Tasks.Task<VimeoDotNet.Models.User> GetAccountInformationAsync();
-        VimeoDotNet.Models.User GetUserInformation(long userId);
-        System.Threading.Tasks.Task<VimeoDotNet.Models.User> GetUserInformationAsync(long userId);
-        VimeoDotNet.Models.Video GetAccountVideo(long clipId);
-        System.Threading.Tasks.Task<VimeoDotNet.Models.Video> GetAccountVideoAsync(long clipId);
-        VimeoDotNet.Models.Paginated<VimeoDotNet.Models.Video> GetAccountVideos();
-        System.Threading.Tasks.Task<VimeoDotNet.Models.Paginated<VimeoDotNet.Models.Video>> GetAccountVideosAsync();
-        string GetOauthUrl(string redirectUri, System.Collections.Generic.IEnumerable<string> scope, string state);
-        VimeoDotNet.Models.UploadTicket GetUploadTicket();
-        System.Threading.Tasks.Task<VimeoDotNet.Models.UploadTicket> GetUploadTicketAsync();
-        VimeoDotNet.Models.Video GetUserVideo(long userId, long clipId);
-        System.Threading.Tasks.Task<VimeoDotNet.Models.Video> GetUserVideoAsync(long userId, long clipId);
-        VimeoDotNet.Models.Paginated<VimeoDotNet.Models.Video> GetUserVideos(long userId);
-        System.Threading.Tasks.Task<VimeoDotNet.Models.Paginated<VimeoDotNet.Models.Video>> GetUserVideosAsync(long userId);
-        VimeoDotNet.Net.IUploadRequest StartUploadFile(VimeoDotNet.Net.IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
-        System.Threading.Tasks.Task<VimeoDotNet.Net.IUploadRequest> StartUploadFileAsync(VimeoDotNet.Net.IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
-        void UpdateVideoMetadata(long clipId, VimeoDotNet.Models.VideoUpdateMetadata metaData);
-        System.Threading.Tasks.Task UpdateVideoMetadataAsync(long clipId, VimeoDotNet.Models.VideoUpdateMetadata metaData);
-        VimeoDotNet.Net.IUploadRequest UploadEntireFile(VimeoDotNet.Net.IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
-        System.Threading.Tasks.Task<VimeoDotNet.Net.IUploadRequest> UploadEntireFileAsync(VimeoDotNet.Net.IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
-        VimeoDotNet.Models.VerifyUploadResponse VerifyUploadFile(VimeoDotNet.Net.IUploadRequest uploadRequest);
-        System.Threading.Tasks.Task<VimeoDotNet.Models.VerifyUploadResponse> VerifyUploadFileAsync(VimeoDotNet.Net.IUploadRequest uploadRequest);
+        void CompleteFileUpload(IUploadRequest uploadRequest);
+        Task CompleteFileUploadAsync(IUploadRequest uploadRequest);
+        VerifyUploadResponse ContinueUploadFile(IUploadRequest uploadRequest);
+        Task<VerifyUploadResponse> ContinueUploadFileAsync(IUploadRequest uploadRequest);
+        AccessTokenResponse GetAccessToken(string authorizationCode, string redirectUrl);
+        Task<AccessTokenResponse> GetAccessTokenAsync(string authorizationCode, string redirectUrl);
+        User GetAccountInformation();
+        Task<User> GetAccountInformationAsync();
+        User GetUserInformation(long userId);
+        Task<User> GetUserInformationAsync(long userId);
+        Video GetAccountVideo(long clipId);
+        Task<Video> GetAccountVideoAsync(long clipId);
+        Paginated<Video> GetAccountVideos();
+        Task<Paginated<Video>> GetAccountVideosAsync();
+        string GetOauthUrl(string redirectUri, IEnumerable<string> scope, string state);
+        UploadTicket GetUploadTicket();
+        Task<UploadTicket> GetUploadTicketAsync();
+        Video GetUserVideo(long userId, long clipId);
+        Task<Video> GetUserVideoAsync(long userId, long clipId);
+        Paginated<Video> GetUserVideos(long userId);
+        Task<Paginated<Video>> GetUserVideosAsync(long userId);
+        IUploadRequest StartUploadFile(IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
+
+        Task<IUploadRequest> StartUploadFileAsync(IBinaryContent fileContent,
+            int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
+
+        void UpdateVideoMetadata(long clipId, VideoUpdateMetadata metaData);
+        Task UpdateVideoMetadataAsync(long clipId, VideoUpdateMetadata metaData);
+
+        IUploadRequest UploadEntireFile(IBinaryContent fileContent,
+            int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
+
+        Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent,
+            int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
+
+        VerifyUploadResponse VerifyUploadFile(IUploadRequest uploadRequest);
+        Task<VerifyUploadResponse> VerifyUploadFileAsync(IUploadRequest uploadRequest);
     }
 }

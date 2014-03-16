@@ -1,16 +1,5 @@
-﻿using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
+﻿using System;
 using System.Runtime.ExceptionServices;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using VimeoDotNet.Authorization;
-using VimeoDotNet.Constants;
-using VimeoDotNet.Enums;
-using VimeoDotNet.Exceptions;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
 
@@ -178,8 +167,9 @@ namespace VimeoDotNet
                 return null;
             }
         }
-        
-        public VerifyUploadResponse VerifyUploadFile(IUploadRequest uploadRequest) {
+
+        public VerifyUploadResponse VerifyUploadFile(IUploadRequest uploadRequest)
+        {
             try
             {
                 return VerifyUploadFileAsync(uploadRequest).Result;
@@ -191,7 +181,8 @@ namespace VimeoDotNet
             }
         }
 
-        public void CompleteFileUpload(IUploadRequest uploadRequest) {
+        public void CompleteFileUpload(IUploadRequest uploadRequest)
+        {
             try
             {
                 CompleteFileUploadAsync(uploadRequest).Wait();

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VimeoDotNet.Constants
+﻿namespace VimeoDotNet.Constants
 {
     public static class ApiVersions
     {

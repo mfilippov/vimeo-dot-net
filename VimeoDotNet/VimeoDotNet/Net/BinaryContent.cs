@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using System.Web;
 using VimeoDotNet.Helpers;
 
 namespace VimeoDotNet.Net
@@ -13,8 +12,7 @@ namespace VimeoDotNet.Net
 
         private const int BUFFER_SIZE = 16384; //16k
 
-        [NonSerialized]
-        private Stream _data;
+        [NonSerialized] private Stream _data;
 
         #endregion
 
@@ -22,10 +20,11 @@ namespace VimeoDotNet.Net
 
         public string OriginalFileName { get; set; }
         public string ContentType { get; set; }
+
         public Stream Data
         {
             get { return _data; }
-            set { _data = value; } 
+            set { _data = value; }
         }
 
         #endregion
@@ -96,18 +95,28 @@ namespace VimeoDotNet.Net
 
         private void VerifyCanRead(long startIndex)
         {
-            if (Data == null) { throw new InvalidOperationException("Data should be populated with a Stream"); }
-            if (!Data.CanRead) { throw new InvalidOperationException("Data should be a readable Stream"); }
+            if (Data == null)
+            {
+                throw new InvalidOperationException("Data should be populated with a Stream");
+            }
+            if (!Data.CanRead)
+            {
+                throw new InvalidOperationException("Data should be a readable Stream");
+            }
             if (Data.Position != startIndex)
             {
-                if (!Data.CanSeek) { throw new InvalidOperationException("Data cannot be advanced to the specified start index: " + startIndex); }
+                if (!Data.CanSeek)
+                {
+                    throw new InvalidOperationException("Data cannot be advanced to the specified start index: " +
+                                                        startIndex);
+                }
                 Data.Position = startIndex;
             }
         }
 
         private async Task<byte[]> ReadDataStream(long totalLength)
         {
-            byte[] buffer = new byte[BUFFER_SIZE];
+            var buffer = new byte[BUFFER_SIZE];
             int read = 0;
             int totalRead = 0;
             using (var ms = new MemoryStream())

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VimeoDotNet
+﻿namespace VimeoDotNet
 {
     public interface IVimeoClientFactory
     {

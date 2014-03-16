@@ -7,22 +7,13 @@ namespace VimeoDotNet.Exceptions
     [Serializable]
     public class VimeoUploadException : VimeoApiException
     {
-        [NonSerialized]
-        private IUploadRequest _request;
-
-        public IUploadRequest Request
-        {
-            get { return _request; }
-            set { _request = value; }
-        }
+        [NonSerialized] private IUploadRequest _request;
 
         public VimeoUploadException()
-            : base()
         {
         }
 
         public VimeoUploadException(IUploadRequest request)
-            : base()
         {
             Request = request;
         }
@@ -52,6 +43,12 @@ namespace VimeoDotNet.Exceptions
         public VimeoUploadException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
+        }
+
+        public IUploadRequest Request
+        {
+            get { return _request; }
+            set { _request = value; }
         }
     }
 }

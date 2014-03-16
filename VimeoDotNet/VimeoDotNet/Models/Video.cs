@@ -9,9 +9,9 @@ namespace VimeoDotNet.Models
     [Serializable]
     public class Video
     {
-        private static readonly IDictionary<string, string> _statusMappings = new Dictionary<string, string>()
+        private static readonly IDictionary<string, string> _statusMappings = new Dictionary<string, string>
         {
-            { "uploading_error", "UploadError" }
+            {"uploading_error", "UploadError"}
         };
 
         public long? id
@@ -51,6 +51,7 @@ namespace VimeoDotNet.Models
         {
             get { return GetFileQualityUrl(FileQualityEnum.Mobile, false); }
         }
+
         public string MobileVideoSecureLink
         {
             get { return GetFileQualityUrl(FileQualityEnum.Mobile, true); }
@@ -60,6 +61,7 @@ namespace VimeoDotNet.Models
         {
             get { return GetFileQualityUrl(FileQualityEnum.Standard, false); }
         }
+
         public string StandardVideoSecureLink
         {
             get { return GetFileQualityUrl(FileQualityEnum.Standard, true); }
@@ -69,6 +71,7 @@ namespace VimeoDotNet.Models
         {
             get { return GetFileQualityUrl(FileQualityEnum.HighDefinition, false); }
         }
+
         public string HighDefinitionVideoSecureLink
         {
             get { return GetFileQualityUrl(FileQualityEnum.HighDefinition, true); }
@@ -78,6 +81,7 @@ namespace VimeoDotNet.Models
         {
             get { return GetFileQualityUrl(FileQualityEnum.Streaming, false); }
         }
+
         public string StreamingVideoSecureLink
         {
             get { return GetFileQualityUrl(FileQualityEnum.Streaming, true); }
@@ -85,9 +89,15 @@ namespace VimeoDotNet.Models
 
         private string GetFileQualityUrl(FileQualityEnum quality, bool secureLink)
         {
-            if (files == null || files.Count == 0) { return null; }
-            var match = files.FirstOrDefault(f => f.FileQuality == quality);
-            if (match == null) { return null; }
+            if (files == null || files.Count == 0)
+            {
+                return null;
+            }
+            File match = files.FirstOrDefault(f => f.FileQuality == quality);
+            if (match == null)
+            {
+                return null;
+            }
             return secureLink ? match.link_secure : match.link;
         }
     }

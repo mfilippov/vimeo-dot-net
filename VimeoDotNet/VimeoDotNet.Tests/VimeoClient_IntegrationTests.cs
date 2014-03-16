@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using VimeoDotNet.Net;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VimeoDotNet.Models;
+using VimeoDotNet.Net;
 
 namespace VimeoDotNet.Tests
 {
@@ -15,16 +14,17 @@ namespace VimeoDotNet.Tests
         private const string CLIENTSECRET = "<YOUR CLIENT SECRET HERE>";
         private const string ACCESSTOKEN = "<YOUR ACCOUNT ACCESS TOKEN HERE>";
 
-        private const string TESTFILEPATH = @"Resources\test.mp4"; // http://download.wavetlan.com/SVV/Media/HTTP/http-mp4.htm
+        private const string TESTFILEPATH = @"Resources\test.mp4";
+            // http://download.wavetlan.com/SVV/Media/HTTP/http-mp4.htm
 
         [TestMethod]
         public void Integration_VimeoClient_GetUploadTicket_CanGenerateStreamingTicket()
         {
             // arrange
-            var client = CreateAuthenticatedClient();
+            VimeoClient client = CreateAuthenticatedClient();
 
             // act
-            var ticket = client.GetUploadTicket();
+            UploadTicket ticket = client.GetUploadTicket();
 
             // assert
             Assert.IsNotNull(ticket);
@@ -40,7 +40,7 @@ namespace VimeoDotNet.Tests
             using (var file = new BinaryContent(GetFullPath(TESTFILEPATH)))
             {
                 length = file.Data.Length;
-                var client = CreateAuthenticatedClient();
+                VimeoClient client = CreateAuthenticatedClient();
 
                 // act
                 completedRequest = client.UploadEntireFile(file);
@@ -53,17 +53,16 @@ namespace VimeoDotNet.Tests
             Assert.AreEqual(length, completedRequest.BytesWritten);
             Assert.IsNotNull(completedRequest.ClipUri);
             Assert.IsTrue(completedRequest.ClipId > 0);
-
         }
 
         [TestMethod]
         public void Integration_VimeoClient_GetAccountInformation_RetrievesCurrentAccountInfo()
         {
             // arrange
-            var client = CreateAuthenticatedClient();
+            VimeoClient client = CreateAuthenticatedClient();
 
             // act
-            var account = client.GetAccountInformation();
+            User account = client.GetAccountInformation();
 
             // assert
             Assert.IsNotNull(account);
@@ -74,10 +73,10 @@ namespace VimeoDotNet.Tests
         {
             // arrange
             long userId = 8128214;
-            var client = CreateAuthenticatedClient();
+            VimeoClient client = CreateAuthenticatedClient();
 
             // act
-            var user = client.GetUserInformation(userId);
+            User user = client.GetUserInformation(userId);
 
             // assert
             Assert.IsNotNull(user);
@@ -88,10 +87,10 @@ namespace VimeoDotNet.Tests
         public void Integration_VimeoClient_GetAccountVideos_RetrievesCurrentAccountVideos()
         {
             // arrange
-            var client = CreateAuthenticatedClient();
+            VimeoClient client = CreateAuthenticatedClient();
 
             // act
-            var videos = client.GetAccountVideos();
+            Paginated<Video> videos = client.GetAccountVideos();
 
             // assert
             Assert.IsNotNull(videos);
@@ -102,10 +101,10 @@ namespace VimeoDotNet.Tests
         {
             // arrange
             long clipId = 89133196; // Your video ID here
-            var client = CreateAuthenticatedClient();
+            VimeoClient client = CreateAuthenticatedClient();
 
             // act
-            var video = client.GetAccountVideo(clipId);
+            Video video = client.GetAccountVideo(clipId);
 
             // assert
             Assert.IsNotNull(video);

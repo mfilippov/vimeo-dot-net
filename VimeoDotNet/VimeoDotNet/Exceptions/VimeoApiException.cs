@@ -7,7 +7,6 @@ namespace VimeoDotNet.Exceptions
     public class VimeoApiException : ApplicationException
     {
         public VimeoApiException()
-            : base()
         {
         }
 

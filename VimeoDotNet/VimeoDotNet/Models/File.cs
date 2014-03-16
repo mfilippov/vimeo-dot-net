@@ -8,12 +8,12 @@ namespace VimeoDotNet.Models
     [Serializable]
     public class File
     {
-        private static readonly IDictionary<string, string> _qualityMappings = new Dictionary<string, string>()
+        private static readonly IDictionary<string, string> _qualityMappings = new Dictionary<string, string>
         {
-            { "mobile", "Mobile" },
-            { "hd", "HighDefinition" },
-            { "sd", "Standard" },
-            { "hls", "Streaming" }
+            {"mobile", "Mobile"},
+            {"hd", "HighDefinition"},
+            {"sd", "Standard"},
+            {"hls", "Streaming"}
         };
 
         public string quality { get; set; }

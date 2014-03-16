@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VimeoDotNet.Helpers;
 using VimeoDotNet.Models;
 
 namespace VimeoDotNet.Net
 {
     [Serializable]
-    public class UploadRequest : VimeoDotNet.Net.IUploadRequest
+    public class UploadRequest : IUploadRequest
     {
         #region Private Fields
 
@@ -29,10 +25,12 @@ namespace VimeoDotNet.Net
         public IBinaryContent File
         {
             get { return _file; }
-            set {
+            set
+            {
                 _file = value;
                 _fileLength = 0;
-                if (_file != null && _file.Data != null) {
+                if (_file != null && _file.Data != null)
+                {
                     _fileLength = _file.Data.Length;
                 }
             }
@@ -40,27 +38,24 @@ namespace VimeoDotNet.Net
 
         public long FileLength
         {
-            get
-            {
-                return _fileLength;
-            }
+            get { return _fileLength; }
         }
 
         public bool AllBytesWritten
         {
             get
             {
-                if (File == null || File.Data == null) { return false; }
+                if (File == null || File.Data == null)
+                {
+                    return false;
+                }
                 return BytesWritten == FileLength;
             }
         }
 
         public long? ClipId
         {
-            get
-            {
-                return ModelHelpers.ParseModelUriId(ClipUri);
-            }
+            get { return ModelHelpers.ParseModelUriId(ClipUri); }
         }
 
         #endregion

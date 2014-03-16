@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VimeoDotNet.Authorization
+﻿namespace VimeoDotNet.Authorization
 {
     public interface IAuthorizationClientFactory
     {

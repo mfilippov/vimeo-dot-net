@@ -1,7 +1,8 @@
-﻿using RestSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
+using RestSharp;
 using VimeoDotNet.Constants;
 
 namespace VimeoDotNet.Net
@@ -10,25 +11,32 @@ namespace VimeoDotNet.Net
     {
         #region Private Fields
 
-        private readonly Dictionary<string, string> _headers = new Dictionary<string, string>();
-        private readonly Dictionary<string, string> _urlSegments = new Dictionary<string, string>();
-        private readonly Dictionary<string, string> _queryString = new Dictionary<string, string>();
         private readonly Dictionary<string, string> _hashValues = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _headers = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _queryString = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _urlSegments = new Dictionary<string, string>();
 
         private string _path;
 
         #endregion
 
         #region Public Properties
-        
+
         public string ApiVersion { get; set; }
         public string ResponseType { get; set; }
         public string Protocol { get; set; }
         public string Host { get; set; }
         public int Port { get; set; }
-        public IDictionary<string, string> Headers { get { return _headers; } }
+
+        public IDictionary<string, string> Headers
+        {
+            get { return _headers; }
+        }
+
         public Method Method { get; set; }
-        public string Path {
+
+        public string Path
+        {
             get { return _path; }
             set
             {
@@ -46,9 +54,19 @@ namespace VimeoDotNet.Net
                 }
             }
         }
+
         public object Body { get; set; }
-        public IDictionary<string, string> Query { get { return _queryString; } }
-        public IDictionary<string, string> UrlSegments { get { return _urlSegments; } }
+
+        public IDictionary<string, string> Query
+        {
+            get { return _queryString; }
+        }
+
+        public IDictionary<string, string> UrlSegments
+        {
+            get { return _urlSegments; }
+        }
+
         public byte[] BinaryContent { get; set; }
         public bool ExcludeAuthorizationHeader { get; set; }
 
@@ -77,14 +95,14 @@ namespace VimeoDotNet.Net
         }
 
         public ApiRequest(string clientId, string clientSecret)
-            :this()
+            : this()
         {
             ClientId = clientId;
             ClientSecret = clientSecret;
         }
 
         public ApiRequest(string accessToken)
-            :this()
+            : this()
         {
             AccessToken = accessToken;
         }
@@ -95,10 +113,10 @@ namespace VimeoDotNet.Net
 
         public IRestResponse ExecuteRequest()
         {
-            var request = PrepareRequest();
-            var client = PrepareClient();
+            IRestRequest request = PrepareRequest();
+            IRestClient client = PrepareClient();
 
-            var response = client.Execute(request);
+            IRestResponse response = client.Execute(request);
             return response;
         }
 
@@ -109,10 +127,10 @@ namespace VimeoDotNet.Net
 
         public IRestResponse<T> ExecuteRequest<T>() where T : new()
         {
-            var request = PrepareRequest();
-            var client = PrepareClient();
+            IRestRequest request = PrepareRequest();
+            IRestClient client = PrepareClient();
 
-            var response = client.Execute<T>(request);
+            IRestResponse<T> response = client.Execute<T>(request);
             return response;
         }
 
@@ -129,8 +147,8 @@ namespace VimeoDotNet.Net
 
         protected Task<IRestResponse> GetAsyncRequestAwaiter()
         {
-            var request = PrepareRequest();
-            var client = PrepareClient();
+            IRestRequest request = PrepareRequest();
+            IRestClient client = PrepareClient();
 
             var tcs = new TaskCompletionSource<IRestResponse>();
             client.ExecuteAsync(request, response => tcs.SetResult(response));
@@ -140,8 +158,8 @@ namespace VimeoDotNet.Net
 
         protected Task<IRestResponse<T>> GetAsyncRequestAwaiter<T>() where T : new()
         {
-            var request = PrepareRequest();
-            var client = PrepareClient();
+            IRestRequest request = PrepareRequest();
+            IRestClient client = PrepareClient();
 
             var tcs = new TaskCompletionSource<IRestResponse<T>>();
             client.ExecuteAsync<T>(request, response => tcs.SetResult(response));
@@ -153,7 +171,7 @@ namespace VimeoDotNet.Net
 
         protected IRestClient PrepareClient()
         {
-            var client = GetClient();
+            IRestClient client = GetClient();
             client.Authenticator = GetAuthenticator();
 
             return client;
@@ -162,7 +180,7 @@ namespace VimeoDotNet.Net
         protected IRestRequest PrepareRequest()
         {
             SetDefaults();
-            var client = GetClient();
+            IRestClient client = GetClient();
             if (!ExcludeAuthorizationHeader)
             {
                 client.Authenticator = GetAuthenticator();
@@ -190,10 +208,12 @@ namespace VimeoDotNet.Net
 
         protected IAuthenticator GetAuthenticator()
         {
-            if (!string.IsNullOrWhiteSpace(AccessToken)) {
+            if (!string.IsNullOrWhiteSpace(AccessToken))
+            {
                 return GetBearerAuthenticator();
             }
-            else if (!string.IsNullOrWhiteSpace(ClientId) && !string.IsNullOrWhiteSpace(ClientSecret)) {
+            if (!string.IsNullOrWhiteSpace(ClientId) && !string.IsNullOrWhiteSpace(ClientSecret))
+            {
                 return GetBasicAuthenticator();
             }
             return null;
@@ -207,15 +227,15 @@ namespace VimeoDotNet.Net
         protected IAuthenticator GetBasicAuthenticator()
         {
             string token = string.Format("{0}:{1}", ClientId, ClientSecret);
-            byte[] tokenBytes = System.Text.Encoding.ASCII.GetBytes(token);
+            byte[] tokenBytes = Encoding.ASCII.GetBytes(token);
             string encoded = Convert.ToBase64String(tokenBytes);
-            
+
             return new OAuth2AuthorizationRequestHeaderAuthenticator(encoded, "Basic");
         }
 
         protected IRestClient GetClient()
         {
-            var baseUrl = GetBaseUrl();
+            string baseUrl = GetBaseUrl();
             if (Client == null || Client.BaseUrl != baseUrl)
             {
                 Client = new RestClient(baseUrl);
@@ -233,20 +253,25 @@ namespace VimeoDotNet.Net
 
         protected void SetHeaders(IRestRequest request)
         {
-            if (!Headers.ContainsKey(Request.HeaderContentType) && (Method == Method.POST || Method == Method.PATCH || Method == Method.PUT)) {
+            if (!Headers.ContainsKey(Request.HeaderContentType) &&
+                (Method == Method.POST || Method == Method.PATCH || Method == Method.PUT))
+            {
                 Headers[Request.HeaderContentType] = "application/x-www-form-urlencoded";
             }
-            if (!Headers.ContainsKey(Request.HeaderAccepts)) {
+            if (!Headers.ContainsKey(Request.HeaderAccepts))
+            {
                 Headers.Add(Request.HeaderAccepts, BuildAcceptsHeader());
             }
-            foreach(var header in Headers) {
+            foreach (var header in Headers)
+            {
                 request.AddHeader(header.Key, header.Value);
             }
         }
 
         protected void SetQueryParams(IRestRequest request)
         {
-            foreach(var qsParam in Query) {
+            foreach (var qsParam in Query)
+            {
                 request.AddParameter(qsParam.Key, qsParam.Value);
             }
         }
@@ -303,7 +328,7 @@ namespace VimeoDotNet.Net
 
             if (Port != GetDefaultPort(Protocol))
             {
-                url += ":" + Port.ToString();
+                url += ":" + Port;
             }
 
             return url;
