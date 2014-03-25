@@ -25,7 +25,7 @@ namespace VimeoDotNet.Authorization
         public AuthorizationClient(string clientId, string clientSecret)
         {
             ClientId = clientId;
-            clientSecret = clientSecret;
+            ClientSecret = clientSecret;
         }
 
         public string GetAuthorizationEndpoint(string redirectUri, IEnumerable<string> scope, string state)
