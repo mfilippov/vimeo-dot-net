@@ -7,6 +7,6 @@ namespace VimeoDotNet.Models
     {
         public long max { get; set; }
         public long free { get; set; }
-        public int used { get; set; }
+        public long used { get; set; }
     }
 }
