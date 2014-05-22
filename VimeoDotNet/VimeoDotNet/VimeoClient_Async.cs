@@ -343,7 +343,7 @@ namespace VimeoDotNet
             }
             if (metaData.Privacy != VideoPrivacyEnum.Unknown)
             {
-                request.Query.Add("privacy", metaData.Privacy.ToString().ToLower());
+                request.Query.Add("privacy.view", metaData.Privacy.ToString().ToLower());
             }
             request.Query.Add("review_link", metaData.ReviewLinkEnabled.ToString().ToLower());
 
