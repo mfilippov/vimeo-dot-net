@@ -17,8 +17,8 @@ namespace VimeoDotNet
         Task<User> GetAccountInformationAsync();
         User GetUserInformation(long userId);
         Task<User> GetUserInformationAsync(long userId);
-        Video GetAccountVideo(long clipId);
-        Task<Video> GetAccountVideoAsync(long clipId);
+        Video GetVideo(long clipId);
+        Task<Video> GetVideoAsync(long clipId);
         Paginated<Video> GetAccountVideos();
         Task<Paginated<Video>> GetAccountVideosAsync();
         string GetOauthUrl(string redirectUri, IEnumerable<string> scope, string state);
@@ -35,13 +35,12 @@ namespace VimeoDotNet
 
         void UpdateVideoMetadata(long clipId, VideoUpdateMetadata metaData);
         Task UpdateVideoMetadataAsync(long clipId, VideoUpdateMetadata metaData);
-
+        void DeleteVideo(long clipId);
+        Task DeleteVideoAsync(long clipId);
         IUploadRequest UploadEntireFile(IBinaryContent fileContent,
             int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
-
         Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent,
             int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
-
         VerifyUploadResponse VerifyUploadFile(IUploadRequest uploadRequest);
         Task<VerifyUploadResponse> VerifyUploadFileAsync(IUploadRequest uploadRequest);
     }
