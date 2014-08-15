@@ -130,7 +130,7 @@ namespace VimeoDotNet
         {
             try
             {
-                return GetUserAlbumVideosAsync(albumId, userId).Result;
+                return GetUserAlbumVideosAsync(userId, albumId).Result;
             }
             catch (AggregateException ex)
             {

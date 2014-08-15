@@ -121,6 +121,7 @@ namespace VimeoDotNet.Tests
 
             // assert
             Assert.IsNotNull(videos);
+            Assert.AreNotEqual(videos.data.Count, 0);
         }
 
         [TestMethod]
@@ -151,6 +152,7 @@ namespace VimeoDotNet.Tests
 
             // assert
             Assert.IsNotNull(videos);
+            Assert.AreNotEqual(videos.data.Count, 0);
         }
 
         [TestMethod]
