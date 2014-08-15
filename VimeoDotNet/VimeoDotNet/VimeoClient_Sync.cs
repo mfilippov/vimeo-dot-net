@@ -100,6 +100,58 @@ namespace VimeoDotNet
             }
         }
 
+        public Paginated<Video> GetAccountAlbumVideos(long albumId)
+        {
+            try
+            {
+                return GetAccountAlbumVideosAsync(albumId).Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
+        }
+
+        public Video GetAccountAlbumVideo(long albumId, long clipId)
+        {
+            try
+            {
+                return GetAccountAlbumVideoAsync(albumId, clipId).Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
+        }
+
+        public Paginated<Video> GetUserAlbumVideos(long userId, long albumId)
+        {
+            try
+            {
+                return GetUserAlbumVideosAsync(albumId, userId).Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
+        }
+
+        public Video GetUserAlbumVideo(long userId, long albumId, long clipId)
+        {
+            try
+            {
+                return GetUserAlbumVideoAsync(userId, albumId, clipId).Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
+        }
+
         public void UpdateVideoMetadata(long clipId, VideoUpdateMetadata metaData)
         {
             try
