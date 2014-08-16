@@ -426,7 +426,7 @@ namespace VimeoDotNet
             ThrowIfUnauthorized();
 
             IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
-            string endpoint = Endpoints.User + (clipId.HasValue ? Endpoints.AlbumVideo : Endpoints.AlbumVideos);
+            string endpoint = clipId.HasValue ? Endpoints.UserAlbumVideo : Endpoints.UserAlbumVideos;
             request.Method = Method.GET;
             request.Path = userId.HasValue ? endpoint : Endpoints.GetCurrentUserEndpoint(endpoint);
 
