@@ -66,16 +66,16 @@ namespace VimeoDotNet.Tests
                 VimeoClient client = CreateAuthenticatedClient();
                 // act
                 completedRequest = client.UploadEntireFile(file);
+                Assert.IsTrue(completedRequest.AllBytesWritten);
+                Assert.IsNotNull(completedRequest);
+                Assert.IsTrue(completedRequest.IsVerifiedComplete);
+                Assert.AreEqual(length, completedRequest.BytesWritten);
+                Assert.IsNotNull(completedRequest.ClipUri);
+                Assert.IsTrue(completedRequest.ClipId.HasValue);                
                 client.DeleteVideo(completedRequest.ClipId.Value);
+                Assert.IsNull(client.GetVideo(completedRequest.ClipId.Value));
             }
-
-            // assert
-            Assert.IsNotNull(completedRequest);
-            Assert.IsTrue(completedRequest.AllBytesWritten);
-            Assert.IsTrue(completedRequest.IsVerifiedComplete);
-            Assert.AreEqual(length, completedRequest.BytesWritten);
-            Assert.IsNotNull(completedRequest.ClipUri);
-            Assert.IsTrue(completedRequest.ClipId > 0);
+            // assert            
         }
 
         [TestMethod]
