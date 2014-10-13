@@ -285,6 +285,103 @@ namespace VimeoDotNet
             }
         }
 
+        public async Task<Paginated<Video>> GetAccountAlbumVideosAsync(long albumId)
+        {
+            try
+            {
+                IApiRequest request = GenerateAlbumVideosRequest(albumId);
+                IRestResponse<Paginated<Video>> response = await request.ExecuteRequestAsync<Paginated<Video>>();
+                CheckStatusCodeError(response, "Error retrieving account album videos.");
+
+                return response.Data;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+                throw new VimeoApiException("Error retrieving account album videos.", ex);
+            }
+        }
+
+        public async Task<Video> GetAccountAlbumVideoAsync(long albumId, long clipId)
+        {
+            try
+            {
+                IApiRequest request = GenerateAlbumVideosRequest(albumId, clipId: clipId);
+                IRestResponse<Video> response = await request.ExecuteRequestAsync<Video>();
+                CheckStatusCodeError(response, "Error retrieving user album video.", HttpStatusCode.NotFound);
+
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+                return response.Data;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+                throw new VimeoApiException("Error retrieving user album video.", ex);
+            }
+        }
+
+        public async Task<Paginated<Video>> GetUserAlbumVideosAsync(long userId, long albumId)
+        {
+            try
+            {
+                IApiRequest request = GenerateAlbumVideosRequest(albumId, userId);
+                IRestResponse<Paginated<Video>> response = await request.ExecuteRequestAsync<Paginated<Video>>();
+                CheckStatusCodeError(response, "Error retrieving user album videos.", HttpStatusCode.NotFound);
+
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return new Paginated<Video>
+                    {
+                        data = new List<Video>(),
+                        page = 0,
+                        total = 0
+                    };
+                }
+                return response.Data;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+                throw new VimeoApiException("Error retrieving user album videos.", ex);
+            }
+        }
+
+        public async Task<Video> GetUserAlbumVideoAsync(long userId, long albumId, long clipId)
+        {
+            try
+            {
+                IApiRequest request = GenerateAlbumVideosRequest(albumId, userId, clipId);
+                IRestResponse<Video> response = await request.ExecuteRequestAsync<Video>();
+                CheckStatusCodeError(response, "Error retrieving user album video.", HttpStatusCode.NotFound);
+
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+                return response.Data;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+                throw new VimeoApiException("Error retrieving user album video.", ex);
+            }
+        }
+
         public async Task UpdateVideoMetadataAsync(long clipId, VideoUpdateMetadata metaData)
         {
             try
@@ -312,6 +409,28 @@ namespace VimeoDotNet
             request.Method = Method.GET;
             request.Path = userId.HasValue ? endpoint : Endpoints.GetCurrentUserEndpoint(endpoint);
 
+            if (userId.HasValue)
+            {
+                request.UrlSegments.Add("userId", userId.ToString());
+            }
+            if (clipId.HasValue)
+            {
+                request.UrlSegments.Add("clipId", clipId.ToString());
+            }
+
+            return request;
+        }
+
+        private IApiRequest GenerateAlbumVideosRequest(long albumId, long? userId = null, long? clipId = null)
+        {
+            ThrowIfUnauthorized();
+
+            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+            string endpoint = clipId.HasValue ? Endpoints.UserAlbumVideo : Endpoints.UserAlbumVideos;
+            request.Method = Method.GET;
+            request.Path = userId.HasValue ? endpoint : Endpoints.GetCurrentUserEndpoint(endpoint);
+
+            request.UrlSegments.Add("albumId", albumId.ToString());
             if (userId.HasValue)
             {
                 request.UrlSegments.Add("userId", userId.ToString());
