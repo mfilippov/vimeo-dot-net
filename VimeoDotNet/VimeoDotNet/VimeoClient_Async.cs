@@ -345,6 +345,10 @@ namespace VimeoDotNet
             {
                 request.Query.Add("privacy.view", metaData.Privacy.ToString().ToLower());
             }
+            if (metaData.EmbedPrivacy != VideoEmbedPrivacyEnum.Unknown)
+            {
+                request.Query.Add("privacy.embed", metaData.EmbedPrivacy.ToString().ToLower());
+            }
             request.Query.Add("review_link", metaData.ReviewLinkEnabled.ToString().ToLower());
 
             return request;
