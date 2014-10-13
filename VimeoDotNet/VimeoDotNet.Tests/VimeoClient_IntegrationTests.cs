@@ -113,7 +113,7 @@ namespace VimeoDotNet.Tests
             VimeoClient client = CreateAuthenticatedClient();
 
             // act
-            Paginated<Video> videos = client.GetAccountVideos();
+            Paginated<Video> videos = client.GetVideos();
 
             // assert
             Assert.IsNotNull(videos);
@@ -141,7 +141,7 @@ namespace VimeoDotNet.Tests
             VimeoClient client = CreateAuthenticatedClient();
 
             // act
-            Paginated<Video> videos = client.GetAccountAlbumVideos(albumId);
+            Paginated<Video> videos = client.GetAlbumVideos(albumId);
 
             // assert
             Assert.IsNotNull(videos);
@@ -157,7 +157,7 @@ namespace VimeoDotNet.Tests
             VimeoClient client = CreateAuthenticatedClient();
 
             // act
-            Video video = client.GetAccountAlbumVideo(albumId, clipId);
+            Video video = client.GetAlbumVideo(albumId, clipId);
 
             // assert
             Assert.IsNotNull(video);

@@ -48,11 +48,11 @@ namespace VimeoDotNet
 
         #region Videos
 
-        public Paginated<Video> GetAccountVideos()
+        public Paginated<Video> GetVideos()
         {
             try
             {
-                return GetAccountVideosAsync().Result;
+                return GetVideosAsync().Result;
             }
             catch (AggregateException ex)
             {
@@ -100,11 +100,11 @@ namespace VimeoDotNet
             }
         }
 
-        public Paginated<Video> GetAccountAlbumVideos(long albumId)
+        public Paginated<Video> GetAlbumVideos(long albumId)
         {
             try
             {
-                return GetAccountAlbumVideosAsync(albumId).Result;
+                return GetAlbumVideosAsync(albumId).Result;
             }
             catch (AggregateException ex)
             {
@@ -113,11 +113,11 @@ namespace VimeoDotNet
             }
         }
 
-        public Video GetAccountAlbumVideo(long albumId, long clipId)
+        public Video GetAlbumVideo(long albumId, long clipId)
         {
             try
             {
-                return GetAccountAlbumVideoAsync(albumId, clipId).Result;
+                return GetAlbumVideoAsync(albumId, clipId).Result;
             }
             catch (AggregateException ex)
             {

@@ -188,7 +188,7 @@ namespace VimeoDotNet
 
         #region Videos
 
-        public async Task<Paginated<Video>> GetAccountVideosAsync()
+        public async Task<Paginated<Video>> GetVideosAsync()
         {
             try
             {
@@ -285,7 +285,7 @@ namespace VimeoDotNet
             }
         }
 
-        public async Task<Paginated<Video>> GetAccountAlbumVideosAsync(long albumId)
+        public async Task<Paginated<Video>> GetAlbumVideosAsync(long albumId)
         {
             try
             {
@@ -305,7 +305,7 @@ namespace VimeoDotNet
             }
         }
 
-        public async Task<Video> GetAccountAlbumVideoAsync(long albumId, long clipId)
+        public async Task<Video> GetAlbumVideoAsync(long albumId, long clipId)
         {
             try
             {
