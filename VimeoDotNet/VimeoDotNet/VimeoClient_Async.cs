@@ -208,7 +208,7 @@ namespace VimeoDotNet
             }
         }
 
-        public async Task<Video> GetAccountVideoAsync(long clipId)
+        public async Task<Video> GetVideoAsync(long clipId)
         {
             try
             {
@@ -400,6 +400,24 @@ namespace VimeoDotNet
             }
         }
 
+        public async Task DeleteVideoAsync(long clipId)
+        {
+            try
+            {
+                IApiRequest request = GenerateVideoDeleteRequest(clipId);
+                IRestResponse response = await request.ExecuteRequestAsync();
+                CheckStatusCodeError(response, "Error deleting video.");
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+                throw new VimeoApiException("Error updating user video metadata.", ex);
+            }
+        }
+       
         private IApiRequest GenerateVideosRequest(long? userId = null, long? clipId = null)
         {
             ThrowIfUnauthorized();
@@ -470,6 +488,19 @@ namespace VimeoDotNet
             }
             request.Query.Add("review_link", metaData.ReviewLinkEnabled.ToString().ToLower());
 
+            return request;
+        }
+
+        private IApiRequest GenerateVideoDeleteRequest(long clipId)
+        {
+            ThrowIfUnauthorized();
+
+            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+            request.Method = Method.DELETE;
+            request.Path = Endpoints.Video;
+
+            request.UrlSegments.Add("clipId", clipId.ToString());
+            
             return request;
         }
 
@@ -612,14 +643,14 @@ namespace VimeoDotNet
                     await GenerateFileStreamRequest(uploadRequest.File, uploadRequest.Ticket, verifyOnly: true);
                 IRestResponse response = await request.ExecuteRequestAsync();
                 var verify = new VerifyUploadResponse();
-                CheckStatusCodeError(uploadRequest, response, "Error verifying file upload.", (HttpStatusCode) 308);
+                CheckStatusCodeError(uploadRequest, response, "Error verifying file upload.", (HttpStatusCode)308);
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     verify.BytesWritten = uploadRequest.FileLength;
                     verify.Status = UploadStatusEnum.Completed;
                 }
-                else if (response.StatusCode == (HttpStatusCode) 308)
+                else if (response.StatusCode == (HttpStatusCode)308)
                 {
                     verify.Status = UploadStatusEnum.InProgress;
                     int startIndex = 0;
@@ -786,7 +817,7 @@ namespace VimeoDotNet
 
         private bool IsSuccessStatusCode(HttpStatusCode statusCode)
         {
-            var code = (int) statusCode;
+            var code = (int)statusCode;
             return code >= 200 && code < 300;
         }
 

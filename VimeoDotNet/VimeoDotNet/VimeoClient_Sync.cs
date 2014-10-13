@@ -61,11 +61,11 @@ namespace VimeoDotNet
             }
         }
 
-        public Video GetAccountVideo(long clipId)
+        public Video GetVideo(long clipId)
         {
             try
             {
-                return GetAccountVideoAsync(clipId).Result;
+                return GetVideoAsync(clipId).Result;
             }
             catch (AggregateException ex)
             {
@@ -157,6 +157,18 @@ namespace VimeoDotNet
             try
             {
                 UpdateVideoMetadataAsync(clipId, metaData).Wait();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+            }
+        }
+
+        public void DeleteVideo(long clipId)
+        {
+            try
+            {
+                DeleteVideoAsync(clipId).Wait();
             }
             catch (AggregateException ex)
             {
