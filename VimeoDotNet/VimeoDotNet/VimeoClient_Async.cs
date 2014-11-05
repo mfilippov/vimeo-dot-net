@@ -188,11 +188,11 @@ namespace VimeoDotNet
 
         #region Videos
 
-        public async Task<Paginated<Video>> GetVideosAsync()
+        public async Task<Paginated<Video>> GetVideosAsync(int? page = null, int? perPage = null)
         {
             try
             {
-                IApiRequest request = GenerateVideosRequest();
+                IApiRequest request = GenerateVideosRequest(page: page, perPage: perPage);
                 IRestResponse<Paginated<Video>> response = await request.ExecuteRequestAsync<Paginated<Video>>();
                 CheckStatusCodeError(response, "Error retrieving account videos.");
 
@@ -418,7 +418,7 @@ namespace VimeoDotNet
             }
         }
        
-        private IApiRequest GenerateVideosRequest(long? userId = null, long? clipId = null)
+        private IApiRequest GenerateVideosRequest(long? userId = null, long? clipId = null, int? page = null, int? perPage = null)
         {
             ThrowIfUnauthorized();
 
@@ -434,6 +434,14 @@ namespace VimeoDotNet
             if (clipId.HasValue)
             {
                 request.UrlSegments.Add("clipId", clipId.ToString());
+            }
+            if (page.HasValue)
+            {
+                request.Query.Add("page", page.ToString());
+            }
+            if (perPage.HasValue)
+            {
+                request.Query.Add("per_page", perPage.ToString());
             }
 
             return request;

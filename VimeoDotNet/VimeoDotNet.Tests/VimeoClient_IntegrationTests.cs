@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
@@ -114,6 +115,19 @@ namespace VimeoDotNet.Tests
 
             // act
             Paginated<Video> videos = client.GetVideos();
+
+            // assert
+            Assert.IsNotNull(videos);
+        }
+
+        [TestMethod]
+        public async Task Integration_VimeoClient_GetAccountVideos_SecondPage()
+        {
+            // arrange
+            VimeoClient client = CreateAuthenticatedClient();
+
+            // act
+            Paginated<Video> videos = await client.GetVideosAsync(page: 2, perPage: 5);
 
             // assert
             Assert.IsNotNull(videos);
