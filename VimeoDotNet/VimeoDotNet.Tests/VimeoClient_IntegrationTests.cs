@@ -113,7 +113,7 @@ namespace VimeoDotNet.Tests
             VimeoClient client = CreateAuthenticatedClient();
 
             // act
-            Paginated<Video> videos = client.GetAccountVideos();
+            Paginated<Video> videos = client.GetVideos();
 
             // assert
             Assert.IsNotNull(videos);
@@ -123,11 +123,73 @@ namespace VimeoDotNet.Tests
         public void Integration_VimeoClient_GetAccountVideo_RetrievesVideo()
         {
             // arrange
-            long clipId = 89133196; // Your video ID here
+            long clipId = 103374506; // Your video ID here
             VimeoClient client = CreateAuthenticatedClient();
 
             // act
             Video video = client.GetVideo(clipId);
+
+            // assert
+            Assert.IsNotNull(video);
+        }
+
+        [TestMethod]
+        public void Integration_VimeoClient_GetAccountAlbumVideos_RetrievesCurrentAccountAlbumVideos()
+        {
+            // arrange
+            const long albumId = 2993579; // Your album ID here
+            VimeoClient client = CreateAuthenticatedClient();
+
+            // act
+            Paginated<Video> videos = client.GetAlbumVideos(albumId);
+
+            // assert
+            Assert.IsNotNull(videos);
+            Assert.AreNotEqual(videos.data.Count, 0);
+        }
+
+        [TestMethod]
+        public void Integration_VimeoClient_GetAccountAlbumVideo_RetrievesVideo()
+        {
+            // arrange
+            const long albumId = 2993579; // Your album ID here
+            const long clipId = 103374506; // Your video ID here
+            VimeoClient client = CreateAuthenticatedClient();
+
+            // act
+            Video video = client.GetAlbumVideo(albumId, clipId);
+
+            // assert
+            Assert.IsNotNull(video);
+        }
+
+        [TestMethod]
+        public void Integration_VimeoClient_GetUserAlbumVideos_RetrievesUserAlbumVideos()
+        {
+            // arrange
+            const long userId = 6029930; // Your user ID here
+            const long albumId = 2993579; // Your album ID here
+            VimeoClient client = CreateAuthenticatedClient();
+
+            // act
+            Paginated<Video> videos = client.GetUserAlbumVideos(userId, albumId);
+
+            // assert
+            Assert.IsNotNull(videos);
+            Assert.AreNotEqual(videos.data.Count, 0);
+        }
+
+        [TestMethod]
+        public void Integration_VimeoClient_GetUserAlbumVideo_RetrievesVideo()
+        {
+            // arrange
+            const long userId = 6029930; // Your user ID here
+            const long albumId = 2993579; // Your album ID here
+            const long clipId = 103374506; // Your video ID here
+            VimeoClient client = CreateAuthenticatedClient();
+
+            // act
+            Video video = client.GetUserAlbumVideo(userId, albumId, clipId);
 
             // assert
             Assert.IsNotNull(video);

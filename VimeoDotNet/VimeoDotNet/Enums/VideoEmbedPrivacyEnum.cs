@@ -3,8 +3,8 @@
     public enum VideoEmbedPrivacyEnum
     {
         Unknown,
-        Nowhere,
-        Anywhere,
-        Approved
+        Public,
+        Private,
+        Whitelist
     }
 }

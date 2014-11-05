@@ -19,8 +19,8 @@ namespace VimeoDotNet
         Task<User> GetUserInformationAsync(long userId);
         Video GetVideo(long clipId);
         Task<Video> GetVideoAsync(long clipId);
-        Paginated<Video> GetAccountVideos();
-        Task<Paginated<Video>> GetAccountVideosAsync();
+        Paginated<Video> GetVideos();
+        Task<Paginated<Video>> GetVideosAsync();
         string GetOauthUrl(string redirectUri, IEnumerable<string> scope, string state);
         UploadTicket GetUploadTicket();
         Task<UploadTicket> GetUploadTicketAsync();
@@ -43,5 +43,14 @@ namespace VimeoDotNet
             int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
         VerifyUploadResponse VerifyUploadFile(IUploadRequest uploadRequest);
         Task<VerifyUploadResponse> VerifyUploadFileAsync(IUploadRequest uploadRequest);
+
+        Paginated<Video> GetAlbumVideos(long albumId);
+        Task<Paginated<Video>> GetAlbumVideosAsync(long albumId);
+        Video GetAlbumVideo(long albumId, long clipId);
+        Task<Video> GetAlbumVideoAsync(long albumId, long clipId);
+        Paginated<Video> GetUserAlbumVideos(long userId, long albumId);
+        Task<Paginated<Video>> GetUserAlbumVideosAsync(long userId, long albumId);
+        Video GetUserAlbumVideo(long userId, long albumId, long clipId);
+        Task<Video> GetUserAlbumVideoAsync(long userId, long albumId, long clipId);
     }
 }

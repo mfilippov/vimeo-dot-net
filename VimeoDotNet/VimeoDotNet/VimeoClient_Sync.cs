@@ -48,11 +48,11 @@ namespace VimeoDotNet
 
         #region Videos
 
-        public Paginated<Video> GetAccountVideos()
+        public Paginated<Video> GetVideos()
         {
             try
             {
-                return GetAccountVideosAsync().Result;
+                return GetVideosAsync().Result;
             }
             catch (AggregateException ex)
             {
@@ -92,6 +92,58 @@ namespace VimeoDotNet
             try
             {
                 return GetUserVideoAsync(userId, clipId).Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
+        }
+
+        public Paginated<Video> GetAlbumVideos(long albumId)
+        {
+            try
+            {
+                return GetAlbumVideosAsync(albumId).Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
+        }
+
+        public Video GetAlbumVideo(long albumId, long clipId)
+        {
+            try
+            {
+                return GetAlbumVideoAsync(albumId, clipId).Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
+        }
+
+        public Paginated<Video> GetUserAlbumVideos(long userId, long albumId)
+        {
+            try
+            {
+                return GetUserAlbumVideosAsync(userId, albumId).Result;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
+        }
+
+        public Video GetUserAlbumVideo(long userId, long albumId, long clipId)
+        {
+            try
+            {
+                return GetUserAlbumVideoAsync(userId, albumId, clipId).Result;
             }
             catch (AggregateException ex)
             {
