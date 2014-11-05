@@ -236,7 +236,7 @@ namespace VimeoDotNet.Net
         protected IRestClient GetClient()
         {
             string baseUrl = GetBaseUrl();
-            if (Client == null || Client.BaseUrl != baseUrl)
+            if (Client == null || Client.BaseUrl.AbsoluteUri != baseUrl)
             {
                 Client = new RestClient(baseUrl);
             }
