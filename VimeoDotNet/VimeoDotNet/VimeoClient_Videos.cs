@@ -156,7 +156,7 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateVideosRequest(userId);
+                IApiRequest request = GenerateVideosRequest(userId: userId);
                 IRestResponse<Paginated<Video>> response = await request.ExecuteRequestAsync<Paginated<Video>>();
                 CheckStatusCodeError(response, "Error retrieving user videos.", HttpStatusCode.NotFound);
 
@@ -205,11 +205,11 @@ namespace VimeoDotNet
             }
         }
 
-        public async Task<Paginated<Video>> GetVideosAsync()
+        public async Task<Paginated<Video>> GetVideosAsync(int? page = null, int? perPage = null)
         {
             try
             {
-                IApiRequest request = GenerateVideosRequest();
+                IApiRequest request = GenerateVideosRequest(page: page, perPage: perPage);
                 IRestResponse<Paginated<Video>> response = await request.ExecuteRequestAsync<Paginated<Video>>();
                 CheckStatusCodeError(response, "Error retrieving account videos.");
 
@@ -335,27 +335,6 @@ namespace VimeoDotNet
                 request.Query.Add("privacy.embed", metaData.EmbedPrivacy.ToString().ToLower());
             }
             request.Query.Add("review_link", metaData.ReviewLinkEnabled.ToString().ToLower());
-
-            return request;
-        }
-
-        private IApiRequest GenerateVideosRequest(long? userId = null, long? clipId = null)
-        {
-            ThrowIfUnauthorized();
-
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
-            string endpoint = clipId.HasValue ? Endpoints.UserVideo : Endpoints.UserVideos;
-            request.Method = Method.GET;
-            request.Path = userId.HasValue ? endpoint : Endpoints.GetCurrentUserEndpoint(endpoint);
-
-            if (userId.HasValue)
-            {
-                request.UrlSegments.Add("userId", userId.ToString());
-            }
-            if (clipId.HasValue)
-            {
-                request.UrlSegments.Add("clipId", clipId.ToString());
-            }
 
             return request;
         }
