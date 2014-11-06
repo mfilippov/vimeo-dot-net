@@ -20,7 +20,7 @@ namespace VimeoDotNet
         Video GetVideo(long clipId);
         Task<Video> GetVideoAsync(long clipId);
         Paginated<Video> GetVideos();
-        Task<Paginated<Video>> GetVideosAsync();
+        Task<Paginated<Video>> GetVideosAsync(int? page, int? perPage);
         string GetOauthUrl(string redirectUri, IEnumerable<string> scope, string state);
         UploadTicket GetUploadTicket();
         Task<UploadTicket> GetUploadTicketAsync();
