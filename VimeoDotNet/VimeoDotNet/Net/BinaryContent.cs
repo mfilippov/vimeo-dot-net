@@ -12,7 +12,10 @@ namespace VimeoDotNet.Net
 
         private const int BUFFER_SIZE = 16384; //16k
 
-        [NonSerialized] private Stream _data;
+        private bool disposeStream = true;
+
+        [NonSerialized]
+        private Stream _data;
 
         #endregion
 
@@ -46,6 +49,7 @@ namespace VimeoDotNet.Net
         {
             ContentType = contentType;
             Data = data;
+            disposeStream = false;
         }
 
         public BinaryContent(byte[] data, string contentType)
@@ -82,7 +86,7 @@ namespace VimeoDotNet.Net
 
         public void Dispose()
         {
-            if (Data != null)
+            if (Data != null && disposeStream)
             {
                 Data.Dispose();
                 Data = null;

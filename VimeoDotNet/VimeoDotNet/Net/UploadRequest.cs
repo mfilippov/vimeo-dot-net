@@ -45,11 +45,7 @@ namespace VimeoDotNet.Net
         {
             get
             {
-                if (File == null || File.Data == null)
-                {
-                    return false;
-                }
-                return BytesWritten == FileLength;
+                return FileLength > 0 && BytesWritten == FileLength;
             }
         }
 
