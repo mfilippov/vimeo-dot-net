@@ -1,21 +1,11 @@
 ﻿using System;
-using VimeoDotNet.Enums;
-using VimeoDotNet.Helpers;
+using System.Collections.Generic;
 
-namespace VimeoDotNet.Models
-{
+namespace VimeoDotNet.Models {
     [Serializable]
-    public class Picture
-    {
-        public string type { get; set; }
-        public int width { get; set; }
-        public int height { get; set; }
-        public string link { get; set; }
-
-        public PictureTypeEnum PictureType
-        {
-            get { return ModelHelpers.GetEnumValue<PictureTypeEnum>(type); }
-            set { type = ModelHelpers.GetEnumString(value); }
-        }
+    public class Picture {
+        public bool active { get; set; }
+        public string uri { get; set; }
+        public List<Size> sizes { get; set; }
     }
 }
