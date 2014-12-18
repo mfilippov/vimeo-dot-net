@@ -59,6 +59,7 @@
     <Compile Include="Models\PresetButtons.cs" />
     <Compile Include="Models\PresetLogos.cs" />
     <Compile Include="Models\PresetSettings.cs" />
+    <Compile Include="Models\Size.cs" />
     <Compile Include="Models\VideoUpdateMetadata.cs" />
     <Compile Include="VimeoClientFactory.cs" />
     <Compile Include="Authorization\AuthorizationClient.cs" />
