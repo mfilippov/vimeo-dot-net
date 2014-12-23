@@ -332,7 +332,7 @@ namespace VimeoDotNet
             }
             if (metaData.Privacy == VideoPrivacyEnum.Password)
             {
-                request.Query.Add("password", metaData.password);
+                request.Query.Add("password", metaData.Password);
             }
             if (metaData.EmbedPrivacy != VideoEmbedPrivacyEnum.Unknown)
             {
