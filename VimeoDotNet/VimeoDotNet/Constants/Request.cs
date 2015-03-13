@@ -9,7 +9,7 @@ namespace VimeoDotNet.Constants
         public const string HeaderContentType = "Content-Type";
         public const string HeaderContentLength = "Content-Length";
         public const string HeaderContentRange = "Content-Range";
-        public const string HeaderAccepts = "Accepts";
+        public const string HeaderAccepts = "Accept";
 
         public const string DefaultProtocol = ProtocolHttps;
         public const string DefaultHostName = "api.vimeo.com";

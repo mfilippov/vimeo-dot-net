@@ -90,7 +90,7 @@ namespace VimeoDotNet.Net
             Port = Request.DefaultHttpsPort;
             Method = Request.DefaultMethod;
             ResponseType = ResponseTypes.Wildcard;
-            ApiVersion = ApiVersions.v3_0;
+            ApiVersion = ApiVersions.v3_2;
             ExcludeAuthorizationHeader = false;
         }
 
@@ -294,7 +294,7 @@ namespace VimeoDotNet.Net
             Protocol = string.IsNullOrWhiteSpace(Protocol) ? Request.DefaultProtocol : Protocol;
             Host = string.IsNullOrWhiteSpace(Host) ? Request.DefaultHostName : Host;
             ResponseType = string.IsNullOrWhiteSpace(ResponseType) ? ResponseTypes.Wildcard : ResponseType;
-            ApiVersion = string.IsNullOrWhiteSpace(ApiVersion) ? ApiVersions.v3_0 : ApiVersion;
+            ApiVersion = string.IsNullOrWhiteSpace(ApiVersion) ? ApiVersions.v3_2 : ApiVersion;
 
             Protocol = Protocol.ToLower();
             Host = Host.ToLower();

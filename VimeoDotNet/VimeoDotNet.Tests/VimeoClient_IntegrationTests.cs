@@ -145,6 +145,7 @@ namespace VimeoDotNet.Tests
 
             // assert
             Assert.IsNotNull(video);
+            Assert.IsTrue(video.pictures.Any(a=>a.uri!=null));
         }
 
         [TestMethod]
