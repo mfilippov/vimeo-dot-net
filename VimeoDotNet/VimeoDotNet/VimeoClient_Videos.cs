@@ -154,9 +154,14 @@ namespace VimeoDotNet
 
         public async Task<Paginated<Video>> GetUserVideosAsync(long userId)
         {
+            return await GetUserVideosAsync(userId, null, null);
+        }
+
+        public async Task<Paginated<Video>> GetUserVideosAsync(long userId, int? page, int? perPage)
+        {
             try
             {
-                IApiRequest request = GenerateVideosRequest(userId: userId);
+                IApiRequest request = GenerateVideosRequest(userId: userId, page: page, perPage: perPage);
                 IRestResponse<Paginated<Video>> response = await request.ExecuteRequestAsync<Paginated<Video>>();
                 CheckStatusCodeError(response, "Error retrieving user videos.", HttpStatusCode.NotFound);
 
