@@ -76,9 +76,14 @@ namespace VimeoDotNet
 
         public Paginated<Video> GetUserVideos(long userId)
         {
+            return GetUserVideos(userId, null, null);
+        }
+
+        public Paginated<Video> GetUserVideos(long userId, int? page, int? perPage)
+        {
             try
             {
-                return GetUserVideosAsync(userId).Result;
+                return GetUserVideosAsync(userId, page, perPage).Result;
             }
             catch (AggregateException ex)
             {
