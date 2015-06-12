@@ -1,12 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>$id$</id>
         <version>$version$</version>
         <title>Vimeo-Dot-Net</title>
-        <authors>Stephen Commisso</authors>
-        <licenseUrl>https://github.com/scommisso/vimeo-dot-net/blob/master/LICENSE</licenseUrl>
-        <projectUrl>https://github.com/scommisso/vimeo-dot-net</projectUrl>
+        <authors>Stephen Commisso, Mikhail Filippov</authors>
+        <licenseUrl>https://github.com/mfilippov/vimeo-dot-net/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/mfilippov/vimeo-dot-net</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
         <description>.NET 4.5 wrapper around Vimeo's REST API v3.0.
 
@@ -15,13 +15,13 @@ Features:
  - Video retrieval
  - Resumable video file upload</description>
         <summary />
-        <releaseNotes>v0.6.3 Fix retrieval functions to return null on 404</releaseNotes>
-        <copyright>Copyright © 2014, Stephen Commisso</copyright>
+        <releaseNotes>v0.7.4 Add paging support for GetUserVideos method</releaseNotes>
+        <copyright>Copyright © 2015, Stephen Commisso, Mikhail Filippov</copyright>
         <language>en-US</language>
         <tags>vimeo, async</tags>
         <dependencies>
-            <group targetFramework=".NETFramework4.5">
-                <dependency id="RestSharp" version="104.4.0" />
+            <group>
+                <dependency id="RestSharp" version="105.1.0" />
             </group>
         </dependencies>
     </metadata>
