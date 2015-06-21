@@ -152,16 +152,16 @@ namespace VimeoDotNet
             }
         }
 
-        public async Task<Paginated<Video>> GetUserVideosAsync(long userId)
+        public async Task<Paginated<Video>> GetUserVideosAsync(long userId, string query = null)
         {
-            return await GetUserVideosAsync(userId, null, null);
+            return await GetUserVideosAsync(userId, null, null, query);
         }
 
-        public async Task<Paginated<Video>> GetUserVideosAsync(long userId, int? page, int? perPage)
+        public async Task<Paginated<Video>> GetUserVideosAsync(long userId, int? page, int? perPage, string query = null)
         {
             try
             {
-                IApiRequest request = GenerateVideosRequest(userId: userId, page: page, perPage: perPage);
+                IApiRequest request = GenerateVideosRequest(userId: userId, page: page, perPage: perPage, query: query);
                 IRestResponse<Paginated<Video>> response = await request.ExecuteRequestAsync<Paginated<Video>>();
                 CheckStatusCodeError(response, "Error retrieving user videos.", HttpStatusCode.NotFound);
 
@@ -247,8 +247,8 @@ namespace VimeoDotNet
                 throw new VimeoApiException("Error updating user video metadata.", ex);
             }
         }
-        
-        private IApiRequest GenerateVideosRequest(long? userId = null, long? clipId = null, int? page = null, int? perPage = null)
+
+        private IApiRequest GenerateVideosRequest(long? userId = null, long? clipId = null, int? page = null, int? perPage = null, string query = null)
         {
             ThrowIfUnauthorized();
 
@@ -274,6 +274,10 @@ namespace VimeoDotNet
             if (perPage.HasValue)
             {
                 request.Query.Add("per_page", perPage.ToString());
+            }
+            if (!string.IsNullOrEmpty(query))
+            {
+                request.Query.Add("query", query);
             }
 
             return request;

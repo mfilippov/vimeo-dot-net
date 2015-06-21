@@ -26,8 +26,8 @@ namespace VimeoDotNet
         Task<UploadTicket> GetUploadTicketAsync();
         Video GetUserVideo(long userId, long clipId);
         Task<Video> GetUserVideoAsync(long userId, long clipId);
-        Paginated<Video> GetUserVideos(long userId);
-        Task<Paginated<Video>> GetUserVideosAsync(long userId);
+        Paginated<Video> GetUserVideos(long userId, string query = null);
+        Task<Paginated<Video>> GetUserVideosAsync(long userId, string query = null);
         IUploadRequest StartUploadFile(IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
 
         Task<IUploadRequest> StartUploadFileAsync(IBinaryContent fileContent,
