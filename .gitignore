@@ -18,6 +18,7 @@ obj/
 [Dd]ebug/
 [Rr]elease/
 [Pp]ackages/
+target/
 x64/
 *_i.c
 *_p.c

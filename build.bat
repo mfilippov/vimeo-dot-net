@@ -10,17 +10,17 @@ if not "%errorlevel%"=="0" goto failure
 
 rd target /Q /S 
 
-if not exist target mkdir target
-if not exist target\package mkdir target\package
-if not exist target\package\lib mkdir target\package\lib
-if not exist target\package\lib\net45 mkdir target\package\lib\net45
-if not exist target\package\lib\net45-client mkdir target\package\lib\net45-client
-if not exist target\package\lib\net451 mkdir target\package\lib\net451
-if not exist target\package\lib\net451-client mkdir target\package\lib\net451-client
-if not exist target\package\lib\net452 mkdir target\package\lib\net452
-if not exist target\package\lib\net452-client mkdir target\package\lib\net452-client
-if not exist target\package\lib\net46 mkdir target\package\lib\net46
-if not exist target\package\lib\net46-client mkdir target\package\lib\net46-client
+mkdir target
+mkdir target\package
+mkdir target\package\lib
+mkdir target\package\lib\net45
+mkdir target\package\lib\net45-client
+mkdir target\package\lib\net451
+mkdir target\package\lib\net451-client
+mkdir target\package\lib\net452
+mkdir target\package\lib\net452-client
+mkdir target\package\lib\net46
+mkdir target\package\lib\net46-client
 
 copy LICENSE target\
 copy readme.md target\package\
