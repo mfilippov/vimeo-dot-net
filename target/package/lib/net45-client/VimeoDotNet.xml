@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VimeoDotNet</name>
+    </assembly>
+    <members>
+        <member name="M:VimeoDotNet.Authorization.VimeoClientFactory.#ctor(VimeoDotNet.Authorization.IAuthorizationClientFactory,VimeoDotNet.Net.IApiRequestFactory)">
+            <summary>
+                IOC Constructor for use with IVimeoClientFactory
+            </summary>
+            <param name="authClientFactory">The IAuthorizationClientFactory</param>
+            <param name="apiRequestFactory">The IApiRequestFactory</param>
+        </member>
+        <member name="M:VimeoDotNet.VimeoClient.#ctor(System.String,System.String)">
+            <summary>
+                Multi-user application constructor, using user-level OAuth2
+            </summary>
+            <param name="accessToken">Your Vimeo API Access Token</param>
+        </member>
+        <member name="M:VimeoDotNet.VimeoClient.#ctor(System.String)">
+            <summary>
+                Single-user application constructor, using account OAuth2 access token
+            </summary>
+            <param name="accessToken">Your Vimeo API Access Token</param>
+        </member>
+        <member name="M:VimeoDotNet.VimeoClient.#ctor(VimeoDotNet.Authorization.IAuthorizationClientFactory,VimeoDotNet.Net.IApiRequestFactory,System.String,System.String)">
+            <summary>
+                Multi-user Constructor for use with IVimeoClientFactory
+            </summary>
+            <param name="authClientFactory">The IAuthorizationClientFactory</param>
+            <param name="apiRequestFactory">The IApiRequestFactory</param>
+        </member>
+        <member name="M:VimeoDotNet.VimeoClient.#ctor(VimeoDotNet.Authorization.IAuthorizationClientFactory,VimeoDotNet.Net.IApiRequestFactory,System.String)">
+            <summary>
+                Single-user Constructor for use with IVimeoClientFactory
+            </summary>
+            <param name="authClientFactory">The IAuthorizationClientFactory</param>
+            <param name="apiRequestFactory">The IApiRequestFactory</param>
+        </member>
+    </members>
+</doc>
