@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CFD7E43D-A5EE-4E65-B70C-9E8441BF412C}</ProjectGuid>
+    <ProjectGuid>{07850BB8-6561-4C12-879B-55D4AAC2823E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>VimeoDotNet</RootNamespace>
     <AssemblyName>VimeoDotNet</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="RestSharp, Version=105.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
+      <HintPath>..\..\packages\RestSharp.105.1.0\lib\net451\RestSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -43,64 +43,64 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Authorization\AuthorizationClient.cs">
+    <Compile Include="..\vimeodotnet\authorization\AuthorizationClient.cs">
       <Link>Authorization\AuthorizationClient.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Authorization\AuthorizationClientFactory.cs">
+    <Compile Include="..\vimeodotnet\authorization\AuthorizationClientFactory.cs">
       <Link>Authorization\AuthorizationClientFactory.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Authorization\IAuthorizationClient.cs">
+    <Compile Include="..\vimeodotnet\authorization\IAuthorizationClient.cs">
       <Link>Authorization\IAuthorizationClient.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Authorization\IAuthorizationClientFactory.cs">
+    <Compile Include="..\vimeodotnet\authorization\IAuthorizationClientFactory.cs">
       <Link>Authorization\IAuthorizationClientFactory.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Constants\ApiVersions.cs">
+    <Compile Include="..\vimeodotnet\constants\ApiVersions.cs">
       <Link>Constants\ApiVersions.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Constants\Endpoints.cs">
+    <Compile Include="..\vimeodotnet\constants\Endpoints.cs">
       <Link>Constants\Endpoints.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Constants\Request.cs">
+    <Compile Include="..\vimeodotnet\constants\Request.cs">
       <Link>Constants\Request.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Constants\ResponseTypes.cs">
+    <Compile Include="..\vimeodotnet\constants\ResponseTypes.cs">
       <Link>Constants\ResponseTypes.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Constants\Scopes.cs">
+    <Compile Include="..\vimeodotnet\constants\Scopes.cs">
       <Link>Constants\Scopes.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Enums\AccountTypeEnum.cs">
+    <Compile Include="..\vimeodotnet\enums\AccountTypeEnum.cs">
       <Link>Enums\AccountTypeEnum.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Enums\FileQualityEnum.cs">
+    <Compile Include="..\vimeodotnet\enums\FileQualityEnum.cs">
       <Link>Enums\FileQualityEnum.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Enums\PictureTypeEnum.cs">
+    <Compile Include="..\vimeodotnet\enums\PictureTypeEnum.cs">
       <Link>Enums\PictureTypeEnum.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Enums\UploadStatusEnum.cs">
+    <Compile Include="..\vimeodotnet\enums\UploadStatusEnum.cs">
       <Link>Enums\UploadStatusEnum.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Enums\VideoEmbedPrivacyEnum.cs">
+    <Compile Include="..\vimeodotnet\enums\VideoEmbedPrivacyEnum.cs">
       <Link>Enums\VideoEmbedPrivacyEnum.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Enums\VideoPrivacyEnum.cs">
+    <Compile Include="..\vimeodotnet\enums\VideoPrivacyEnum.cs">
       <Link>Enums\VideoPrivacyEnum.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Enums\VideoStatusEnum.cs">
+    <Compile Include="..\vimeodotnet\enums\VideoStatusEnum.cs">
       <Link>Enums\VideoStatusEnum.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Exceptions\VimeoApiException.cs">
+    <Compile Include="..\vimeodotnet\exceptions\VimeoApiException.cs">
       <Link>Exceptions\VimeoApiException.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Exceptions\VimeoUploadException.cs">
+    <Compile Include="..\vimeodotnet\exceptions\VimeoUploadException.cs">
       <Link>Exceptions\VimeoUploadException.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Helpers\MimeHelpers.cs">
+    <Compile Include="..\vimeodotnet\helpers\MimeHelpers.cs">
       <Link>Helpers\MimeHelpers.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Helpers\ModelHelpers.cs">
+    <Compile Include="..\vimeodotnet\helpers\ModelHelpers.cs">
       <Link>Helpers\ModelHelpers.cs</Link>
     </Compile>
     <Compile Include="..\VimeoDotNet\IVimeoClient.cs">
@@ -109,154 +109,154 @@
     <Compile Include="..\VimeoDotNet\IVimeoClientFactory.cs">
       <Link>IVimeoClientFactory.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\AccessTokenResponse.cs">
+    <Compile Include="..\vimeodotnet\models\AccessTokenResponse.cs">
       <Link>Models\AccessTokenResponse.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\Album.cs">
+    <Compile Include="..\vimeodotnet\models\Album.cs">
       <Link>Models\Album.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\AlbumConnections.cs">
+    <Compile Include="..\vimeodotnet\models\AlbumConnections.cs">
       <Link>Models\AlbumConnections.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\AlbumMetadata.cs">
+    <Compile Include="..\vimeodotnet\models\AlbumMetadata.cs">
       <Link>Models\AlbumMetadata.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\AlbumStats.cs">
+    <Compile Include="..\vimeodotnet\models\AlbumStats.cs">
       <Link>Models\AlbumStats.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\Comment.cs">
+    <Compile Include="..\vimeodotnet\models\Comment.cs">
       <Link>Models\Comment.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\Download.cs">
+    <Compile Include="..\vimeodotnet\models\Download.cs">
       <Link>Models\Download.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\EmbedPresets.cs">
+    <Compile Include="..\vimeodotnet\models\EmbedPresets.cs">
       <Link>Models\EmbedPresets.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\File.cs">
+    <Compile Include="..\vimeodotnet\models\File.cs">
       <Link>Models\File.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\Follow.cs">
+    <Compile Include="..\vimeodotnet\models\Follow.cs">
       <Link>Models\Follow.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\Follower.cs">
+    <Compile Include="..\vimeodotnet\models\Follower.cs">
       <Link>Models\Follower.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\Like.cs">
+    <Compile Include="..\vimeodotnet\models\Like.cs">
       <Link>Models\Like.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\Paginated.cs">
+    <Compile Include="..\vimeodotnet\models\Paginated.cs">
       <Link>Models\Paginated.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\Paging.cs">
+    <Compile Include="..\vimeodotnet\models\Paging.cs">
       <Link>Models\Paging.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\Picture.cs">
+    <Compile Include="..\vimeodotnet\models\Picture.cs">
       <Link>Models\Picture.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\PresetButtons.cs">
+    <Compile Include="..\vimeodotnet\models\PresetButtons.cs">
       <Link>Models\PresetButtons.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\PresetLogos.cs">
+    <Compile Include="..\vimeodotnet\models\PresetLogos.cs">
       <Link>Models\PresetLogos.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\PresetSettings.cs">
+    <Compile Include="..\vimeodotnet\models\PresetSettings.cs">
       <Link>Models\PresetSettings.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\Privacy.cs">
+    <Compile Include="..\vimeodotnet\models\Privacy.cs">
       <Link>Models\Privacy.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\Size.cs">
+    <Compile Include="..\vimeodotnet\models\Size.cs">
       <Link>Models\Size.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\Space.cs">
+    <Compile Include="..\vimeodotnet\models\Space.cs">
       <Link>Models\Space.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\Tag.cs">
+    <Compile Include="..\vimeodotnet\models\Tag.cs">
       <Link>Models\Tag.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\Transcode.cs">
+    <Compile Include="..\vimeodotnet\models\Transcode.cs">
       <Link>Models\Transcode.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\UploadStatus.cs">
+    <Compile Include="..\vimeodotnet\models\UploadStatus.cs">
       <Link>Models\UploadStatus.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\UploadTicket.cs">
+    <Compile Include="..\vimeodotnet\models\UploadTicket.cs">
       <Link>Models\UploadTicket.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\UploadTicketQuota.cs">
+    <Compile Include="..\vimeodotnet\models\UploadTicketQuota.cs">
       <Link>Models\UploadTicketQuota.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\User.cs">
+    <Compile Include="..\vimeodotnet\models\User.cs">
       <Link>Models\User.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\UserConnections.cs">
+    <Compile Include="..\vimeodotnet\models\UserConnections.cs">
       <Link>Models\UserConnections.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\UserInteractions.cs">
+    <Compile Include="..\vimeodotnet\models\UserInteractions.cs">
       <Link>Models\UserInteractions.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\UserMetadata.cs">
+    <Compile Include="..\vimeodotnet\models\UserMetadata.cs">
       <Link>Models\UserMetadata.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\UserQuota.cs">
+    <Compile Include="..\vimeodotnet\models\UserQuota.cs">
       <Link>Models\UserQuota.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\UserStats.cs">
+    <Compile Include="..\vimeodotnet\models\UserStats.cs">
       <Link>Models\UserStats.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\UserUploadQuota.cs">
+    <Compile Include="..\vimeodotnet\models\UserUploadQuota.cs">
       <Link>Models\UserUploadQuota.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\VerifyUploadResponse.cs">
+    <Compile Include="..\vimeodotnet\models\VerifyUploadResponse.cs">
       <Link>Models\VerifyUploadResponse.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\Video.cs">
+    <Compile Include="..\vimeodotnet\models\Video.cs">
       <Link>Models\Video.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\VideoConnections.cs">
+    <Compile Include="..\vimeodotnet\models\VideoConnections.cs">
       <Link>Models\VideoConnections.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\VideoInteractions.cs">
+    <Compile Include="..\vimeodotnet\models\VideoInteractions.cs">
       <Link>Models\VideoInteractions.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\VideoMetadata.cs">
+    <Compile Include="..\vimeodotnet\models\VideoMetadata.cs">
       <Link>Models\VideoMetadata.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\VideoStats.cs">
+    <Compile Include="..\vimeodotnet\models\VideoStats.cs">
       <Link>Models\VideoStats.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\VideoUpdateMetadata.cs">
+    <Compile Include="..\vimeodotnet\models\VideoUpdateMetadata.cs">
       <Link>Models\VideoUpdateMetadata.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\WatchLater.cs">
+    <Compile Include="..\vimeodotnet\models\WatchLater.cs">
       <Link>Models\WatchLater.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Models\Website.cs">
+    <Compile Include="..\vimeodotnet\models\Website.cs">
       <Link>Models\Website.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Net\ApiRequest.cs">
+    <Compile Include="..\vimeodotnet\net\ApiRequest.cs">
       <Link>Net\ApiRequest.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Net\ApiRequestFactory.cs">
+    <Compile Include="..\vimeodotnet\net\ApiRequestFactory.cs">
       <Link>Net\ApiRequestFactory.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Net\BinaryContent.cs">
+    <Compile Include="..\vimeodotnet\net\BinaryContent.cs">
       <Link>Net\BinaryContent.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Net\IApiRequest.cs">
+    <Compile Include="..\vimeodotnet\net\IApiRequest.cs">
       <Link>Net\IApiRequest.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Net\IApiRequestFactory.cs">
+    <Compile Include="..\vimeodotnet\net\IApiRequestFactory.cs">
       <Link>Net\IApiRequestFactory.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Net\IBinaryContent.cs">
+    <Compile Include="..\vimeodotnet\net\IBinaryContent.cs">
       <Link>Net\IBinaryContent.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Net\IUploadRequest.cs">
+    <Compile Include="..\vimeodotnet\net\IUploadRequest.cs">
       <Link>Net\IUploadRequest.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Net\UploadRequest.cs">
+    <Compile Include="..\vimeodotnet\net\UploadRequest.cs">
       <Link>Net\UploadRequest.cs</Link>
     </Compile>
     <Compile Include="..\VimeoDotNet\VimeoClientFactory.cs">
