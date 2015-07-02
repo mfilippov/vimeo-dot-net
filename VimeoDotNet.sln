@@ -1,5 +1,8 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.22823.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VimeoDotNet", "src\VimeoDotNet\VimeoDotNet.csproj", "{90BFBB6A-05E5-4736-99B0-0C276581EF21}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AF96074E-5B07-4486-A73D-2886A8CD23D0}"
@@ -8,6 +11,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VimeoDotNet.Tests", "src\VimeoDotNet.Tests\VimeoDotNet.Tests.csproj", "{52A87768-AEB5-4FD5-85EB-3941787816F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VimeoDotNet.Net45", "src\VimeoDotNet.Net45\VimeoDotNet.Net45.csproj", "{CFD7E43D-A5EE-4E65-B70C-9E8441BF412C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VimeoDotNet.Net451", "src\VimeoDotNet.Net451\VimeoDotNet.Net451.csproj", "{07850BB8-6561-4C12-879B-55D4AAC2823E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VimeoDotNet.Net452", "src\VimeoDotNet.Net452\VimeoDotNet.Net452.csproj", "{6853750E-B104-464A-81E5-85EF88734444}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VimeoDotNet.Net46", "src\VimeoDotNet.Net46\VimeoDotNet.Net46.csproj", "{46B1DC57-89E3-4EF3-95AF-550EEF11B44C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +34,22 @@ Global
 		{52A87768-AEB5-4FD5-85EB-3941787816F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52A87768-AEB5-4FD5-85EB-3941787816F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52A87768-AEB5-4FD5-85EB-3941787816F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFD7E43D-A5EE-4E65-B70C-9E8441BF412C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFD7E43D-A5EE-4E65-B70C-9E8441BF412C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFD7E43D-A5EE-4E65-B70C-9E8441BF412C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFD7E43D-A5EE-4E65-B70C-9E8441BF412C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07850BB8-6561-4C12-879B-55D4AAC2823E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07850BB8-6561-4C12-879B-55D4AAC2823E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07850BB8-6561-4C12-879B-55D4AAC2823E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07850BB8-6561-4C12-879B-55D4AAC2823E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6853750E-B104-464A-81E5-85EF88734444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6853750E-B104-464A-81E5-85EF88734444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6853750E-B104-464A-81E5-85EF88734444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6853750E-B104-464A-81E5-85EF88734444}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46B1DC57-89E3-4EF3-95AF-550EEF11B44C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46B1DC57-89E3-4EF3-95AF-550EEF11B44C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46B1DC57-89E3-4EF3-95AF-550EEF11B44C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46B1DC57-89E3-4EF3-95AF-550EEF11B44C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

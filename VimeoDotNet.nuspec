@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>VimeoDotNet</id>
+        <version>0.7.5</version>
+        <title>Vimeo-Dot-Net</title>
+        <authors>Stephen Commisso, Mikhail Filippov</authors>
+        <licenseUrl>https://github.com/mfilippov/vimeo-dot-net/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/mfilippov/vimeo-dot-net</projectUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>.NET wrapper around Vimeo's REST API v3.0.
+
+            Features:
+            - Account information retrieval
+            - Video retrieval
+            - Resumable video file upload</description>
+            <summary />
+            <releaseNotes>Add search support for GetUserVideos method</releaseNotes>
+            <copyright>Copyright © 2015, Stephen Commisso, Mikhail Filippov</copyright>
+            <language>en-US</language>
+            <tags>vimeo, async</tags>
+            <dependencies>
+                <group>
+                    <dependency id="RestSharp" version="105.1.0" />
+                </group>
+            </dependencies>
+        </metadata>
+        <files>
+            <file src="lib\net45\*.dll" target="lib\net45" /> 
+            <file src="lib\net45\*.pdb" target="lib\net45" /> 
+            <file src="lib\net45\*.xml" target="lib\net45" />
+
+            <file src="lib\net45-client\*.dll" target="lib\net45-client" /> 
+            <file src="lib\net45-client\*.pdb" target="lib\net45-client" /> 
+            <file src="lib\net45-client\*.xml" target="lib\net45-client" />
+
+            <file src="lib\net451\*.dll" target="lib\net451" /> 
+            <file src="lib\net451\*.pdb" target="lib\net451" /> 
+            <file src="lib\net451\*.xml" target="lib\net451" />
+
+            <file src="lib\net451-client\*.dll" target="lib\net451-client" /> 
+            <file src="lib\net451-client\*.pdb" target="lib\net451-client" /> 
+            <file src="lib\net451-client\*.xml" target="lib\net451-client" />
+
+            <file src="lib\net452\*.dll" target="lib\net452" /> 
+            <file src="lib\net452\*.pdb" target="lib\net452" /> 
+            <file src="lib\net452\*.xml" target="lib\net452" />
+
+            <file src="lib\net452-client\*.dll" target="lib\net452-client" /> 
+            <file src="lib\net452-client\*.pdb" target="lib\net452-client" /> 
+            <file src="lib\net452-client\*.xml" target="lib\net452-client" />
+
+            <file src="lib\net46\*.dll" target="lib\net46" /> 
+            <file src="lib\net46\*.pdb" target="lib\net46" /> 
+            <file src="lib\net46\*.xml" target="lib\net46" />
+
+            <file src="lib\net46-client\*.dll" target="lib\net46-client" /> 
+            <file src="lib\net46-client\*.pdb" target="lib\net46-client" /> 
+            <file src="lib\net46-client\*.xml" target="lib\net46-client" />
+      </files>
+  </package>
