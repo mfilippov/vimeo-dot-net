@@ -10,7 +10,7 @@ namespace VimeoDotNet.Tests
 {
     [TestClass]
     [Ignore] // Comment this line to run integration tests.
-    public class IVimeoClient_IntegrationTests
+    public class VimeoClient_IntegrationTests
     {
         private const string CLIENTID = "<YOUR CLIENT ID HERE>";
         private const string CLIENTSECRET = "<YOUR CLIENT SECRET HERE>";
