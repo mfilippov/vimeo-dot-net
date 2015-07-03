@@ -211,11 +211,19 @@ namespace VimeoDotNet.Tests
             Assert.IsNotNull(video);
         }
 
+        /// <summary>
+        /// Returns interface to enforce interface completeness
+        /// </summary>
+        /// <returns></returns>
         private IVimeoClient CreateUnauthenticatedClient()
         {
             return new VimeoClient(CLIENTID, CLIENTSECRET);
         }
 
+        /// <summary>
+        /// Returns interface to enforce interface completeness
+        /// </summary>
+        /// <returns></returns>
         private IVimeoClient CreateAuthenticatedClient()
         {
             return new VimeoClient(ACCESSTOKEN);
