@@ -17,17 +17,19 @@ namespace VimeoDotNet
         Task<User> GetAccountInformationAsync();
         User GetUserInformation(long userId);
         Task<User> GetUserInformationAsync(long userId);
-        Video GetVideo(long clipId);
-        Task<Video> GetVideoAsync(long clipId);
-        Paginated<Video> GetVideos();
-        Task<Paginated<Video>> GetVideosAsync(int? page, int? perPage);
+        Video GetVideo(long clipId, string fieldsCsv = null);
+        Task<Video> GetVideoAsync(long clipId, string fieldsCsv = null);
+        Paginated<Video> GetVideos(string fieldsCsv = null);
+        Task<Paginated<Video>> GetVideosAsync(int? page, int? perPage, string fieldsCsv = null);
         string GetOauthUrl(string redirectUri, IEnumerable<string> scope, string state);
         UploadTicket GetUploadTicket();
         Task<UploadTicket> GetUploadTicketAsync();
-        Video GetUserVideo(long userId, long clipId);
-        Task<Video> GetUserVideoAsync(long userId, long clipId);
-        Paginated<Video> GetUserVideos(long userId);
-        Task<Paginated<Video>> GetUserVideosAsync(long userId);
+        Video GetUserVideo(long userId, long clipId, string fieldsCsv = null);
+        Task<Video> GetUserVideoAsync(long userId, long clipId, string fieldsCsv = null);
+        Paginated<Video> GetUserVideos(long userId, string fieldsCsv = null);
+        Task<Paginated<Video>> GetUserVideosAsync(long userId, string fieldsCsv = null);
+        Paginated<Video> GetUserVideos(long userId, int? page, int? perPage, string fieldsCsv = null);
+        Task<Paginated<Video>> GetUserVideosAsync(long userId, int? page, int? perPage, string fieldsCsv = null);
         IUploadRequest StartUploadFile(IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
 
         Task<IUploadRequest> StartUploadFileAsync(IBinaryContent fileContent,
@@ -44,13 +46,17 @@ namespace VimeoDotNet
         VerifyUploadResponse VerifyUploadFile(IUploadRequest uploadRequest);
         Task<VerifyUploadResponse> VerifyUploadFileAsync(IUploadRequest uploadRequest);
 
-        Paginated<Video> GetAlbumVideos(long albumId);
-        Task<Paginated<Video>> GetAlbumVideosAsync(long albumId);
-        Video GetAlbumVideo(long albumId, long clipId);
-        Task<Video> GetAlbumVideoAsync(long albumId, long clipId);
-        Paginated<Video> GetUserAlbumVideos(long userId, long albumId);
-        Task<Paginated<Video>> GetUserAlbumVideosAsync(long userId, long albumId);
-        Video GetUserAlbumVideo(long userId, long albumId, long clipId);
-        Task<Video> GetUserAlbumVideoAsync(long userId, long albumId, long clipId);
+        Paginated<Video> GetAlbumVideos(long albumId, string fieldsCsv = null);
+        Task<Paginated<Video>> GetAlbumVideosAsync(long albumId, int? page, int? perPage, string fieldsCsv = null);
+        Video GetAlbumVideo(long albumId, long clipId, string fieldsCsv = null);
+        Task<Video> GetAlbumVideoAsync(long albumId, long clipId, string fieldsCsv = null);
+        Paginated<Video> GetUserAlbumVideos(long userId, long albumId, int? page = null, int? perPage = null, string fieldsCsv = null);
+        Task<Paginated<Video>> GetUserAlbumVideosAsync(long userId, long albumId, int? page = null, int? perPage = null, string fieldsCsv = null);
+        Video GetUserAlbumVideo(long userId, long albumId, long clipId, string fieldsCsv = null);
+        Task<Video> GetUserAlbumVideoAsync(long userId, long albumId, long clipId, string fieldsCsv = null);
+
+        Paginated<Album> GetAlbums(long? userId, int? page = null, int? perPage = null, string fieldsCsv = null);
+        void AddVideoToAlbum(long? userId, long albumId, long clipId);
+        void RemoveVideoFromAlbum(long? userId, long albumId, long clipId);
     }
 }
