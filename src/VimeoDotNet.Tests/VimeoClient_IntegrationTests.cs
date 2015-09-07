@@ -162,7 +162,7 @@ namespace VimeoDotNet.Tests
             VimeoClient client = CreateAuthenticatedClient();
 
             // act
-            Paginated<Video> videos = client.GetAlbumVideos(vimeoSettings.AlbumId);
+            Paginated<Video> videos = client.GetAlbumVideos(vimeoSettings.AlbumId, 1, null);
 
             // assert
             Assert.IsNotNull(videos);
