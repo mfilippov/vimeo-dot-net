@@ -44,8 +44,8 @@ namespace VimeoDotNet
         VerifyUploadResponse VerifyUploadFile(IUploadRequest uploadRequest);
         Task<VerifyUploadResponse> VerifyUploadFileAsync(IUploadRequest uploadRequest);
 
-        Paginated<Video> GetAlbumVideos(long albumId);
-        Task<Paginated<Video>> GetAlbumVideosAsync(long albumId);
+        Paginated<Video> GetAlbumVideos(long albumId, int? page, int? perPage, string sort = null, string direction = null);
+        Task<Paginated<Video>> GetAlbumVideosAsync(long albumId, int? page, int? perPage, string sort = null, string direction = null);
         Video GetAlbumVideo(long albumId, long clipId);
         Task<Video> GetAlbumVideoAsync(long albumId, long clipId);
         Paginated<Video> GetUserAlbumVideos(long userId, long albumId);
