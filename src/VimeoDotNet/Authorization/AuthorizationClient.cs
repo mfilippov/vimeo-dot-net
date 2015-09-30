@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RestSharp;
-using RestSharp.Contrib;
+using RestSharp.Extensions.MonoHttp;
 using VimeoDotNet.Constants;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
