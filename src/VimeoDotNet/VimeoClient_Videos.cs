@@ -57,12 +57,27 @@ namespace VimeoDotNet
 
         public async Task<Paginated<Video>> GetAlbumVideosAsync(long albumId)
         {
+            return await GetAlbumVideosAsync(albumId, null, null);
+        }
+
+        // Added 28/07/2015
+        public async Task<Paginated<Video>> GetAlbumVideosAsync(long albumId, int? page, int? perPage, string sort = null, string direction = null)
+        {
             try
             {
-                IApiRequest request = GenerateAlbumVideosRequest(albumId);
+                IApiRequest request = GenerateAlbumVideosRequest(albumId, page: page, perPage: perPage, sort: sort, direction: direction);
                 IRestResponse<Paginated<Video>> response = await request.ExecuteRequestAsync<Paginated<Video>>();
-                CheckStatusCodeError(response, "Error retrieving account album videos.");
+                CheckStatusCodeError(response, "Error retrieving account album videos.", HttpStatusCode.NotFound);
 
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return new Paginated<Video>
+                    {
+                        data = new List<Video>(),
+                        page = 0,
+                        total = 0
+                    };
+                }
                 return response.Data;
             }
             catch (Exception ex)
@@ -283,7 +298,7 @@ namespace VimeoDotNet
             return request;
         }
 
-        private IApiRequest GenerateAlbumVideosRequest(long albumId, long? userId = null, long? clipId = null)
+        private IApiRequest GenerateAlbumVideosRequest(long albumId, long? userId = null, long? clipId = null, int? page = null, int? perPage = null, string sort = null, string direction = null)
         {
             ThrowIfUnauthorized();
 
@@ -300,6 +315,22 @@ namespace VimeoDotNet
             if (clipId.HasValue)
             {
                 request.UrlSegments.Add("clipId", clipId.ToString());
+            }
+            if (page.HasValue)
+            {
+                request.Query.Add("page", page.ToString());
+            }
+            if (perPage.HasValue)
+            {
+                request.Query.Add("per_page", perPage.ToString());
+            }
+            if (!string.IsNullOrEmpty(sort))
+            {
+                request.Query.Add("sort", sort);
+            }
+            if (!string.IsNullOrEmpty(direction))
+            {
+                request.Query.Add("direction", direction);
             }
 
             return request;

@@ -106,11 +106,11 @@ namespace VimeoDotNet
             }
         }
 
-        public Paginated<Video> GetAlbumVideos(long albumId)
+        public Paginated<Video> GetAlbumVideos(long albumId, int? page, int? perPage, string sort = null, string direction = null)
         {
             try
             {
-                return Task.Run(async () => await GetAlbumVideosAsync(albumId)).Result;
+                return Task.Run(async () => await GetAlbumVideosAsync(albumId, page, perPage, sort, direction)).Result;
             }
             catch (AggregateException ex)
             {
