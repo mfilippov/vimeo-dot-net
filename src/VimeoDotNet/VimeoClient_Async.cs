@@ -128,60 +128,27 @@ namespace VimeoDotNet
 
         public async Task<User> GetAccountInformationAsync()
         {
-            try
-            {
-                IApiRequest request = GenerateUserInformationRequest();
-                IRestResponse<User> response = await request.ExecuteRequestAsync<User>();
-                CheckStatusCodeError(response, "Error retrieving account information.");
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.GET,
+				Endpoints.GetCurrentUserEndpoint(Endpoints.User)
+			);
 
-                return response.Data;
-            }
-            catch (Exception ex)
-            {
-                if (ex is VimeoApiException)
-                {
-                    throw;
-                }
-                throw new VimeoApiException("Error retrieving account information.", ex);
-            }
+			return await ExecuteApiRequest<User>(request);
         }
 
         public async Task<User> GetUserInformationAsync(long userId)
         {
-            try
-            {
-                IApiRequest request = GenerateUserInformationRequest(userId);
-                IRestResponse<User> response = await request.ExecuteRequestAsync<User>();
-                CheckStatusCodeError(response, "Error retrieving user information.", HttpStatusCode.NotFound);
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.GET,
+				Endpoints.User,
+				new Dictionary<string, string>(){
+					{ "userId", userId.ToString() }
+				}
+			);
 
-                if (response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return null;
-                }
-                return response.Data;
-            }
-            catch (Exception ex)
-            {
-                if (ex is VimeoApiException)
-                {
-                    throw;
-                }
-                throw new VimeoApiException("Error retrieving user information.", ex);
-            }
-        }
-
-        private IApiRequest GenerateUserInformationRequest(long? userId = null)
-        {
-            ThrowIfUnauthorized();
-
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
-            request.Method = Method.GET;
-            request.Path = userId.HasValue ? Endpoints.User : Endpoints.GetCurrentUserEndpoint(Endpoints.User);
-            if (userId.HasValue)
-            {
-                request.UrlSegments.Add("userId", userId.ToString());
-            }
-            return request;
+			return await ExecuteApiRequest<User>(request);
         }
 
 		#endregion
@@ -190,41 +157,88 @@ namespace VimeoDotNet
 
 		public async Task<Paginated<Album>> GetUserAlbumsAsync(long userId)
 		{
-			try
-			{
-				IApiRequest request = GetUserAlbumsRequest(userId);
-				IRestResponse<Paginated<Album>> response = await request.ExecuteRequestAsync<Paginated<Album>>();
-				CheckStatusCodeError(response, "Error retrieving user albums information.", HttpStatusCode.NotFound);
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.GET,
+				Endpoints.UserAlbums,
+				new Dictionary<string, string>(){
+					{ "userId", userId.ToString() }
+				}
+			);
 
-				if (response.StatusCode == HttpStatusCode.NotFound)
-				{
-					return null;
-				}
-				return response.Data;
-			}
-			catch (Exception ex)
-			{
-				if (ex is VimeoApiException)
-				{
-					throw;
-				}
-				throw new VimeoApiException("Error retrieving user albums information.", ex);
-			}
+			return await ExecuteApiRequest<Paginated<Album>>(request);
 		}
 
 		public async Task<Paginated<Album>> GetAccountAlbumsAsync()
 		{
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.GET,
+				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbums)
+			);
+
+			return await ExecuteApiRequest<Paginated<Album>>(request);
+		}
+
+		#endregion
+
+		#region Utility
+
+		/// <summary>
+		/// Utility method for calling ExecuteApiRequest with the most common use case (returning
+		/// null for NotFound responses).
+		/// </summary>
+		/// <typeparam name="T">Type of the expected response data.</typeparam>
+		/// <param name="request"></param>
+		/// <returns></returns>
+		private async Task<T> ExecuteApiRequest<T>(IApiRequest request) where T : new()
+		{
+			return await ExecuteApiRequest<T>(request, (statusCode) => default(T), new []{ HttpStatusCode.NotFound } );
+		}
+
+		/// <summary>
+		/// Utility method for performing API requests that retrieve data in a consistent manner.  
+		/// 
+		/// The given request will be performed, and if the response is an outright success then
+		/// the response data will be unwrapped and returned.  
+		/// 
+		/// If the call is not an outright success, but the status code is among the other acceptable 
+		/// results (provided via validStatusCodes), the getValueForStatusCode method will be called
+		/// to generate a return value. This allows the caller to return null or an empty list as 
+		/// desired.
+		/// 
+		/// If neither of the above is possible, an exception will be thrown.
+		/// </summary>
+		/// <typeparam name="T">Type of the expected response data.</typeparam>
+		/// <param name="request"></param>
+		/// <param name="getValueForStatusCode"></param>
+		/// <param name="validStatusCodes"></param>
+		/// <returns></returns>
+		private async Task<T> ExecuteApiRequest<T>(IApiRequest request, Func<HttpStatusCode, T> getValueForStatusCode, params HttpStatusCode[] validStatusCodes) where T : new()
+		{			
 			try
 			{
-				IApiRequest request = GetAccountAlbumsRequest();
-				IRestResponse<Paginated<Album>> response = await request.ExecuteRequestAsync<Paginated<Album>>();
-				CheckStatusCodeError(response, "Error retrieving account albums information.", HttpStatusCode.NotFound);
+				IRestResponse<T> response = await request.ExecuteRequestAsync<T>();
 
-				if (response.StatusCode == HttpStatusCode.NotFound)
+				// if request was successful, return immediately...
+				if (IsSuccessStatusCode(response.StatusCode))
 				{
-					return null;
+					return response.Data;
 				}
-				return response.Data;
+
+				// if request is among other accepted status codes, return the corresponding value...
+				if (validStatusCodes != null && validStatusCodes.Contains(response.StatusCode))
+				{
+					return getValueForStatusCode(response.StatusCode);
+				}
+
+				// at this point, we've eliminated all acceptable responses, throw an exception...
+				throw new VimeoApiException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
+					Environment.NewLine, 
+					"Error retrieving information from Vimeo API.", 
+					response.StatusCode, 
+					response.Content
+				));
 			}
 			catch (Exception ex)
 			{
@@ -232,32 +246,8 @@ namespace VimeoDotNet
 				{
 					throw;
 				}
-				throw new VimeoApiException("Error retrieving account albums information.", ex);
+				throw new VimeoApiException("Error retrieving information from Vimeo API.", ex);
 			}
-		}
-
-		private IApiRequest GetUserAlbumsRequest(long userId)
-		{
-			ThrowIfUnauthorized();
-
-			IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
-			request.Method = Method.GET;
-			request.Path = Endpoints.UserAlbums;
-			
-			request.UrlSegments.Add("userId", userId.ToString());
-
-			return request;
-		}
-
-		private IApiRequest GetAccountAlbumsRequest()
-		{
-			ThrowIfUnauthorized();
-
-			IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
-			request.Method = Method.GET;
-			request.Path = Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbums);
-
-			return request;
 		}
 
 		#endregion
