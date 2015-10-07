@@ -184,11 +184,87 @@ namespace VimeoDotNet
             return request;
         }
 
-        #endregion
-        
-        #region Helper Functions
+		#endregion
 
-        private void ThrowIfUnauthorized()
+		#region Albums
+
+		public async Task<Paginated<Album>> GetUserAlbumsAsync(long userId)
+		{
+			try
+			{
+				IApiRequest request = GetUserAlbumsRequest(userId);
+				IRestResponse<Paginated<Album>> response = await request.ExecuteRequestAsync<Paginated<Album>>();
+				CheckStatusCodeError(response, "Error retrieving user albums information.", HttpStatusCode.NotFound);
+
+				if (response.StatusCode == HttpStatusCode.NotFound)
+				{
+					return null;
+				}
+				return response.Data;
+			}
+			catch (Exception ex)
+			{
+				if (ex is VimeoApiException)
+				{
+					throw;
+				}
+				throw new VimeoApiException("Error retrieving user albums information.", ex);
+			}
+		}
+
+		public async Task<Paginated<Album>> GetAccountAlbumsAsync()
+		{
+			try
+			{
+				IApiRequest request = GetAccountAlbumsRequest();
+				IRestResponse<Paginated<Album>> response = await request.ExecuteRequestAsync<Paginated<Album>>();
+				CheckStatusCodeError(response, "Error retrieving account albums information.", HttpStatusCode.NotFound);
+
+				if (response.StatusCode == HttpStatusCode.NotFound)
+				{
+					return null;
+				}
+				return response.Data;
+			}
+			catch (Exception ex)
+			{
+				if (ex is VimeoApiException)
+				{
+					throw;
+				}
+				throw new VimeoApiException("Error retrieving account albums information.", ex);
+			}
+		}
+
+		private IApiRequest GetUserAlbumsRequest(long userId)
+		{
+			ThrowIfUnauthorized();
+
+			IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+			request.Method = Method.GET;
+			request.Path = Endpoints.UserAlbums;
+			
+			request.UrlSegments.Add("userId", userId.ToString());
+
+			return request;
+		}
+
+		private IApiRequest GetAccountAlbumsRequest()
+		{
+			ThrowIfUnauthorized();
+
+			IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+			request.Method = Method.GET;
+			request.Path = Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbums);
+
+			return request;
+		}
+
+		#endregion
+
+		#region Helper Functions
+
+		private void ThrowIfUnauthorized()
         {
             if (string.IsNullOrWhiteSpace(AccessToken))
             {

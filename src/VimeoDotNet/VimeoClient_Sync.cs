@@ -47,9 +47,39 @@ namespace VimeoDotNet
 
         #endregion
 
-        #region Videos
+		#region Albums
 
-        public Paginated<Video> GetVideos()
+		public Paginated<Album> GetUserAlbums(long userId)
+		{
+			try
+			{
+				return GetUserAlbumsAsync(userId).Result;
+			}
+			catch (AggregateException ex)
+			{
+				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+				return null;
+			}
+		}
+
+		public Paginated<Album> GetAccountAlbums()
+		{
+			try
+			{
+				return GetAccountAlbumsAsync().Result;
+			}
+			catch (AggregateException ex)
+			{
+				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+				return null;
+			}
+		}
+
+		#endregion
+
+		#region Videos
+
+		public Paginated<Video> GetVideos()
         {
             try
             {

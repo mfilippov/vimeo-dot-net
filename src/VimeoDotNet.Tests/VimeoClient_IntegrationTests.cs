@@ -208,7 +208,32 @@ namespace VimeoDotNet.Tests
             // assert
             Assert.IsNotNull(video);
         }
-        
+
+		[TestMethod]
+		public void Integration_VimeoClient_GetAccountAlbums_NotNull()
+		{
+			// arrange
+			VimeoClient client = CreateAuthenticatedClient();
+
+			// act
+			Paginated<Album> albums = client.GetAccountAlbums();
+
+			// assert
+			Assert.IsNotNull(albums);
+		}
+
+		[TestMethod]
+		public void Integration_VimeoClient_GetUserAlbums_NotNull()
+		{
+			// arrange
+			VimeoClient client = CreateAuthenticatedClient();
+
+			// act
+			Paginated<Album> albums = client.GetUserAlbums(vimeoSettings.UserId);
+
+			// assert
+			Assert.IsNotNull(albums);
+		}
 
         private VimeoClient CreateUnauthenticatedClient()
         {
