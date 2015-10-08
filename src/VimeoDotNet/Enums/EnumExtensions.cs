@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace VimeoDotNet.Enums
 {
-	[AttributeUsage(AttributeTargets.Enum, AllowMultiple=false, Inherited=false)]
+	[AttributeUsage(AttributeTargets.Field, AllowMultiple=false, Inherited=false)]
 	public class ParameterValueAttribute : Attribute
 	{
 		public string TextValue { get; set; }

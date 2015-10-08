@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace VimeoDotNet.Models
 {
@@ -17,5 +18,20 @@ namespace VimeoDotNet.Models
         public Privacy privacy { get; set; }
         public AlbumStats stats { get; set; }
         public AlbumMetadata metadata { get; set; }
+
+		public long? GetAlbumId()
+		{
+			if (String.IsNullOrEmpty(uri)) { return null; }
+
+			var match = regexAlbumUri.Match(uri);
+			if (match.Success)
+			{
+				return long.Parse(match.Groups["albumId"].Value);
+			}
+
+			return null;
+		}
+
+		private static Regex regexAlbumUri = new Regex(@"/albums/(?<albumId>\d+)/?$");
     }
 }

@@ -17,11 +17,6 @@ namespace VimeoDotNet
         User GetUserInformation(long userId);
         Task<User> GetUserInformationAsync(long userId);
 
-		// User/Albums
-		Task<Paginated<Album>> GetUserAlbumsAsync(long userId, GetAlbumsParameters parameters = null);
-		Paginated<Album> GetUserAlbums(long userId, GetAlbumsParameters parameters = null);
-
-
 		// Retrieve Videos
 		// ...by id
         Video GetVideo(long clipId);
@@ -68,9 +63,18 @@ namespace VimeoDotNet
 		Task<User> UpdateAccountInformationAsync(EditUserParameters parameters);
 		User UpdateAccountInformation(EditUserParameters parameters);
 
-		// Account/Albums
-		Task<Paginated<Album>> GetAccountAlbumsAsync(GetAlbumsParameters parameters = null);
-		Paginated<Album> GetAccountAlbums(GetAlbumsParameters parameters = null);
+		// Albums
+		Task<Paginated<Album>> GetAlbumsAsync(GetAlbumsParameters parameters = null);					
+		Task<Paginated<Album>> GetAlbumsAsync(long userId, GetAlbumsParameters parameters = null);
+		Task<Album> CreateAlbumAsync(EditAlbumParameters parameters = null);
+		Task<Album> UpdateAlbumAsync(long albumId, EditAlbumParameters parameters = null);
+		Task<bool> DeleteAlbumAsync(long albumId);
+
+		Paginated<Album> GetAlbums(GetAlbumsParameters parameters = null);
+		Paginated<Album> GetAlbums(long userId, GetAlbumsParameters parameters = null);
+		Album CreateAlbum(EditAlbumParameters parameters = null);
+		Album UpdateAlbum(long albumId, EditAlbumParameters parameters = null);
+		bool DeleteAlbum(long albumId);
 
 		// Deleting Videos
 		void DeleteVideo(long clipId);

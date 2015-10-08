@@ -170,7 +170,20 @@ namespace VimeoDotNet
 
 		#region Albums
 
-		public async Task<Paginated<Album>> GetUserAlbumsAsync(long userId, GetAlbumsParameters parameters = null)
+		public async Task<Paginated<Album>> GetAlbumsAsync(GetAlbumsParameters parameters = null)
+		{
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.GET,
+				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbums),
+				null,
+				parameters
+			);
+
+			return await ExecuteApiRequest<Paginated<Album>>(request);
+		}
+
+		public async Task<Paginated<Album>> GetAlbumsAsync(long userId, GetAlbumsParameters parameters = null)
 		{
 			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
 				AccessToken,
@@ -185,17 +198,46 @@ namespace VimeoDotNet
 			return await ExecuteApiRequest<Paginated<Album>>(request);
 		}
 
-		public async Task<Paginated<Album>> GetAccountAlbumsAsync(GetAlbumsParameters parameters = null)
+		public async Task<Album> CreateAlbumAsync(EditAlbumParameters parameters = null)
 		{
 			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
 				AccessToken,
-				Method.GET,
+				Method.POST,
 				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbums),
 				null,
 				parameters
 			);
 
-			return await ExecuteApiRequest<Paginated<Album>>(request);
+			return await ExecuteApiRequest<Album>(request);
+		}
+
+		public async Task<Album> UpdateAlbumAsync(long albumId, EditAlbumParameters parameters = null)
+		{
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.PATCH,
+				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbum),
+				new Dictionary<string, string>(){
+					{ "albumId", albumId.ToString() }
+				},
+				parameters
+			);
+
+			return await ExecuteApiRequest<Album>(request);
+		}
+
+		public async Task<bool> DeleteAlbumAsync(long albumId)
+		{
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.DELETE,
+				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbum),
+				new Dictionary<string, string>(){
+					{ "albumId", albumId.ToString() }
+				}
+			);
+
+			return await ExecuteApiRequest(request);
 		}
 
 		#endregion
@@ -255,6 +297,42 @@ namespace VimeoDotNet
 					Environment.NewLine, 
 					"Error retrieving information from Vimeo API.", 
 					response.StatusCode, 
+					response.Content
+				));
+			}
+			catch (Exception ex)
+			{
+				if (ex is VimeoApiException)
+				{
+					throw;
+				}
+				throw new VimeoApiException("Error retrieving information from Vimeo API.", ex);
+			}
+		}
+
+		private async Task<bool> ExecuteApiRequest(IApiRequest request, params HttpStatusCode[] validStatusCodes)
+		{
+			try
+			{
+				IRestResponse response = await request.ExecuteRequestAsync();
+
+				// if request was successful, return immediately...
+				if (IsSuccessStatusCode(response.StatusCode))
+				{
+					return true;
+				}
+
+				// if request is among other accepted status codes, return the corresponding value...
+				if (validStatusCodes != null && validStatusCodes.Contains(response.StatusCode))
+				{
+					return true;
+				}
+
+				// at this point, we've eliminated all acceptable responses, throw an exception...
+				throw new VimeoApiException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
+					Environment.NewLine,
+					"Error retrieving information from Vimeo API.",
+					response.StatusCode,
 					response.Content
 				));
 			}

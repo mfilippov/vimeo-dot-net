@@ -293,10 +293,53 @@ namespace VimeoDotNet.Tests
 			VimeoClient client = CreateAuthenticatedClient();
 
 			// act
-			Paginated<Album> albums = client.GetAccountAlbums();
+			Paginated<Album> albums = client.GetAlbums();
 
 			// assert
 			Assert.IsNotNull(albums);
+		}
+
+		[TestMethod]
+		public void Integration_VimeoClient_AlbumManagement()
+		{
+			VimeoClient client = CreateAuthenticatedClient();
+		
+			// create a new album...
+			string originalName = "Unit Test Album";
+			string originalDesc = "This album was created via an automated test, and should be deleted momentarily...";
+
+			Album newAlbum = client.CreateAlbum(new EditAlbumParameters()
+			{
+				Name = originalName,
+				Description = originalDesc,
+				Sort = EditAlbumSortOption.Newest,
+				Privacy = EditAlbumPrivacyOption.Password,
+				Password = "test"
+			});
+
+			Assert.IsNotNull(newAlbum);
+			Assert.AreEqual(originalName, newAlbum.name);
+			Assert.AreEqual(originalDesc, newAlbum.description);
+
+			// retrieve albums for the current user...there should be at least one now...
+			Paginated<Album> albums = client.GetAlbums();
+
+			Assert.IsTrue(albums.total > 0);
+
+			// update the album...
+			string updatedName = "Unit Test Album (Updated)";
+			Album updatedAlbum = client.UpdateAlbum(newAlbum.GetAlbumId().Value, new EditAlbumParameters()
+			{
+				Name = updatedName,
+				Privacy = EditAlbumPrivacyOption.Anybody
+			});
+
+			Assert.AreEqual(updatedName, updatedAlbum.name);
+
+			// delete the album...
+			bool isDeleted = client.DeleteAlbum(updatedAlbum.GetAlbumId().Value);
+
+			Assert.IsTrue(isDeleted);
 		}
 
 		[TestMethod]
@@ -306,7 +349,7 @@ namespace VimeoDotNet.Tests
 			VimeoClient client = CreateAuthenticatedClient();
 
 			// act
-			Paginated<Album> albums = client.GetUserAlbums(vimeoSettings.UserId);
+			Paginated<Album> albums = client.GetAlbums(vimeoSettings.UserId);
 
 			// assert
 			Assert.IsNotNull(albums);

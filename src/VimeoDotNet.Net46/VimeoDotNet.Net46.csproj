@@ -263,6 +263,9 @@
     <Compile Include="..\vimeodotnet\net\UploadRequest.cs">
       <Link>Net\UploadRequest.cs</Link>
     </Compile>
+    <Compile Include="..\VimeoDotNet\Parameters\EditAlbumParameters.cs">
+      <Link>Parameters\EditAlbumParameters.cs</Link>
+    </Compile>
     <Compile Include="..\VimeoDotNet\Parameters\EditUserParameters.cs">
       <Link>Parameters\EditUserParameters.cs</Link>
     </Compile>
