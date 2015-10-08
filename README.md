@@ -26,13 +26,13 @@ API COVERAGE
 | [/me/information](https://developer.vimeo.com/api/endpoints/me#)|Complete?|API Method|
 |:---|:---:|:---|
 | Get user information | :heavy_check_mark: | `GetAccountInformationAsync()` |
-| Edit user information |  |  |
+| Edit user information | :heavy_check_mark: | `UpdateAccountInformationAsync()` |
 | [/me/albums](https://developer.vimeo.com/api/endpoints/me#/albums)|Complete?|API Method|
 | Get a list of a user's Albums. | :heavy_check_mark:  | `GetAccountAlbumsAsync()`  |
-| Create an Album. |   |   |
+| Create an Album. | :heavy_check_mark:  | `CreateAlbumAsync()`  |
 | Get info on an Album. |   |   |
-| Edit an Album. |   |   |
-| Delete an Album. |   |   |
+| Edit an Album. | :heavy_check_mark:  | `UpdateAlbumAsync()`  |
+| Delete an Album. |  :heavy_check_mark: |  `DeleteAlbumAsync` |
 | Get the list of videos in an Album. | :heavy_check_mark:  | `GetAlbumVideosAsync()`  |
 | Check if an Album contains a video. |   |   |
 | Add a video to an Album. |   |   |
