@@ -156,7 +156,7 @@ namespace VimeoDotNet
 
 		#region Albums
 
-		public async Task<Paginated<Album>> GetUserAlbumsAsync(long userId, AlbumQueryParameters parameters = null)
+		public async Task<Paginated<Album>> GetUserAlbumsAsync(long userId, GetAlbumsParameters parameters = null)
 		{
 			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
 				AccessToken,
@@ -171,7 +171,7 @@ namespace VimeoDotNet
 			return await ExecuteApiRequest<Paginated<Album>>(request);
 		}
 
-		public async Task<Paginated<Album>> GetAccountAlbumsAsync(AlbumQueryParameters parameters = null)
+		public async Task<Paginated<Album>> GetAccountAlbumsAsync(GetAlbumsParameters parameters = null)
 		{
 			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
 				AccessToken,

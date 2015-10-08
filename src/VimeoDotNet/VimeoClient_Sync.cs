@@ -50,7 +50,7 @@ namespace VimeoDotNet
 
 		#region Albums
 
-		public Paginated<Album> GetUserAlbums(long userId, AlbumQueryParameters parameters = null)
+		public Paginated<Album> GetUserAlbums(long userId, GetAlbumsParameters parameters = null)
 		{
 			try
 			{
@@ -63,7 +63,7 @@ namespace VimeoDotNet
 			}
 		}
 
-		public Paginated<Album> GetAccountAlbums(AlbumQueryParameters parameters = null)
+		public Paginated<Album> GetAccountAlbums(GetAlbumsParameters parameters = null)
 		{
 			try
 			{

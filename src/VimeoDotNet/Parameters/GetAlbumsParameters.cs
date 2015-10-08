@@ -7,7 +7,7 @@ using VimeoDotNet.Enums;
 
 namespace VimeoDotNet.Parameters
 {
-	public enum AlbumQuerySortOption
+	public enum GetAlbumsSortOption
 	{
 		Date,
 		Alphabetical,
@@ -15,13 +15,13 @@ namespace VimeoDotNet.Parameters
 		Duration
 	}
 
-	public enum AlbumQuerySortDirectionOption
+	public enum GetAlbumsSortDirectionOption
 	{
 		Asc,
 		Desc
 	}
 
-	public class AlbumQueryParameters : IParameterProvider
+	public class GetAlbumsParameters : IParameterProvider
 	{
 		public int? Page { get; set; }
 
@@ -29,9 +29,9 @@ namespace VimeoDotNet.Parameters
 
 		public string Query { get; set; }
 
-		public AlbumQuerySortOption? Sort { get; set; }
+		public GetAlbumsSortOption? Sort { get; set; }
 
-		public AlbumQuerySortDirectionOption? Direction { get; set; }
+		public GetAlbumsSortDirectionOption? Direction { get; set; }
 
 		public string ValidationError()
 		{

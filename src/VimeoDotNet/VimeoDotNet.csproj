@@ -62,7 +62,7 @@
     <Compile Include="Models\PresetSettings.cs" />
     <Compile Include="Models\Size.cs" />
     <Compile Include="Models\VideoUpdateMetadata.cs" />
-    <Compile Include="Parameters\AlbumQueryParameters.cs" />
+    <Compile Include="Parameters\GetAlbumsParameters.cs" />
     <Compile Include="Parameters\IParameterProvider.cs" />
     <Compile Include="VimeoClientFactory.cs" />
     <Compile Include="Authorization\AuthorizationClient.cs" />

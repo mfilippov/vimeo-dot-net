@@ -262,8 +262,8 @@
     <Compile Include="..\vimeodotnet\net\UploadRequest.cs">
       <Link>Net\UploadRequest.cs</Link>
     </Compile>
-    <Compile Include="..\VimeoDotNet\Parameters\AlbumQueryParameters.cs">
-      <Link>Parameters\AlbumQueryParameters.cs</Link>
+    <Compile Include="..\VimeoDotNet\Parameters\GetAlbumsParameters.cs">
+      <Link>Parameters\GetAlbumsParameters.cs</Link>
     </Compile>
     <Compile Include="..\VimeoDotNet\Parameters\IParameterProvider.cs">
       <Link>Parameters\IParameterProvider.cs</Link>

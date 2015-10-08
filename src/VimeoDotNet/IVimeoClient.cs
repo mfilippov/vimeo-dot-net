@@ -60,10 +60,10 @@ namespace VimeoDotNet
 		Task CompleteFileUploadAsync(IUploadRequest uploadRequest);
 
 		// Albums
-		Task<Paginated<Album>> GetAccountAlbumsAsync(AlbumQueryParameters parameters = null);
-		Task<Paginated<Album>> GetUserAlbumsAsync(long userId, AlbumQueryParameters parameters = null);
-		Paginated<Album> GetAccountAlbums(AlbumQueryParameters parameters = null);
-		Paginated<Album> GetUserAlbums(long userId, AlbumQueryParameters parameters = null);
+		Task<Paginated<Album>> GetAccountAlbumsAsync(GetAlbumsParameters parameters = null);
+		Task<Paginated<Album>> GetUserAlbumsAsync(long userId, GetAlbumsParameters parameters = null);
+		Paginated<Album> GetAccountAlbums(GetAlbumsParameters parameters = null);
+		Paginated<Album> GetUserAlbums(long userId, GetAlbumsParameters parameters = null);
 
 		// Deleting Videos
 		void DeleteVideo(long clipId);
