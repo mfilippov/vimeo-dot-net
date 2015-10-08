@@ -23,8 +23,6 @@ namespace VimeoDotNet.Parameters
 
 	public class AlbumQueryParameters : IParameterProvider
 	{
-		public static AlbumQueryParameters Empty = new AlbumQueryParameters();
-
 		public int? Page { get; set; }
 
 		public int? PerPage { get; set; }

@@ -20,4 +20,21 @@ namespace VimeoDotNet.Parameters
 		/// <returns>Returns all parameters as name/value pairs.</returns>
 		IDictionary<string, string> GetParameterValues();
 	}
+
+	public class ParameterDictionary : Dictionary<string, string>, IParameterProvider
+	{
+		/// <summary>
+		/// ParameterDictionary is always considered valid, so no error is ever returned.
+		/// </summary>
+		/// <returns>null</returns>
+		public string ValidationError()
+		{
+			return null;
+		}
+
+		public IDictionary<string, string> GetParameterValues()
+		{
+			return this;
+		}
+	}
 }

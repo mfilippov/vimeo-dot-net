@@ -158,8 +158,6 @@ namespace VimeoDotNet
 
 		public async Task<Paginated<Album>> GetUserAlbumsAsync(long userId, AlbumQueryParameters parameters = null)
 		{
-			var options = parameters != null ? parameters.GetParameterValues() : null;
-
 			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.GET,
@@ -167,7 +165,7 @@ namespace VimeoDotNet
 				new Dictionary<string, string>(){
 					{ "userId", userId.ToString() }
 				},
-				options
+				parameters
 			);
 
 			return await ExecuteApiRequest<Paginated<Album>>(request);
@@ -175,14 +173,12 @@ namespace VimeoDotNet
 
 		public async Task<Paginated<Album>> GetAccountAlbumsAsync(AlbumQueryParameters parameters = null)
 		{
-			var options = parameters != null ? parameters.GetParameterValues() : null;
-
 			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.GET,
 				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbums),
 				null,
-				options
+				parameters
 			);
 
 			return await ExecuteApiRequest<Paginated<Album>>(request);
