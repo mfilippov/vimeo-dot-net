@@ -20,6 +20,26 @@ TODO
 - Verify OAuth2 functionality for multi-user clients.
 - *Everything else...*
 
+API COVERAGE
+----
+
+| [/me/information](https://developer.vimeo.com/api/endpoints/me#)|Complete?|API Method|
+|:---|:---:|:---|
+| Get user information | :heavy_check_mark: | `GetAccountInformationAsync()` |
+| Edit user information |  |  |
+| [/me/albums](https://developer.vimeo.com/api/endpoints/me#/albums)|Complete?|API Method|
+| Get a list of a user's Albums. | :heavy_check_mark:  | `GetAccountAlbumsAsync()`  |
+| Create an Album. |   |   |
+| Get info on an Album. |   |   |
+| Edit an Album. |   |   |
+| Delete an Album. |   |   |
+| Get the list of videos in an Album. | :heavy_check_mark:  | `GetAlbumVideosAsync()`  |
+| Check if an Album contains a video. |   |   |
+| Add a video to an Album. |   |   |
+| Remove a video from an Album. |   |   |
+
+
+
 REFERENCE
 ---------
 [API 3 Guide](https://developer.vimeo.com/api/start)  
