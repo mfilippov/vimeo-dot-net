@@ -11,6 +11,7 @@ using VimeoDotNet.Enums;
 using VimeoDotNet.Exceptions;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
+using VimeoDotNet.Parameters;
 
 namespace VimeoDotNet
 {
@@ -155,26 +156,33 @@ namespace VimeoDotNet
 
 		#region Albums
 
-		public async Task<Paginated<Album>> GetUserAlbumsAsync(long userId)
+		public async Task<Paginated<Album>> GetUserAlbumsAsync(long userId, AlbumQueryParameters parameters = null)
 		{
+			var options = parameters != null ? parameters.GetParameterValues() : null;
+
 			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.GET,
 				Endpoints.UserAlbums,
 				new Dictionary<string, string>(){
 					{ "userId", userId.ToString() }
-				}
+				},
+				options
 			);
 
 			return await ExecuteApiRequest<Paginated<Album>>(request);
 		}
 
-		public async Task<Paginated<Album>> GetAccountAlbumsAsync()
+		public async Task<Paginated<Album>> GetAccountAlbumsAsync(AlbumQueryParameters parameters = null)
 		{
+			var options = parameters != null ? parameters.GetParameterValues() : null;
+
 			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.GET,
-				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbums)
+				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbums),
+				null,
+				options
 			);
 
 			return await ExecuteApiRequest<Paginated<Album>>(request);

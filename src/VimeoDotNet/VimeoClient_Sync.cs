@@ -3,6 +3,7 @@ using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
+using VimeoDotNet.Parameters;
 
 namespace VimeoDotNet
 {
@@ -49,11 +50,11 @@ namespace VimeoDotNet
 
 		#region Albums
 
-		public Paginated<Album> GetUserAlbums(long userId)
+		public Paginated<Album> GetUserAlbums(long userId, AlbumQueryParameters parameters = null)
 		{
 			try
 			{
-				return GetUserAlbumsAsync(userId).Result;
+				return GetUserAlbumsAsync(userId, parameters).Result;
 			}
 			catch (AggregateException ex)
 			{
@@ -62,11 +63,11 @@ namespace VimeoDotNet
 			}
 		}
 
-		public Paginated<Album> GetAccountAlbums()
+		public Paginated<Album> GetAccountAlbums(AlbumQueryParameters parameters = null)
 		{
 			try
 			{
-				return GetAccountAlbumsAsync().Result;
+				return GetAccountAlbumsAsync(parameters).Result;
 			}
 			catch (AggregateException ex)
 			{

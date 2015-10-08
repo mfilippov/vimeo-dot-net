@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
+using VimeoDotNet.Parameters;
 
 namespace VimeoDotNet
 {
@@ -59,10 +60,10 @@ namespace VimeoDotNet
 		Task CompleteFileUploadAsync(IUploadRequest uploadRequest);
 
 		// Albums
-		Task<Paginated<Album>> GetAccountAlbumsAsync();
-		Task<Paginated<Album>> GetUserAlbumsAsync(long userId);
-		Paginated<Album> GetAccountAlbums();
-		Paginated<Album> GetUserAlbums(long userId);
+		Task<Paginated<Album>> GetAccountAlbumsAsync(AlbumQueryParameters parameters = null);
+		Task<Paginated<Album>> GetUserAlbumsAsync(long userId, AlbumQueryParameters parameters = null);
+		Paginated<Album> GetAccountAlbums(AlbumQueryParameters parameters = null);
+		Paginated<Album> GetUserAlbums(long userId, AlbumQueryParameters parameters = null);
 
 		// Deleting Videos
 		void DeleteVideo(long clipId);

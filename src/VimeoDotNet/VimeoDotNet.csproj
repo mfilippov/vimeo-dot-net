@@ -46,6 +46,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Enums\AccountTypeEnum.cs" />
+    <Compile Include="Enums\EnumExtensions.cs" />
     <Compile Include="Enums\VideoEmbedPrivacyEnum.cs" />
     <Compile Include="Enums\VideoPrivacyEnum.cs" />
     <Compile Include="Enums\FileQualityEnum.cs" />
@@ -61,6 +62,8 @@
     <Compile Include="Models\PresetSettings.cs" />
     <Compile Include="Models\Size.cs" />
     <Compile Include="Models\VideoUpdateMetadata.cs" />
+    <Compile Include="Parameters\AlbumQueryParameters.cs" />
+    <Compile Include="Parameters\IParameterProvider.cs" />
     <Compile Include="VimeoClientFactory.cs" />
     <Compile Include="Authorization\AuthorizationClient.cs" />
     <Compile Include="Authorization\AuthorizationClientFactory.cs" />
