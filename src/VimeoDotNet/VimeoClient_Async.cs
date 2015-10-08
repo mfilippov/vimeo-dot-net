@@ -138,6 +138,20 @@ namespace VimeoDotNet
 			return await ExecuteApiRequest<User>(request);
         }
 
+		public async Task<User> UpdateAccountInformationAsync(EditUserParameters parameters)
+		{
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.PATCH,
+				Endpoints.GetCurrentUserEndpoint(Endpoints.User),
+				null,
+				parameters
+			);
+
+			return await ExecuteApiRequest<User>(request);
+		}
+
+
         public async Task<User> GetUserInformationAsync(long userId)
         {
 			IApiRequest request = _apiRequestFactory.AuthorizedRequest(

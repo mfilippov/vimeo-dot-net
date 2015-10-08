@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
 using VimeoDotNet.Tests.Settings;
+using VimeoDotNet.Parameters;
 
 namespace VimeoDotNet.Tests
 {
@@ -100,6 +101,82 @@ namespace VimeoDotNet.Tests
             // assert
             Assert.IsNotNull(account);
         }
+
+		[TestMethod]
+		public void Integration_VimeoClient_UpdateAccountInformation_UpdatesCurrentAccountInfo()
+		{
+			// first, ensure we can retrieve the current user...
+			VimeoClient client = CreateAuthenticatedClient();
+			User original = client.GetAccountInformation();
+			Assert.IsNotNull(original);
+
+			// next, update the user record with some new values...
+			string testName = "King Henry VIII";
+			string testBio = "";
+			string testLocation = "England";
+
+			User updated = client.UpdateAccountInformation(new EditUserParameters
+			{
+				Name = testName,
+				Bio = testBio,
+				Location = testLocation
+			});
+
+			// inspect the result and ensure the values match what we expect...
+			// the vimeo api will set string fields to null if the value passed in is an empty string
+			// so check against null if that is what we are passing in, otherwise, expect the passed value...
+			if (string.IsNullOrEmpty(testName))
+				Assert.IsNull(updated.name);
+			else
+				Assert.AreEqual(testName, updated.name);
+
+			if (string.IsNullOrEmpty(testBio))
+				Assert.IsNull(updated.bio);
+			else
+				Assert.AreEqual(testBio, updated.bio);
+
+			if (string.IsNullOrEmpty(testLocation))
+				Assert.IsNull(updated.location);
+			else
+				Assert.AreEqual(testLocation, updated.location);
+
+			// restore the original values...
+			User final = client.UpdateAccountInformation(new Parameters.EditUserParameters
+			{
+				Name = original.name ?? string.Empty,
+				Bio = original.bio ?? string.Empty,
+				Location = original.location ?? string.Empty
+			});
+
+			// inspect the result and ensure the values match our originals...
+			if (string.IsNullOrEmpty(original.name))
+			{
+				Assert.IsNull(final.name);
+			}
+			else
+			{
+				Assert.AreEqual(original.name, final.name);
+			}
+				
+			if (string.IsNullOrEmpty(original.bio))
+			{
+				Assert.IsNull(final.bio);
+			}
+			else
+			{
+				Assert.AreEqual(original.bio, final.bio);
+			}
+				
+			if (string.IsNullOrEmpty(original.location))
+			{
+				Assert.IsNull(final.location);
+			} 
+			else
+			{
+				Assert.AreEqual(original.location, final.location);
+			}			
+		}
+
 
         [TestMethod]
         public void Integration_VimeoClient_GetUserInformation_RetrievesUserInfo()

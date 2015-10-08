@@ -14,10 +14,13 @@ namespace VimeoDotNet
 		string GetOauthUrl(string redirectUri, IEnumerable<string> scope, string state);
 
 		// User Information
-        User GetAccountInformation();
-        Task<User> GetAccountInformationAsync();
         User GetUserInformation(long userId);
         Task<User> GetUserInformationAsync(long userId);
+
+		// User/Albums
+		Task<Paginated<Album>> GetUserAlbumsAsync(long userId, GetAlbumsParameters parameters = null);
+		Paginated<Album> GetUserAlbums(long userId, GetAlbumsParameters parameters = null);
+
 
 		// Retrieve Videos
 		// ...by id
@@ -59,11 +62,15 @@ namespace VimeoDotNet
 		void CompleteFileUpload(IUploadRequest uploadRequest);
 		Task CompleteFileUploadAsync(IUploadRequest uploadRequest);
 
-		// Albums
+		// Account Information
+		User GetAccountInformation();
+		Task<User> GetAccountInformationAsync();
+		Task<User> UpdateAccountInformationAsync(EditUserParameters parameters);
+		User UpdateAccountInformation(EditUserParameters parameters);
+
+		// Account/Albums
 		Task<Paginated<Album>> GetAccountAlbumsAsync(GetAlbumsParameters parameters = null);
-		Task<Paginated<Album>> GetUserAlbumsAsync(long userId, GetAlbumsParameters parameters = null);
 		Paginated<Album> GetAccountAlbums(GetAlbumsParameters parameters = null);
-		Paginated<Album> GetUserAlbums(long userId, GetAlbumsParameters parameters = null);
 
 		// Deleting Videos
 		void DeleteVideo(long clipId);

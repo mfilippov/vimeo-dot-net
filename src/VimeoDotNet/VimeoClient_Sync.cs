@@ -33,6 +33,19 @@ namespace VimeoDotNet
             }
         }
 
+		public User UpdateAccountInformation(EditUserParameters parameters)
+		{
+			try
+			{
+				return Task.Run(async () => await UpdateAccountInformationAsync(parameters)).Result;
+			}
+			catch (AggregateException ex)
+			{
+				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+				return null;
+			}
+		}
+
         public User GetUserInformation(long userId)
         {
             try
