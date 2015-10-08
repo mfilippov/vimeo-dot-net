@@ -54,7 +54,7 @@ namespace VimeoDotNet
 		{
 			try
 			{
-				return GetUserAlbumsAsync(userId, parameters).Result;
+				return Task.Run(async () => await GetUserAlbumsAsync(userId, parameters)).Result;
 			}
 			catch (AggregateException ex)
 			{
@@ -67,7 +67,7 @@ namespace VimeoDotNet
 		{
 			try
 			{
-				return GetAccountAlbumsAsync(parameters).Result;
+				return Task.Run(async () => await GetAccountAlbumsAsync(parameters)).Result;
 			}
 			catch (AggregateException ex)
 			{
