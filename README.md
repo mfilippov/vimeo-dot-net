@@ -34,9 +34,14 @@ API COVERAGE
 | Edit an Album. | :heavy_check_mark:  | `UpdateAlbumAsync()`  |
 | Delete an Album. |  :heavy_check_mark: |  `DeleteAlbumAsync` |
 | Get the list of videos in an Album. | :heavy_check_mark:  | `GetAlbumVideosAsync()`  |
-| Check if an Album contains a video. |   |   |
-| Add a video to an Album. |   |   |
+| Check if an Album contains a video. |   | If you know account's userId, can use `GetUserAlbumVideoAsync()` |
+| Add a video to an Album. |  |  |
 | Remove a video from an Album. |   |   |
+| [/me/videos](https://developer.vimeo.com/api/endpoints/me#/videos)|Complete?|API Method|
+| Get a list of videos uploaded by a user. | :heavy_check_mark: | `GetVideosAsync()` |
+| Begin the video upload process. | :heavy_check_mark: | `GetUploadTicketAsync()` |
+| Check if a user owns a clip. | :heavy_check_mark: | `GetUserVideo()` |
+
 
 
 
