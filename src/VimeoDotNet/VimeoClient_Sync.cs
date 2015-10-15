@@ -33,18 +33,18 @@ namespace VimeoDotNet
             }
         }
 
-		public User UpdateAccountInformation(EditUserParameters parameters)
-		{
-			try
-			{
-				return Task.Run(async () => await UpdateAccountInformationAsync(parameters)).Result;
-			}
-			catch (AggregateException ex)
-			{
-				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-				return null;
-			}
-		}
+        public User UpdateAccountInformation(EditUserParameters parameters)
+        {
+            try
+            {
+                return UpdateAccountInformationAsync(parameters).RunSynchronouslyWithCurrentCulture();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
+        }
 
         public User GetUserInformation(long userId)
         {
@@ -61,78 +61,78 @@ namespace VimeoDotNet
 
         #endregion
 
-		#region Albums
+        #region Albums
 
-		public Paginated<Album> GetAlbums(long userId, GetAlbumsParameters parameters = null)
-		{
-			try
-			{
-				return Task.Run(async () => await GetAlbumsAsync(userId, parameters)).Result;
-			}
-			catch (AggregateException ex)
-			{
-				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-				return null;
-			}
-		}
+        public Paginated<Album> GetAlbums(long userId, GetAlbumsParameters parameters = null)
+        {
+            try
+            {
+                return GetAlbumsAsync(userId, parameters).RunSynchronouslyWithCurrentCulture();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
+        }
 
-		public Paginated<Album> GetAlbums(GetAlbumsParameters parameters = null)
-		{
-			try
-			{
-				return Task.Run(async () => await GetAlbumsAsync(parameters)).Result;
-			}
-			catch (AggregateException ex)
-			{
-				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-				return null;
-			}
-		}
+        public Paginated<Album> GetAlbums(GetAlbumsParameters parameters = null)
+        {
+            try
+            {
+                return GetAlbumsAsync(parameters).RunSynchronouslyWithCurrentCulture();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
+        }
 
-		public Album CreateAlbum(EditAlbumParameters parameters = null)
-		{
-			try
-			{
-				return Task.Run(async () => await CreateAlbumAsync(parameters)).Result;
-			}
-			catch (AggregateException ex)
-			{
-				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-				return null;
-			}
-		}
+        public Album CreateAlbum(EditAlbumParameters parameters = null)
+        {
+            try
+            {
+                return CreateAlbumAsync(parameters).RunSynchronouslyWithCurrentCulture();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
+        }
 
-		public Album UpdateAlbum(long albumId, EditAlbumParameters parameters = null)
-		{
-			try
-			{
-				return Task.Run(async () => await UpdateAlbumAsync(albumId, parameters)).Result;
-			}
-			catch (AggregateException ex)
-			{
-				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-				return null;
-			}
-		}
+        public Album UpdateAlbum(long albumId, EditAlbumParameters parameters = null)
+        {
+            try
+            {
+                return UpdateAlbumAsync(albumId, parameters).RunSynchronouslyWithCurrentCulture();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
+        }
 
-		public bool DeleteAlbum(long albumId)
-		{
-			try
-			{
-				return Task.Run(async () => await DeleteAlbumAsync(albumId)).Result;
-			}
-			catch (AggregateException ex)
-			{
-				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-				return false;
-			}
-		}
+        public bool DeleteAlbum(long albumId)
+        {
+            try
+            {
+                return DeleteAlbumAsync(albumId).RunSynchronouslyWithCurrentCulture();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return false;
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Videos
+        #region Videos
 
-		public Paginated<Video> GetVideos()
+        public Paginated<Video> GetVideos()
         {
             try
             {
