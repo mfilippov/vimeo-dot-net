@@ -74,6 +74,9 @@
     <Compile Include="..\vimeodotnet\enums\AccountTypeEnum.cs">
       <Link>Enums\AccountTypeEnum.cs</Link>
     </Compile>
+    <Compile Include="..\VimeoDotNet\Enums\EnumExtensions.cs">
+      <Link>Enums\EnumExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\vimeodotnet\enums\FileQualityEnum.cs">
       <Link>Enums\FileQualityEnum.cs</Link>
     </Compile>
@@ -262,6 +265,18 @@
     </Compile>
     <Compile Include="..\vimeodotnet\net\UploadRequest.cs">
       <Link>Net\UploadRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\VimeoDotNet\Parameters\EditAlbumParameters.cs">
+      <Link>Parameters\EditAlbumParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\VimeoDotNet\Parameters\EditUserParameters.cs">
+      <Link>Parameters\EditUserParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\VimeoDotNet\Parameters\GetAlbumsParameters.cs">
+      <Link>Parameters\GetAlbumsParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\VimeoDotNet\Parameters\IParameterProvider.cs">
+      <Link>Parameters\IParameterProvider.cs</Link>
     </Compile>
     <Compile Include="..\VimeoDotNet\VimeoClientFactory.cs">
       <Link>VimeoClientFactory.cs</Link>

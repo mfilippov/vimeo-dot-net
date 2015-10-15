@@ -11,6 +11,7 @@ using VimeoDotNet.Enums;
 using VimeoDotNet.Exceptions;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
+using VimeoDotNet.Parameters;
 
 namespace VimeoDotNet
 {
@@ -128,67 +129,228 @@ namespace VimeoDotNet
 
         public async Task<User> GetAccountInformationAsync()
         {
-            try
-            {
-                IApiRequest request = GenerateUserInformationRequest();
-                IRestResponse<User> response = await request.ExecuteRequestAsync<User>();
-                CheckStatusCodeError(response, "Error retrieving account information.");
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.GET,
+				Endpoints.GetCurrentUserEndpoint(Endpoints.User)
+			);
 
-                return response.Data;
-            }
-            catch (Exception ex)
-            {
-                if (ex is VimeoApiException)
-                {
-                    throw;
-                }
-                throw new VimeoApiException("Error retrieving account information.", ex);
-            }
+			return await ExecuteApiRequest<User>(request);
         }
+
+		public async Task<User> UpdateAccountInformationAsync(EditUserParameters parameters)
+		{
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.PATCH,
+				Endpoints.GetCurrentUserEndpoint(Endpoints.User),
+				null,
+				parameters
+			);
+
+			return await ExecuteApiRequest<User>(request);
+		}
+
 
         public async Task<User> GetUserInformationAsync(long userId)
         {
-            try
-            {
-                IApiRequest request = GenerateUserInformationRequest(userId);
-                IRestResponse<User> response = await request.ExecuteRequestAsync<User>();
-                CheckStatusCodeError(response, "Error retrieving user information.", HttpStatusCode.NotFound);
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.GET,
+				Endpoints.User,
+				new Dictionary<string, string>(){
+					{ "userId", userId.ToString() }
+				}
+			);
 
-                if (response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return null;
-                }
-                return response.Data;
-            }
-            catch (Exception ex)
-            {
-                if (ex is VimeoApiException)
-                {
-                    throw;
-                }
-                throw new VimeoApiException("Error retrieving user information.", ex);
-            }
+			return await ExecuteApiRequest<User>(request);
         }
 
-        private IApiRequest GenerateUserInformationRequest(long? userId = null)
-        {
-            ThrowIfUnauthorized();
+		#endregion
 
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
-            request.Method = Method.GET;
-            request.Path = userId.HasValue ? Endpoints.User : Endpoints.GetCurrentUserEndpoint(Endpoints.User);
-            if (userId.HasValue)
-            {
-                request.UrlSegments.Add("userId", userId.ToString());
-            }
-            return request;
-        }
+		#region Albums
 
-        #endregion
-        
-        #region Helper Functions
+		public async Task<Paginated<Album>> GetAlbumsAsync(GetAlbumsParameters parameters = null)
+		{
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.GET,
+				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbums),
+				null,
+				parameters
+			);
 
-        private void ThrowIfUnauthorized()
+			return await ExecuteApiRequest<Paginated<Album>>(request);
+		}
+
+		public async Task<Paginated<Album>> GetAlbumsAsync(long userId, GetAlbumsParameters parameters = null)
+		{
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.GET,
+				Endpoints.UserAlbums,
+				new Dictionary<string, string>(){
+					{ "userId", userId.ToString() }
+				},
+				parameters
+			);
+
+			return await ExecuteApiRequest<Paginated<Album>>(request);
+		}
+
+		public async Task<Album> CreateAlbumAsync(EditAlbumParameters parameters = null)
+		{
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.POST,
+				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbums),
+				null,
+				parameters
+			);
+
+			return await ExecuteApiRequest<Album>(request);
+		}
+
+		public async Task<Album> UpdateAlbumAsync(long albumId, EditAlbumParameters parameters = null)
+		{
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.PATCH,
+				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbum),
+				new Dictionary<string, string>(){
+					{ "albumId", albumId.ToString() }
+				},
+				parameters
+			);
+
+			return await ExecuteApiRequest<Album>(request);
+		}
+
+		public async Task<bool> DeleteAlbumAsync(long albumId)
+		{
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.DELETE,
+				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbum),
+				new Dictionary<string, string>(){
+					{ "albumId", albumId.ToString() }
+				}
+			);
+
+			return await ExecuteApiRequest(request);
+		}
+
+		#endregion
+
+		#region Utility
+
+		/// <summary>
+		/// Utility method for calling ExecuteApiRequest with the most common use case (returning
+		/// null for NotFound responses).
+		/// </summary>
+		/// <typeparam name="T">Type of the expected response data.</typeparam>
+		/// <param name="request"></param>
+		/// <returns></returns>
+		private async Task<T> ExecuteApiRequest<T>(IApiRequest request) where T : new()
+		{
+			return await ExecuteApiRequest<T>(request, (statusCode) => default(T), new []{ HttpStatusCode.NotFound } );
+		}
+
+		/// <summary>
+		/// Utility method for performing API requests that retrieve data in a consistent manner.  
+		/// 
+		/// The given request will be performed, and if the response is an outright success then
+		/// the response data will be unwrapped and returned.  
+		/// 
+		/// If the call is not an outright success, but the status code is among the other acceptable 
+		/// results (provided via validStatusCodes), the getValueForStatusCode method will be called
+		/// to generate a return value. This allows the caller to return null or an empty list as 
+		/// desired.
+		/// 
+		/// If neither of the above is possible, an exception will be thrown.
+		/// </summary>
+		/// <typeparam name="T">Type of the expected response data.</typeparam>
+		/// <param name="request"></param>
+		/// <param name="getValueForStatusCode"></param>
+		/// <param name="validStatusCodes"></param>
+		/// <returns></returns>
+		private async Task<T> ExecuteApiRequest<T>(IApiRequest request, Func<HttpStatusCode, T> getValueForStatusCode, params HttpStatusCode[] validStatusCodes) where T : new()
+		{			
+			try
+			{
+				IRestResponse<T> response = await request.ExecuteRequestAsync<T>();
+
+				// if request was successful, return immediately...
+				if (IsSuccessStatusCode(response.StatusCode))
+				{
+					return response.Data;
+				}
+
+				// if request is among other accepted status codes, return the corresponding value...
+				if (validStatusCodes != null && validStatusCodes.Contains(response.StatusCode))
+				{
+					return getValueForStatusCode(response.StatusCode);
+				}
+
+				// at this point, we've eliminated all acceptable responses, throw an exception...
+				throw new VimeoApiException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
+					Environment.NewLine, 
+					"Error retrieving information from Vimeo API.", 
+					response.StatusCode, 
+					response.Content
+				));
+			}
+			catch (Exception ex)
+			{
+				if (ex is VimeoApiException)
+				{
+					throw;
+				}
+				throw new VimeoApiException("Error retrieving information from Vimeo API.", ex);
+			}
+		}
+
+		private async Task<bool> ExecuteApiRequest(IApiRequest request, params HttpStatusCode[] validStatusCodes)
+		{
+			try
+			{
+				IRestResponse response = await request.ExecuteRequestAsync();
+
+				// if request was successful, return immediately...
+				if (IsSuccessStatusCode(response.StatusCode))
+				{
+					return true;
+				}
+
+				// if request is among other accepted status codes, return the corresponding value...
+				if (validStatusCodes != null && validStatusCodes.Contains(response.StatusCode))
+				{
+					return true;
+				}
+
+				// at this point, we've eliminated all acceptable responses, throw an exception...
+				throw new VimeoApiException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
+					Environment.NewLine,
+					"Error retrieving information from Vimeo API.",
+					response.StatusCode,
+					response.Content
+				));
+			}
+			catch (Exception ex)
+			{
+				if (ex is VimeoApiException)
+				{
+					throw;
+				}
+				throw new VimeoApiException("Error retrieving information from Vimeo API.", ex);
+			}
+		}
+
+		#endregion
+
+		#region Helper Functions
+
+		private void ThrowIfUnauthorized()
         {
             if (string.IsNullOrWhiteSpace(AccessToken))
             {

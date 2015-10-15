@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
 using VimeoDotNet.Tests.Settings;
+using VimeoDotNet.Parameters;
 
 namespace VimeoDotNet.Tests
 {
@@ -100,6 +101,82 @@ namespace VimeoDotNet.Tests
             // assert
             Assert.IsNotNull(account);
         }
+
+		[TestMethod]
+		public void Integration_VimeoClient_UpdateAccountInformation_UpdatesCurrentAccountInfo()
+		{
+			// first, ensure we can retrieve the current user...
+			VimeoClient client = CreateAuthenticatedClient();
+			User original = client.GetAccountInformation();
+			Assert.IsNotNull(original);
+
+			// next, update the user record with some new values...
+			string testName = "King Henry VIII";
+			string testBio = "";
+			string testLocation = "England";
+
+			User updated = client.UpdateAccountInformation(new EditUserParameters
+			{
+				Name = testName,
+				Bio = testBio,
+				Location = testLocation
+			});
+
+			// inspect the result and ensure the values match what we expect...
+			// the vimeo api will set string fields to null if the value passed in is an empty string
+			// so check against null if that is what we are passing in, otherwise, expect the passed value...
+			if (string.IsNullOrEmpty(testName))
+				Assert.IsNull(updated.name);
+			else
+				Assert.AreEqual(testName, updated.name);
+
+			if (string.IsNullOrEmpty(testBio))
+				Assert.IsNull(updated.bio);
+			else
+				Assert.AreEqual(testBio, updated.bio);
+
+			if (string.IsNullOrEmpty(testLocation))
+				Assert.IsNull(updated.location);
+			else
+				Assert.AreEqual(testLocation, updated.location);
+
+			// restore the original values...
+			User final = client.UpdateAccountInformation(new Parameters.EditUserParameters
+			{
+				Name = original.name ?? string.Empty,
+				Bio = original.bio ?? string.Empty,
+				Location = original.location ?? string.Empty
+			});
+
+			// inspect the result and ensure the values match our originals...
+			if (string.IsNullOrEmpty(original.name))
+			{
+				Assert.IsNull(final.name);
+			}
+			else
+			{
+				Assert.AreEqual(original.name, final.name);
+			}
+				
+			if (string.IsNullOrEmpty(original.bio))
+			{
+				Assert.IsNull(final.bio);
+			}
+			else
+			{
+				Assert.AreEqual(original.bio, final.bio);
+			}
+				
+			if (string.IsNullOrEmpty(original.location))
+			{
+				Assert.IsNull(final.location);
+			} 
+			else
+			{
+				Assert.AreEqual(original.location, final.location);
+			}			
+		}
+
 
         [TestMethod]
         public void Integration_VimeoClient_GetUserInformation_RetrievesUserInfo()
@@ -208,7 +285,75 @@ namespace VimeoDotNet.Tests
             // assert
             Assert.IsNotNull(video);
         }
-        
+
+		[TestMethod]
+		public void Integration_VimeoClient_GetAccountAlbums_NotNull()
+		{
+			// arrange
+			VimeoClient client = CreateAuthenticatedClient();
+
+			// act
+			Paginated<Album> albums = client.GetAlbums();
+
+			// assert
+			Assert.IsNotNull(albums);
+		}
+
+		[TestMethod]
+		public void Integration_VimeoClient_AlbumManagement()
+		{
+			VimeoClient client = CreateAuthenticatedClient();
+		
+			// create a new album...
+			string originalName = "Unit Test Album";
+			string originalDesc = "This album was created via an automated test, and should be deleted momentarily...";
+
+			Album newAlbum = client.CreateAlbum(new EditAlbumParameters()
+			{
+				Name = originalName,
+				Description = originalDesc,
+				Sort = EditAlbumSortOption.Newest,
+				Privacy = EditAlbumPrivacyOption.Password,
+				Password = "test"
+			});
+
+			Assert.IsNotNull(newAlbum);
+			Assert.AreEqual(originalName, newAlbum.name);
+			Assert.AreEqual(originalDesc, newAlbum.description);
+
+			// retrieve albums for the current user...there should be at least one now...
+			Paginated<Album> albums = client.GetAlbums();
+
+			Assert.IsTrue(albums.total > 0);
+
+			// update the album...
+			string updatedName = "Unit Test Album (Updated)";
+			Album updatedAlbum = client.UpdateAlbum(newAlbum.GetAlbumId().Value, new EditAlbumParameters()
+			{
+				Name = updatedName,
+				Privacy = EditAlbumPrivacyOption.Anybody
+			});
+
+			Assert.AreEqual(updatedName, updatedAlbum.name);
+
+			// delete the album...
+			bool isDeleted = client.DeleteAlbum(updatedAlbum.GetAlbumId().Value);
+
+			Assert.IsTrue(isDeleted);
+		}
+
+		[TestMethod]
+		public void Integration_VimeoClient_GetUserAlbums_NotNull()
+		{
+			// arrange
+			VimeoClient client = CreateAuthenticatedClient();
+
+			// act
+			Paginated<Album> albums = client.GetAlbums(vimeoSettings.UserId);
+
+			// assert
+			Assert.IsNotNull(albums);
+		}
 
         private VimeoClient CreateUnauthenticatedClient()
         {
