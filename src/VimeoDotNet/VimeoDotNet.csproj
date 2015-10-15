@@ -51,6 +51,7 @@
     <Compile Include="Enums\FileQualityEnum.cs" />
     <Compile Include="Enums\PictureTypeEnum.cs" />
     <Compile Include="Enums\VideoStatusEnum.cs" />
+    <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Helpers\MimeHelpers.cs" />
     <Compile Include="IVimeoClient.cs" />
     <Compile Include="IVimeoClientFactory.cs" />
