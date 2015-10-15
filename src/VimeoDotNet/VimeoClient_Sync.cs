@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.ExceptionServices;
-using System.Threading.Tasks;
+using VimeoDotNet.Extensions;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
 
@@ -12,7 +12,7 @@ namespace VimeoDotNet
 
         public AccessTokenResponse GetAccessToken(string authorizationCode, string redirectUrl)
         {
-            return OAuth2Client.GetAccessTokenAsync(authorizationCode, redirectUrl).Result;
+            return OAuth2Client.GetAccessTokenAsync(authorizationCode, redirectUrl).RunSynchronouslyWithCurrentCulture();
         }
 
         #endregion
@@ -23,7 +23,7 @@ namespace VimeoDotNet
         {
             try
             {
-                return Task.Run(async () => await GetAccountInformationAsync()).Result;
+                return GetAccountInformationAsync().RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -36,7 +36,7 @@ namespace VimeoDotNet
         {
             try
             {
-                return Task.Run(async () => await GetUserInformationAsync(userId)).Result;
+                return GetUserInformationAsync(userId).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -53,7 +53,7 @@ namespace VimeoDotNet
         {
             try
             {
-                return Task.Run(async () => await GetVideosAsync()).Result;
+                return GetVideosAsync().RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -66,7 +66,7 @@ namespace VimeoDotNet
         {
             try
             {
-                return Task.Run(async () => await GetVideoAsync(clipId)).Result;
+                return GetVideoAsync(clipId).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -84,7 +84,7 @@ namespace VimeoDotNet
         {
             try
             {
-                return Task.Run(async () => await GetUserVideosAsync(userId, page, perPage, query)).Result;
+                return GetUserVideosAsync(userId, page, perPage, query).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -97,7 +97,7 @@ namespace VimeoDotNet
         {
             try
             {
-                return Task.Run(async () => await GetUserVideoAsync(userId, clipId)).Result;
+                return GetUserVideoAsync(userId, clipId).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -110,7 +110,7 @@ namespace VimeoDotNet
         {
             try
             {
-                return Task.Run(async () => await GetAlbumVideosAsync(albumId, page, perPage, sort, direction)).Result;
+                return GetAlbumVideosAsync(albumId, page, perPage, sort, direction).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -123,7 +123,7 @@ namespace VimeoDotNet
         {
             try
             {
-                return Task.Run(async () => await GetAlbumVideoAsync(albumId, clipId)).Result;
+                return GetAlbumVideoAsync(albumId, clipId).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -136,7 +136,7 @@ namespace VimeoDotNet
         {
             try
             {
-                return Task.Run(async () => await GetUserAlbumVideosAsync(userId, albumId)).Result;
+                return GetUserAlbumVideosAsync(userId, albumId).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -149,7 +149,7 @@ namespace VimeoDotNet
         {
             try
             {
-                return Task.Run(async () => await GetUserAlbumVideoAsync(userId, albumId, clipId)).Result;
+                return GetUserAlbumVideoAsync(userId, albumId, clipId).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -162,7 +162,7 @@ namespace VimeoDotNet
         {
             try
             {
-                Task.Run(async () => await UpdateVideoMetadataAsync(clipId, metaData)).Wait();
+                UpdateVideoMetadataAsync(clipId, metaData).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -174,7 +174,7 @@ namespace VimeoDotNet
         {
             try
             {
-                Task.Run(async () => await DeleteVideoAsync(clipId)).Wait();
+                DeleteVideoAsync(clipId).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -190,7 +190,7 @@ namespace VimeoDotNet
         {
             try
             {
-                return Task.Run(async () => await GetUploadTicketAsync()).Result;
+                return GetUploadTicketAsync().RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -203,7 +203,7 @@ namespace VimeoDotNet
         {
             try
             {
-                return Task.Run(async () => await StartUploadFileAsync(fileContent, chunkSize)).Result;
+                return StartUploadFileAsync(fileContent, chunkSize).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -216,7 +216,7 @@ namespace VimeoDotNet
         {
             try
             {
-                return Task.Run(async () => await UploadEntireFileAsync(fileContent, chunkSize)).Result;
+                return UploadEntireFileAsync(fileContent, chunkSize).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -229,7 +229,7 @@ namespace VimeoDotNet
         {
             try
             {
-                return Task.Run(async () => await ContinueUploadFileAsync(uploadRequest)).Result;
+                return ContinueUploadFileAsync(uploadRequest).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -242,7 +242,7 @@ namespace VimeoDotNet
         {
             try
             {
-                return Task.Run(async () => await VerifyUploadFileAsync(uploadRequest)).Result;
+                return VerifyUploadFileAsync(uploadRequest).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -255,7 +255,7 @@ namespace VimeoDotNet
         {
             try
             {
-                Task.Run(async () => await CompleteFileUploadAsync(uploadRequest)).Wait();
+                CompleteFileUploadAsync(uploadRequest).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {

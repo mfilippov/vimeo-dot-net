@@ -98,6 +98,9 @@
     <Compile Include="..\VimeoDotNet\Exceptions\VimeoUploadException.cs">
       <Link>Exceptions\VimeoUploadException.cs</Link>
     </Compile>
+    <Compile Include="..\VimeoDotNet\Extensions\TaskExtensions.cs">
+      <Link>Extensions\TaskExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\VimeoDotNet\Helpers\MimeHelpers.cs">
       <Link>Helpers\MimeHelpers.cs</Link>
     </Compile>
