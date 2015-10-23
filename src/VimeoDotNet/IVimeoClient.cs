@@ -66,15 +66,27 @@ namespace VimeoDotNet
 		// Albums
 		Task<Paginated<Album>> GetAlbumsAsync(GetAlbumsParameters parameters = null);					
 		Task<Paginated<Album>> GetAlbumsAsync(long userId, GetAlbumsParameters parameters = null);
+		Task<Album> GetAlbumAsync(long albumId);
+		Task<Album> GetAlbumAsync(long userId, long albumId);
 		Task<Album> CreateAlbumAsync(EditAlbumParameters parameters = null);
 		Task<Album> UpdateAlbumAsync(long albumId, EditAlbumParameters parameters = null);
 		Task<bool> DeleteAlbumAsync(long albumId);
+		Task<bool> AddToAlbumAsync(long albumId, long clipId);
+		Task<bool> AddToAlbumAsync(long userId, long albumId, long clipId);
+		Task<bool> RemoveFromAlbumAsync(long albumId, long clipId);
+		Task<bool> RemoveFromAlbumAsync(long userId, long albumId, long clipId);
 
 		Paginated<Album> GetAlbums(GetAlbumsParameters parameters = null);
 		Paginated<Album> GetAlbums(long userId, GetAlbumsParameters parameters = null);
+		Album GetAlbum(long albumId);
+		Album GetAlbum(long userId, long albumId);
 		Album CreateAlbum(EditAlbumParameters parameters = null);
 		Album UpdateAlbum(long albumId, EditAlbumParameters parameters = null);
 		bool DeleteAlbum(long albumId);
+		bool AddToAlbum(long albumId, long clipId);
+		bool AddToAlbum(long userId, long albumId, long clipId);
+		bool RemoveFromAlbum(long albumId, long clipId);
+		bool RemoveFromAlbum(long userId, long albumId, long clipId);
 
 		// Deleting Videos
 		void DeleteVideo(long clipId);

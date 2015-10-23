@@ -300,6 +300,32 @@ namespace VimeoDotNet.Tests
 		}
 
 		[TestMethod]
+		public void Integration_VimeoClient_AlbumVideoManagement()
+		{
+			VimeoClient client = CreateAuthenticatedClient();
+
+			// assume this album and video are configured in the current account...
+			long albumId = vimeoSettings.AlbumId;
+			long videoId = vimeoSettings.VideoId;
+
+			// add it...
+			bool isAdded = client.AddToAlbum(albumId, videoId);
+			Video addedVideo = client.GetAlbumVideo(albumId, videoId);
+			bool isPresent = addedVideo != null;
+
+			Assert.IsTrue(isAdded, "AddToAlbum failed.");
+			Assert.IsTrue(isAdded == isPresent, "Returned value does not match actual presence of video.");
+			
+			// then remove it...
+			bool isRemoved = client.RemoveFromAlbum(albumId, videoId);
+			Video removedVideo = client.GetAlbumVideo(albumId, videoId);
+			bool isAbsent = removedVideo == null;
+
+			Assert.IsTrue(isRemoved, "RemoveFromAlbum failed.");
+			Assert.IsTrue(isRemoved == isAbsent, "Returned value does not match actual abscence of video.");
+		}
+
+		[TestMethod]
 		public void Integration_VimeoClient_AlbumManagement()
 		{
 			VimeoClient client = CreateAuthenticatedClient();

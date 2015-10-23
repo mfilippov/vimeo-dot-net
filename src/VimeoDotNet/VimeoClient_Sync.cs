@@ -63,6 +63,19 @@ namespace VimeoDotNet
 
         #region Albums
 
+		public Paginated<Album> GetAlbums(GetAlbumsParameters parameters = null)
+		{
+			try
+			{
+				return GetAlbumsAsync(parameters).RunSynchronouslyWithCurrentCulture();
+			}
+			catch (AggregateException ex)
+			{
+				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+				return null;
+			}
+		}
+
         public Paginated<Album> GetAlbums(long userId, GetAlbumsParameters parameters = null)
         {
             try
@@ -76,18 +89,31 @@ namespace VimeoDotNet
             }
         }
 
-        public Paginated<Album> GetAlbums(GetAlbumsParameters parameters = null)
-        {
-            try
-            {
-                return GetAlbumsAsync(parameters).RunSynchronouslyWithCurrentCulture();
-            }
-            catch (AggregateException ex)
-            {
-                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
-            }
-        }
+		public Album GetAlbum(long albumId)
+		{
+			try
+			{
+				return GetAlbumAsync(albumId).RunSynchronouslyWithCurrentCulture();
+			}
+			catch (AggregateException ex)
+			{
+				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+				return null;
+			}
+		}
+
+		public Album GetAlbum(long userId, long albumId)
+		{
+			try
+			{
+				return GetAlbumAsync(userId, albumId).RunSynchronouslyWithCurrentCulture();
+			}
+			catch (AggregateException ex)
+			{
+				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+				return null;
+			}
+		}
 
         public Album CreateAlbum(EditAlbumParameters parameters = null)
         {
@@ -127,6 +153,60 @@ namespace VimeoDotNet
                 return false;
             }
         }
+
+		
+		public bool AddToAlbum(long albumId, long clipId)
+		{
+			try
+			{
+				return AddToAlbumAsync(albumId, clipId).RunSynchronouslyWithCurrentCulture();
+			}
+			catch (AggregateException ex)
+			{
+				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+				return false;
+			}
+		}
+
+		public bool AddToAlbum(long userId, long albumId, long clipId)
+		{
+			try
+			{
+				return AddToAlbumAsync(userId, albumId, clipId).RunSynchronouslyWithCurrentCulture();
+			}
+			catch (AggregateException ex)
+			{
+				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+				return false;
+			}
+		}
+
+		
+		public bool RemoveFromAlbum(long albumId, long clipId)
+		{
+			try
+			{
+				return RemoveFromAlbumAsync(albumId, clipId).RunSynchronouslyWithCurrentCulture();
+			}
+			catch (AggregateException ex)
+			{
+				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+				return false;
+			}
+		}
+
+		public bool RemoveFromAlbum(long userId, long albumId, long clipId)
+		{
+			try
+			{
+				return RemoveFromAlbumAsync(userId, albumId, clipId).RunSynchronouslyWithCurrentCulture();
+			}
+			catch (AggregateException ex)
+			{
+				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+				return false;
+			}
+		}
 
         #endregion
 
