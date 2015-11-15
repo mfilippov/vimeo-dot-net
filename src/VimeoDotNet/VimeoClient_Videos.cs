@@ -263,6 +263,24 @@ namespace VimeoDotNet
             }
         }
 
+        public async Task UpdateVideoAllowedDomainAsync(long clipId, string domain)
+        {
+            try
+            {
+                IApiRequest request = GenerateVideoAllowedDomainPatchRequest(clipId, domain);
+                IRestResponse response = await request.ExecuteRequestAsync();
+                CheckStatusCodeError(response, "Error updating user video metadata.");
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+                throw new VimeoApiException("Error updating user video metadata.", ex);
+            }
+        }
+
         private IApiRequest GenerateVideosRequest(long? userId = null, long? clipId = null, int? page = null, int? perPage = null, string query = null)
         {
             ThrowIfUnauthorized();
@@ -378,7 +396,27 @@ namespace VimeoDotNet
             {
                 request.Query.Add("privacy.embed", metaData.EmbedPrivacy.ToString().ToLower());
             }
+            if (metaData.Comments != VideoCommentsEnum.Unknown)
+            {
+                request.Query.Add("privacy.comments", metaData.Comments.ToString().ToLower());
+            }
             request.Query.Add("review_link", metaData.ReviewLinkEnabled.ToString().ToLower());
+            request.Query.Add("privacy.download", metaData.AllowDownloadVideo ? "true" : "false");
+            request.Query.Add("privacy.add", metaData.AllowAddToAlbumChannelGroup ? "true" : "false");
+
+            return request;
+        }
+
+        private IApiRequest GenerateVideoAllowedDomainPatchRequest(long clipId, string domain)
+        {
+            ThrowIfUnauthorized();
+
+            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+            request.Method = Method.PUT;
+            request.Path = Endpoints.VideoAllowedDomain;
+
+            request.UrlSegments.Add("clipId", clipId.ToString());
+            request.UrlSegments.Add("domain", domain);
 
             return request;
         }

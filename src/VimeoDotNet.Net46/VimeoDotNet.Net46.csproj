@@ -86,6 +86,9 @@
     <Compile Include="..\vimeodotnet\enums\UploadStatusEnum.cs">
       <Link>Enums\UploadStatusEnum.cs</Link>
     </Compile>
+    <Compile Include="..\VimeoDotNet\Enums\VideoCommentsEnum.cs">
+      <Link>Enums\VideoCommentsEnum.cs</Link>
+    </Compile>
     <Compile Include="..\vimeodotnet\enums\VideoEmbedPrivacyEnum.cs">
       <Link>Enums\VideoEmbedPrivacyEnum.cs</Link>
     </Compile>
