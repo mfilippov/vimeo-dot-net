@@ -26,7 +26,19 @@ namespace VimeoDotNet.Tests
             // The settings loader will create this file in the bin/ folder if it doesn't exist
             vimeoSettings = Settings.SettingsLoader.LoadSettings(); 
         }
+        
+        [TestMethod]
+        public void Integration_VimeoClient_GetReplaceVideoUploadTicket_CanGenerateStreamingTicket()
+        {
+            // arrange
+            VimeoClient client = CreateAuthenticatedClient();
 
+            // act
+            UploadTicket ticket = client.GetReplaceVideoUploadTicket(vimeoSettings.VideoId);
+
+            // assert
+            Assert.IsNotNull(ticket);
+        }
 
         [TestMethod]
         public void Integration_VimeoClient_GetUploadTicket_CanGenerateStreamingTicket()

@@ -269,6 +269,19 @@ namespace VimeoDotNet
 
         #region Upload
 
+        public UploadTicket GetReplaceVideoUploadTicket(long videoId)
+        {
+            try
+            {
+                return GetReplaceVideoUploadTicketAsync(videoId).RunSynchronouslyWithCurrentCulture();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
+            }
+        }
+
         public UploadTicket GetUploadTicket()
         {
             try
@@ -282,11 +295,11 @@ namespace VimeoDotNet
             }
         }
 
-        public IUploadRequest StartUploadFile(IBinaryContent fileContent, int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE)
+        public IUploadRequest StartUploadFile(IBinaryContent fileContent, int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null)
         {
             try
             {
-                return StartUploadFileAsync(fileContent, chunkSize).RunSynchronouslyWithCurrentCulture();
+                return StartUploadFileAsync(fileContent, chunkSize, replaceVideoId).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -295,11 +308,11 @@ namespace VimeoDotNet
             }
         }
 
-        public IUploadRequest UploadEntireFile(IBinaryContent fileContent, int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE)
+        public IUploadRequest UploadEntireFile(IBinaryContent fileContent, int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null)
         {
             try
             {
-                return UploadEntireFileAsync(fileContent, chunkSize).RunSynchronouslyWithCurrentCulture();
+                return UploadEntireFileAsync(fileContent, chunkSize, replaceVideoId).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
