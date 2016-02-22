@@ -46,12 +46,14 @@ namespace VimeoDotNet
 		// Uploading Files
 		UploadTicket GetUploadTicket();
 		Task<UploadTicket> GetUploadTicketAsync();
-		IUploadRequest UploadEntireFile(IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
-		Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
+        UploadTicket GetReplaceVideoUploadTicket(long videoId);
+        Task<UploadTicket> GetReplaceVideoUploadTicketAsync(long videoId);
+		IUploadRequest UploadEntireFile(IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
+		Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
 		VerifyUploadResponse VerifyUploadFile(IUploadRequest uploadRequest);
 		Task<VerifyUploadResponse> VerifyUploadFileAsync(IUploadRequest uploadRequest);
-		IUploadRequest StartUploadFile(IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
-		Task<IUploadRequest> StartUploadFileAsync(IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE);
+		IUploadRequest StartUploadFile(IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
+		Task<IUploadRequest> StartUploadFileAsync(IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
 		VerifyUploadResponse ContinueUploadFile(IUploadRequest uploadRequest);
 		Task<VerifyUploadResponse> ContinueUploadFileAsync(IUploadRequest uploadRequest);
 		void CompleteFileUpload(IUploadRequest uploadRequest);
