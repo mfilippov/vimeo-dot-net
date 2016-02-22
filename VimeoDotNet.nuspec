@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>VimeoDotNet</id>
-        <version>0.7.6</version>
+        <version>0.8.2</version>
         <title>Vimeo-Dot-Net</title>
         <authors>Stephen Commisso, Mikhail Filippov</authors>
         <licenseUrl>https://github.com/mfilippov/vimeo-dot-net/blob/master/LICENSE</licenseUrl>
@@ -16,7 +16,7 @@
             - Resumable video file upload</description>
             <summary />
             <releaseNotes>Add search support for GetUserVideos method</releaseNotes>
-            <copyright>Copyright © 2015, Stephen Commisso, Mikhail Filippov</copyright>
+            <copyright>Copyright © 2015-2016, Stephen Commisso, Mikhail Filippov</copyright>
             <language>en-US</language>
             <tags>vimeo, async</tags>
             <dependencies>
