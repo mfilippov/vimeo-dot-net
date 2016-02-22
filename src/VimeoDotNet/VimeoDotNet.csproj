@@ -47,6 +47,7 @@
     </Compile>
     <Compile Include="Enums\AccountTypeEnum.cs" />
     <Compile Include="Enums\EnumExtensions.cs" />
+    <Compile Include="Enums\VideoCommentsEnum.cs" />
     <Compile Include="Enums\VideoEmbedPrivacyEnum.cs" />
     <Compile Include="Enums\VideoPrivacyEnum.cs" />
     <Compile Include="Enums\FileQualityEnum.cs" />

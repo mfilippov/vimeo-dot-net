@@ -253,6 +253,18 @@ namespace VimeoDotNet
             }
         }
 
+        public void UpdateVideoAllowedDomain(long clipId, string domain)
+        {
+            try
+            {
+                UpdateVideoAllowedDomainAsync(clipId, domain).RunSynchronouslyWithCurrentCulture();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+            }
+        }
+
         public void DeleteVideo(long clipId)
         {
             try

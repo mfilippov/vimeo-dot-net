@@ -12,5 +12,8 @@ namespace VimeoDotNet.Models
         public VideoEmbedPrivacyEnum EmbedPrivacy { get; set; }
         public bool ReviewLinkEnabled { get; set; }
         public string Password { get; set; }
+        public VideoCommentsEnum Comments { get; set; }
+        public bool AllowAddToAlbumChannelGroup { get; set; }
+        public bool AllowDownloadVideo { get; set; }
     }
 }
