@@ -269,7 +269,7 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateVideoAllowedDomainPatchRequest(clipId, domain);
                 IRestResponse response = await request.ExecuteRequestAsync();
-                CheckStatusCodeError(response, "Error updating user video metadata.");
+                CheckStatusCodeError(response, "Error updating user video allowed domain.");
             }
             catch (Exception ex)
             {
