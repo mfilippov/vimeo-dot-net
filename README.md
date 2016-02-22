@@ -30,13 +30,13 @@ API COVERAGE
 | [/me/albums](https://developer.vimeo.com/api/endpoints/me#/albums)|Complete?|API Method|
 | Get a list of a user's Albums. | :heavy_check_mark:  | `GetAccountAlbumsAsync()`  |
 | Create an Album. | :heavy_check_mark:  | `CreateAlbumAsync()`  |
-| Get info on an Album. |   |   |
+| Get info on an Album. | :heavy_check_mark: | `GetAlbumAsync()` |
 | Edit an Album. | :heavy_check_mark:  | `UpdateAlbumAsync()`  |
 | Delete an Album. |  :heavy_check_mark: |  `DeleteAlbumAsync` |
 | Get the list of videos in an Album. | :heavy_check_mark:  | `GetAlbumVideosAsync()`  |
-| Check if an Album contains a video. |   | If you know account's userId, can use `GetUserAlbumVideoAsync()` |
-| Add a video to an Album. |  |  |
-| Remove a video from an Album. |   |   |
+| Check if an Album contains a video. | :heavy_check_mark: | `GetAlbumVideoAsync()` |
+| Add a video to an Album. | :heavy_check_mark: | `AddToAlbumAsync()` |
+| Remove a video from an Album. | :heavy_check_mark: | `RemoveFromAlbumAsync()` |
 | [/me/videos](https://developer.vimeo.com/api/endpoints/me#/videos)|Complete?|API Method|
 | Get a list of videos uploaded by a user. | :heavy_check_mark: | `GetVideosAsync()` |
 | Begin the video upload process. | :heavy_check_mark: | `GetUploadTicketAsync()` |

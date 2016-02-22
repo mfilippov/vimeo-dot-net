@@ -198,6 +198,37 @@ namespace VimeoDotNet
 			return await ExecuteApiRequest<Paginated<Album>>(request);
 		}
 
+		public async Task<Album> GetAlbumAsync(long albumId)
+		{
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.GET,
+				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbum),
+				new Dictionary<string, string>(){
+					{ "albumId", albumId.ToString() }
+				},
+				null
+			);
+
+			return await ExecuteApiRequest<Album>(request);
+		}
+
+		public async Task<Album> GetAlbumAsync(long userId, long albumId)
+		{
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.GET,
+				Endpoints.UserAlbum,
+				new Dictionary<string, string>(){
+					{ "userId", userId.ToString() },
+					{ "albumId", albumId.ToString() }
+				},
+				null
+			);
+
+			return await ExecuteApiRequest<Album>(request);
+		}
+
 		public async Task<Album> CreateAlbumAsync(EditAlbumParameters parameters = null)
 		{
 			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
@@ -239,6 +270,70 @@ namespace VimeoDotNet
 
 			return await ExecuteApiRequest(request);
 		}
+
+		public async Task<bool> AddToAlbumAsync(long albumId, long clipId)
+		{
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.PUT,
+				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbumVideo),
+				new Dictionary<string, string>(){
+					{ "albumId", albumId.ToString() },
+					{ "clipId", clipId.ToString() }
+				}
+			);
+
+			return await ExecuteApiRequest(request);
+		}
+
+		public async Task<bool> AddToAlbumAsync(long userId, long albumId, long clipId)
+		{
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.PUT,
+				Endpoints.UserAlbumVideo,
+				new Dictionary<string, string>(){
+					{ "userId", userId.ToString() },
+					{ "albumId", albumId.ToString() },
+					{ "clipId", clipId.ToString() }
+				}
+			);
+
+			return await ExecuteApiRequest(request);
+		}
+
+		public async Task<bool> RemoveFromAlbumAsync(long albumId, long clipId)
+		{
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.DELETE,
+				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbumVideo),
+				new Dictionary<string, string>(){
+					{ "albumId", albumId.ToString() },
+					{ "clipId", clipId.ToString() }
+				}
+			);
+
+			return await ExecuteApiRequest(request);
+		}
+
+		public async Task<bool> RemoveFromAlbumAsync(long userId, long albumId, long clipId)
+		{
+			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+				AccessToken,
+				Method.DELETE,
+				Endpoints.UserAlbumVideo,
+				new Dictionary<string, string>(){
+					{ "userId", userId.ToString() },
+					{ "albumId", albumId.ToString() },
+					{ "clipId", clipId.ToString() }
+				}
+			);
+
+			return await ExecuteApiRequest(request);
+		}
+		
+		
 
 		#endregion
 
