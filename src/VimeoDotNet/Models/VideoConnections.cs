@@ -10,6 +10,7 @@ namespace VimeoDotNet.Models
         public string files { get; set; }
         public string likes { get; set; }
         public string presets { get; set; }
+        public TextTracks texttracks { get; set; }
         public string upload_tickets { get; set; }
     }
 }

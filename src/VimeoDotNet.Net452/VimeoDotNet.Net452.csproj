@@ -295,6 +295,15 @@
     <Compile Include="..\VimeoDotNet\VimeoClient_Videos.cs">
       <Link>VimeoClient_Videos.cs</Link>
     </Compile>
+    <Compile Include="..\VimeoDotNet\VimeoClient_TextTracks.cs">
+      <Link>VimeoClient_TextTracks.cs</Link>
+    </Compile>
+    <Compile Include="..\VimeoDotNet\Models\TextTrack.cs">
+      <Link>Models\TextTrack.cs</Link>
+    </Compile>
+    <Compile Include="..\VimeoDotNet\Models\TextTracks.cs">
+      <Link>Models\TextTracks.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
