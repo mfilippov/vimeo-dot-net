@@ -100,5 +100,11 @@ namespace VimeoDotNet
 		// Deleting Videos
 		void DeleteVideo(long clipId);
 		Task DeleteVideoAsync(long clipId);
-    }
+
+		//Rate Limit
+		long RateLimit { get; }
+		long RateLimitRemaining { get; }
+		System.DateTime RateLimitReset { get; }
+		bool RateLimitUpdatingOn { get; set; }
+	}
 }
