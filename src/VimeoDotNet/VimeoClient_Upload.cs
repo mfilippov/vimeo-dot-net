@@ -22,6 +22,7 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateCompleteUploadRequest(uploadRequest.Ticket);
                 IRestResponse response = await request.ExecuteRequestAsync();
+                UpdateRateLimit(response);
                 CheckStatusCodeError(uploadRequest, response, "Error marking file upload as complete.");
 
                 Parameter locationHeader =
@@ -58,6 +59,7 @@ namespace VimeoDotNet
                 IApiRequest request = await GenerateFileStreamRequest(uploadRequest.File, uploadRequest.Ticket,
                     chunkSize: uploadRequest.ChunkSize, written: uploadRequest.BytesWritten);
                 IRestResponse response = await request.ExecuteRequestAsync();
+                UpdateRateLimit(response);
                 CheckStatusCodeError(uploadRequest, response, "Error uploading file chunk.", HttpStatusCode.BadRequest);
 
                 if (response.StatusCode == HttpStatusCode.BadRequest)
@@ -91,6 +93,7 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateUploadTicketRequest();
                 IRestResponse<UploadTicket> response = await request.ExecuteRequestAsync<UploadTicket>();
+                UpdateRateLimit(response);
                 CheckStatusCodeError(null, response, "Error generating upload ticket.");
 
                 return response.Data;
@@ -111,6 +114,7 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateReplaceVideoUploadTicketRequest(videoId);
                 IRestResponse<UploadTicket> response = await request.ExecuteRequestAsync<UploadTicket>();
+                UpdateRateLimit(response);
                 CheckStatusCodeError(null, response, "Error generating upload ticket to replace video.");
 
                 return response.Data;
@@ -199,6 +203,7 @@ namespace VimeoDotNet
                 IApiRequest request =
                     await GenerateFileStreamRequest(uploadRequest.File, uploadRequest.Ticket, verifyOnly: true);
                 IRestResponse response = await request.ExecuteRequestAsync();
+                UpdateRateLimit(response);
                 var verify = new VerifyUploadResponse();
                 CheckStatusCodeError(uploadRequest, response, "Error verifying file upload.", (HttpStatusCode)308);
 
