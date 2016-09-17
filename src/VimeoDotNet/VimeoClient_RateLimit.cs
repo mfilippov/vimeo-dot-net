@@ -15,42 +15,49 @@ namespace VimeoDotNet
 {
 	public partial class VimeoClient : IVimeoClient
 	{
-		public long RateLimit { get; private set; } = 0;
-		public long RateLimitRemaining { get; private set; } = 0;
-		public DateTime RateLimitReset { get; private set; }
+		public long RateLimit
+		{
+			get
+			{
+				if (_headers != null)
+				{
+					var v = _headers.FirstOrDefault(h => h.Name.Equals("X-RateLimit-Limit"));
+					return Convert.ToInt64(v.Value.ToString());
+				}
+				return 0;
+			}
+		}
 
-		public bool RateLimitUpdatingOn { get; set; } = false;
+		public long RateLimitRemaining
+		{
+			get
+			{
+				if (_headers != null)
+				{
+					var v = _headers.FirstOrDefault(h => h.Name.Equals("X-RateLimit-Remaining"));
+					return Convert.ToInt64(v.Value.ToString());
+				}
+				return 0;
+			}
+		}
 
+		public DateTime RateLimitReset
+		{
+			get
+			{
+				if (_headers != null)
+				{
+					var v = _headers.FirstOrDefault(h => h.Name.Equals("X-RateLimit-Reset"));
+					return DateTime.Parse(v.Value.ToString());
+				}
+				return DateTime.UtcNow;
+			}
+		}
+
+		private IList<Parameter> _headers = null;
 		private void UpdateRateLimit(IRestResponse response)
 		{
-			if (!RateLimitUpdatingOn) { return; }
-			try
-			{
-
-			foreach (var header in response.Headers)
-			{
-				switch (header.Name)
-				{
-					case "X-RateLimit-Limit":
-						RateLimit = Convert.ToInt64(header.Value.ToString());
-						break;
-					case "X-RateLimit-Remaining":
-						RateLimitRemaining = Convert.ToInt64(header.Value.ToString());
-						break;
-					case "X-RateLimit-Reset":
-						RateLimitReset = DateTime.Parse(header.Value.ToString());
-						break;
-					default:
-						break;
-				}
-			}
-			} catch (Exception)
-			{
-				// Do not let a failure here break the call
-				RateLimit = 0;
-				RateLimitRemaining = 0;
-				RateLimitReset = DateTime.UtcNow;
-			}
+			_headers = response.Headers;
 		}
 	}
 }

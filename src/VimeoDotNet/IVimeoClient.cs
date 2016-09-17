@@ -105,6 +105,5 @@ namespace VimeoDotNet
 		long RateLimit { get; }
 		long RateLimitRemaining { get; }
 		System.DateTime RateLimitReset { get; }
-		bool RateLimitUpdatingOn { get; set; }
 	}
 }
