@@ -22,7 +22,7 @@ namespace VimeoDotNet
 				if (_headers != null)
 				{
 					var v = _headers.FirstOrDefault(h => h.Name.Equals("X-RateLimit-Limit"));
-					return Convert.ToInt64(v.Value.ToString());
+					return Convert.ToInt64(v != null ? v.Value.ToString() : "0");
 				}
 				return 0;
 			}
@@ -35,7 +35,7 @@ namespace VimeoDotNet
 				if (_headers != null)
 				{
 					var v = _headers.FirstOrDefault(h => h.Name.Equals("X-RateLimit-Remaining"));
-					return Convert.ToInt64(v.Value.ToString());
+					return Convert.ToInt64(v != null ? v.Value.ToString() : "0");
 				}
 				return 0;
 			}
@@ -48,7 +48,10 @@ namespace VimeoDotNet
 				if (_headers != null)
 				{
 					var v = _headers.FirstOrDefault(h => h.Name.Equals("X-RateLimit-Reset"));
-					return DateTime.Parse(v.Value.ToString());
+					if (v != null)
+					{
+						return DateTime.Parse(v.Value.ToString());
+					}
 				}
 				return DateTime.UtcNow;
 			}
