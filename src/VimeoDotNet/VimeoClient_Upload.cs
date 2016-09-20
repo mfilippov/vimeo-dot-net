@@ -22,7 +22,6 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateCompleteUploadRequest(uploadRequest.Ticket);
                 IRestResponse response = await request.ExecuteRequestAsync();
-                UpdateRateLimit(response);
                 CheckStatusCodeError(uploadRequest, response, "Error marking file upload as complete.");
 
                 Parameter locationHeader =
@@ -59,7 +58,6 @@ namespace VimeoDotNet
                 IApiRequest request = await GenerateFileStreamRequest(uploadRequest.File, uploadRequest.Ticket,
                     chunkSize: uploadRequest.ChunkSize, written: uploadRequest.BytesWritten);
                 IRestResponse response = await request.ExecuteRequestAsync();
-                UpdateRateLimit(response);
                 CheckStatusCodeError(uploadRequest, response, "Error uploading file chunk.", HttpStatusCode.BadRequest);
 
                 if (response.StatusCode == HttpStatusCode.BadRequest)
@@ -203,7 +201,6 @@ namespace VimeoDotNet
                 IApiRequest request =
                     await GenerateFileStreamRequest(uploadRequest.File, uploadRequest.Ticket, verifyOnly: true);
                 IRestResponse response = await request.ExecuteRequestAsync();
-                UpdateRateLimit(response);
                 var verify = new VerifyUploadResponse();
                 CheckStatusCodeError(uploadRequest, response, "Error verifying file upload.", (HttpStatusCode)308);
 

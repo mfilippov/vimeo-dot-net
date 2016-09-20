@@ -87,7 +87,6 @@ namespace VimeoDotNet
             request.BinaryContent = await fileContent.ReadAllAsync();
 
             IRestResponse response = await request.ExecuteRequestAsync();
-            UpdateRateLimit(response);
             CheckStatusCodeError(null, response, "Error uploading text track file.", HttpStatusCode.BadRequest);
 
             return ticket;
