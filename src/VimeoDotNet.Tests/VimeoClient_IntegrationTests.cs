@@ -20,6 +20,8 @@ namespace VimeoDotNet.Tests
 		private const string TESTFILEPATH = @"Resources\test.mp4";
 		// http://download.wavetlan.com/SVV/Media/HTTP/http-mp4.htm
 
+		private const string TESTTEXTTRACKFILEPATH = @"Resources\test.vtt";
+
         public VimeoClient_IntegrationTests()
         {
             // Load the settings from a file that is not under version control for security
@@ -399,7 +401,7 @@ namespace VimeoDotNet.Tests
 			albums.ShouldNotBeNull();
 		}
 
-		[TestMethod]
+		[Fact]
 		public async Task Integration_VimeoClient_GetTextTracksAsync()
 		{
 			// arrange
@@ -409,10 +411,10 @@ namespace VimeoDotNet.Tests
 			var texttracks = await client.GetTextTracksAsync(vimeoSettings.VideoId);
 			
 			// assert
-			Assert.IsNotNull(texttracks);
+			texttracks.ShouldNotBeNull();
 		}
 
-		[TestMethod]
+		[Fact]
 		public async Task Integration_VimeoClient_GetTextTrackAsync()
 		{
 			// arrange
@@ -422,17 +424,17 @@ namespace VimeoDotNet.Tests
 			var texttrack = await client.GetTextTrackAsync(vimeoSettings.VideoId, vimeoSettings.TextTrackId);
 
 			// assert
-			Assert.IsNotNull(texttrack);
+			texttrack.ShouldNotBeNull();
 		}
 
-		[TestMethod]
+		[Fact]
 		public async Task Integration_VimeoClient_UpdateTextTrackAsync()
 		{
 			// arrange
 			VimeoClient client = CreateAuthenticatedClient();
 			var original = await client.GetTextTrackAsync(vimeoSettings.VideoId, vimeoSettings.TextTrackId);
 
-			Assert.IsNotNull(original);
+			original.ShouldNotBeNull();
 
 			// act
 			// update the text track record with some new values...
@@ -454,10 +456,10 @@ namespace VimeoDotNet.Tests
 
 			// inspect the result and ensure the values match what we expect...
 			// assert
-			Assert.AreEqual(testName, updated.name);
-			Assert.AreEqual(testType, updated.type);
-			Assert.AreEqual(testLanguage, updated.language);
-			Assert.AreEqual(testActive, updated.active);
+			testName.ShouldEqual(updated.name);
+			testType.ShouldEqual(updated.type);
+			testLanguage.ShouldEqual(updated.language);
+			testActive.ShouldEqual(updated.active);
 
 			// restore the original values...
 			var final = await client.UpdateTextTrackAsync(
@@ -474,35 +476,35 @@ namespace VimeoDotNet.Tests
 			// inspect the result and ensure the values match our originals...
 			if (string.IsNullOrEmpty(original.name))
 			{
-				Assert.IsNull(final.name);
+				final.name.ShouldBeNull();
 			}
 			else
 			{
-				Assert.AreEqual(original.name, final.name);
+				original.name.ShouldEqual(final.name);
 			}
 
 			if (string.IsNullOrEmpty(original.type))
 			{
-				Assert.IsNull(final.type);
+				final.type.ShouldBeNull();
 			}
 			else
 			{
-				Assert.AreEqual(original.type, final.type);
+				original.type.ShouldEqual(final.type);
 			}
 
 			if (string.IsNullOrEmpty(original.language))
 			{
-				Assert.IsNull(final.language);
+				final.language.ShouldBeNull();
 			}
 			else
 			{
-				Assert.AreEqual(original.language, final.language);
+				original.language.ShouldEqual(final.language);
 			}
 
-			Assert.AreEqual(original.active, final.active);
+			original.active.ShouldEqual(final.active);
 		}
 
-		[TestMethod]
+		[Fact]
 		public async Task Integration_VimeoClient_UploadTextTrackFileAsync()
 		{
 			// arrange
@@ -524,11 +526,11 @@ namespace VimeoDotNet.Tests
 			}
 
 			// assert
-			Assert.IsNotNull(completedRequest);
-			Assert.IsNotNull(completedRequest.uri);
+			completedRequest.ShouldNotBeNull();
+			completedRequest.uri.ShouldNotBeNull();
 		}
 
-		[TestMethod]
+		[Fact]
 		public async Task Integration_VimeoClient_DeleteTextTrack()
 		{
 			// arrange
@@ -547,8 +549,8 @@ namespace VimeoDotNet.Tests
 									type = "captions"
 								});
 			}
-			Assert.IsNotNull(completedRequest);
-			Assert.IsNotNull(completedRequest.uri);
+			completedRequest.ShouldNotBeNull();
+			completedRequest.uri.ShouldNotBeNull();
 			var uri = completedRequest.uri;
 			var trackId = System.Convert.ToInt64(uri.Substring(uri.LastIndexOf('/') + 1));
 			// act
@@ -556,7 +558,7 @@ namespace VimeoDotNet.Tests
 
 			//assert
 			var texttrack = await client.GetTextTrackAsync(vimeoSettings.VideoId, trackId);
-			Assert.IsNull(texttrack);
+			texttrack.ShouldBeNull();
 		}
 
 		private VimeoClient CreateUnauthenticatedClient()
