@@ -43,6 +43,13 @@ namespace VimeoDotNet
 		void UpdateVideoMetadata(long clipId, VideoUpdateMetadata metaData);
 		Task UpdateVideoMetadataAsync(long clipId, VideoUpdateMetadata metaData);
 
+		// Text Tracks
+		Task<TextTracks> GetTextTracksAsync(long clipId);
+		Task<TextTrack> GetTextTrackAsync(long clipId, long trackId);
+		Task<TextTrack> UpdateTextTrackAsync(long clipId, long trackId, TextTrack track);
+		Task<TextTrack> UploadTextTrackFileAsync(IBinaryContent fileContent, long videoId, TextTrack track);
+		Task DeleteTextTrackAsync(long clipId, long trackId);
+
 		// Uploading Files
 		UploadTicket GetUploadTicket();
 		Task<UploadTicket> GetUploadTicketAsync();
@@ -93,5 +100,10 @@ namespace VimeoDotNet
 		// Deleting Videos
 		void DeleteVideo(long clipId);
 		Task DeleteVideoAsync(long clipId);
-    }
+
+		//Rate Limit
+		long RateLimit { get; }
+		long RateLimitRemaining { get; }
+		System.DateTime RateLimitReset { get; }
+	}
 }

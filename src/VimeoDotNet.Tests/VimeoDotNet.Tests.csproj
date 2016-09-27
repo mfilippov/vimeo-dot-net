@@ -89,6 +89,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Resources\test.vtt" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\test.mp4" />

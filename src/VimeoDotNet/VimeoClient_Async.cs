@@ -374,6 +374,7 @@ namespace VimeoDotNet
 			try
 			{
 				IRestResponse<T> response = await request.ExecuteRequestAsync<T>();
+				UpdateRateLimit(response);
 
 				// if request was successful, return immediately...
 				if (IsSuccessStatusCode(response.StatusCode))
@@ -410,7 +411,7 @@ namespace VimeoDotNet
 			try
 			{
 				IRestResponse response = await request.ExecuteRequestAsync();
-
+				UpdateRateLimit(response);
 				// if request was successful, return immediately...
 				if (IsSuccessStatusCode(response.StatusCode))
 				{

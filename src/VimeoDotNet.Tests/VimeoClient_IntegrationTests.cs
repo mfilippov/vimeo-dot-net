@@ -17,8 +17,8 @@ namespace VimeoDotNet.Tests
     {
         private VimeoApiTestSettings vimeoSettings;
 
-        private const string TESTFILEPATH = @"Resources\test.mp4";
-            // http://download.wavetlan.com/SVV/Media/HTTP/http-mp4.htm
+		private const string TESTFILEPATH = @"Resources\test.mp4";
+		// http://download.wavetlan.com/SVV/Media/HTTP/http-mp4.htm
 
         public VimeoClient_IntegrationTests()
         {
@@ -399,7 +399,167 @@ namespace VimeoDotNet.Tests
 			albums.ShouldNotBeNull();
 		}
 
-        private VimeoClient CreateUnauthenticatedClient()
+		[TestMethod]
+		public async Task Integration_VimeoClient_GetTextTracksAsync()
+		{
+			// arrange
+			VimeoClient client = CreateAuthenticatedClient();
+
+			// act
+			var texttracks = await client.GetTextTracksAsync(vimeoSettings.VideoId);
+			
+			// assert
+			Assert.IsNotNull(texttracks);
+		}
+
+		[TestMethod]
+		public async Task Integration_VimeoClient_GetTextTrackAsync()
+		{
+			// arrange
+			VimeoClient client = CreateAuthenticatedClient();
+
+			// act
+			var texttrack = await client.GetTextTrackAsync(vimeoSettings.VideoId, vimeoSettings.TextTrackId);
+
+			// assert
+			Assert.IsNotNull(texttrack);
+		}
+
+		[TestMethod]
+		public async Task Integration_VimeoClient_UpdateTextTrackAsync()
+		{
+			// arrange
+			VimeoClient client = CreateAuthenticatedClient();
+			var original = await client.GetTextTrackAsync(vimeoSettings.VideoId, vimeoSettings.TextTrackId);
+
+			Assert.IsNotNull(original);
+
+			// act
+			// update the text track record with some new values...
+			var testName = "NewTrackName";
+			var testType = "subtitles";
+			var testLanguage = "fr";
+			var testActive = false;
+
+			var updated = await client.UpdateTextTrackAsync(
+									vimeoSettings.VideoId,
+									vimeoSettings.TextTrackId,
+									new TextTrack
+									{
+										name = testName,
+										type = testType,
+										language = testLanguage,
+										active = testActive
+									});
+
+			// inspect the result and ensure the values match what we expect...
+			// assert
+			Assert.AreEqual(testName, updated.name);
+			Assert.AreEqual(testType, updated.type);
+			Assert.AreEqual(testLanguage, updated.language);
+			Assert.AreEqual(testActive, updated.active);
+
+			// restore the original values...
+			var final = await client.UpdateTextTrackAsync(
+									vimeoSettings.VideoId,
+									vimeoSettings.TextTrackId,
+									new TextTrack
+									{
+										name = original.name,
+										type = original.type,
+										language = original.language,
+										active = original.active
+									});
+
+			// inspect the result and ensure the values match our originals...
+			if (string.IsNullOrEmpty(original.name))
+			{
+				Assert.IsNull(final.name);
+			}
+			else
+			{
+				Assert.AreEqual(original.name, final.name);
+			}
+
+			if (string.IsNullOrEmpty(original.type))
+			{
+				Assert.IsNull(final.type);
+			}
+			else
+			{
+				Assert.AreEqual(original.type, final.type);
+			}
+
+			if (string.IsNullOrEmpty(original.language))
+			{
+				Assert.IsNull(final.language);
+			}
+			else
+			{
+				Assert.AreEqual(original.language, final.language);
+			}
+
+			Assert.AreEqual(original.active, final.active);
+		}
+
+		[TestMethod]
+		public async Task Integration_VimeoClient_UploadTextTrackFileAsync()
+		{
+			// arrange
+			VimeoClient client = CreateAuthenticatedClient();
+			TextTrack completedRequest;
+			using (var file = new BinaryContent(GetFullPath(TESTTEXTTRACKFILEPATH)))
+			{
+				// act
+				completedRequest = await client.UploadTextTrackFileAsync(
+								file,
+								vimeoSettings.VideoId,
+								new TextTrack
+								{
+									active = false,
+									name = "UploadTest",
+									language = "en",
+									type = "captions"
+								});
+			}
+
+			// assert
+			Assert.IsNotNull(completedRequest);
+			Assert.IsNotNull(completedRequest.uri);
+		}
+
+		[TestMethod]
+		public async Task Integration_VimeoClient_DeleteTextTrack()
+		{
+			// arrange
+			TextTrack completedRequest;
+			VimeoClient client = CreateAuthenticatedClient();
+			using (var file = new BinaryContent(GetFullPath(TESTTEXTTRACKFILEPATH)))
+			{
+				completedRequest = await client.UploadTextTrackFileAsync(
+								file,
+								vimeoSettings.VideoId,
+								new TextTrack
+								{
+									active = false,
+									name = "DeleteTest",
+									language = "en",
+									type = "captions"
+								});
+			}
+			Assert.IsNotNull(completedRequest);
+			Assert.IsNotNull(completedRequest.uri);
+			var uri = completedRequest.uri;
+			var trackId = System.Convert.ToInt64(uri.Substring(uri.LastIndexOf('/') + 1));
+			// act
+			await client.DeleteTextTrackAsync(vimeoSettings.VideoId, trackId);
+
+			//assert
+			var texttrack = await client.GetTextTrackAsync(vimeoSettings.VideoId, trackId);
+			Assert.IsNull(texttrack);
+		}
+
+		private VimeoClient CreateUnauthenticatedClient()
         {
             return new VimeoClient(vimeoSettings.ClientId, vimeoSettings.ClientSecret);
         }
