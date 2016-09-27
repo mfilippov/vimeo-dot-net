@@ -63,6 +63,8 @@
     <Compile Include="Models\PresetLogos.cs" />
     <Compile Include="Models\PresetSettings.cs" />
     <Compile Include="Models\Size.cs" />
+    <Compile Include="Models\TextTrack.cs" />
+    <Compile Include="Models\TextTracks.cs" />
     <Compile Include="Models\VideoUpdateMetadata.cs" />
     <Compile Include="Parameters\EditAlbumParameters.cs" />
     <Compile Include="Parameters\EditUserParameters.cs" />
@@ -130,6 +132,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VimeoClient_RateLimit.cs" />
+    <Compile Include="VimeoClient_TextTracks.cs" />
     <Compile Include="VimeoClient_Videos.cs" />
     <Compile Include="VimeoClient_Upload.cs" />
   </ItemGroup>

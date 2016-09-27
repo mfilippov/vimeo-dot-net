@@ -91,6 +91,7 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateUploadTicketRequest();
                 IRestResponse<UploadTicket> response = await request.ExecuteRequestAsync<UploadTicket>();
+                UpdateRateLimit(response);
                 CheckStatusCodeError(null, response, "Error generating upload ticket.");
 
                 return response.Data;
@@ -111,6 +112,7 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateReplaceVideoUploadTicketRequest(videoId);
                 IRestResponse<UploadTicket> response = await request.ExecuteRequestAsync<UploadTicket>();
+                UpdateRateLimit(response);
                 CheckStatusCodeError(null, response, "Error generating upload ticket to replace video.");
 
                 return response.Data;
