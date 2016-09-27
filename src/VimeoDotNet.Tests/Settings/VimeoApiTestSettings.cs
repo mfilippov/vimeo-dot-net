@@ -11,6 +11,7 @@
         public long UserId { get; set; }
         public long AlbumId { get; set; }
         public long ChannelId { get; set; }
-        public long VideoId { get; set; }
-    }
+		public long VideoId { get; set; }
+		public long TextTrackId { get; set; }
+	}
 }

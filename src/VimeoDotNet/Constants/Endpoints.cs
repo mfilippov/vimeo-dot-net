@@ -78,6 +78,9 @@
         public const string VideoRelatedVideos = "/videos/{clipId}/related";
         public const string VideoReplaceFile = "/videos/{clipId}/files";
 
+        public const string TextTracks = "/videos/{clipId}/texttracks/";
+        public const string TextTrack = "/videos/{clipId}/texttracks/{trackId}";
+
         public static string GetCurrentUserEndpoint(string endpoint)
         {
             return endpoint.Replace("users/{userId}", "me");
