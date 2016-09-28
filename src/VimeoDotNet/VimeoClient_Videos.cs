@@ -19,6 +19,7 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateVideoDeleteRequest(clipId);
                 IRestResponse response = await request.ExecuteRequestAsync();
+                UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error deleting video.");
             }
             catch (Exception ex)
@@ -37,6 +38,7 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateAlbumVideosRequest(albumId, clipId: clipId);
                 IRestResponse<Video> response = await request.ExecuteRequestAsync<Video>();
+                UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving user album video.", HttpStatusCode.NotFound);
 
                 if (response.StatusCode == HttpStatusCode.NotFound)
@@ -67,6 +69,7 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateAlbumVideosRequest(albumId, page: page, perPage: perPage, sort: sort, direction: direction);
                 IRestResponse<Paginated<Video>> response = await request.ExecuteRequestAsync<Paginated<Video>>();
+                UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving account album videos.", HttpStatusCode.NotFound);
 
                 if (response.StatusCode == HttpStatusCode.NotFound)
@@ -96,6 +99,7 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateAlbumVideosRequest(albumId, userId, clipId);
                 IRestResponse<Video> response = await request.ExecuteRequestAsync<Video>();
+                UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving user album video.", HttpStatusCode.NotFound);
 
                 if (response.StatusCode == HttpStatusCode.NotFound)
@@ -120,6 +124,7 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateAlbumVideosRequest(albumId, userId);
                 IRestResponse<Paginated<Video>> response = await request.ExecuteRequestAsync<Paginated<Video>>();
+                UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving user album videos.", HttpStatusCode.NotFound);
 
                 if (response.StatusCode == HttpStatusCode.NotFound)
@@ -149,6 +154,7 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateVideosRequest(userId, clipId);
                 IRestResponse<Video> response = await request.ExecuteRequestAsync<Video>();
+                UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving user video.", HttpStatusCode.NotFound);
 
                 if (response.StatusCode == HttpStatusCode.NotFound)
@@ -178,6 +184,7 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateVideosRequest(userId: userId, page: page, perPage: perPage, query: query);
                 IRestResponse<Paginated<Video>> response = await request.ExecuteRequestAsync<Paginated<Video>>();
+                UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving user videos.", HttpStatusCode.NotFound);
 
                 if (response.StatusCode == HttpStatusCode.NotFound)
@@ -207,6 +214,7 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateVideosRequest(clipId: clipId);
                 IRestResponse<Video> response = await request.ExecuteRequestAsync<Video>();
+                UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving account video.", HttpStatusCode.NotFound);
 
                 if (response.StatusCode == HttpStatusCode.NotFound)
@@ -231,6 +239,7 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateVideosRequest(page: page, perPage: perPage);
                 IRestResponse<Paginated<Video>> response = await request.ExecuteRequestAsync<Paginated<Video>>();
+                UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving account videos.");
 
                 return response.Data;
@@ -251,6 +260,7 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateVideoPatchRequest(clipId, metaData);
                 IRestResponse response = await request.ExecuteRequestAsync();
+                UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error updating user video metadata.");
             }
             catch (Exception ex)
@@ -269,6 +279,7 @@ namespace VimeoDotNet
             {
                 IApiRequest request = GenerateVideoAllowedDomainPatchRequest(clipId, domain);
                 IRestResponse response = await request.ExecuteRequestAsync();
+                UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error updating user video allowed domain.");
             }
             catch (Exception ex)
