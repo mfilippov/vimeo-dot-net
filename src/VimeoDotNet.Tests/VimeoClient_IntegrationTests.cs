@@ -528,6 +528,11 @@ namespace VimeoDotNet.Tests
 			// assert
 			completedRequest.ShouldNotBeNull();
 			completedRequest.uri.ShouldNotBeNull();
+
+		    // cleanup
+		    var uri = completedRequest.uri;
+		    var trackId = System.Convert.ToInt64(uri.Substring(uri.LastIndexOf('/') + 1));
+		    await client.DeleteTextTrackAsync(vimeoSettings.VideoId, trackId);
 		}
 
 		[Fact]
