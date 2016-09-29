@@ -5,11 +5,6 @@ VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VimeoDotNet", "src\VimeoDotNet\VimeoDotNet.csproj", "{90BFBB6A-05E5-4736-99B0-0C276581EF21}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AF96074E-5B07-4486-A73D-2886A8CD23D0}"
-	ProjectSection(SolutionItems) = preProject
-		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VimeoDotNet.Tests", "src\VimeoDotNet.Tests\VimeoDotNet.Tests.csproj", "{52A87768-AEB5-4FD5-85EB-3941787816F1}"
 EndProject
 Global

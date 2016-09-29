@@ -73,9 +73,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="..\..\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="Settings\SettingsLoader.cs" />
     <Compile Include="Settings\VimeoApiTestSettings.cs" />
     <Compile Include="VimeoClient_IntegrationTests.cs" />
@@ -94,6 +91,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\test.mp4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
