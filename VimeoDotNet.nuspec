@@ -26,36 +26,8 @@
             </dependencies>
         </metadata>
         <files>
-            <file src="lib\net45\*.dll" target="lib\net45" /> 
-            <file src="lib\net45\*.pdb" target="lib\net45" /> 
-            <file src="lib\net45\*.xml" target="lib\net45" />
-
-            <file src="lib\net45-client\*.dll" target="lib\net45-client" /> 
-            <file src="lib\net45-client\*.pdb" target="lib\net45-client" /> 
-            <file src="lib\net45-client\*.xml" target="lib\net45-client" />
-
-            <file src="lib\net451\*.dll" target="lib\net451" /> 
-            <file src="lib\net451\*.pdb" target="lib\net451" /> 
-            <file src="lib\net451\*.xml" target="lib\net451" />
-
-            <file src="lib\net451-client\*.dll" target="lib\net451-client" /> 
-            <file src="lib\net451-client\*.pdb" target="lib\net451-client" /> 
-            <file src="lib\net451-client\*.xml" target="lib\net451-client" />
-
-            <file src="lib\net452\*.dll" target="lib\net452" /> 
-            <file src="lib\net452\*.pdb" target="lib\net452" /> 
-            <file src="lib\net452\*.xml" target="lib\net452" />
-
-            <file src="lib\net452-client\*.dll" target="lib\net452-client" /> 
-            <file src="lib\net452-client\*.pdb" target="lib\net452-client" /> 
-            <file src="lib\net452-client\*.xml" target="lib\net452-client" />
-
-            <file src="lib\net46\*.dll" target="lib\net46" /> 
-            <file src="lib\net46\*.pdb" target="lib\net46" /> 
-            <file src="lib\net46\*.xml" target="lib\net46" />
-
-            <file src="lib\net46-client\*.dll" target="lib\net46-client" /> 
-            <file src="lib\net46-client\*.pdb" target="lib\net46-client" /> 
-            <file src="lib\net46-client\*.xml" target="lib\net46-client" />
+            <file src="src\VimeoDotNet\bin\Release\VimeoDotNet.dll" target="lib\net45" />
+            <file src="src\VimeoDotNet\bin\Release\VimeoDotNet.pdb" target="lib\net45" />
+            <file src="src\VimeoDotNet\bin\Release\VimeoDotNet.xml" target="lib\net45" />
       </files>
   </package>
