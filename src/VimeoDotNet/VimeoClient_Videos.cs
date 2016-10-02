@@ -11,7 +11,7 @@ using VimeoDotNet.Net;
 
 namespace VimeoDotNet
 {
-    public partial class VimeoClient : IVimeoClient
+    public partial class VimeoClient
     {
         public async Task DeleteVideoAsync(long clipId)
         {
@@ -55,11 +55,6 @@ namespace VimeoDotNet
                 }
                 throw new VimeoApiException("Error retrieving user album video.", ex);
             }
-        }
-
-        public async Task<Paginated<Video>> GetAlbumVideosAsync(long albumId)
-        {
-            return await GetAlbumVideosAsync(albumId, null, null);
         }
 
         // Added 28/07/2015

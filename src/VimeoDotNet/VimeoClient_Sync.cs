@@ -7,19 +7,19 @@ using VimeoDotNet.Parameters;
 
 namespace VimeoDotNet
 {
+    /// <summary>
+    /// Implementation of Vimeo API
+    /// </summary>
     public partial class VimeoClient
     {
-        #region Authorization
-
+        #region User authentication
         public AccessTokenResponse GetAccessToken(string authorizationCode, string redirectUrl)
         {
             return OAuth2Client.GetAccessTokenAsync(authorizationCode, redirectUrl).RunSynchronouslyWithCurrentCulture();
         }
-
         #endregion
 
-        #region Account
-
+        #region Account information
         public User GetAccountInformation()
         {
             try
@@ -359,7 +359,7 @@ namespace VimeoDotNet
 
         #endregion
 
-        #region Upload
+        #region Upload files
 
         public UploadTicket GetReplaceVideoUploadTicket(long videoId)
         {

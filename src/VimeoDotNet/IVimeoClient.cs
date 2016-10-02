@@ -8,7 +8,7 @@ using VimeoDotNet.Parameters;
 namespace VimeoDotNet
 {
     /// <summary>
-    /// Interface for Viemo API
+    /// Interface of Vimeo API
     /// </summary>
     public interface IVimeoClient
     {
@@ -57,7 +57,7 @@ namespace VimeoDotNet
         Task<User> GetUserInformationAsync(long userId);
         #endregion
 
-        #region Retrieve videos
+        #region Videos
         // ...by id
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace VimeoDotNet
         /// Get videos metadata by UserId and query
         /// </summary>
         /// <param name="userId">UserId</param>
-        /// <param name="query">Search query.</param>
+        /// <param name="query">Search query</param>
         /// <returns>Paginated videos metadata</returns>
         Paginated<Video> GetUserVideos(long userId, string query = null);
 
@@ -120,9 +120,29 @@ namespace VimeoDotNet
         /// Get videos metadata by UserId and query asynchronously
         /// </summary>
         /// <param name="userId">UserId</param>
-        /// <param name="query">Search query.</param>
+        /// <param name="query">Search query</param>
         /// <returns>Paginated videos metadata</returns>
         Task<Paginated<Video>> GetUserVideosAsync(long userId, string query = null);
+
+        /// <summary>
+        /// Get videos metadata by UserId and query and page parameters
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="perPage">Number of items to show on each page. Max 50</param>
+        /// <param name="query">Search query</param>
+        /// <param name="page">The page number to show</param>
+        /// <returns>Paginated videos metadata</returns>
+        Paginated<Video> GetUserVideos(long userId, int? page, int? perPage, string query = null);
+
+        /// <summary>
+        /// Get videos metadata by UserId and query and page parameters asynchronously
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="perPage">Number of items to show on each page. Max 50</param>
+        /// <param name="query">Search query</param>
+        /// <param name="page">The page number to show</param>
+        /// <returns>Paginated videos metadata</returns>
+        Task<Paginated<Video>> GetUserVideosAsync(long userId, int? page, int? perPage, string query = null);
 
 
         // ...for an album
@@ -131,10 +151,10 @@ namespace VimeoDotNet
         /// Get videos metadata by AlbumId
         /// </summary>
         /// <param name="albumId">AlbumId</param>
-        /// <param name="page">The page number to show.</param>
-        /// <param name="perPage">Number of items to show on each page. Max 50.</param>
+        /// <param name="page">The page number to show</param>
+        /// <param name="perPage">Number of items to show on each page. Max 50</param>
         /// <param name="sort">The default sort order of an Album's videos</param>
-        /// <param name="direction">The direction that the results are sorted.</param>
+        /// <param name="direction">The direction that the results are sorted</param>
         /// <returns>Paginated videos metadata</returns>
         Paginated<Video> GetAlbumVideos(long albumId, int? page, int? perPage,
             string sort = null, string direction = null);
@@ -200,6 +220,20 @@ namespace VimeoDotNet
         /// <param name="clipId">ClipId</param>
         /// <returns>Video metadata</returns>
         Task<Video> GetUserAlbumVideoAsync(long userId, long albumId, long clipId);
+
+        /// <summary>
+        /// Update allowed domain for clip
+        /// </summary>
+        /// <param name="clipId">ClipId</param>
+        /// <param name="domain">Domain</param>
+        void UpdateVideoAllowedDomain(long clipId, string domain);
+
+        /// <summary>
+        /// Update allowed domain for clip asynchronously
+        /// </summary>
+        /// <param name="clipId">ClipId</param>
+        /// <param name="domain">Domain</param>
+        Task UpdateVideoAllowedDomainAsync(long clipId, string domain);
         #endregion
 
         #region Update video metadata
