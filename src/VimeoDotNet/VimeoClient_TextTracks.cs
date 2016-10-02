@@ -15,11 +15,11 @@ namespace VimeoDotNet
 {
     public partial class VimeoClient : IVimeoClient
     {
-        public async Task<TextTracks> GetTextTracksAsync(long clipId)
+        public async Task<TextTracks> GetTextTracksAsync(long videoId)
         {
             try
             {
-                IApiRequest request = GenerateTextTracksRequest(clipId);
+                IApiRequest request = GenerateTextTracksRequest(videoId);
                 IRestResponse<TextTracks> response = await request.ExecuteRequestAsync<TextTracks>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving text tracks for video.", HttpStatusCode.NotFound);
@@ -40,11 +40,11 @@ namespace VimeoDotNet
             }
         }
 
-        public async Task<TextTrack> GetTextTrackAsync(long clipId, long trackId)
+        public async Task<TextTrack> GetTextTrackAsync(long videoId, long trackId)
         {
             try
             {
-                IApiRequest request = GenerateTextTracksRequest(clipId, trackId);
+                IApiRequest request = GenerateTextTracksRequest(videoId, trackId);
                 IRestResponse<TextTrack> response = await request.ExecuteRequestAsync<TextTrack>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving text track for video.", HttpStatusCode.NotFound);
@@ -92,11 +92,11 @@ namespace VimeoDotNet
             return ticket;
         }
 
-        public async Task<TextTrack> UpdateTextTrackAsync(long clipId, long trackId, TextTrack track)
+        public async Task<TextTrack> UpdateTextTrackAsync(long videoId, long trackId, TextTrack track)
         {
             try
             {
-                IApiRequest request = GenerateUpdateTextTrackRequest(clipId, trackId, track);
+                IApiRequest request = GenerateUpdateTextTrackRequest(videoId, trackId, track);
                 IRestResponse<TextTrack> response = await request.ExecuteRequestAsync<TextTrack>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error updating text track for video.", HttpStatusCode.NotFound);
@@ -117,11 +117,11 @@ namespace VimeoDotNet
             }
         }
 
-        public async Task DeleteTextTrackAsync(long clipId, long trackId)
+        public async Task DeleteTextTrackAsync(long videoId, long trackId)
         {
             try
             {
-                IApiRequest request = GenerateDeleteTextTrackRequest(clipId, trackId);
+                IApiRequest request = GenerateDeleteTextTrackRequest(videoId, trackId);
                 IRestResponse<TextTrack> response = await request.ExecuteRequestAsync<TextTrack>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error updating text track for video.", HttpStatusCode.NotFound);

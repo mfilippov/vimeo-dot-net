@@ -6,71 +6,398 @@ using VimeoDotNet.Parameters;
 
 namespace VimeoDotNet
 {
+    /// <summary>
+    /// Interface for Viemo API
+    /// </summary>
     public interface IVimeoClient
     {
-		// User Authentication
+        #region User authentication
+        /// <summary>
+        /// Exchange the code for an access token
+        /// </summary>
+        /// <param name="authorizationCode">A string token you must exchange for your access token</param>
+        /// <param name="redirectUrl">This field is required, and must match one of your application’s
+        /// redirect URI’s</param>
+        /// <returns>AccessTokenResponse</returns>
         AccessTokenResponse GetAccessToken(string authorizationCode, string redirectUrl);
+
+        /// <summary>
+        /// Exchange the code for an access token asynchronously
+        /// </summary>
+        /// <param name="authorizationCode">A string token you must exchange for your access token</param>
+        /// <param name="redirectUrl">This field is required, and must match one of your application’s
+        /// redirect URI’s</param>
+        /// <returns></returns>
         Task<AccessTokenResponse> GetAccessTokenAsync(string authorizationCode, string redirectUrl);
+
+        /// <summary>
+		/// Return authorztion URL
+		/// </summary>
+		/// <param name="redirectUri"></param>
+		/// <param name="scope">Defaults to "public" and "private"; this is a space-separated list of <a href="#supported-scopes">scopes</a> you want to access</param>
+		/// <param name="state">A unique value which the client will return alongside access tokens</param>
+		/// <returns>Authorization URL</returns>
 		string GetOauthUrl(string redirectUri, IEnumerable<string> scope, string state);
 
 		// User Information
+        /// <summary>
+        /// Get user information
+        /// </summary>
+        /// <param name="userId">User Id</param>
+        /// <returns>User information object</returns>
         User GetUserInformation(long userId);
+
+        // User Information
+        /// <summary>
+        /// Get user information async
+        /// </summary>
+        /// <param name="userId">User Id</param>
+        /// <returns>User information object</returns>
         Task<User> GetUserInformationAsync(long userId);
+        #endregion
 
-		// Retrieve Videos
+        #region Retrieve videos
 		// ...by id
+
+        /// <summary>
+        /// Get video metadata by ClipId
+        /// </summary>
+        /// <param name="clipId">ClipId</param>
+        /// <returns>Video metadata</returns>
         Video GetVideo(long clipId);
+
+        /// <summary>
+        /// Get video metadata by ClipId asynchronously
+        /// </summary>
+        /// <param name="clipId">ClipId</param>
+        /// <returns>Video metadata</returns>
         Task<Video> GetVideoAsync(long clipId);
+
+
 		// ...for current account
+
+        /// <summary>
+        /// Get paginated video for current account
+        /// </summary>
+        /// <returns>Paginated videos metadata</returns>
         Paginated<Video> GetVideos();
+
+        /// <summary>
+        /// Get paginated video for current account asynchronously
+        /// </summary>
+        /// <returns>Paginated videos metadata</returns>
         Task<Paginated<Video>> GetVideosAsync(int? page, int? perPage);
-		// ...for another acount
+
+
+		// ...for another account
+
+        /// <summary>
+        /// Get video metadata by ClipId for UserId
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="clipId">ClipId</param>
+        /// <returns>Video metadata</returns>
         Video GetUserVideo(long userId, long clipId);
+
+        /// <summary>
+        /// Get video metadata by ClipId for UserId asynchronously
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="clipId">ClipId</param>
+        /// <returns>Video metadata</returns>
         Task<Video> GetUserVideoAsync(long userId, long clipId);
+
+        /// <summary>
+        /// Get videos metadata by UserId and query
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="query">Search query.</param>
+        /// <returns>Paginated videos metadata</returns>
         Paginated<Video> GetUserVideos(long userId, string query = null);
+
+        /// <summary>
+        /// Get videos metadata by UserId and query asynchronously
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="query">Search query.</param>
+        /// <returns>Paginated videos metadata</returns>
         Task<Paginated<Video>> GetUserVideosAsync(long userId, string query = null);
-		// ...for an album
-        Paginated<Video> GetAlbumVideos(long albumId, int? page, int? perPage, string sort = null, string direction = null);
-        Task<Paginated<Video>> GetAlbumVideosAsync(long albumId, int? page, int? perPage, string sort = null, string direction = null);
+
+
+        // ...for an album
+
+        /// <summary>
+        /// Get videos metadata by AlbumId
+        /// </summary>
+        /// <param name="albumId">AlbumId</param>
+        /// <param name="page">The page number to show.</param>
+        /// <param name="perPage">Number of items to show on each page. Max 50.</param>
+        /// <param name="sort">The default sort order of an Album's videos</param>
+        /// <param name="direction">The direction that the results are sorted.</param>
+        /// <returns>Paginated videos metadata</returns>
+        Paginated<Video> GetAlbumVideos(long albumId, int? page, int? perPage,
+            string sort = null, string direction = null);
+
+        /// <summary>
+        /// Get videos metadata by AlbumId asynchronously
+        /// </summary>
+        /// <param name="albumId">AlbumId</param>
+        /// <param name="page">The page number to show.</param>
+        /// <param name="perPage">Number of items to show on each page. Max 50.</param>
+        /// <param name="sort">The default sort order of an Album's videos</param>
+        /// <param name="direction">The direction that the results are sorted.</param>
+        /// <returns>Paginated videos metadata</returns>
+        Task<Paginated<Video>> GetAlbumVideosAsync(long albumId, int? page, int? perPage,
+            string sort = null, string direction = null);
+
+        /// <summary>
+        /// Get video from album by AlbumId and ClipId
+        /// </summary>
+        /// <param name="albumId">AlbumId</param>
+        /// <param name="clipId">ClipId</param>
+        /// <returns>Video metadata</returns>
         Video GetAlbumVideo(long albumId, long clipId);
+
+        /// <summary>
+        /// Get video from album by AlbumId and ClipId asynchronously
+        /// </summary>
+        /// <param name="albumId">AlbumId</param>
+        /// <param name="clipId">ClipId</param>
+        /// <returns>Video metadata</returns>
         Task<Video> GetAlbumVideoAsync(long albumId, long clipId);
+
+        /// <summary>
+        /// Get videos from album by AlbumId and UserId
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="albumId">AlbumId</param>
+        /// <returns>Paginated videos metadata</returns>
         Paginated<Video> GetUserAlbumVideos(long userId, long albumId);
+
+        /// <summary>
+        /// Get videos from album by AlbumId and UserId asynchronously
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="albumId">AlbumId</param>
+        /// <returns>Paginated videos metadata</returns>
         Task<Paginated<Video>> GetUserAlbumVideosAsync(long userId, long albumId);
+
+        /// <summary>
+        /// Get video from album by AlbumId and UserId and ClipId
+        /// </summary>
+        /// <param name="userId">AlbumId</param>
+        /// <param name="albumId">UserId</param>
+        /// <param name="clipId">ClipId</param>
+        /// <returns>Video metadata</returns>
         Video GetUserAlbumVideo(long userId, long albumId, long clipId);
+
+        /// <summary>
+        /// Get video from album by AlbumId and UserId and ClipId asynchronously
+        /// </summary>
+        /// <param name="userId">AlbumId</param>
+        /// <param name="albumId">UserId</param>
+        /// <param name="clipId">ClipId</param>
+        /// <returns>Video metadata</returns>
         Task<Video> GetUserAlbumVideoAsync(long userId, long albumId, long clipId);
+        #endregion
 
-		// Update Video Metadata
+        #region Update video metadata
+		/// <summary>
+		/// Update video metadata by ClipId
+		/// </summary>
+		/// <param name="clipId">ClipId</param>
+		/// <param name="metaData">New video metadata</param>
 		void UpdateVideoMetadata(long clipId, VideoUpdateMetadata metaData);
-		Task UpdateVideoMetadataAsync(long clipId, VideoUpdateMetadata metaData);
 
-		// Text Tracks
-		Task<TextTracks> GetTextTracksAsync(long clipId);
-		Task<TextTrack> GetTextTrackAsync(long clipId, long trackId);
-		Task<TextTrack> UpdateTextTrackAsync(long clipId, long trackId, TextTrack track);
+        /// <summary>
+        /// Update video metadata by ClipId asynchronously
+        /// </summary>
+        /// <param name="clipId">ClipId</param>
+        /// <param name="metaData">New video metadata</param>
+        Task UpdateVideoMetadataAsync(long clipId, VideoUpdateMetadata metaData);
+        #endregion
+
+		#region Text tracks
+		/// <summary>
+		/// Get text tracks asynchronously
+		/// </summary>
+		/// <param name="videoId">VideoId</param>
+		/// <returns>Return text tracks</returns>
+		///
+		Task<TextTracks> GetTextTracksAsync(long videoId);
+
+		/// <summary>
+		/// Get text track asynchronously
+		/// </summary>
+		/// <param name="videoId">VideoId</param>
+		/// <param name="trackId">TrackId</param>
+		/// <returns>Return text track</returns>
+		Task<TextTrack> GetTextTrackAsync(long videoId, long trackId);
+
+        /// <summary>
+		/// Update text track asynchronously
+        /// </summary>
+		/// <param name="videoId">VideoId</param>
+		/// <param name="trackId">TrackId</param>
+		/// <param name="track">TextTrack</param>
+		/// <returns>Updated text track</returns>
+		Task<TextTrack> UpdateTextTrackAsync(long videoId, long trackId, TextTrack track);
+
+		/// <summary>
+		/// Upload new text track file asynchronously
+		/// </summary>
+		/// <param name="fileContent">File content</param>
+		/// <param name="videoId">VideoId</param>
+		/// <param name="track">Track</param>
+		/// <returns>New text track</returns>
 		Task<TextTrack> UploadTextTrackFileAsync(IBinaryContent fileContent, long videoId, TextTrack track);
-		Task DeleteTextTrackAsync(long clipId, long trackId);
 
-		// Uploading Files
+		/// <summary>
+		/// Delete text track asynchronously
+		/// </summary>
+		/// <param name="videoId">VideoId</param>
+		/// <param name="trackId">TrackId</param>
+		/// <returns></returns>
+		Task DeleteTextTrackAsync(long videoId, long trackId);
+        #endregion
+
+		#region Uploading files
+		/// <summary>
+		/// Create new upload ticket
+		/// </summary>
+		/// <returns>Upload ticket</returns>
 		UploadTicket GetUploadTicket();
-		Task<UploadTicket> GetUploadTicketAsync();
-        UploadTicket GetReplaceVideoUploadTicket(long videoId);
-        Task<UploadTicket> GetReplaceVideoUploadTicketAsync(long videoId);
-		IUploadRequest UploadEntireFile(IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
-		Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
-		VerifyUploadResponse VerifyUploadFile(IUploadRequest uploadRequest);
-		Task<VerifyUploadResponse> VerifyUploadFileAsync(IUploadRequest uploadRequest);
-		IUploadRequest StartUploadFile(IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
-		Task<IUploadRequest> StartUploadFileAsync(IBinaryContent fileContent, int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
-		VerifyUploadResponse ContinueUploadFile(IUploadRequest uploadRequest);
-		Task<VerifyUploadResponse> ContinueUploadFileAsync(IUploadRequest uploadRequest);
-		void CompleteFileUpload(IUploadRequest uploadRequest);
-		Task CompleteFileUploadAsync(IUploadRequest uploadRequest);
 
-		// Account Information
+		/// <summary>
+		/// Create new upload ticket asynchronously
+		/// </summary>
+		/// <returns>Upload ticket</returns>
+		Task<UploadTicket> GetUploadTicketAsync();
+
+        /// <summary>
+        /// Create new upload ticket for replace video
+        /// </summary>
+        /// <param name="videoId">VideoId</param>
+        /// <returns>Upload ticket</returns>
+        UploadTicket GetReplaceVideoUploadTicket(long videoId);
+
+        /// <summary>
+        /// Create new upload ticket for replace video asynchronously
+        /// </summary>
+        /// <param name="videoId">VideoId</param>
+        /// <returns>Upload ticket</returns>
+        Task<UploadTicket> GetReplaceVideoUploadTicketAsync(long videoId);
+
+		/// <summary>
+		/// Upload file part
+		/// </summary>
+		/// <param name="fileContent">FileContent</param>
+		/// <param name="chunkSize">ChunkSize</param>
+		/// <param name="replaceVideoId">ReplaceVideoId</param>
+		/// <returns>Upload request</returns>
+		IUploadRequest UploadEntireFile(IBinaryContent fileContent,
+		    int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
+
+        /// <summary>
+		/// Upload file part asynchronously
+        /// </summary>
+		/// <param name="fileContent">FileContent</param>
+		/// <param name="chunkSize">ChunkSize</param>
+		/// <param name="replaceVideoId">ReplaceVideoId</param>
+		/// <returns>Upload request</returns>
+		Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent,
+            int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
+
+        /// <summary>
+		/// Verify upload file part
+        /// </summary>
+		/// <param name="uploadRequest">UploadRequest</param>
+		/// <returns>Verification reponse</returns>
+		VerifyUploadResponse VerifyUploadFile(IUploadRequest uploadRequest);
+
+        /// <summary>
+		/// Verify upload file part asynchronously
+        /// </summary>
+		/// <param name="uploadRequest">UploadRequest</param>
+		/// <returns>Verification reponse</returns>
+		Task<VerifyUploadResponse> VerifyUploadFileAsync(IUploadRequest uploadRequest);
+
+        /// <summary>
+		/// Start upload file
+		/// </summary>
+		/// <param name="fileContent">FileContent</param>
+		/// <param name="chunkSize">ChunkSize</param>
+		/// <param name="replaceVideoId">ReplaceVideoId</param>
+		/// <returns>Upload request</returns>
+		IUploadRequest StartUploadFile(IBinaryContent fileContent,
+            int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
+
+        /// <summary>
+		/// Start upload file asynchronously
+        /// </summary>
+		/// <param name="fileContent">FileContent</param>
+		/// <param name="chunkSize">ChunkSize</param>
+		/// <param name="replaceVideoId">ReplaceVideoId</param>
+		/// <returns></returns>
+		Task<IUploadRequest> StartUploadFileAsync(IBinaryContent fileContent,
+            int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
+
+        /// <summary>
+		/// Continue upload file
+		/// </summary>
+		/// <param name="uploadRequest">UploadRequest</param>
+		/// <returns>Verification upload response</returns>
+		VerifyUploadResponse ContinueUploadFile(IUploadRequest uploadRequest);
+
+        /// <summary>
+		/// Continue upload file asynchronously
+        /// </summary>
+		/// <param name="uploadRequest">UploadRequest</param>
+		/// <returns>Verification upload response</returns>
+		Task<VerifyUploadResponse> ContinueUploadFileAsync(IUploadRequest uploadRequest);
+
+        /// <summary>
+        /// Complete upload file
+        /// </summary>
+        /// <param name="uploadRequest">UploadRequest</param>
+        /// <returns></returns>
+        void CompleteFileUpload(IUploadRequest uploadRequest);
+
+        /// <summary>
+		/// Complete upload file asynchronously
+        /// </summary>
+		/// <param name="uploadRequest">UploadRequest</param>
+		/// <returns></returns>
+		Task CompleteFileUploadAsync(IUploadRequest uploadRequest);
+        #endregion
+
+		#region Account information
+		/// <summary>
+		/// Get user information
+		/// </summary>
+		/// <returns>User metadata</returns>
 		User GetAccountInformation();
+
+		/// <summary>
+		/// Get user information asynchronously
+		/// </summary>
+		/// <returns>User metadata</returns>
 		Task<User> GetAccountInformationAsync();
+
+        /// <summary>
+        /// Update user information
+        /// </summary>
+        /// <param name="parameters">User parameters</param>
+        /// <returns>User metadata</returns>
+        User UpdateAccountInformation(EditUserParameters parameters);
+
+        /// <summary>
+		/// Update user information asynchronously
+		/// </summary>
+		/// <param name="parameters">User parameters</param>
+		/// <returns>User metadata</returns>
 		Task<User> UpdateAccountInformationAsync(EditUserParameters parameters);
-		User UpdateAccountInformation(EditUserParameters parameters);
+        #endregion
 
 		// Albums
 		Task<Paginated<Album>> GetAlbumsAsync(GetAlbumsParameters parameters = null);					
