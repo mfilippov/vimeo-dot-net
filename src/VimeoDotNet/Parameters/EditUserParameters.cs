@@ -1,36 +1,80 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using VimeoDotNet.Enums;
 
 namespace VimeoDotNet.Parameters
 {
+	/// <summary>
+	/// Edit user privacy comment option
+	/// </summary>
 	public enum EditUserPrivacyCommentOption
 	{
+		/// <summary>
+		/// Anybody
+		/// </summary>
 		Anybody,
+		/// <summary>
+		/// Nobody
+		/// </summary>
 		Nobody,
+		/// <summary>
+		/// Contacts
+		/// </summary>
 		Contacts
 	}
 
+	/// <summary>
+	/// Edit user privacy view option
+	/// </summary>
 	public enum EditUserPrivacyViewOption
 	{
+		/// <summary>
+		/// Anybody
+		/// </summary>
 		Anybody,
+		/// <summary>
+		/// Nobody
+		/// </summary>
 		Nobody,
+		/// <summary>
+		/// Contacts
+		/// </summary>
 		Contacts,
+		/// <summary>
+		/// Password
+		/// </summary>
 		Password,
+		/// <summary>
+		/// Users
+		/// </summary>
 		Users,
+		/// <summary>
+		/// Disable
+		/// </summary>
 		Disable
 	}
 
+	/// <summary>
+	///Edit user privacy embed option
+	/// </summary>
 	public enum EditUserPrivacyEmbedOption
 	{
+		/// <summary>
+		/// Public
+		/// </summary>
 		Public,
+		/// <summary>
+		/// Private
+		/// </summary>
 		Private,
+		/// <summary>
+		/// Whitelist
+		/// </summary>
 		Whitelist
 	}
 
+	/// <summary>
+	/// Edit user parameters
+	/// </summary>
 	public class EditUserParameters : IParameterProvider
 	{
 		/// <summary>
@@ -73,13 +117,21 @@ namespace VimeoDotNet.Parameters
 		/// </summary>
 		public string Bio { get; set; }
 
-		public string ValidationError()
+	    /// <summary>
+	    /// Performs validation and returns a description of the first error encountered.
+	    /// </summary>
+	    /// <returns>Description of first error, or null if none found.</returns>
+	    public string ValidationError()
 		{
 			// no parameter restrictions indicated
 			return null;
 		}
 
-		public IDictionary<string, string> GetParameterValues()
+	    /// <summary>
+	    /// Provides universal interface to retrieve parameter values.
+	    /// </summary>
+	    /// <returns>Returns all parameters as name/value pairs.</returns>
+	    public IDictionary<string, string> GetParameterValues()
 		{
 			Dictionary<string, string> parameterValues = new Dictionary<string, string>();
 

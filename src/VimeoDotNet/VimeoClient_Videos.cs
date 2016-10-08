@@ -13,6 +13,10 @@ namespace VimeoDotNet
 {
     public partial class VimeoClient
     {
+        /// <summary>
+        /// Delete video asynchronously
+        /// </summary>
+        /// <param name="clipId">CliepId</param>
         public async Task DeleteVideoAsync(long clipId)
         {
             try
@@ -32,6 +36,12 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Get video from album by AlbumId and ClipId asynchronously
+        /// </summary>
+        /// <param name="albumId">AlbumId</param>
+        /// <param name="clipId">ClipId</param>
+        /// <returns>Video</returns>
         public async Task<Video> GetAlbumVideoAsync(long albumId, long clipId)
         {
             try
@@ -58,6 +68,15 @@ namespace VimeoDotNet
         }
 
         // Added 28/07/2015
+        /// <summary>
+        /// Get videos by AlbumId asynchronously
+        /// </summary>
+        /// <param name="albumId">AlbumId</param>
+        /// <param name="page">The page number to show.</param>
+        /// <param name="perPage">Number of items to show on each page. Max 50.</param>
+        /// <param name="sort">The default sort order of an Album's videos</param>
+        /// <param name="direction">The direction that the results are sorted.</param>
+        /// <returns>Paginated videos</returns>
         public async Task<Paginated<Video>> GetAlbumVideosAsync(long albumId, int? page, int? perPage, string sort = null, string direction = null)
         {
             try
@@ -88,6 +107,13 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Get video from album by AlbumId and UserId and ClipId asynchronously
+        /// </summary>
+        /// <param name="userId">AlbumId</param>
+        /// <param name="albumId">UserId</param>
+        /// <param name="clipId">ClipId</param>
+        /// <returns>Video</returns>
         public async Task<Video> GetUserAlbumVideoAsync(long userId, long albumId, long clipId)
         {
             try
@@ -113,6 +139,12 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Get videos from album by AlbumId and UserId asynchronously
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="albumId">AlbumId</param>
+        /// <returns>Paginated videos</returns>
         public async Task<Paginated<Video>> GetUserAlbumVideosAsync(long userId, long albumId)
         {
             try
@@ -143,6 +175,12 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Get video by ClipId for UserId asynchronously
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="clipId">ClipId</param>
+        /// <returns>Video</returns>
         public async Task<Video> GetUserVideoAsync(long userId, long clipId)
         {
             try
@@ -168,11 +206,25 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Get videos by UserId and query asynchronously
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="query">Search query</param>
+        /// <returns>Paginated videos</returns>
         public async Task<Paginated<Video>> GetUserVideosAsync(long userId, string query = null)
         {
             return await GetUserVideosAsync(userId, null, null, query);
         }
 
+        /// <summary>
+        /// Get videos by UserId and query and page parameters asynchronously
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="perPage">Number of items to show on each page. Max 50</param>
+        /// <param name="query">Search query</param>
+        /// <param name="page">The page number to show</param>
+        /// <returns>Paginated videos</returns>
         public async Task<Paginated<Video>> GetUserVideosAsync(long userId, int? page, int? perPage, string query = null)
         {
             try
@@ -203,6 +255,11 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Get video by ClipId asynchronously
+        /// </summary>
+        /// <param name="clipId">ClipId</param>
+        /// <returns>Video</returns>
         public async Task<Video> GetVideoAsync(long clipId)
         {
             try
@@ -228,6 +285,10 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Get paginated video for current account asynchronously
+        /// </summary>
+        /// <returns>Paginated videos</returns>
         public async Task<Paginated<Video>> GetVideosAsync(int? page = null, int? perPage = null)
         {
             try
@@ -249,6 +310,11 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Update video metadata by ClipId asynchronously
+        /// </summary>
+        /// <param name="clipId">ClipId</param>
+        /// <param name="metaData">New video metadata</param>
         public async Task UpdateVideoMetadataAsync(long clipId, VideoUpdateMetadata metaData)
         {
             try
@@ -268,6 +334,11 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Update allowed domain for clip asynchronously
+        /// </summary>
+        /// <param name="clipId">ClipId</param>
+        /// <param name="domain">Domain</param>
         public async Task UpdateVideoAllowedDomainAsync(long clipId, string domain)
         {
             try
@@ -291,7 +362,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
             string endpoint = userId.HasValue
                 ? clipId.HasValue ? Endpoints.UserVideo : Endpoints.UserVideos
                 : clipId.HasValue ? Endpoints.Video : Endpoints.Videos;
@@ -326,7 +397,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
             string endpoint = clipId.HasValue ? Endpoints.UserAlbumVideo : Endpoints.UserAlbumVideos;
             request.Method = Method.GET;
             request.Path = userId.HasValue ? endpoint : Endpoints.GetCurrentUserEndpoint(endpoint);
@@ -364,7 +435,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
             request.Method = Method.DELETE;
             request.Path = Endpoints.Video;
 
@@ -377,7 +448,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
             request.Method = Method.PATCH;
             request.Path = Endpoints.Video;
 
@@ -417,7 +488,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
             request.Method = Method.PUT;
             request.Path = Endpoints.VideoAllowedDomain;
 

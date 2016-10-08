@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace VimeoDotNet.Exceptions
 {
     [Serializable]
-    public class VimeoApiException : ApplicationException
+    internal class VimeoApiException : ApplicationException
     {
         public VimeoApiException()
         {

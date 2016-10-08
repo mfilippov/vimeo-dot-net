@@ -1,20 +1,22 @@
 ﻿using RestSharp;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using VimeoDotNet.Constants;
-using VimeoDotNet.Enums;
 using VimeoDotNet.Exceptions;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
 
 namespace VimeoDotNet
 {
-    public partial class VimeoClient : IVimeoClient
+    public partial class VimeoClient
     {
+        /// <summary>
+        /// Get text tracks asynchronously
+        /// </summary>
+        /// <param name="videoId">VideoId</param>
+        /// <returns>Return text tracks</returns>
+        ///
         public async Task<TextTracks> GetTextTracksAsync(long videoId)
         {
             try
@@ -40,6 +42,12 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Get text track asynchronously
+        /// </summary>
+        /// <param name="videoId">VideoId</param>
+        /// <param name="trackId">TrackId</param>
+        /// <returns>Return text track</returns>
         public async Task<TextTrack> GetTextTrackAsync(long videoId, long trackId)
         {
             try
@@ -65,6 +73,13 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Upload new text track file asynchronously
+        /// </summary>
+        /// <param name="fileContent">File content</param>
+        /// <param name="videoId">VideoId</param>
+        /// <param name="track">Track</param>
+        /// <returns>New text track</returns>
         public async Task<TextTrack> UploadTextTrackFileAsync(IBinaryContent fileContent, long videoId, TextTrack track)
         {
             if (!fileContent.Data.CanRead)
@@ -78,7 +93,7 @@ namespace VimeoDotNet
 
             TextTrack ticket = await GetUploadTextTrackTicketAsync(videoId, track);
 
-            IApiRequest request = _apiRequestFactory.GetApiRequest();
+            IApiRequest request = ApiRequestFactory.GetApiRequest();
             request.Method = Method.PUT;
             request.ExcludeAuthorizationHeader = true;
             request.Path = ticket.link;
@@ -92,6 +107,13 @@ namespace VimeoDotNet
             return ticket;
         }
 
+        /// <summary>
+        /// Update text track asynchronously
+        /// </summary>
+        /// <param name="videoId">VideoId</param>
+        /// <param name="trackId">TrackId</param>
+        /// <param name="track">TextTrack</param>
+        /// <returns>Updated text track</returns>
         public async Task<TextTrack> UpdateTextTrackAsync(long videoId, long trackId, TextTrack track)
         {
             try
@@ -117,6 +139,12 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Delete text track asynchronously
+        /// </summary>
+        /// <param name="videoId">VideoId</param>
+        /// <param name="trackId">TrackId</param>
+        /// <returns></returns>
         public async Task DeleteTextTrackAsync(long videoId, long trackId)
         {
             try
@@ -162,7 +190,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
             request.Method = Method.POST;
             request.Path = Endpoints.TextTracks;
             request.UrlSegments.Add("clipId", clipId.ToString());
@@ -191,7 +219,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
             request.Method = Method.PATCH;
             request.Path = Endpoints.TextTrack;
             request.UrlSegments.Add("clipId", clipId.ToString());
@@ -221,7 +249,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
             string endpoint = trackId.HasValue ? Endpoints.TextTrack : Endpoints.TextTracks;
             request.Method = Method.GET;
             request.Path = endpoint;
@@ -238,7 +266,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
             string endpoint = Endpoints.TextTrack;
             request.Method = Method.DELETE;
             request.Path = endpoint;

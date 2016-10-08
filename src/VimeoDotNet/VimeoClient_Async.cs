@@ -15,46 +15,69 @@ using VimeoDotNet.Parameters;
 
 namespace VimeoDotNet
 {
-    public partial class VimeoClient : IVimeoClient
+    public partial class VimeoClient: IVimeoClient
     {
         #region Constants
 
         internal const int DEFAULT_UPLOAD_CHUNK_SIZE = 1048576; // 1MB
-
-        protected static readonly Regex _rangeRegex = new Regex(@"bytes\s*=\s*(?<start>\d+)-(?<end>\d+)",
+        /// <summary>
+        /// Range regex
+        /// </summary>
+        protected static readonly Regex RangeRegex = new Regex(@"bytes\s*=\s*(?<start>\d+)-(?<end>\d+)",
             RegexOptions.IgnoreCase);
 
         #endregion
 
         #region Fields
-
-        protected IApiRequestFactory _apiRequestFactory;
-        protected IAuthorizationClientFactory _authClientFactory;
+        /// <summary>
+        /// Api request factory
+        /// </summary>
+        protected IApiRequestFactory ApiRequestFactory;
+        /// <summary>
+        /// Auth client factory
+        /// </summary>
+        protected IAuthorizationClientFactory AuthClientFactory;
 
         #endregion
 
         #region Properties
 
+        /// <summary>
+        /// ClientId
+        /// </summary>
         protected string ClientId { get; set; }
+        /// <summary>
+        /// ClientSecret
+        /// </summary>
         protected string ClientSecret { get; set; }
+        /// <summary>
+        /// AccessToken
+        /// </summary>
         protected string AccessToken { get; set; }
 
+        /// <summary>
+        /// OAuth2Client
+        /// </summary>
         protected IAuthorizationClient OAuth2Client { get; set; }
 
         #endregion
 
         #region Constructors
 
+        /// <summary>
+        ///
+        /// </summary>
         protected VimeoClient()
         {
-            _authClientFactory = new AuthorizationClientFactory();
-            _apiRequestFactory = new ApiRequestFactory();
+            AuthClientFactory = new AuthorizationClientFactory();
+            ApiRequestFactory = new ApiRequestFactory();
         }
 
         /// <summary>
-        ///     Multi-user application constructor, using user-level OAuth2
+        /// Multi-user application constructor, using user-level OAuth2
         /// </summary>
-        /// <param name="accessToken">Your Vimeo API Access Token</param>
+        /// <param name="clientId">ClientId</param>
+        /// <param name="clientSecret">ClientSecret</param>
         public VimeoClient(string clientId, string clientSecret)
             : this()
         {
@@ -64,7 +87,7 @@ namespace VimeoDotNet
         }
 
         /// <summary>
-        ///     Single-user application constructor, using account OAuth2 access token
+        /// Single-user application constructor, using account OAuth2 access token
         /// </summary>
         /// <param name="accessToken">Your Vimeo API Access Token</param>
         public VimeoClient(string accessToken)
@@ -78,12 +101,14 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="authClientFactory">The IAuthorizationClientFactory</param>
         /// <param name="apiRequestFactory">The IApiRequestFactory</param>
+        /// <param name="clientId">ClientId</param>
+        /// <param name="clientSecret">ClientSecret</param>
         internal VimeoClient(IAuthorizationClientFactory authClientFactory, IApiRequestFactory apiRequestFactory,
             string clientId, string clientSecret)
             : this(clientId, clientSecret)
         {
-            _authClientFactory = authClientFactory;
-            _apiRequestFactory = apiRequestFactory;
+            AuthClientFactory = authClientFactory;
+            ApiRequestFactory = apiRequestFactory;
         }
 
         /// <summary>
@@ -91,24 +116,39 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="authClientFactory">The IAuthorizationClientFactory</param>
         /// <param name="apiRequestFactory">The IApiRequestFactory</param>
+        /// <param name="accessToken">AccessToken</param>
         internal VimeoClient(IAuthorizationClientFactory authClientFactory, IApiRequestFactory apiRequestFactory,
             string accessToken)
             : this(accessToken)
         {
-            _authClientFactory = authClientFactory;
-            _apiRequestFactory = apiRequestFactory;
+            AuthClientFactory = authClientFactory;
+            ApiRequestFactory = apiRequestFactory;
         }
 
         #endregion
 
         #region Authorization
 
+        /// <summary>
+        /// Return authorztion URL
+        /// </summary>
+        /// <param name="redirectUri"></param>
+        /// <param name="scope">Defaults to "public" and "private"; this is a space-separated list of <a href="#supported-scopes">scopes</a> you want to access</param>
+        /// <param name="state">A unique value which the client will return alongside access tokens</param>
+        /// <returns>Authorization URL</returns>
         public string GetOauthUrl(string redirectUri, IEnumerable<string> scope, string state)
         {
             PrepAuthorizationClient();
             return OAuth2Client.GetAuthorizationEndpoint(redirectUri, scope, state);
         }
 
+        /// <summary>
+        /// Exchange the code for an access token asynchronously
+        /// </summary>
+        /// <param name="authorizationCode">A string token you must exchange for your access token</param>
+        /// <param name="redirectUrl">This field is required, and must match one of your application’s
+        /// redirect URI’s</param>
+        /// <returns></returns>
         public async Task<AccessTokenResponse> GetAccessTokenAsync(string authorizationCode, string redirectUrl)
         {
             PrepAuthorizationClient();
@@ -119,7 +159,7 @@ namespace VimeoDotNet
         {
             if (OAuth2Client == null)
             {
-                OAuth2Client = _authClientFactory.GetAuthorizationClient(ClientId, ClientSecret);
+                OAuth2Client = AuthClientFactory.GetAuthorizationClient(ClientId, ClientSecret);
             }
         }
 
@@ -127,9 +167,13 @@ namespace VimeoDotNet
 
         #region Account
 
+        /// <summary>
+        /// Get user information asynchronously
+        /// </summary>
+        /// <returns>User information</returns>
         public async Task<User> GetAccountInformationAsync()
         {
-			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+			IApiRequest request = ApiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.GET,
 				Endpoints.GetCurrentUserEndpoint(Endpoints.User)
@@ -138,9 +182,14 @@ namespace VimeoDotNet
 			return await ExecuteApiRequest<User>(request);
         }
 
-		public async Task<User> UpdateAccountInformationAsync(EditUserParameters parameters)
+        /// <summary>
+        /// Update user information asynchronously
+        /// </summary>
+        /// <param name="parameters">User parameters</param>
+        /// <returns>User information</returns>
+        public async Task<User> UpdateAccountInformationAsync(EditUserParameters parameters)
 		{
-			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+			IApiRequest request = ApiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.PATCH,
 				Endpoints.GetCurrentUserEndpoint(Endpoints.User),
@@ -152,9 +201,14 @@ namespace VimeoDotNet
 		}
 
 
+        /// <summary>
+        /// Get user information async
+        /// </summary>
+        /// <param name="userId">User Id</param>
+        /// <returns>User information object</returns>
         public async Task<User> GetUserInformationAsync(long userId)
         {
-			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+			IApiRequest request = ApiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.GET,
 				Endpoints.User,
@@ -170,9 +224,14 @@ namespace VimeoDotNet
 
 		#region Albums
 
-		public async Task<Paginated<Album>> GetAlbumsAsync(GetAlbumsParameters parameters = null)
+        /// <summary>
+        /// Get album by parameters asynchronously
+        /// </summary>
+        /// <param name="parameters">GetAlbumsParameters</param>
+        /// <returns>Paginated albums</returns>
+        public async Task<Paginated<Album>> GetAlbumsAsync(GetAlbumsParameters parameters = null)
 		{
-			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+			IApiRequest request = ApiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.GET,
 				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbums),
@@ -183,9 +242,15 @@ namespace VimeoDotNet
 			return await ExecuteApiRequest<Paginated<Album>>(request);
 		}
 
-		public async Task<Paginated<Album>> GetAlbumsAsync(long userId, GetAlbumsParameters parameters = null)
+        /// <summary>
+        /// Get album by UserId and parameters asynchronously
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="parameters">GetAlbumsParameters</param>
+        /// <returns>Paginated albums</returns>
+        public async Task<Paginated<Album>> GetAlbumsAsync(long userId, GetAlbumsParameters parameters = null)
 		{
-			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+			IApiRequest request = ApiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.GET,
 				Endpoints.UserAlbums,
@@ -198,9 +263,14 @@ namespace VimeoDotNet
 			return await ExecuteApiRequest<Paginated<Album>>(request);
 		}
 
-		public async Task<Album> GetAlbumAsync(long albumId)
+        /// <summary>
+        /// Get album by AlbumId asynchronously
+        /// </summary>
+        /// <param name="albumId">AlbumId</param>
+        /// <returns>Album</returns>
+        public async Task<Album> GetAlbumAsync(long albumId)
 		{
-			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+			IApiRequest request = ApiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.GET,
 				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbum),
@@ -213,9 +283,15 @@ namespace VimeoDotNet
 			return await ExecuteApiRequest<Album>(request);
 		}
 
-		public async Task<Album> GetAlbumAsync(long userId, long albumId)
+        /// <summary>
+        /// Get album by AlbumId and UserId asynchronously
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="albumId">AlbumId</param>
+        /// <returns>Album</returns>
+        public async Task<Album> GetAlbumAsync(long userId, long albumId)
 		{
-			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+			IApiRequest request = ApiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.GET,
 				Endpoints.UserAlbum,
@@ -229,9 +305,14 @@ namespace VimeoDotNet
 			return await ExecuteApiRequest<Album>(request);
 		}
 
-		public async Task<Album> CreateAlbumAsync(EditAlbumParameters parameters = null)
+        /// <summary>
+        /// Create new album asynchronously
+        /// </summary>
+        /// <param name="parameters">Creation parameters</param>
+        /// <returns>Album</returns>
+        public async Task<Album> CreateAlbumAsync(EditAlbumParameters parameters = null)
 		{
-			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+			IApiRequest request = ApiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.POST,
 				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbums),
@@ -242,9 +323,15 @@ namespace VimeoDotNet
 			return await ExecuteApiRequest<Album>(request);
 		}
 
-		public async Task<Album> UpdateAlbumAsync(long albumId, EditAlbumParameters parameters = null)
+        /// <summary>
+        /// Update album asynchronously
+        /// </summary>
+        /// <param name="albumId">Albumid</param>
+        /// <param name="parameters">Album parameters</param>
+        /// <returns>Album</returns>
+        public async Task<Album> UpdateAlbumAsync(long albumId, EditAlbumParameters parameters = null)
 		{
-			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+			IApiRequest request = ApiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.PATCH,
 				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbum),
@@ -257,9 +344,14 @@ namespace VimeoDotNet
 			return await ExecuteApiRequest<Album>(request);
 		}
 
-		public async Task<bool> DeleteAlbumAsync(long albumId)
+        /// <summary>
+        /// Delete album asynchronously
+        /// </summary>
+        /// <param name="albumId">AlbumId</param>
+        /// <returns>Deletion result</returns>
+        public async Task<bool> DeleteAlbumAsync(long albumId)
 		{
-			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+			IApiRequest request = ApiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.DELETE,
 				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbum),
@@ -271,9 +363,15 @@ namespace VimeoDotNet
 			return await ExecuteApiRequest(request);
 		}
 
-		public async Task<bool> AddToAlbumAsync(long albumId, long clipId)
+        /// <summary>
+        /// Add video to album by AlbumId and ClipId asynchronously
+        /// </summary>
+        /// <param name="albumId">AlbumId</param>
+        /// <param name="clipId">ClipId</param>
+        /// <returns>Adding result</returns>
+        public async Task<bool> AddToAlbumAsync(long albumId, long clipId)
 		{
-			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+			IApiRequest request = ApiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.PUT,
 				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbumVideo),
@@ -286,9 +384,16 @@ namespace VimeoDotNet
 			return await ExecuteApiRequest(request);
 		}
 
-		public async Task<bool> AddToAlbumAsync(long userId, long albumId, long clipId)
+        /// <summary>
+        /// Add video to album by UserId and AlbumId and ClipId asynchronously
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="albumId">AlbumId</param>
+        /// <param name="clipId">ClipId</param>
+        /// <returns>Adding result</returns>
+        public async Task<bool> AddToAlbumAsync(long userId, long albumId, long clipId)
 		{
-			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+			IApiRequest request = ApiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.PUT,
 				Endpoints.UserAlbumVideo,
@@ -302,9 +407,15 @@ namespace VimeoDotNet
 			return await ExecuteApiRequest(request);
 		}
 
-		public async Task<bool> RemoveFromAlbumAsync(long albumId, long clipId)
+        /// <summary>
+        /// Remove video from album by AlbumId and ClipId asynchronously
+        /// </summary>
+        /// <param name="albumId">AlbumId</param>
+        /// <param name="clipId">ClipId</param>
+        /// <returns>Removing result</returns>
+        public async Task<bool> RemoveFromAlbumAsync(long albumId, long clipId)
 		{
-			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+			IApiRequest request = ApiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.DELETE,
 				Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbumVideo),
@@ -317,9 +428,16 @@ namespace VimeoDotNet
 			return await ExecuteApiRequest(request);
 		}
 
-		public async Task<bool> RemoveFromAlbumAsync(long userId, long albumId, long clipId)
+        /// <summary>
+        /// Remove video from album by AlbumId and ClipId and UserId asynchronously
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="albumId">AlbumId</param>
+        /// <param name="clipId">ClipId</param>
+        /// <returns>Removing result</returns>
+        public async Task<bool> RemoveFromAlbumAsync(long userId, long albumId, long clipId)
 		{
-			IApiRequest request = _apiRequestFactory.AuthorizedRequest(
+			IApiRequest request = ApiRequestFactory.AuthorizedRequest(
 				AccessToken,
 				Method.DELETE,
 				Endpoints.UserAlbumVideo,

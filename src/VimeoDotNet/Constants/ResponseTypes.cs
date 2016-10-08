@@ -1,6 +1,6 @@
 ﻿namespace VimeoDotNet.Constants
 {
-    public static class ResponseTypes
+    internal static class ResponseTypes
     {
         public const string Album = "application/vnd.vimeo.album+json";
         public const string Category = "application/vnd.vimeo.category+json";

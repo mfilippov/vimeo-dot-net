@@ -2,20 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using VimeoDotNet.Constants;
-using VimeoDotNet.Enums;
-using VimeoDotNet.Exceptions;
-using VimeoDotNet.Models;
-using VimeoDotNet.Net;
 
 namespace VimeoDotNet
 {
-	public partial class VimeoClient : IVimeoClient
+	public partial class VimeoClient
 	{
-		public long RateLimit
+	    /// <summary>
+	    /// Return rate limit
+	    /// </summary>
+	    public long RateLimit
 		{
 			get
 			{
@@ -28,7 +23,10 @@ namespace VimeoDotNet
 			}
 		}
 
-		public long RateLimitRemaining
+	    /// <summary>
+	    /// Return remaning rate limit
+	    /// </summary>
+	    public long RateLimitRemaining
 		{
 			get
 			{
@@ -41,7 +39,10 @@ namespace VimeoDotNet
 			}
 		}
 
-		public DateTime RateLimitReset
+	    /// <summary>
+	    /// Return rate limit reset time
+	    /// </summary>
+	    public DateTime RateLimitReset
 		{
 			get
 			{

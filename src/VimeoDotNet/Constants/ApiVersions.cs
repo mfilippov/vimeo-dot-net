@@ -1,6 +1,6 @@
 ﻿namespace VimeoDotNet.Constants
 {
-    public static class ApiVersions
+    internal static class ApiVersions
     {
         public const string v2_0 = "version=2.0";
         public const string v2_5 = "version=2.5";

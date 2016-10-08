@@ -1,6 +1,6 @@
 ﻿namespace VimeoDotNet.Constants
 {
-    public static class Scopes
+    internal static class Scopes
     {
         public const string Private = "private";
         public const string Public = "public";

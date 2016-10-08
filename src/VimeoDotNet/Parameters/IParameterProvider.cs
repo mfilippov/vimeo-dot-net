@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace VimeoDotNet.Parameters
 {
+	/// <summary>
+	/// IParameterProvider
+	/// </summary>
 	public interface IParameterProvider
 	{
 		/// <summary>
@@ -21,6 +20,9 @@ namespace VimeoDotNet.Parameters
 		IDictionary<string, string> GetParameterValues();
 	}
 
+	/// <summary>
+	/// Parameter dictionary
+	/// </summary>
 	public class ParameterDictionary : Dictionary<string, string>, IParameterProvider
 	{
 		/// <summary>
@@ -32,7 +34,11 @@ namespace VimeoDotNet.Parameters
 			return null;
 		}
 
-		public IDictionary<string, string> GetParameterValues()
+	    /// <summary>
+	    /// Provides universal interface to retrieve parameter values.
+	    /// </summary>
+	    /// <returns>Returns all parameters as name/value pairs.</returns>
+	    public IDictionary<string, string> GetParameterValues()
 		{
 			return this;
 		}
