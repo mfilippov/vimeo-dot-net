@@ -4,6 +4,9 @@ using VimeoDotNet.Models;
 
 namespace VimeoDotNet.Net
 {
+    /// <summary>
+    /// Upload request
+    /// </summary>
     [Serializable]
     public class UploadRequest : IUploadRequest
     {
@@ -16,12 +19,34 @@ namespace VimeoDotNet.Net
 
         #region Public Properties
 
+        /// <summary>
+        /// Ticket
+        /// </summary>
         public UploadTicket Ticket { get; set; }
+
+        /// <summary>
+        /// Chunk size
+        /// </summary>
         public int ChunkSize { get; set; }
+
+        /// <summary>
+        /// Bytes written
+        /// </summary>
         public long BytesWritten { get; set; }
+
+        /// <summary>
+        /// Is verified complete
+        /// </summary>
         public bool IsVerifiedComplete { get; set; }
+
+        /// <summary>
+        /// Clip URI
+        /// </summary>
         public string ClipUri { get; set; }
 
+        /// <summary>
+        /// File
+        /// </summary>
         public IBinaryContent File
         {
             get { return _file; }
@@ -36,11 +61,17 @@ namespace VimeoDotNet.Net
             }
         }
 
+        /// <summary>
+        /// File length
+        /// </summary>
         public long FileLength
         {
             get { return _fileLength; }
         }
 
+        /// <summary>
+        /// All bytes written
+        /// </summary>
         public bool AllBytesWritten
         {
             get
@@ -49,6 +80,9 @@ namespace VimeoDotNet.Net
             }
         }
 
+        /// <summary>
+        /// Clip id
+        /// </summary>
         public long? ClipId
         {
             get { return ModelHelpers.ParseModelUriId(ClipUri); }

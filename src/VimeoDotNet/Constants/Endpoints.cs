@@ -1,6 +1,6 @@
 ﻿namespace VimeoDotNet.Constants
 {
-    public static class Endpoints
+    internal static class Endpoints
     {
         public const string Authorize = "/oauth/authorize";
         public const string AccessToken = "/oauth/access_token";

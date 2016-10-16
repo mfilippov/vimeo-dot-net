@@ -2,7 +2,7 @@
 
 namespace VimeoDotNet.Constants
 {
-    public static class Request
+    internal static class Request
     {
         public const string ProtocolHttps = "https";
 

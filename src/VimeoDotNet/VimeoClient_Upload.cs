@@ -12,8 +12,13 @@ using VimeoDotNet.Net;
 
 namespace VimeoDotNet
 {
-    public partial class VimeoClient : IVimeoClient
+    public partial class VimeoClient
     {
+        /// <summary>
+        /// Complete upload file asynchronously
+        /// </summary>
+        /// <param name="uploadRequest">UploadRequest</param>
+        /// <returns></returns>
         public async Task CompleteFileUploadAsync(IUploadRequest uploadRequest)
         {
             ThrowIfUnauthorized();
@@ -41,6 +46,11 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Continue upload file asynchronously
+        /// </summary>
+        /// <param name="uploadRequest">UploadRequest</param>
+        /// <returns>Verification upload response</returns>
         public async Task<VerifyUploadResponse> ContinueUploadFileAsync(IUploadRequest uploadRequest)
         {
             if (uploadRequest.AllBytesWritten)
@@ -85,6 +95,10 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Create new upload ticket asynchronously
+        /// </summary>
+        /// <returns>Upload ticket</returns>
         public async Task<UploadTicket> GetUploadTicketAsync()
         {
             try
@@ -106,6 +120,11 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Create new upload ticket for replace video asynchronously
+        /// </summary>
+        /// <param name="videoId">VideoId</param>
+        /// <returns>Upload ticket</returns>
         public async Task<UploadTicket> GetReplaceVideoUploadTicketAsync(long videoId)
         {
             try
@@ -127,6 +146,13 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Start upload file asynchronously
+        /// </summary>
+        /// <param name="fileContent">FileContent</param>
+        /// <param name="chunkSize">ChunkSize</param>
+        /// <param name="replaceVideoId">ReplaceVideoId</param>
+        /// <returns></returns>
         public async Task<IUploadRequest> StartUploadFileAsync(IBinaryContent fileContent,
             int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE,
             long? replaceVideoId = null)
@@ -156,6 +182,13 @@ namespace VimeoDotNet
             return uploadRequest;
         }
 
+        /// <summary>
+        /// Upload file part asynchronously
+        /// </summary>
+        /// <param name="fileContent">FileContent</param>
+        /// <param name="chunkSize">ChunkSize</param>
+        /// <param name="replaceVideoId">ReplaceVideoId</param>
+        /// <returns>Upload request</returns>
         public async Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent,
             int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE,
             long? replaceVideoId = null)
@@ -194,6 +227,11 @@ namespace VimeoDotNet
             return uploadRequest;
         }
 
+        /// <summary>
+        /// Verify upload file part asynchronously
+        /// </summary>
+        /// <param name="uploadRequest">UploadRequest</param>
+        /// <returns>Verification reponse</returns>
         public async Task<VerifyUploadResponse> VerifyUploadFileAsync(IUploadRequest uploadRequest)
         {
             try
@@ -218,7 +256,7 @@ namespace VimeoDotNet
                         response.Headers.FirstOrDefault(h => string.Compare(h.Name, "Range", true) == 0);
                     if (rangeHeader != null && rangeHeader.Value != null)
                     {
-                        Match match = _rangeRegex.Match(rangeHeader.Value as string);
+                        Match match = RangeRegex.Match(rangeHeader.Value as string);
                         if (match.Success
                             && int.TryParse(match.Groups["start"].Value, out startIndex)
                             && int.TryParse(match.Groups["end"].Value, out endIndex))
@@ -250,7 +288,7 @@ namespace VimeoDotNet
 
         private IApiRequest GenerateCompleteUploadRequest(UploadTicket ticket)
         {
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
             request.Method = Method.DELETE;
             request.Path = ticket.complete_uri;
             return request;
@@ -270,7 +308,7 @@ namespace VimeoDotNet
                     ticket.quota.free_space + ".");
             }
 
-            IApiRequest request = _apiRequestFactory.GetApiRequest();
+            IApiRequest request = ApiRequestFactory.GetApiRequest();
             request.Method = Method.PUT;
             request.ExcludeAuthorizationHeader = true;
             request.Path = ticket.upload_link_secure;
@@ -305,7 +343,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
             request.Method = Method.POST;
             request.Path = Endpoints.UploadTicket;
             request.Query.Add("type", "streaming");
@@ -316,7 +354,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
             request.Method = Method.PUT;
             request.Path = Endpoints.VideoReplaceFile;
             request.UrlSegments.Add("clipId", clipId.ToString());

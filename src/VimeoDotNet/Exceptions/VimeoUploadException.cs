@@ -5,7 +5,7 @@ using VimeoDotNet.Net;
 namespace VimeoDotNet.Exceptions
 {
     [Serializable]
-    public class VimeoUploadException : VimeoApiException
+    internal class VimeoUploadException : VimeoApiException
     {
         [NonSerialized] private IUploadRequest _request;
 

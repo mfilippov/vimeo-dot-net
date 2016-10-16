@@ -3,10 +3,28 @@ using VimeoDotNet.Parameters;
 
 namespace VimeoDotNet.Net
 {
+    /// <summary>
+    /// IApiRequestFactory
+    /// </summary>
     public interface IApiRequestFactory
     {
+        /// <summary>
+        /// Return api request
+        /// </summary>
+        /// <returns>Api request</returns>
         IApiRequest GetApiRequest();
+        /// <summary>
+        /// Return api request by AccessToken
+        /// </summary>
+        /// <param name="accessToken">AccessToken</param>
+        /// <returns>Api request</returns>
         IApiRequest GetApiRequest(string accessToken);
+        /// <summary>
+        /// Return api request by ClientId and ClientSecret
+        /// </summary>
+        /// <param name="clientId">ClientId</param>
+        /// <param name="clientSecret">ClientSecret</param>
+        /// <returns>Api request</returns>
         IApiRequest GetApiRequest(string clientId, string clientSecret);
 
 		/// <summary>

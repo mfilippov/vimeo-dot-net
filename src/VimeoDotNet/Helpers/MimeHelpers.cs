@@ -3,7 +3,7 @@ using System.IO;
 
 namespace VimeoDotNet.Helpers
 {
-    public static class MimeHelpers
+    internal static class MimeHelpers
     {
         private const string DEFAULT_CONTENT_TYPE = "application/octet-stream";
 

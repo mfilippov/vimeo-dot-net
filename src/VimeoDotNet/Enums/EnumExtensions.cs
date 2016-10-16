@@ -4,7 +4,7 @@ using System.Reflection;
 namespace VimeoDotNet.Enums
 {
 	[AttributeUsage(AttributeTargets.Field, AllowMultiple=false, Inherited=false)]
-	public class ParameterValueAttribute : Attribute
+	internal class ParameterValueAttribute : Attribute
 	{
 		public string TextValue { get; set; }
 
@@ -14,7 +14,7 @@ namespace VimeoDotNet.Enums
 		}
 	}
 
-	public static class EnumExtensions
+    internal static class EnumExtensions
 	{
 		public static string GetParameterValue(this Enum value)
 		{

@@ -5,6 +5,9 @@ using VimeoDotNet.Helpers;
 
 namespace VimeoDotNet.Net
 {
+    /// <summary>
+    /// Binary content
+    /// </summary>
     [Serializable]
     public class BinaryContent : IDisposable, IBinaryContent
     {
@@ -21,9 +24,18 @@ namespace VimeoDotNet.Net
 
         #region Properties
 
+        /// <summary>
+        /// Original file name
+        /// </summary>
         public string OriginalFileName { get; set; }
+        /// <summary>
+        /// Content type
+        /// </summary>
         public string ContentType { get; set; }
 
+        /// <summary>
+        /// Data
+        /// </summary>
         public Stream Data
         {
             get { return _data; }
@@ -34,10 +46,17 @@ namespace VimeoDotNet.Net
 
         #region Constructors
 
+        /// <summary>
+        /// Binary content
+        /// </summary>
         public BinaryContent()
         {
         }
 
+        /// <summary>
+        /// Binary content
+        /// </summary>
+        /// <param name="filePath">FilePath</param>
         public BinaryContent(string filePath)
         {
             OriginalFileName = Path.GetFileName(filePath);
@@ -45,13 +64,22 @@ namespace VimeoDotNet.Net
             Data = File.OpenRead(filePath);
         }
 
+        /// <summary>
+        /// Binary content
+        /// </summary>
+        /// <param name="data">Data</param>
+        /// <param name="contentType">Content type</param>
         public BinaryContent(Stream data, string contentType)
         {
             ContentType = contentType;
             Data = data;
             disposeStream = false;
         }
-
+        /// <summary>
+        /// Binary content
+        /// </summary>
+        /// <param name="data">Data</param>
+        /// <param name="contentType">Content type</param>
         public BinaryContent(byte[] data, string contentType)
         {
             ContentType = contentType;
@@ -62,28 +90,52 @@ namespace VimeoDotNet.Net
 
         #region Public Functions
 
+        /// <summary>
+        /// Read bytes to byte array
+        /// </summary>
+        /// <param name="startIndex">Start index</param>
+        /// <param name="endIndex">End index</param>
+        /// <returns>Byte array</returns>
         public byte[] Read(int startIndex, int endIndex)
         {
             return ReadAsync(startIndex, endIndex).Result;
         }
 
+        /// <summary>
+        /// Read all bytes to array
+        /// </summary>
+        /// <returns>Byte array</returns>
         public byte[] ReadAll()
         {
             return ReadAllAsync().Result;
         }
 
+        /// <summary>
+        /// Read all bytes to byte array asynchronously
+        /// </summary>
+        /// <returns>Byte array</returns>
         public async Task<byte[]> ReadAllAsync()
         {
             VerifyCanRead(0);
             return await ReadDataStream(Data.Length);
         }
 
+        /// <summary>
+        /// Read bytes to byte array asynchronously
+        /// </summary>
+        /// <param name="startIndex">Start index</param>
+        /// <param name="endIndex">End index</param>
+        /// <returns>Byte array</returns>
         public async Task<byte[]> ReadAsync(long startIndex, long endIndex)
         {
             VerifyCanRead(startIndex);
             return await ReadDataStream(endIndex - startIndex);
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing,
+        /// releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             if (Data != null && disposeStream)

@@ -5,10 +5,13 @@ using VimeoDotNet.Helpers;
 
 namespace VimeoDotNet.Models
 {
+    /// <summary>
+    /// File model
+    /// </summary>
     [Serializable]
     public class File
     {
-        private static readonly IDictionary<string, string> _qualityMappings = new Dictionary<string, string>
+        private static readonly IDictionary<string, string> QualityMappings = new Dictionary<string, string>
         {
             {"mobile", "Mobile"},
             {"hd", "HighDefinition"},
@@ -16,18 +19,48 @@ namespace VimeoDotNet.Models
             {"hls", "Streaming"}
         };
 
+        /// <summary>
+        /// Quality
+        /// </summary>
         public string quality { get; set; }
+
+        /// <summary>
+        /// Type
+        /// </summary>
         public string type { get; set; }
+
+        /// <summary>
+        /// Width
+        /// </summary>
         public int width { get; set; }
+
+        /// <summary>
+        /// Height
+        /// </summary>
         public int height { get; set; }
+
+        /// <summary>
+        /// Expires
+        /// </summary>
         public DateTime? expires { get; set; }
+
+        /// <summary>
+        /// Link
+        /// </summary>
         public string link { get; set; }
+
+        /// <summary>
+        /// LinkSecure
+        /// </summary>
         public string link_secure { get; set; }
 
+        /// <summary>
+        /// FileQuality
+        /// </summary>
         public FileQualityEnum FileQuality
         {
-            get { return ModelHelpers.GetEnumValue<FileQualityEnum>(quality, _qualityMappings); }
-            set { quality = ModelHelpers.GetEnumString(value, _qualityMappings); }
+            get { return ModelHelpers.GetEnumValue<FileQualityEnum>(quality, QualityMappings); }
+            set { quality = ModelHelpers.GetEnumString(value, QualityMappings); }
         }
     }
 }

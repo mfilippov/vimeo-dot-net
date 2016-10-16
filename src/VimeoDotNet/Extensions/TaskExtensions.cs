@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VimeoDotNet.Extensions
 {
-    public static class TaskExtensions
+    internal static class TaskExtensions
     {
         public static TResult RunSynchronouslyWithCurrentCulture<TResult>(this Task<TResult> task)
         {
@@ -87,7 +87,7 @@ namespace VimeoDotNet.Extensions
         }
     }
 
-    public class PreserveCultureAwaiter : INotifyCompletion
+    internal class PreserveCultureAwaiter : INotifyCompletion
     {
         private TaskAwaiter waiter;
         private CultureInfo culture;
@@ -119,7 +119,7 @@ namespace VimeoDotNet.Extensions
         }
     }
 
-    public class PreserveCultureAwaiter<TResult> : INotifyCompletion
+    internal class PreserveCultureAwaiter<TResult> : INotifyCompletion
     {
         private TaskAwaiter<TResult> waiter;
         private CultureInfo culture;

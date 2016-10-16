@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace VimeoDotNet.Helpers
 {
-    public static class ModelHelpers
+    internal static class ModelHelpers
     {
         public static long? ParseModelUriId(string uri)
         {
