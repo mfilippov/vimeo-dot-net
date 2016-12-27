@@ -39,15 +39,15 @@ namespace VimeoDotNet.Models
         /// </summary>
         public int height { get; set; }
 
-		/// <summary>
-		/// File size
-		/// </summary>
-		public long size { get; set; }
+        /// <summary>
+        /// File size
+        /// </summary>
+        public long size { get; set; }
 
-		/// <summary>
-		/// Expires
-		/// </summary>
-		public DateTime? expires { get; set; }
+        /// <summary>
+        /// Expires
+        /// </summary>
+        public DateTime? expires { get; set; }
 
         /// <summary>
         /// Link
