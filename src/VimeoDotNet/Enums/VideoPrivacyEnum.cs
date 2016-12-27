@@ -32,6 +32,10 @@
         /// <summary>
         /// Disable
         /// </summary>
-        Disable
+        Disable,
+        /// <summary>
+        /// Unlisted
+        /// </summary>
+        Unlisted
     }
 }
