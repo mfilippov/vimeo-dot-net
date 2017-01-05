@@ -27,6 +27,11 @@ namespace VimeoDotNet.Models
         /// Height
         /// </summary>
         public int height { get; set; }
+        
+        /// <summary>
+        /// File size
+        /// </summary>
+        public long size { get; set; }
 
         /// <summary>
         /// Expires
