@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Pipes;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using RestSharp;
-using RestSharp.Authenticators;
+using Newtonsoft.Json;
 using VimeoDotNet.Constants;
 
 namespace VimeoDotNet.Net
@@ -16,9 +19,12 @@ namespace VimeoDotNet.Net
         #region Private Fields
 
         private readonly Dictionary<string, string> _hashValues = new Dictionary<string, string>();
-        private readonly Dictionary<string, string> _headers = new Dictionary<string, string>();
         private readonly Dictionary<string, string> _queryString = new Dictionary<string, string>();
         private readonly Dictionary<string, string> _urlSegments = new Dictionary<string, string>();
+        private static readonly JsonSerializerSettings DateFormatSettings = new JsonSerializerSettings
+        {
+            DateFormatString = "yyyy-MM-ddTHH:mm:sszzz"
+        };
 
         private string _path;
 
@@ -50,17 +56,9 @@ namespace VimeoDotNet.Net
         public int Port { get; set; }
 
         /// <summary>
-        ///
-        /// </summary>
-        public IDictionary<string, string> Headers
-        {
-            get { return _headers; }
-        }
-
-        /// <summary>
         /// Method
         /// </summary>
-        public Method Method { get; set; }
+        public HttpMethod Method { get; set; }
 
         /// <summary>
         /// Path
@@ -88,7 +86,7 @@ namespace VimeoDotNet.Net
         /// <summary>
         /// Body
         /// </summary>
-        public object Body { get; set; }
+        public HttpContent Body { get; set; }
 
         /// <summary>
         ///
@@ -123,7 +121,8 @@ namespace VimeoDotNet.Net
         /// <summary>
         /// Rest client
         /// </summary>
-        protected IRestClient Client { get; private set; }
+        protected static readonly HttpClient Client = new HttpClient();
+        
         /// <summary>
         /// Client Id
         /// </summary>
@@ -182,247 +181,187 @@ namespace VimeoDotNet.Net
         #region Public Methods
 
         /// <summary>
-        /// ExecuteRequest
-        /// </summary>
-        /// <returns>Rest response</returns>
-        public IRestResponse ExecuteRequest()
-        {
-            IRestRequest request = PrepareRequest();
-            IRestClient client = PrepareClient();
-
-            IRestResponse response = client.Execute(request);
-            return response;
-        }
-        /// <summary>
         /// Execute request asynchronously
         /// </summary>
         /// <returns>Rest reponse</returns>
-        public async Task<IRestResponse> ExecuteRequestAsync()
+        public async Task<IApiResponse> ExecuteRequestAsync()
         {
-            return await GetAsyncRequestAwaiter();
+            var response = await Client.SendAsync(PrepareRequest());
+            var content = await response.Content.ReadAsStringAsync();
+            return new ApiResponse(response.StatusCode, content, response.Headers);
         }
-        /// <summary>
-        /// Execute request
-        /// </summary>
-        /// <typeparam name="T">Type</typeparam>
-        /// <returns>Rest repons</returns>
-        public IRestResponse<T> ExecuteRequest<T>() where T : new()
-        {
-            IRestRequest request = PrepareRequest();
-            IRestClient client = PrepareClient();
-
-            IRestResponse<T> response = client.Execute<T>(request);
-            return response;
-        }
+       
         /// <summary>
         /// Execute request asynchronously
         /// </summary>
         /// <typeparam name="T">Type</typeparam>
         /// <returns>Rest repons</returns>
-        public async Task<IRestResponse<T>> ExecuteRequestAsync<T>() where T : new()
+        public async Task<IApiResponse<T>> ExecuteRequestAsync<T>() where T : new()
         {
-            return await GetAsyncRequestAwaiter<T>();
+            var response = await Client.SendAsync(PrepareRequest());
+            var content = await response.Content.ReadAsStringAsync();
+            return new ApiResponse<T>(response.StatusCode, content, response.Headers, JsonConvert.DeserializeObject<T>(content, DateFormatSettings));
         }
+
+        
 
         #endregion
 
         #region Private Methods
 
-        #region Async
-
-        /// <summary>
-        /// GetAsyncRequestAwaiter
-        /// </summary>
-        /// <returns>Rest response</returns>
-        protected Task<IRestResponse> GetAsyncRequestAwaiter()
-        {
-            IRestRequest request = PrepareRequest();
-            IRestClient client = PrepareClient();
-
-            var tcs = new TaskCompletionSource<IRestResponse>();
-            client.ExecuteAsync(request, response => tcs.SetResult(response));
-
-            return tcs.Task;
-        }
-
-        /// <summary>
-        /// GetAsyncRequestAwaiter
-        /// </summary>
-        /// <typeparam name="T">Type</typeparam>
-        /// <returns>Rest response</returns>
-        protected Task<IRestResponse<T>> GetAsyncRequestAwaiter<T>() where T : new()
-        {
-            IRestRequest request = PrepareRequest();
-            IRestClient client = PrepareClient();
-
-            var tcs = new TaskCompletionSource<IRestResponse<T>>();
-            client.ExecuteAsync<T>(request, response => tcs.SetResult(response));
-
-            return tcs.Task;
-        }
-
-        #endregion
-
-        /// <summary>
-        /// PrepareClient
-        /// </summary>
-        /// <returns>Rest client</returns>
-        protected IRestClient PrepareClient()
-        {
-            IRestClient client = GetClient();
-            client.Authenticator = GetAuthenticator();
-
-            return client;
-        }
         /// <summary>
         /// PrepareRequest
         /// </summary>
         /// <returns>Rest request</returns>
-        protected IRestRequest PrepareRequest()
+        protected HttpRequestMessage PrepareRequest()
         {
             SetDefaults();
-            IRestClient client = GetClient();
+            var request = new HttpRequestMessage(Method, BuildUrl());
+            
             if (!ExcludeAuthorizationHeader)
             {
-                client.Authenticator = GetAuthenticator();
+                SetAuth(request);
             }
-
-            var request = new RestRequest(Path, Method);
             SetHeaders(request);
-            SetUrlSegments(request);
-            SetQueryParams(request);
-            SetBody(request);
-            SetJsonResponse(request);
-
+            request.Content = Body;
             return request;
         }
-
-        /// <summary>
-        /// Set json response
-        /// </summary>
-        /// <param name="request">Request</param>
-        protected void SetJsonResponse(IRestRequest request)
-        {
-            request.DateFormat = "yyyy-MM-ddTHH:mm:sszzz";
-            request.OnBeforeDeserialization += (IRestResponse response) =>
-            {
-                // Switch response content type to allow deserializer to work properly.
-                response.ContentType = "application/json";
-            };
-        }
-
-        /// <summary>
-        /// Retrun authenticator
-        /// </summary>
-        /// <returns>Authenticator</returns>
-        protected IAuthenticator GetAuthenticator()
-        {
-            if (!string.IsNullOrWhiteSpace(AccessToken))
-            {
-                return GetBearerAuthenticator();
-            }
-            if (!string.IsNullOrWhiteSpace(ClientId) && !string.IsNullOrWhiteSpace(ClientSecret))
-            {
-                return GetBasicAuthenticator();
-            }
-            return null;
-        }
-        /// <summary>
-        /// Retrun bearer authenticator
-        /// </summary>
-        /// <returns>Bearer authenticator</returns>
-        protected IAuthenticator GetBearerAuthenticator()
-        {
-            return new OAuth2AuthorizationRequestHeaderAuthenticator(AccessToken, "Bearer");
-        }
-        /// <summary>
-        /// Retrun basic authenticator
-        /// </summary>
-        /// <returns>Basic authenticator</returns>
-        protected IAuthenticator GetBasicAuthenticator()
-        {
-            string token = string.Format("{0}:{1}", ClientId, ClientSecret);
-            byte[] tokenBytes = Encoding.ASCII.GetBytes(token);
-            string encoded = Convert.ToBase64String(tokenBytes);
-
-            return new OAuth2AuthorizationRequestHeaderAuthenticator(encoded, "Basic");
-        }
-
-        /// <summary>
-        /// Retrun rest client
-        /// </summary>
-        /// <returns>Rest client</returns>
-        protected IRestClient GetClient()
-        {
-            string baseUrl = GetBaseUrl();
-            if (Client == null || Client.BaseUrl.AbsoluteUri != baseUrl)
-            {
-                Client = new RestClient(baseUrl);
-            }
-            return Client;
-        }
-
-        /// <summary>
-        /// Set request url segment
-        /// </summary>
-        /// <param name="request">Request</param>
-        protected void SetUrlSegments(IRestRequest request)
-        {
-            foreach (var segment in UrlSegments)
-            {
-                request.AddUrlSegment(segment.Key, segment.Value);
-            }
-        }
-
+        
         /// <summary>
         /// Set request headers
         /// </summary>
         /// <param name="request">Request</param>
-        protected void SetHeaders(IRestRequest request)
+        protected void SetHeaders(HttpRequestMessage request)
         {
-            if (!Headers.ContainsKey(Request.HeaderContentType) &&
-                (Method == Method.POST || Method == Method.PATCH || Method == Method.PUT))
-            {
-                Headers[Request.HeaderContentType] = "application/x-www-form-urlencoded";
-            }
-            if (!Headers.ContainsKey(Request.HeaderAccepts))
-            {
-                Headers.Add(Request.HeaderAccepts, BuildAcceptsHeader());
-            }
-            foreach (var header in Headers)
-            {
-                request.AddHeader(header.Key, header.Value);
-            }
+            request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse(BuildAcceptsHeader()));
+            request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
         }
-
+        
         /// <summary>
-        /// Set request query params
+        /// Set authentication
         /// </summary>
-        /// <param name="request">Request</param>
-        protected void SetQueryParams(IRestRequest request)
+        protected void SetAuth(HttpRequestMessage request)
         {
-            foreach (var qsParam in Query)
+            if (!string.IsNullOrWhiteSpace(AccessToken))
             {
-                request.AddParameter(qsParam.Key, qsParam.Value);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
             }
+            if (string.IsNullOrWhiteSpace(ClientId) || string.IsNullOrWhiteSpace(ClientSecret))
+                return;
+            var token = $"{ClientId}:{ClientSecret}";
+            var tokenBytes = Encoding.ASCII.GetBytes(token);
+            var encoded = Convert.ToBase64String(tokenBytes);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Basic", encoded);
         }
+        
+//        /// <summary>
+//        /// Set request body
+//        /// </summary>
+//        /// <param name="request">Request</param>
+//        protected void SetBody(HttpRequestMessage request)
+//        {
+//            string mediaType;
+//            
+//            if (!Headers.ContainsKey(Request.HeaderContentType) &&
+//                (Method == HttpMethod.Post || Method.Method == "PATCH" || Method == HttpMethod.Put))
+//            {
+//                mediaType = "application/x-www-form-urlencoded";
+//            }
+//            else
+//            {
+//                mediaType = Headers[Request.HeaderContentRange];
+//            }
+//            
+//            if (Body != null)
+//            {
+//                request.Content = new StringContent(JsonConvert.SerializeObject(Body), Encoding.UTF8, mediaType);
+//            }
+//            else if (BinaryContent != null)
+//            {
+//                request.Content = new ByteArrayContent(BinaryContent, );
+//            }
+//            
+//            foreach (var header in Headers)
+//            {
+//                if (header.Key == Request.HeaderContentType 
+//                    || header.Key == Request.HeaderAccepts 
+//                    || header.Key == Request.HeaderContentLength)
+//                    continue;
+//                request.Headers.Add(header.Key, header.Value);
+//            }
+//        }
+//        
+//        /// <summary>
+//        /// Set json response
+//        /// </summary>
+//        /// <param name="request">Request</param>
+//        protected void SetJsonResponse(HttpRequestMessage request)
+//        {
+//            request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
+//            //request.DateFormat = "yyyy-MM-ddTHH:mm:sszzz";
+//        }
+//        
+//        
 
-        /// <summary>
-        /// Set request body
-        /// </summary>
-        /// <param name="request">Request</param>
-        protected void SetBody(IRestRequest request)
-        {
-            if (Body != null)
-            {
-                request.AddBody(Body);
-                request.RequestFormat = DataFormat.Json;
-            }
-            else if (BinaryContent != null)
-            {
-                request.AddParameter(string.Empty, BinaryContent, ParameterType.RequestBody);
-            }
-        }
+//        /// <summary>
+//        /// Retrun authenticator
+//        /// </summary>
+//        /// <returns>Authenticator</returns>
+//        protected void GetAuthenticator(HttpRequestMessage request)
+//        {
+//            if (!string.IsNullOrWhiteSpace(AccessToken))
+//            {
+//                return GetBearerAuthenticator();
+//            }
+//            if (!string.IsNullOrWhiteSpace(ClientId) && !string.IsNullOrWhiteSpace(ClientSecret))
+//            {
+//                return GetBasicAuthenticator();
+//            }
+//            return null;
+//        }
+////        /// <summary>
+//        /// Retrun bearer authenticator
+//        /// </summary>
+//        /// <returns>Bearer authenticator</returns>
+//        protected IAuthenticator GetBearerAuthenticator()
+//        {
+//            return new OAuth2AuthorizationRequestHeaderAuthenticator(AccessToken, "Bearer");
+//        }
+//        /// <summary>
+//        /// Retrun basic authenticator
+//        /// </summary>
+//        /// <returns>Basic authenticator</returns>
+//        protected IAuthenticator GetBasicAuthenticator()
+//        {
+//            string token = string.Format("{0}:{1}", ClientId, ClientSecret);
+//            byte[] tokenBytes = Encoding.ASCII.GetBytes(token);
+//            string encoded = Convert.ToBase64String(tokenBytes);
+//
+//            return new OAuth2AuthorizationRequestHeaderAuthenticator(encoded, "Basic");
+//        }
+//        /// <summary>
+//        /// Set request url segment
+//        /// </summary>
+//        /// <param name="request">Request</param>
+//        protected void SetUrlSegments(IRestRequest request)
+//        {
+//            foreach (var segment in UrlSegments)
+//            {
+//                request.AddUrlSegment(segment.Key, segment.Value);
+//            }
+//        }
+//
+//        /// <summary>
+//        /// Set request query params
+//        /// </summary>
+//        /// <param name="request">Request</param>
+//        protected void SetQueryParams(IRestRequest request)
+//        {
+//            foreach (var qsParam in Query)
+//            {
+//                request.AddParameter(qsParam.Key, qsParam.Value);
+//            }
+//        }
 
         /// <summary>
         /// Set defaults
@@ -483,6 +422,28 @@ namespace VimeoDotNet.Net
             }
 
             return url;
+        }
+
+        /// <summary>
+        /// Build request URL
+        /// </summary>
+        /// <returns>Request URL</returns>
+        protected string BuildUrl()
+        {
+            var sb = new StringBuilder();
+            sb.Append(GetBaseUrl());
+            var path = Path;
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var urlSegment in UrlSegments)
+            {
+                path = path.Replace($"{{{urlSegment.Key}}}", urlSegment.Value);
+            }
+            sb.Append(path);
+            if (Query.Keys.Count == 0)
+                return sb.ToString();
+            sb.Append("?");
+            sb.Append(string.Join("&", Query.Select(q => $"{q.Key}={q.Value}")));
+            return sb.ToString();
         }
 
         #endregion

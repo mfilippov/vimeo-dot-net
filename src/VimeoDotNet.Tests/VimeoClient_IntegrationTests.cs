@@ -12,31 +12,30 @@ using Xunit;
 
 namespace VimeoDotNet.Tests
 {
-    //[Ignore] // Comment this line to run integration tests.
-    public class VimeoClient_IntegrationTests
+    public class VimeoClientIntegrationTests
     {
-        private VimeoApiTestSettings vimeoSettings;
+        private readonly VimeoApiTestSettings _vimeoSettings;
 
 		private const string TESTFILEPATH = @"Resources\test.mp4";
 		// http://download.wavetlan.com/SVV/Media/HTTP/http-mp4.htm
 
 		private const string TESTTEXTTRACKFILEPATH = @"Resources\test.vtt";
 
-        public VimeoClient_IntegrationTests()
+        public VimeoClientIntegrationTests()
         {
             // Load the settings from a file that is not under version control for security
             // The settings loader will create this file in the bin/ folder if it doesn't exist
-            vimeoSettings = Settings.SettingsLoader.LoadSettings(); 
+            _vimeoSettings = Settings.SettingsLoader.LoadSettings(); 
         }
         
         [Fact]
         public void Integration_VimeoClient_GetReplaceVideoUploadTicket_CanGenerateStreamingTicket()
         {
             // arrange
-            VimeoClient client = CreateAuthenticatedClient();
+            var client = CreateAuthenticatedClient();
 
             // act
-            UploadTicket ticket = client.GetReplaceVideoUploadTicket(vimeoSettings.VideoId);
+            var ticket = client.GetReplaceVideoUploadTicket(_vimeoSettings.VideoId);
 
             // assert
             ticket.ShouldNotBeNull();
@@ -46,10 +45,10 @@ namespace VimeoDotNet.Tests
         public void Integration_VimeoClient_GetUploadTicket_CanGenerateStreamingTicket()
         {
             // arrange
-            VimeoClient client = CreateAuthenticatedClient();
+            var client = CreateAuthenticatedClient();
 
             // act
-            UploadTicket ticket = client.GetUploadTicket();
+            var ticket = client.GetUploadTicket();
 
             // assert
             ticket.ShouldNotBeNull();
@@ -64,7 +63,7 @@ namespace VimeoDotNet.Tests
             using (var file = new BinaryContent(GetFullPath(TESTFILEPATH)))
             {
                 length = file.Data.Length;
-                VimeoClient client = CreateAuthenticatedClient();
+                var client = CreateAuthenticatedClient();
 
                 // act
                 completedRequest = client.UploadEntireFile(file);
@@ -91,7 +90,7 @@ namespace VimeoDotNet.Tests
             using (var file = new BinaryContent(GetFullPath(TESTFILEPATH)))
             {
                 length = file.Data.Length;
-                VimeoClient client = CreateAuthenticatedClient();
+                var client = CreateAuthenticatedClient();
                 // act
                 completedRequest = client.UploadEntireFile(file);
                 completedRequest.AllBytesWritten.ShouldBeTrue();
@@ -111,10 +110,10 @@ namespace VimeoDotNet.Tests
         public void Integration_VimeoClient_GetAccountInformation_RetrievesCurrentAccountInfo()
         {
             // arrange
-            VimeoClient client = CreateAuthenticatedClient();
+            var client = CreateAuthenticatedClient();
 
             // act
-            User account = client.GetAccountInformation();
+            var account = client.GetAccountInformation();
 
             // assert
             account.ShouldNotBeNull();
@@ -124,16 +123,16 @@ namespace VimeoDotNet.Tests
 		public void Integration_VimeoClient_UpdateAccountInformation_UpdatesCurrentAccountInfo()
 		{
 			// first, ensure we can retrieve the current user...
-			VimeoClient client = CreateAuthenticatedClient();
-			User original = client.GetAccountInformation();
+			var client = CreateAuthenticatedClient();
+			var original = client.GetAccountInformation();
 			original.ShouldNotBeNull();
 
 			// next, update the user record with some new values...
-			string testName = "King Henry VIII";
-			string testBio = "";
-			string testLocation = "England";
+			var testName = "King Henry VIII";
+			var testBio = "";
+			var testLocation = "England";
 
-			User updated = client.UpdateAccountInformation(new EditUserParameters
+			var updated = client.UpdateAccountInformation(new EditUserParameters
 			{
 				Name = testName,
 				Bio = testBio,
@@ -158,7 +157,7 @@ namespace VimeoDotNet.Tests
 		        updated.location.ShouldEqual(testLocation);
 
 			// restore the original values...
-			User final = client.UpdateAccountInformation(new Parameters.EditUserParameters
+			var final = client.UpdateAccountInformation(new Parameters.EditUserParameters
 			{
 				Name = original.name ?? string.Empty,
 				Bio = original.bio ?? string.Empty,
@@ -199,24 +198,24 @@ namespace VimeoDotNet.Tests
         public void Integration_VimeoClient_GetUserInformation_RetrievesUserInfo()
         {
             // arrange
-            VimeoClient client = CreateAuthenticatedClient();
+            var client = CreateAuthenticatedClient();
 
             // act
-            User user = client.GetUserInformation(vimeoSettings.UserId);
+            var user = client.GetUserInformation(_vimeoSettings.UserId);
 
             // assert
             user.ShouldNotBeNull();
-            user.id.Value.ShouldEqual(vimeoSettings.UserId);
+            user.id.Value.ShouldEqual(_vimeoSettings.UserId);
         }
 
         [Fact]
         public void Integration_VimeoClient_GetAccountVideos_RetrievesCurrentAccountVideos()
         {
             // arrange
-            VimeoClient client = CreateAuthenticatedClient();
+            var client = CreateAuthenticatedClient();
 
             // act
-            Paginated<Video> videos = client.GetUserVideos(vimeoSettings.UserId); 
+            var videos = client.GetUserVideos(_vimeoSettings.UserId); 
 
             // assert
             videos.ShouldNotBeNull();
@@ -226,10 +225,10 @@ namespace VimeoDotNet.Tests
         public async Task Integration_VimeoClient_GetAccountVideos_SecondPage()
         {
             // arrange
-            VimeoClient client = CreateAuthenticatedClient();
+            var client = CreateAuthenticatedClient();
 
             // act
-            Paginated<Video> videos = await client.GetVideosAsync(page: 2, perPage: 5);
+            var videos = await client.GetVideosAsync(page: 2, perPage: 5);
 
             // assert
             videos.ShouldNotBeNull();
@@ -239,10 +238,10 @@ namespace VimeoDotNet.Tests
         public void Integration_VimeoClient_GetAccountVideo_RetrievesVideo()
         {
             // arrange
-            VimeoClient client = CreateAuthenticatedClient();
+            var client = CreateAuthenticatedClient();
 
             // act
-            Video video = client.GetVideo(vimeoSettings.VideoId);
+            var video = client.GetVideo(_vimeoSettings.VideoId);
 
             // assert
             video.ShouldNotBeNull();
@@ -253,10 +252,10 @@ namespace VimeoDotNet.Tests
         public void Integration_VimeoClient_GetAccountAlbumVideos_RetrievesCurrentAccountAlbumVideos()
         {
             // arrange
-            VimeoClient client = CreateAuthenticatedClient();
+            var client = CreateAuthenticatedClient();
 
             // act
-            Paginated<Video> videos = client.GetAlbumVideos(vimeoSettings.AlbumId, 1, null);
+            var videos = client.GetAlbumVideos(_vimeoSettings.AlbumId, 1, null);
 
             // assert
             videos.ShouldNotBeNull();
@@ -267,10 +266,10 @@ namespace VimeoDotNet.Tests
         public void Integration_VimeoClient_GetAccountAlbumVideo_RetrievesVideo()
         {
             // arrange
-            VimeoClient client = CreateAuthenticatedClient();
+            var client = CreateAuthenticatedClient();
 
             // act
-            Video video = client.GetAlbumVideo(vimeoSettings.AlbumId, vimeoSettings.VideoId);
+            var video = client.GetAlbumVideo(_vimeoSettings.AlbumId, _vimeoSettings.VideoId);
 
             // assert
             video.ShouldNotBeNull();
@@ -280,10 +279,10 @@ namespace VimeoDotNet.Tests
         public void Integration_VimeoClient_GetUserAlbumVideos_RetrievesUserAlbumVideos()
         {
             // arrange
-            VimeoClient client = CreateAuthenticatedClient();
+            var client = CreateAuthenticatedClient();
 
             // act
-            Paginated<Video> videos = client.GetUserAlbumVideos(vimeoSettings.UserId, vimeoSettings.AlbumId);
+            var videos = client.GetUserAlbumVideos(_vimeoSettings.UserId, _vimeoSettings.AlbumId);
 
             // assert
             videos.ShouldNotBeNull();;
@@ -294,10 +293,10 @@ namespace VimeoDotNet.Tests
         public void Integration_VimeoClient_GetUserAlbumVideo_RetrievesVideo()
         {
             // arrange
-            VimeoClient client = CreateAuthenticatedClient();
+            var client = CreateAuthenticatedClient();
 
             // act
-            Video video = client.GetUserAlbumVideo(vimeoSettings.UserId, vimeoSettings.AlbumId, vimeoSettings.VideoId);
+            var video = client.GetUserAlbumVideo(_vimeoSettings.UserId, _vimeoSettings.AlbumId, _vimeoSettings.VideoId);
 
             // assert
             video.ShouldNotBeNull();
@@ -307,10 +306,10 @@ namespace VimeoDotNet.Tests
 		public void Integration_VimeoClient_GetAccountAlbums_NotNull()
 		{
 			// arrange
-			VimeoClient client = CreateAuthenticatedClient();
+			var client = CreateAuthenticatedClient();
 
 			// act
-			Paginated<Album> albums = client.GetAlbums();
+			var albums = client.GetAlbums();
 
 			// assert
 			albums.ShouldNotBeNull();
@@ -319,24 +318,24 @@ namespace VimeoDotNet.Tests
 		[Fact]
 		public void Integration_VimeoClient_AlbumVideoManagement()
 		{
-			VimeoClient client = CreateAuthenticatedClient();
+			var client = CreateAuthenticatedClient();
 
 			// assume this album and video are configured in the current account...
-			long albumId = vimeoSettings.AlbumId;
-			long videoId = vimeoSettings.VideoId;
+			var albumId = _vimeoSettings.AlbumId;
+			var videoId = _vimeoSettings.VideoId;
 
 			// then remove it...
-			bool isRemoved = client.RemoveFromAlbum(albumId, videoId);
-			Video removedVideo = client.GetAlbumVideo(albumId, videoId);
-			bool isAbsent = removedVideo == null;
+			var isRemoved = client.RemoveFromAlbum(albumId, videoId);
+			var removedVideo = client.GetAlbumVideo(albumId, videoId);
+			var isAbsent = removedVideo == null;
 
 			isRemoved.ShouldBeTrue("RemoveFromAlbum failed.");
 			isRemoved.ShouldEqual(isAbsent, "Returned value does not match actual abscence of video.");
 
 		    // add it...
-		    bool isAdded = client.AddToAlbum(albumId, videoId);
-		    Video addedVideo = client.GetAlbumVideo(albumId, videoId);
-		    bool isPresent = addedVideo != null;
+		    var isAdded = client.AddToAlbum(albumId, videoId);
+		    var addedVideo = client.GetAlbumVideo(albumId, videoId);
+		    var isPresent = addedVideo != null;
 
 		    isAdded.ShouldBeTrue("AddToAlbum failed.");
 		    isAdded.ShouldEqual(isPresent, "Returned value does not match actual presence of video.");
@@ -345,13 +344,13 @@ namespace VimeoDotNet.Tests
 		[Fact]
 		public void Integration_VimeoClient_AlbumManagement()
 		{
-			VimeoClient client = CreateAuthenticatedClient();
+			var client = CreateAuthenticatedClient();
 		
 			// create a new album...
-			string originalName = "Unit Test Album";
-			string originalDesc = "This album was created via an automated test, and should be deleted momentarily...";
+			const string originalName = "Unit Test Album";
+			const string originalDesc = "This album was created via an automated test, and should be deleted momentarily...";
 
-			Album newAlbum = client.CreateAlbum(new EditAlbumParameters()
+			var newAlbum = client.CreateAlbum(new EditAlbumParameters()
 			{
 				Name = originalName,
 				Description = originalDesc,
@@ -366,13 +365,13 @@ namespace VimeoDotNet.Tests
 		    newAlbum.description.ShouldEqual(originalDesc);
 
 		        // retrieve albums for the current user...there should be at least one now...
-			Paginated<Album> albums = client.GetAlbums();
+			var albums = client.GetAlbums();
 
 			albums.total.ShouldBeGreaterThan(0);
 
 			// update the album...
-			string updatedName = "Unit Test Album (Updated)";
-			Album updatedAlbum = client.UpdateAlbum(newAlbum.GetAlbumId().Value, new EditAlbumParameters()
+			const string updatedName = "Unit Test Album (Updated)";
+			var updatedAlbum = client.UpdateAlbum(newAlbum.GetAlbumId().Value, new EditAlbumParameters()
 			{
 				Name = updatedName,
 				Privacy = EditAlbumPrivacyOption.Anybody
@@ -381,21 +380,19 @@ namespace VimeoDotNet.Tests
 			updatedAlbum.name.ShouldEqual(updatedName);
 
 			// delete the album...
-			bool isDeleted = client.DeleteAlbum(updatedAlbum.GetAlbumId().Value);
+			var isDeleted = client.DeleteAlbum(updatedAlbum.GetAlbumId().Value);
 
 			isDeleted.ShouldBeTrue();
-
-
 		}
 
 		[Fact]
 		public void Integration_VimeoClient_GetUserAlbums_NotNull()
 		{
 			// arrange
-			VimeoClient client = CreateAuthenticatedClient();
+			var client = CreateAuthenticatedClient();
 
 			// act
-			Paginated<Album> albums = client.GetAlbums(vimeoSettings.UserId);
+			var albums = client.GetAlbums(_vimeoSettings.UserId);
 
 			// assert
 			albums.ShouldNotBeNull();
@@ -405,10 +402,10 @@ namespace VimeoDotNet.Tests
 		public async Task Integration_VimeoClient_GetTextTracksAsync()
 		{
 			// arrange
-			VimeoClient client = CreateAuthenticatedClient();
+			var client = CreateAuthenticatedClient();
 
 			// act
-			var texttracks = await client.GetTextTracksAsync(vimeoSettings.VideoId);
+			var texttracks = await client.GetTextTracksAsync(_vimeoSettings.VideoId);
 			
 			// assert
 			texttracks.ShouldNotBeNull();
@@ -418,10 +415,10 @@ namespace VimeoDotNet.Tests
 		public async Task Integration_VimeoClient_GetTextTrackAsync()
 		{
 			// arrange
-			VimeoClient client = CreateAuthenticatedClient();
+			var client = CreateAuthenticatedClient();
 
 			// act
-			var texttrack = await client.GetTextTrackAsync(vimeoSettings.VideoId, vimeoSettings.TextTrackId);
+			var texttrack = await client.GetTextTrackAsync(_vimeoSettings.VideoId, _vimeoSettings.TextTrackId);
 
 			// assert
 			texttrack.ShouldNotBeNull();
@@ -431,8 +428,8 @@ namespace VimeoDotNet.Tests
 		public async Task Integration_VimeoClient_UpdateTextTrackAsync()
 		{
 			// arrange
-			VimeoClient client = CreateAuthenticatedClient();
-			var original = await client.GetTextTrackAsync(vimeoSettings.VideoId, vimeoSettings.TextTrackId);
+			var client = CreateAuthenticatedClient();
+			var original = await client.GetTextTrackAsync(_vimeoSettings.VideoId, _vimeoSettings.TextTrackId);
 
 			original.ShouldNotBeNull();
 
@@ -444,8 +441,8 @@ namespace VimeoDotNet.Tests
 			var testActive = false;
 
 			var updated = await client.UpdateTextTrackAsync(
-									vimeoSettings.VideoId,
-									vimeoSettings.TextTrackId,
+									_vimeoSettings.VideoId,
+									_vimeoSettings.TextTrackId,
 									new TextTrack
 									{
 										name = testName,
@@ -463,8 +460,8 @@ namespace VimeoDotNet.Tests
 
 			// restore the original values...
 			var final = await client.UpdateTextTrackAsync(
-									vimeoSettings.VideoId,
-									vimeoSettings.TextTrackId,
+									_vimeoSettings.VideoId,
+									_vimeoSettings.TextTrackId,
 									new TextTrack
 									{
 										name = original.name,
@@ -508,14 +505,14 @@ namespace VimeoDotNet.Tests
 		public async Task Integration_VimeoClient_UploadTextTrackFileAsync()
 		{
 			// arrange
-			VimeoClient client = CreateAuthenticatedClient();
+			var client = CreateAuthenticatedClient();
 			TextTrack completedRequest;
 			using (var file = new BinaryContent(GetFullPath(TESTTEXTTRACKFILEPATH)))
 			{
 				// act
 				completedRequest = await client.UploadTextTrackFileAsync(
 								file,
-								vimeoSettings.VideoId,
+								_vimeoSettings.VideoId,
 								new TextTrack
 								{
 									active = false,
@@ -532,7 +529,7 @@ namespace VimeoDotNet.Tests
 		    // cleanup
 		    var uri = completedRequest.uri;
 		    var trackId = System.Convert.ToInt64(uri.Substring(uri.LastIndexOf('/') + 1));
-		    await client.DeleteTextTrackAsync(vimeoSettings.VideoId, trackId);
+		    await client.DeleteTextTrackAsync(_vimeoSettings.VideoId, trackId);
 		}
 
 		[Fact]
@@ -540,12 +537,12 @@ namespace VimeoDotNet.Tests
 		{
 			// arrange
 			TextTrack completedRequest;
-			VimeoClient client = CreateAuthenticatedClient();
+			var client = CreateAuthenticatedClient();
 			using (var file = new BinaryContent(GetFullPath(TESTTEXTTRACKFILEPATH)))
 			{
 				completedRequest = await client.UploadTextTrackFileAsync(
 								file,
-								vimeoSettings.VideoId,
+								_vimeoSettings.VideoId,
 								new TextTrack
 								{
 									active = false,
@@ -559,21 +556,21 @@ namespace VimeoDotNet.Tests
 			var uri = completedRequest.uri;
 			var trackId = System.Convert.ToInt64(uri.Substring(uri.LastIndexOf('/') + 1));
 			// act
-			await client.DeleteTextTrackAsync(vimeoSettings.VideoId, trackId);
+			await client.DeleteTextTrackAsync(_vimeoSettings.VideoId, trackId);
 
 			//assert
-			var texttrack = await client.GetTextTrackAsync(vimeoSettings.VideoId, trackId);
+			var texttrack = await client.GetTextTrackAsync(_vimeoSettings.VideoId, trackId);
 			texttrack.ShouldBeNull();
 		}
 
 		private VimeoClient CreateUnauthenticatedClient()
         {
-            return new VimeoClient(vimeoSettings.ClientId, vimeoSettings.ClientSecret);
+            return new VimeoClient(_vimeoSettings.ClientId, _vimeoSettings.ClientSecret);
         }
 
         private VimeoClient CreateAuthenticatedClient()
         {
-            return new VimeoClient(vimeoSettings.AccessToken);
+            return new VimeoClient(_vimeoSettings.AccessToken);
         }
 
         private string GetFullPath(string relativePath)

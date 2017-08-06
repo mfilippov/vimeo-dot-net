@@ -11,46 +11,67 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Activities
         /// </summary>
-        public string activities { get; set; }
+        public UserConnection activities { get; set; }
         /// <summary>
         /// Albums
         /// </summary>
-        public string albums { get; set; }
+        public UserConnection albums { get; set; }
         /// <summary>
         /// Channels
         /// </summary>
-        public string channels { get; set; }
+        public UserConnection channels { get; set; }
         /// <summary>
         /// Feed
         /// </summary>
-        public string feed { get; set; }
+        public UserConnection feed { get; set; }
         /// <summary>
         /// Followers
         /// </summary>
-        public string followers { get; set; }
+        public UserConnection followers { get; set; }
         /// <summary>
         /// Following
         /// </summary>
-        public string following { get; set; }
+        public UserConnection following { get; set; }
         /// <summary>
         /// Groups
         /// </summary>
-        public string groups { get; set; }
+        public UserConnection groups { get; set; }
         /// <summary>
         /// Likes
         /// </summary>
-        public string likes { get; set; }
+        public UserConnection likes { get; set; }
         /// <summary>
         /// Portfolios
         /// </summary>
-        public string portfolios { get; set; }
+        public UserConnection portfolios { get; set; }
         /// <summary>
         /// Videos
         /// </summary>
-        public string videos { get; set; }
+        public UserConnection videos { get; set; }
         /// <summary>
         /// Watch later
         /// </summary>
-        public string watchlater { get; set; }
+        public UserConnection watchlater { get; set; }
+    }
+
+    /// <summary>
+    /// User connection
+    /// </summary>
+    public class UserConnection
+    {
+        /// <summary>
+        /// URI
+        /// </summary>
+        public string uri { get; set; }
+        
+        /// <summary>
+        /// Options
+        /// </summary>
+        public string[] options { get; set; }
+
+        /// <summary>
+        /// Total
+        /// </summary>
+        public int total { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using RestSharp;
+using System.Net.Http;
 using VimeoDotNet.Parameters;
 
 namespace VimeoDotNet.Net
@@ -49,7 +49,7 @@ namespace VimeoDotNet.Net
         /// <param name="urlSubstitutions">Dictionary containing url parameter keys and values. Continuing above example, key would be "userId", value would be "12345".</param>
         /// <param name="additionalParameters">IParameterProvider that returns any other parameters the API method accepts. Can be null for no parameters, or use ParameterDictionary if typed provider not available.</param>
         /// <returns>A ready to execute IApiRequest.</returns>
-        public IApiRequest AuthorizedRequest(string accessToken, Method method, string endpoint, IDictionary<string, string> urlSubstitutions = null, IParameterProvider additionalParameters = null)
+        public IApiRequest AuthorizedRequest(string accessToken, HttpMethod method, string endpoint, IDictionary<string, string> urlSubstitutions = null, IParameterProvider additionalParameters = null)
 		{
 			// Verify the provided parameters at least have a chance of succeeding, otherwise, exit early via exception...
 			VerifyAccessToken(accessToken);

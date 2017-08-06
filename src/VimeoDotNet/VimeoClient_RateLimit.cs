@@ -1,7 +1,8 @@
-﻿using RestSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
+using VimeoDotNet.Net;
 
 namespace VimeoDotNet
 {
@@ -14,12 +15,9 @@ namespace VimeoDotNet
 		{
 			get
 			{
-				if (_headers != null)
-				{
-					var v = _headers.FirstOrDefault(h => h.Name.Equals("X-RateLimit-Limit"));
-					return Convert.ToInt64(v != null ? v.Value.ToString() : "0");
-				}
-				return 0;
+				if (_headers == null || !_headers.Contains("X-RateLimit-Limit"))
+					return 0;
+				return Convert.ToInt64(_headers.GetValues("X-RateLimit-Limit").First());
 			}
 		}
 
@@ -30,12 +28,9 @@ namespace VimeoDotNet
 		{
 			get
 			{
-				if (_headers != null)
-				{
-					var v = _headers.FirstOrDefault(h => h.Name.Equals("X-RateLimit-Remaining"));
-					return Convert.ToInt64(v != null ? v.Value.ToString() : "0");
-				}
-				return 0;
+				if (_headers == null || !_headers.Contains("X-RateLimit-Remaining"))
+					return 0;
+				return Convert.ToInt64(_headers.GetValues("X-RateLimit-Remaining").First());
 			}
 		}
 
@@ -46,20 +41,14 @@ namespace VimeoDotNet
 		{
 			get
 			{
-				if (_headers != null)
-				{
-					var v = _headers.FirstOrDefault(h => h.Name.Equals("X-RateLimit-Reset"));
-					if (v != null)
-					{
-						return DateTime.Parse(v.Value.ToString());
-					}
-				}
-				return DateTime.UtcNow;
+				if (_headers == null || !_headers.Contains("X-RateLimit-Reset"))
+					return DateTime.UtcNow;
+				return DateTime.Parse(_headers.GetValues("X-RateLimit-Reset").First());
 			}
 		}
 
-		private IList<Parameter> _headers = null;
-		private void UpdateRateLimit(IRestResponse response)
+		private HttpResponseHeaders _headers = null;
+		private void UpdateRateLimit(IApiResponse response)
 		{
 			_headers = response.Headers;
 		}

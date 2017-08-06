@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using RestSharp;
-using RestSharp.Extensions.MonoHttp;
 using VimeoDotNet.Constants;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
@@ -86,7 +86,7 @@ namespace VimeoDotNet.Authorization
         public async Task<AccessTokenResponse> GetAccessTokenAsync(string authorizationCode, string redirectUri)
         {
             ApiRequest request = BuildAccessTokenRequest(authorizationCode, redirectUri);
-            IRestResponse<AccessTokenResponse> result = await request.ExecuteRequestAsync<AccessTokenResponse>();
+            IApiResponse<AccessTokenResponse> result = await request.ExecuteRequestAsync<AccessTokenResponse>();
             return result.Data;
         }
 
@@ -123,7 +123,7 @@ namespace VimeoDotNet.Authorization
             }
 
             var request = new ApiRequest(ClientId, ClientSecret);
-            request.Method = Method.POST;
+            request.Method = HttpMethod.Post;
             request.Path = Endpoints.AccessToken;
             SetAccessTokenQueryParams(request, authorizationCode, redirectUri);
 
@@ -201,7 +201,8 @@ namespace VimeoDotNet.Authorization
                 {
                     sb.Append("&");
                 }
-                sb.AppendFormat("{0}={1}", HttpUtility.UrlEncode(qsParam.Key), HttpUtility.UrlEncode(qsParam.Value));
+                
+                sb.AppendFormat("{0}={1}", WebUtility.UrlEncode(qsParam.Key), WebUtility.UrlEncode(qsParam.Value));
             }
             sb.Insert(0, "?");
             return sb.ToString();

@@ -1,6 +1,6 @@
-﻿using RestSharp;
-using System;
+﻿using System;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using VimeoDotNet.Constants;
 using VimeoDotNet.Exceptions;
@@ -21,8 +21,8 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateTextTracksRequest(videoId);
-                IRestResponse<TextTracks> response = await request.ExecuteRequestAsync<TextTracks>();
+                var request = GenerateTextTracksRequest(videoId);
+                var response = await request.ExecuteRequestAsync<TextTracks>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving text tracks for video.", HttpStatusCode.NotFound);
 
@@ -52,8 +52,8 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateTextTracksRequest(videoId, trackId);
-                IRestResponse<TextTrack> response = await request.ExecuteRequestAsync<TextTrack>();
+                var request = GenerateTextTracksRequest(videoId, trackId);
+                var response = await request.ExecuteRequestAsync<TextTrack>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving text track for video.", HttpStatusCode.NotFound);
 
@@ -92,16 +92,14 @@ namespace VimeoDotNet
             }
 
             TextTrack ticket = await GetUploadTextTrackTicketAsync(videoId, track);
-
             IApiRequest request = ApiRequestFactory.GetApiRequest();
-            request.Method = Method.PUT;
+            request.Method = HttpMethod.Put;
             request.ExcludeAuthorizationHeader = true;
             request.Path = ticket.link;
-            request.Headers.Add(Request.HeaderContentType, fileContent.ContentType);
-            request.Headers.Add(Request.HeaderContentLength, fileContent.Data.Length.ToString());
-            request.BinaryContent = await fileContent.ReadAllAsync();
+            
+            request.Body = new ByteArrayContent(await fileContent.ReadAllAsync());
 
-            IRestResponse response = await request.ExecuteRequestAsync();
+            var response = await request.ExecuteRequestAsync();
             CheckStatusCodeError(null, response, "Error uploading text track file.", HttpStatusCode.BadRequest);
 
             return ticket;
@@ -118,8 +116,8 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateUpdateTextTrackRequest(videoId, trackId, track);
-                IRestResponse<TextTrack> response = await request.ExecuteRequestAsync<TextTrack>();
+                var request = GenerateUpdateTextTrackRequest(videoId, trackId, track);
+                var response = await request.ExecuteRequestAsync<TextTrack>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error updating text track for video.", HttpStatusCode.NotFound);
 
@@ -149,8 +147,8 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateDeleteTextTrackRequest(videoId, trackId);
-                IRestResponse<TextTrack> response = await request.ExecuteRequestAsync<TextTrack>();
+                var request = GenerateDeleteTextTrackRequest(videoId, trackId);
+                var response = await request.ExecuteRequestAsync<TextTrack>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error updating text track for video.", HttpStatusCode.NotFound);
             }
@@ -168,9 +166,8 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateUploadTextTrackTicketRequest(clipId, track);
-
-                IRestResponse<TextTrack> response = await request.ExecuteRequestAsync<TextTrack>();
+                var request = GenerateUploadTextTrackTicketRequest(clipId, track);
+                var response = await request.ExecuteRequestAsync<TextTrack>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(null, response, "Error generating upload text track ticket.");
 
@@ -191,7 +188,7 @@ namespace VimeoDotNet
             ThrowIfUnauthorized();
 
             IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
-            request.Method = Method.POST;
+            request.Method = HttpMethod.Post;
             request.Path = Endpoints.TextTracks;
             request.UrlSegments.Add("clipId", clipId.ToString());
 
@@ -220,7 +217,7 @@ namespace VimeoDotNet
             ThrowIfUnauthorized();
 
             IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
-            request.Method = Method.PATCH;
+            request.Method = new HttpMethod("PATCH");
             request.Path = Endpoints.TextTrack;
             request.UrlSegments.Add("clipId", clipId.ToString());
             request.UrlSegments.Add("trackId", trackId.ToString());
@@ -251,7 +248,7 @@ namespace VimeoDotNet
 
             IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
             string endpoint = trackId.HasValue ? Endpoints.TextTrack : Endpoints.TextTracks;
-            request.Method = Method.GET;
+            request.Method = HttpMethod.Get;
             request.Path = endpoint;
 
             request.UrlSegments.Add("clipId", clipId.ToString());
@@ -268,7 +265,7 @@ namespace VimeoDotNet
 
             IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
             string endpoint = Endpoints.TextTrack;
-            request.Method = Method.DELETE;
+            request.Method = HttpMethod.Delete;
             request.Path = endpoint;
 
             request.UrlSegments.Add("clipId", clipId.ToString());
