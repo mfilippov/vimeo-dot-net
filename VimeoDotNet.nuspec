@@ -21,7 +21,7 @@
             <tags>vimeo, async</tags>
             <dependencies>
                 <group>
-                    <dependency id="RestSharp" version="105.1.0" />
+                    <dependency id="RestSharp" version="105.2.3" />
                 </group>
             </dependencies>
         </metadata>
