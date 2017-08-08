@@ -81,9 +81,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AuthorizationClientAsyncTests.cs" />
     <Compile Include="Settings\SettingsLoader.cs" />
     <Compile Include="Settings\VimeoApiTestSettings.cs" />
-    <Compile Include="VimeoClient_IntegrationTests.cs" />
+    <Compile Include="VimeoClientAsyncTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

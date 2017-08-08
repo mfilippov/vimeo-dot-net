@@ -73,10 +73,39 @@ namespace VimeoDotNet.Authorization
             return result.Content;
         }
 
+        /// <inheritdoc />
+        public async Task<AccessTokenResponse> GetUnauthenticatedTokenAsync()
+        {
+            var request = BuildUnauthenticatedTokenRequest();
+            var result = await request.ExecuteRequestAsync<AccessTokenResponse>();
+            return result.Content;
+        }
+
         #endregion
 
         #region Private Methods
 
+        private ApiRequest BuildUnauthenticatedTokenRequest(List<string> scopes = null)
+        {
+            if (string.IsNullOrWhiteSpace(ClientId))
+                throw new InvalidOperationException("Authorization.ClientId should be a non-null, non-whitespace string");
+            if (string.IsNullOrWhiteSpace(ClientSecret))
+                throw new InvalidOperationException(
+                    "Authorization.ClientSecret should be a non-null, non-whitespace string");
+            var request = new ApiRequest(ClientId, ClientSecret)
+            {
+                Method = HttpMethod.Post,
+                Path = Endpoints.AuthorizeClient
+            };
+            var parameters = new Dictionary<string, string>
+            {
+                ["grant_type"] = "client_credentials"
+            };
+            if (scopes != null)
+                parameters["scope"] = string.Join(" ", scopes);
+            request.Body = new FormUrlEncodedContent(parameters);
+            return request;
+        }
         /// <summary>
         /// Build access token request
         /// </summary>

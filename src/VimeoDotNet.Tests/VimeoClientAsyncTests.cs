@@ -11,7 +11,7 @@ using Xunit;
 
 namespace VimeoDotNet.Tests
 {
-    public class VimeoClientIntegrationTests
+    public class VimeoClientAsyncTests
     {
         private readonly VimeoApiTestSettings _vimeoSettings;
 
@@ -20,7 +20,7 @@ namespace VimeoDotNet.Tests
 
 		private const string Testtexttrackfilepath = @"Resources\test.vtt";
 
-        public VimeoClientIntegrationTests()
+        public VimeoClientAsyncTests()
         {
             // Load the settings from a file that is not under version control for security
             // The settings loader will create this file in the bin/ folder if it doesn't exist

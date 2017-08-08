@@ -6,6 +6,7 @@ namespace VimeoDotNet.Authorization
 {
     /// <summary>
     /// IAuthorizationClient
+    /// Additional info https://developer.vimeo.com/api/authentication
     /// </summary>
     public interface IAuthorizationClient
     {
@@ -23,6 +24,11 @@ namespace VimeoDotNet.Authorization
         /// <param name="redirectUri">RedirectUri</param>
         /// <returns>Access token response</returns>
         Task<AccessTokenResponse> GetAccessTokenAsync(string authorizationCode, string redirectUri);
+        /// <summary>
+        /// Return unauthenticated token
+        /// </summary>
+        /// <returns>Access token response</returns>
+        Task<AccessTokenResponse> GetUnauthenticatedTokenAsync();
         /// <summary>
         /// GetAuthorizationEndpoint
         /// </summary>
