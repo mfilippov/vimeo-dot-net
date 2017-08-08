@@ -198,7 +198,8 @@ namespace VimeoDotNet.Net
         /// <returns>Rest repons</returns>
         public async Task<IApiResponse<T>> ExecuteRequestAsync<T>() where T : new()
         {
-            var response = await Client.SendAsync(PrepareRequest());
+            var request = PrepareRequest();
+            var response = await Client.SendAsync(request);
             var content = await response.Content.ReadAsStringAsync();
             try
             {

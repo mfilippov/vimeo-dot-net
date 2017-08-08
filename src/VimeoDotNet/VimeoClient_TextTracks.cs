@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -216,28 +217,31 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
+            var request = ApiRequestFactory.GetApiRequest(AccessToken);
             request.Method = new HttpMethod("PATCH");
             request.Path = Endpoints.TextTrack;
             request.UrlSegments.Add("clipId", clipId.ToString());
             request.UrlSegments.Add("trackId", trackId.ToString());
 
-            if (track != null)
+            if (track == null) 
+                return request;
+            var parameters = new Dictionary<string, string>
             {
-                request.Query.Add("active", track.active.ToString().ToLower());
-                if (track.name != null)
-                {
-                    request.Query.Add("name", track.name);
-                }
-                if (track.language != null)
-                {
-                    request.Query.Add("language", track.language);
-                }
-                if (track.type != null)
-                {
-                    request.Query.Add("type", track.type);
-                }
+                ["active"] = track.active.ToString().ToLower()
+            };
+            if (track.name != null)
+            {
+                parameters["name"] = track.name;
             }
+            if (track.language != null)
+            {
+                parameters["language"] =track.language;
+            }
+            if (track.type != null)
+            {
+                parameters["type"] = track.type;
+            }
+            request.Body = new FormUrlEncodedContent(parameters);
 
             return request;
         }
