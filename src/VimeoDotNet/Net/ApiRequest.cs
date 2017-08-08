@@ -200,10 +200,17 @@ namespace VimeoDotNet.Net
         {
             var response = await Client.SendAsync(PrepareRequest());
             var content = await response.Content.ReadAsStringAsync();
-            return new ApiResponse<T>(response.StatusCode, content, response.Headers, JsonConvert.DeserializeObject<T>(content, DateFormatSettings));
+            try
+            {
+                return new ApiResponse<T>(response.StatusCode, content, response.Headers,
+                    JsonConvert.DeserializeObject<T>(content, DateFormatSettings));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return null;
         }
-
-        
 
         #endregion
 

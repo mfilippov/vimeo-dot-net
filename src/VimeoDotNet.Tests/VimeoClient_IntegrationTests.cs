@@ -245,7 +245,7 @@ namespace VimeoDotNet.Tests
 
             // assert
             video.ShouldNotBeNull();
-            video.pictures.Any(a => a.uri != null).ShouldBeTrue();
+	        video.pictures.uri.ShouldNotBeNull();
         }
 
         [Fact]

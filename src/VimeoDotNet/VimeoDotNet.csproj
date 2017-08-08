@@ -56,6 +56,7 @@
     <Compile Include="Helpers\MimeHelpers.cs" />
     <Compile Include="IVimeoClient.cs" />
     <Compile Include="IVimeoClientFactory.cs" />
+    <Compile Include="Models\AlbumConnectionsEntry.cs" />
     <Compile Include="Models\Download.cs" />
     <Compile Include="Models\EmbedPresets.cs" />
     <Compile Include="Models\Pictures.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Models\Size.cs" />
     <Compile Include="Models\TextTrack.cs" />
     <Compile Include="Models\TextTracks.cs" />
+    <Compile Include="Models\UserConnectionsEntry.cs" />
     <Compile Include="Models\VideoUpdateMetadata.cs" />
     <Compile Include="Net\IApiResponse.cs" />
     <Compile Include="Parameters\EditAlbumParameters.cs" />
