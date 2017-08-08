@@ -1,4 +1,6 @@
-﻿namespace VimeoDotNet.Models
+﻿using System.Collections.Generic;
+
+namespace VimeoDotNet.Models
 {
     /// <summary>
     /// User connection
@@ -13,7 +15,7 @@
         /// <summary>
         /// Options
         /// </summary>
-        public string[] options { get; set; }
+        public List<string> options { get; set; }
 
         /// <summary>
         /// Total
