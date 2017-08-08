@@ -16,6 +16,11 @@ namespace VimeoDotNet.Net
         /// HTTP response headers
         /// </summary>
         HttpResponseHeaders Headers { get; }
+
+        /// <summary>
+        /// Response text
+        /// </summary>
+        string Text { get; }
     }
 
     /// <inheritdoc />
@@ -32,27 +37,31 @@ namespace VimeoDotNet.Net
     
     internal class ApiResponse : IApiResponse
     {
-        public ApiResponse(HttpStatusCode statusCode, HttpResponseHeaders headers)
+        public ApiResponse(HttpStatusCode statusCode, HttpResponseHeaders headers, string text)
         {
             StatusCode = statusCode;
             Headers = headers;
+            Text = text;
         }
         
         public HttpStatusCode StatusCode { get; }
         public HttpResponseHeaders Headers { get; }
+        public string Text { get; }
     }
     
     internal class ApiResponse<T> : IApiResponse<T>
     {
-        public ApiResponse(HttpStatusCode statusCode, HttpResponseHeaders headers, T content)
+        public ApiResponse(HttpStatusCode statusCode, HttpResponseHeaders headers, string text, T content)
         {
             StatusCode = statusCode;
             Headers = headers;
             Content = content;
+            Text = text;
         }
 
         public HttpStatusCode StatusCode { get; }
         public HttpResponseHeaders Headers { get; }
+        public string Text { get; }
         public T Content { get; }
     }
 }

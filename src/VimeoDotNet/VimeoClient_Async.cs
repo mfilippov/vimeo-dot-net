@@ -509,8 +509,9 @@ namespace VimeoDotNet
 				throw new VimeoApiException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
 					Environment.NewLine, 
 					"Error retrieving information from Vimeo API.", 
-					response.StatusCode
-				));
+					response.StatusCode,
+				    response.Text
+                ));
 			}
 			catch (Exception ex)
 			{
@@ -544,8 +545,9 @@ namespace VimeoDotNet
 				throw new VimeoApiException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
 					Environment.NewLine,
 					"Error retrieving information from Vimeo API.",
-					response.StatusCode
-				));
+					response.StatusCode, 
+                    response.Text
+                ));
 			}
 			catch (Exception ex)
 			{
@@ -576,7 +578,7 @@ namespace VimeoDotNet
                 !validStatusCodes.Contains(response.StatusCode))
             {
                 throw new VimeoUploadException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
-                    Environment.NewLine, message, response.StatusCode),
+                    Environment.NewLine, message, response.StatusCode, response.Text),
                     request);
             }
         }
@@ -588,7 +590,7 @@ namespace VimeoDotNet
                 !validStatusCodes.Contains(response.StatusCode))
             {
                 throw new VimeoApiException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
-                    Environment.NewLine, message, response.StatusCode));
+                    Environment.NewLine, message, response.StatusCode, response.Text));
             }
         }
 

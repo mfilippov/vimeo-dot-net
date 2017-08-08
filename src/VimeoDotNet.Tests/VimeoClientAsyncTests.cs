@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Shouldly;
+using VimeoDotNet.Authorization;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
 using VimeoDotNet.Parameters;
@@ -490,9 +491,20 @@ namespace VimeoDotNet.Tests
             texttrack.ShouldBeNull();
         }
 
-        private VimeoClient CreateUnauthenticatedClient()
+        [Fact]
+        public async Task GetAccountVideoWtihUnauthenticatedToken()
         {
-            return new VimeoClient(_vimeoSettings.ClientId, _vimeoSettings.ClientSecret);
+            var client = await CreateUnauthenticatedClient();
+            var video = await client.GetVideoAsync(_vimeoSettings.VideoId);
+            video.ShouldNotBeNull();
+            video.pictures.uri.ShouldNotBeNull();
+        }
+
+        private async Task<VimeoClient> CreateUnauthenticatedClient()
+        {
+            var authorizationClient = new AuthorizationClient(_vimeoSettings.ClientId, _vimeoSettings.ClientSecret);
+            var unauthenticatedToken = await authorizationClient.GetUnauthenticatedTokenAsync();
+            return new VimeoClient(unauthenticatedToken.access_token);
         }
 
         private VimeoClient CreateAuthenticatedClient()
