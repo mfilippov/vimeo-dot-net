@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using VimeoDotNet.Parameters;
 
@@ -71,12 +72,7 @@ namespace VimeoDotNet.Net
 
 			// Add query or body parameters if present...
 			if (additionalParameters != null)
-			{
-				foreach (var parameter in additionalParameters.GetParameterValues())
-				{
-					request.Query.Add(parameter);
-				}
-			}
+				request.Body = new FormUrlEncodedContent(additionalParameters.GetParameterValues());
 
 			return request;
 		}

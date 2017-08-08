@@ -448,38 +448,40 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
+            var request = ApiRequestFactory.GetApiRequest(AccessToken);
             request.Method = new HttpMethod("PATCH");
             request.Path = Endpoints.Video;
 
             request.UrlSegments.Add("clipId", clipId.ToString());
+            var parameters = new Dictionary<string, string>();
             if (metaData.Name != null)
             {
-                request.Query.Add("name", metaData.Name.Trim());
+                parameters["name"] = metaData.Name.Trim();
             }
             if (metaData.Description != null)
             {
-                request.Query.Add("description", metaData.Description.Trim());
+                parameters["description"] = metaData.Description.Trim();
             }
             if (metaData.Privacy != VideoPrivacyEnum.Unknown)
             {
-                request.Query.Add("privacy.view", metaData.Privacy.ToString().ToLower());
+                parameters["privacy.view"] = metaData.Privacy.ToString().ToLower();
             }
             if (metaData.Privacy == VideoPrivacyEnum.Password)
             {
-                request.Query.Add("password", metaData.Password);
+                parameters["password"] = metaData.Password;
             }
             if (metaData.EmbedPrivacy != VideoEmbedPrivacyEnum.Unknown)
             {
-                request.Query.Add("privacy.embed", metaData.EmbedPrivacy.ToString().ToLower());
+                parameters["privacy.embed"] = metaData.EmbedPrivacy.ToString().ToLower();
             }
             if (metaData.Comments != VideoCommentsEnum.Unknown)
             {
-                request.Query.Add("privacy.comments", metaData.Comments.ToString().ToLower());
+                parameters["privacy.comments"] = metaData.Comments.ToString().ToLower();
             }
-            request.Query.Add("review_link", metaData.ReviewLinkEnabled.ToString().ToLower());
-            request.Query.Add("privacy.download", metaData.AllowDownloadVideo ? "true" : "false");
-            request.Query.Add("privacy.add", metaData.AllowAddToAlbumChannelGroup ? "true" : "false");
+            parameters["review_link"] = metaData.ReviewLinkEnabled.ToString().ToLower();
+            parameters["privacy.download"] = metaData.AllowDownloadVideo ? "true" : "false";
+            parameters["privacy.add"] = metaData.AllowAddToAlbumChannelGroup ? "true" : "false";
+            request.Body = new FormUrlEncodedContent(parameters);
 
             return request;
         }
