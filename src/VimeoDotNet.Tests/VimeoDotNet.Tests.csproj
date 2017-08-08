@@ -96,10 +96,10 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <Content Include="Resources\test.vtt" />
+    <EmbeddedResource Include="Resources\test.vtt" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\test.mp4" />
+    <EmbeddedResource Include="Resources\test.mp4" />
   </ItemGroup>
   <ItemGroup />
   <Choose>

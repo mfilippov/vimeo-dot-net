@@ -16,10 +16,10 @@ namespace VimeoDotNet.Tests
     {
         private readonly VimeoApiTestSettings _vimeoSettings;
 
-        private const string Testfilepath = @"Resources\test.mp4";
+        private const string Testfilepath = @"VimeoDotNet.Tests.Resources.test.mp4";
         // http://download.wavetlan.com/SVV/Media/HTTP/http-mp4.htm
 
-        private const string Testtexttrackfilepath = @"Resources\test.vtt";
+        private const string Testtexttrackfilepath = @"VimeoDotNet.Tests.Resources.test.vtt";
 
         public VimeoClientAsyncTests()
         {
@@ -49,7 +49,7 @@ namespace VimeoDotNet.Tests
         {
             long length;
             IUploadRequest completedRequest;
-            using (var file = new BinaryContent(GetFullPath(Testfilepath)))
+            using (var file = new BinaryContent(GetFileFromEmbeddedResources(Testfilepath), "video/mp4"))
             {
                 length = file.Data.Length;
                 var client = CreateAuthenticatedClient();
@@ -69,7 +69,7 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task Integration_VimeoClient_DeleteVideo_DeletesVideo()
         {
-            using (var file = new BinaryContent(GetFullPath(Testfilepath)))
+            using (var file = new BinaryContent(GetFileFromEmbeddedResources(Testfilepath), "video/mp4"))
             {
                 var length = file.Data.Length;
                 var client = CreateAuthenticatedClient();
@@ -435,7 +435,7 @@ namespace VimeoDotNet.Tests
             // arrange
             var client = CreateAuthenticatedClient();
             TextTrack completedRequest;
-            using (var file = new BinaryContent(GetFullPath(Testtexttrackfilepath)))
+            using (var file = new BinaryContent(GetFileFromEmbeddedResources(Testtexttrackfilepath), "application/octet-stream"))
             {
                 // act
                 completedRequest = await client.UploadTextTrackFileAsync(
@@ -466,7 +466,9 @@ namespace VimeoDotNet.Tests
             // arrange
             TextTrack completedRequest;
             var client = CreateAuthenticatedClient();
-            using (var file = new BinaryContent(GetFullPath(Testtexttrackfilepath)))
+            var fileStream = GetFileFromEmbeddedResources(Testtexttrackfilepath);
+            fileStream.ShouldNotBeNull();
+            using (var file = new BinaryContent(fileStream, "application/octet-stream"))
             {
                 completedRequest = await client.UploadTextTrackFileAsync(
                                 file,
@@ -512,10 +514,10 @@ namespace VimeoDotNet.Tests
             return new VimeoClient(_vimeoSettings.AccessToken);
         }
 
-        private static string GetFullPath(string relativePath)
+        private static Stream GetFileFromEmbeddedResources(string relativePath)
         {
-            var dir = new DirectoryInfo(Directory.GetCurrentDirectory()); // /bin/debug
-            return Path.Combine(dir.Parent?.Parent?.FullName ?? throw new InvalidOperationException(), relativePath);
+            var assembly = typeof(VimeoClientAsyncTests).Assembly;
+            return assembly.GetManifestResourceStream(relativePath);
         }
     }
 }
