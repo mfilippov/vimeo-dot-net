@@ -55,7 +55,7 @@ namespace VimeoDotNet
                 {
                     return null;
                 }
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -95,7 +95,7 @@ namespace VimeoDotNet
                         total = 0
                     };
                 }
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -127,7 +127,7 @@ namespace VimeoDotNet
                 {
                     return null;
                 }
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -163,7 +163,7 @@ namespace VimeoDotNet
                         total = 0
                     };
                 }
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -194,7 +194,7 @@ namespace VimeoDotNet
                 {
                     return null;
                 }
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -243,7 +243,7 @@ namespace VimeoDotNet
                         total = 0
                     };
                 }
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -273,7 +273,7 @@ namespace VimeoDotNet
                 {
                     return null;
                 }
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -298,7 +298,7 @@ namespace VimeoDotNet
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving account videos.");
 
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {

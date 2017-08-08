@@ -105,7 +105,7 @@ namespace VimeoDotNet
                 UpdateRateLimit(response);
                 CheckStatusCodeError(null, response, "Error generating upload ticket.");
 
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -131,7 +131,7 @@ namespace VimeoDotNet
                 UpdateRateLimit(response);
                 CheckStatusCodeError(null, response, "Error generating upload ticket to replace video.");
 
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {

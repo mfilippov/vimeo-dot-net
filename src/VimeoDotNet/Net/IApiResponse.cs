@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Headers;
 
 namespace VimeoDotNet.Net
@@ -14,54 +13,46 @@ namespace VimeoDotNet.Net
         HttpStatusCode StatusCode { get; }
         
         /// <summary>
-        /// Reponse content
-        /// </summary>
-        string Content { get; }
-        
-        /// <summary>
         /// HTTP response headers
         /// </summary>
         HttpResponseHeaders Headers { get; }
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// Interface of REST response with payload type
     /// </summary>
-    public interface IApiResponse<T> : IApiResponse
+    public interface IApiResponse<out T> : IApiResponse
     {
         /// <summary>
         /// Response payload
         /// </summary>
-        T Data { get; }
+        T Content { get; }
     }
     
     internal class ApiResponse : IApiResponse
     {
-        public ApiResponse(HttpStatusCode statusCode, string content, HttpResponseHeaders headers)
+        public ApiResponse(HttpStatusCode statusCode, HttpResponseHeaders headers)
         {
             StatusCode = statusCode;
-            Content = content;
             Headers = headers;
         }
         
         public HttpStatusCode StatusCode { get; }
-        public string Content { get; }
         public HttpResponseHeaders Headers { get; }
     }
     
     internal class ApiResponse<T> : IApiResponse<T>
     {
-        public ApiResponse(HttpStatusCode statusCode, string content, HttpResponseHeaders headers, T data)
+        public ApiResponse(HttpStatusCode statusCode, HttpResponseHeaders headers, T content)
         {
             StatusCode = statusCode;
-            Content = content;
             Headers = headers;
-            Data = data;
+            Content = content;
         }
 
         public HttpStatusCode StatusCode { get; }
-        public string Content { get; }
         public HttpResponseHeaders Headers { get; }
-        public T Data { get; }
+        public T Content { get; }
     }
 }

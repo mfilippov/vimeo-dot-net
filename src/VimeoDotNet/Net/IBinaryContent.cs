@@ -13,7 +13,7 @@ namespace VimeoDotNet.Net
         /// </summary>
         string ContentType { get; set; }
         /// <summary>
-        /// Data
+        /// Content
         /// </summary>
         Stream Data { get; set; }
         /// <summary>

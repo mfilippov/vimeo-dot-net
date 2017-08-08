@@ -7,6 +7,7 @@ using VimeoDotNet.Parameters;
 
 namespace VimeoDotNet
 {
+    /// <inheritdoc />
     /// <summary>
     /// Implementation of Vimeo API
     /// </summary>
@@ -14,6 +15,7 @@ namespace VimeoDotNet
     {
         #region User authentication
 
+        /// <inheritdoc />
         /// <summary>
         /// Exchange the code for an access token
         /// </summary>
@@ -29,6 +31,7 @@ namespace VimeoDotNet
 
         #region Account information
 
+        /// <inheritdoc />
         /// <summary>
         /// Get user information
         /// </summary>
@@ -42,10 +45,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Update user information
         /// </summary>
@@ -60,10 +64,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Get user information
         /// </summary>
@@ -78,14 +83,15 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
         #endregion
 
         #region Albums
 
+        /// <inheritdoc />
         /// <summary>
         /// Get album by parameters
         /// </summary>
@@ -100,10 +106,11 @@ namespace VimeoDotNet
 			catch (AggregateException ex)
 			{
 				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-				return null;
 			}
-		}
+		    return null;
+        }
 
+        /// <inheritdoc />
         /// <summary>
         /// Get album by UserId and parameters
         /// </summary>
@@ -119,10 +126,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Get album by AlbumId
         /// </summary>
@@ -137,16 +145,17 @@ namespace VimeoDotNet
 			catch (AggregateException ex)
 			{
 				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-				return null;
 			}
-		}
+		    return null;
+        }
 
-        /// <summary>
-        ///Get album by AlbumId and UserId
-        /// </summary>
-        /// <param name="userId">AlbumId</param>
-        /// <param name="albumId">UserId</param>
-        /// <returns>Album</returns>
+        /// <inheritdoc />
+        ///  <summary>
+        /// Get album by AlbumId and UserId
+        ///  </summary>
+        ///  <param name="userId">AlbumId</param>
+        ///  <param name="albumId">UserId</param>
+        ///  <returns>Album</returns>
         public Album GetAlbum(long userId, long albumId)
 		{
 			try
@@ -156,10 +165,11 @@ namespace VimeoDotNet
 			catch (AggregateException ex)
 			{
 				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-				return null;
 			}
-		}
+		    return null;
+        }
 
+        /// <inheritdoc />
         /// <summary>
         /// Create new album
         /// </summary>
@@ -174,10 +184,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Update album
         /// </summary>
@@ -193,10 +204,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Delete album
         /// </summary>
@@ -211,11 +223,12 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return false;
             }
+            return false;
         }
 
 
+        /// <inheritdoc />
         /// <summary>
         /// Add video to album by AlbumId and ClipId
         /// </summary>
@@ -231,10 +244,11 @@ namespace VimeoDotNet
 			catch (AggregateException ex)
 			{
 				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-				return false;
 			}
-		}
+		    return false;
+        }
 
+        /// <inheritdoc />
         /// <summary>
         /// Add video to album by UserId and AlbumId and ClipId
         /// </summary>
@@ -251,11 +265,12 @@ namespace VimeoDotNet
 			catch (AggregateException ex)
 			{
 				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-				return false;
 			}
-		}
+		    return false;
+        }
 
 
+        /// <inheritdoc />
         /// <summary>
         /// Remove video from album by AlbumId and ClipId
         /// </summary>
@@ -271,10 +286,11 @@ namespace VimeoDotNet
 			catch (AggregateException ex)
 			{
 				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-				return false;
 			}
-		}
+		    return false;
+        }
 
+        /// <inheritdoc />
         /// <summary>
         /// Remove video from album by AlbumId and ClipId and UserId
         /// </summary>
@@ -291,14 +307,15 @@ namespace VimeoDotNet
 			catch (AggregateException ex)
 			{
 				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-				return false;
 			}
-		}
+		    return false;
+        }
 
         #endregion
 
         #region Videos
 
+        /// <inheritdoc />
         /// <summary>
         /// Get paginated video for current account
         /// </summary>
@@ -312,10 +329,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Get video by ClipId
         /// </summary>
@@ -330,10 +348,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Get videos  by UserId and query
         /// </summary>
@@ -345,6 +364,7 @@ namespace VimeoDotNet
             return GetUserVideos(userId, null, null, query);
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Get videos by UserId and query and page parameters
         /// </summary>
@@ -362,10 +382,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Get video by ClipId for UserId
         /// </summary>
@@ -381,10 +402,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Get videos by AlbumId
         /// </summary>
@@ -403,10 +425,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Get video from album by AlbumId and ClipId
         /// </summary>
@@ -422,10 +445,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Get videos from album by AlbumId and UserId
         /// </summary>
@@ -441,10 +465,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Get video from album by AlbumId and UserId and ClipId
         /// </summary>
@@ -461,10 +486,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Update video metadata by ClipId
         /// </summary>
@@ -482,6 +508,7 @@ namespace VimeoDotNet
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Update allowed domain for clip
         /// </summary>
@@ -499,6 +526,7 @@ namespace VimeoDotNet
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Delete video
         /// </summary>
@@ -519,6 +547,7 @@ namespace VimeoDotNet
 
         #region Upload files
 
+        /// <inheritdoc />
         /// <summary>
         /// Create new upload ticket for replace video
         /// </summary>
@@ -533,10 +562,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Create new upload ticket
         /// </summary>
@@ -550,10 +580,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Start upload file
         /// </summary>
@@ -570,10 +601,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Upload file part
         /// </summary>
@@ -590,10 +622,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Continue upload file
         /// </summary>
@@ -608,10 +641,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Verify upload file part
         /// </summary>
@@ -626,10 +660,11 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                return null;
             }
+            return null;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Complete upload file
         /// </summary>

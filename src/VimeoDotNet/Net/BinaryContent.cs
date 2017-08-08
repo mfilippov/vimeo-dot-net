@@ -34,7 +34,7 @@ namespace VimeoDotNet.Net
         public string ContentType { get; set; }
 
         /// <summary>
-        /// Data
+        /// Content
         /// </summary>
         public Stream Data
         {
@@ -67,7 +67,7 @@ namespace VimeoDotNet.Net
         /// <summary>
         /// Binary content
         /// </summary>
-        /// <param name="data">Data</param>
+        /// <param name="data">Content</param>
         /// <param name="contentType">Content type</param>
         public BinaryContent(Stream data, string contentType)
         {
@@ -78,7 +78,7 @@ namespace VimeoDotNet.Net
         /// <summary>
         /// Binary content
         /// </summary>
-        /// <param name="data">Data</param>
+        /// <param name="data">Content</param>
         /// <param name="contentType">Content type</param>
         public BinaryContent(byte[] data, string contentType)
         {
@@ -153,17 +153,17 @@ namespace VimeoDotNet.Net
         {
             if (Data == null)
             {
-                throw new InvalidOperationException("Data should be populated with a Stream");
+                throw new InvalidOperationException("Content should be populated with a Stream");
             }
             if (!Data.CanRead)
             {
-                throw new InvalidOperationException("Data should be a readable Stream");
+                throw new InvalidOperationException("Content should be a readable Stream");
             }
             if (Data.Position != startIndex)
             {
                 if (!Data.CanSeek)
                 {
-                    throw new InvalidOperationException("Data cannot be advanced to the specified start index: " +
+                    throw new InvalidOperationException("Content cannot be advanced to the specified start index: " +
                                                         startIndex);
                 }
                 Data.Position = startIndex;

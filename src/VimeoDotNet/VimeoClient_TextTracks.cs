@@ -31,7 +31,7 @@ namespace VimeoDotNet
                 {
                     return null;
                 }
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -62,7 +62,7 @@ namespace VimeoDotNet
                 {
                     return null;
                 }
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -126,7 +126,7 @@ namespace VimeoDotNet
                 {
                     return null;
                 }
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -172,7 +172,7 @@ namespace VimeoDotNet
                 UpdateRateLimit(response);
                 CheckStatusCodeError(null, response, "Error generating upload text track ticket.");
 
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {

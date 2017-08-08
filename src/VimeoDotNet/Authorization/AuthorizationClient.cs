@@ -87,7 +87,7 @@ namespace VimeoDotNet.Authorization
         {
             ApiRequest request = BuildAccessTokenRequest(authorizationCode, redirectUri);
             IApiResponse<AccessTokenResponse> result = await request.ExecuteRequestAsync<AccessTokenResponse>();
-            return result.Data;
+            return result.Content;
         }
 
         #endregion

@@ -496,7 +496,7 @@ namespace VimeoDotNet
 				// if request was successful, return immediately...
 				if (IsSuccessStatusCode(response.StatusCode))
 				{
-					return response.Data;
+					return response.Content;
 				}
 
 				// if request is among other accepted status codes, return the corresponding value...
@@ -509,8 +509,7 @@ namespace VimeoDotNet
 				throw new VimeoApiException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
 					Environment.NewLine, 
 					"Error retrieving information from Vimeo API.", 
-					response.StatusCode, 
-					response.Content
+					response.StatusCode
 				));
 			}
 			catch (Exception ex)
@@ -545,8 +544,7 @@ namespace VimeoDotNet
 				throw new VimeoApiException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
 					Environment.NewLine,
 					"Error retrieving information from Vimeo API.",
-					response.StatusCode,
-					response.Content
+					response.StatusCode
 				));
 			}
 			catch (Exception ex)
@@ -578,7 +576,7 @@ namespace VimeoDotNet
                 !validStatusCodes.Contains(response.StatusCode))
             {
                 throw new VimeoUploadException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
-                    Environment.NewLine, message, response.StatusCode, response.Content),
+                    Environment.NewLine, message, response.StatusCode),
                     request);
             }
         }
@@ -590,7 +588,7 @@ namespace VimeoDotNet
                 !validStatusCodes.Contains(response.StatusCode))
             {
                 throw new VimeoApiException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
-                    Environment.NewLine, message, response.StatusCode, response.Content));
+                    Environment.NewLine, message, response.StatusCode));
             }
         }
 

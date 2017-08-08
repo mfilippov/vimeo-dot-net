@@ -18,7 +18,7 @@ namespace VimeoDotNet.Models
         /// </summary>
         public List<string> options { get; set; }
         /// <summary>
-        /// Data
+        /// Content
         /// </summary>
         public List<TextTrack> data { get; set; }
         /// <summary>
