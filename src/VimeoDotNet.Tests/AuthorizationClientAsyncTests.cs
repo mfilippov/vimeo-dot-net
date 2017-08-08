@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using System.Threading.Tasks;
+using Shouldly;
 using VimeoDotNet.Authorization;
 using VimeoDotNet.Tests.Settings;
 using Xunit;
@@ -17,7 +18,7 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
-        public async void ShouldCorrectlyGetUnauthenticatedToken()
+        public async Task ShouldCorrectlyGetUnauthenticatedToken()
         {
             var client = new AuthorizationClient(_vimeoSettings.ClientId, _vimeoSettings.ClientSecret);
 
