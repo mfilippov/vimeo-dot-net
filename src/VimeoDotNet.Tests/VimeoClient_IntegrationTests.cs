@@ -1,13 +1,12 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using Should;
+using Shouldly;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
-using VimeoDotNet.Tests.Settings;
 using VimeoDotNet.Parameters;
+using VimeoDotNet.Tests.Settings;
 using Xunit;
 
 namespace VimeoDotNet.Tests
@@ -16,16 +15,16 @@ namespace VimeoDotNet.Tests
     {
         private readonly VimeoApiTestSettings _vimeoSettings;
 
-		private const string TESTFILEPATH = @"Resources\test.mp4";
+		private const string Testfilepath = @"Resources\test.mp4";
 		// http://download.wavetlan.com/SVV/Media/HTTP/http-mp4.htm
 
-		private const string TESTTEXTTRACKFILEPATH = @"Resources\test.vtt";
+		private const string Testtexttrackfilepath = @"Resources\test.vtt";
 
         public VimeoClientIntegrationTests()
         {
             // Load the settings from a file that is not under version control for security
             // The settings loader will create this file in the bin/ folder if it doesn't exist
-            _vimeoSettings = Settings.SettingsLoader.LoadSettings(); 
+            _vimeoSettings = SettingsLoader.LoadSettings(); 
         }
         
         [Fact]
@@ -60,7 +59,7 @@ namespace VimeoDotNet.Tests
             // arrange
             long length;
             IUploadRequest completedRequest;
-            using (var file = new BinaryContent(GetFullPath(TESTFILEPATH)))
+            using (var file = new BinaryContent(GetFullPath(Testfilepath)))
             {
                 length = file.Data.Length;
                 var client = CreateAuthenticatedClient();
@@ -76,34 +75,30 @@ namespace VimeoDotNet.Tests
             completedRequest.ShouldNotBeNull();
             completedRequest.AllBytesWritten.ShouldBeTrue();
             completedRequest.IsVerifiedComplete.ShouldBeTrue();
-            completedRequest.BytesWritten.ShouldEqual(length);
+            completedRequest.BytesWritten.ShouldBe(length);
             completedRequest.ClipUri.ShouldNotBeNull();
-            completedRequest.ClipId.ShouldBeGreaterThan(0);
+            completedRequest.ClipId.ShouldBeNull();
+            completedRequest.ClipId?.ShouldBeGreaterThan(0);
         }
 
         [Fact]
         public void Integration_VimeoClient_DeleteVideo_DeletesVideo()
         {
-            // arrange
-            long length;
-            IUploadRequest completedRequest;
-            using (var file = new BinaryContent(GetFullPath(TESTFILEPATH)))
+            using (var file = new BinaryContent(GetFullPath(Testfilepath)))
             {
-                length = file.Data.Length;
+                var length = file.Data.Length;
                 var client = CreateAuthenticatedClient();
-                // act
-                completedRequest = client.UploadEntireFile(file);
+                var completedRequest = client.UploadEntireFile(file);
                 completedRequest.AllBytesWritten.ShouldBeTrue();
                 completedRequest.ShouldNotBeNull();
                 completedRequest.IsVerifiedComplete.ShouldBeTrue();
-                completedRequest.BytesWritten.ShouldEqual(length);
+                completedRequest.BytesWritten.ShouldBe(length);
                 completedRequest.ClipUri.ShouldNotBeNull();
                 completedRequest.ClipId.HasValue.ShouldBeTrue();
                 Debug.Assert(completedRequest.ClipId != null, "completedRequest.ClipId != null");
                 client.DeleteVideo(completedRequest.ClipId.Value);
                 client.GetVideo(completedRequest.ClipId.Value).ShouldBeNull();
             }
-            // assert            
         }
 
         [Fact]
@@ -145,19 +140,19 @@ namespace VimeoDotNet.Tests
 			if (string.IsNullOrEmpty(testName))
 				updated.name.ShouldBeNull();
 			else
-		        updated.name.ShouldEqual(testName);
+		        updated.name.ShouldBe(testName);
 			if (string.IsNullOrEmpty(testBio))
 				updated.bio.ShouldBeNull();
 			else
-		        updated.bio.ShouldEqual(testBio);
+		        updated.bio.ShouldBe(testBio);
 
 			if (string.IsNullOrEmpty(testLocation))
 		        updated.location.ShouldBeNull();
 			else
-		        updated.location.ShouldEqual(testLocation);
+		        updated.location.ShouldBe(testLocation);
 
 			// restore the original values...
-			var final = client.UpdateAccountInformation(new Parameters.EditUserParameters
+			var final = client.UpdateAccountInformation(new EditUserParameters
 			{
 				Name = original.name ?? string.Empty,
 				Bio = original.bio ?? string.Empty,
@@ -171,7 +166,7 @@ namespace VimeoDotNet.Tests
 			}
 			else
 			{
-				final.name.ShouldEqual(original.name);
+				final.name.ShouldBe(original.name);
 			}
 				
 			if (string.IsNullOrEmpty(original.bio))
@@ -180,7 +175,7 @@ namespace VimeoDotNet.Tests
 			}
 			else
 			{
-				final.bio.ShouldEqual(original.bio);
+				final.bio.ShouldBe(original.bio);
 			}
 				
 			if (string.IsNullOrEmpty(original.location))
@@ -189,7 +184,7 @@ namespace VimeoDotNet.Tests
 			} 
 			else
 			{
-				final.location.ShouldEqual(original.location);
+				final.location.ShouldBe(original.location);
 			}			
 		}
 
@@ -205,7 +200,9 @@ namespace VimeoDotNet.Tests
 
             // assert
             user.ShouldNotBeNull();
-            user.id.Value.ShouldEqual(_vimeoSettings.UserId);
+            user.id.ShouldBeNull();
+            Debug.Assert(user.id != null, "user.id != null");
+            user.id.Value.ShouldBe(_vimeoSettings.UserId);
         }
 
         [Fact]
@@ -285,7 +282,7 @@ namespace VimeoDotNet.Tests
             var videos = client.GetUserAlbumVideos(_vimeoSettings.UserId, _vimeoSettings.AlbumId);
 
             // assert
-            videos.ShouldNotBeNull();;
+            videos.ShouldNotBeNull();
             videos.data.Count.ShouldBeGreaterThan(0);
         }
 
@@ -330,7 +327,7 @@ namespace VimeoDotNet.Tests
 			var isAbsent = removedVideo == null;
 
 			isRemoved.ShouldBeTrue("RemoveFromAlbum failed.");
-			isRemoved.ShouldEqual(isAbsent, "Returned value does not match actual abscence of video.");
+			isRemoved.ShouldBe(isAbsent, "Returned value does not match actual abscence of video.");
 
 		    // add it...
 		    var isAdded = client.AddToAlbum(albumId, videoId);
@@ -338,7 +335,7 @@ namespace VimeoDotNet.Tests
 		    var isPresent = addedVideo != null;
 
 		    isAdded.ShouldBeTrue("AddToAlbum failed.");
-		    isAdded.ShouldEqual(isPresent, "Returned value does not match actual presence of video.");
+		    isAdded.ShouldBe(isPresent, "Returned value does not match actual presence of video.");
 		}
 
 		[Fact]
@@ -350,7 +347,7 @@ namespace VimeoDotNet.Tests
 			const string originalName = "Unit Test Album";
 			const string originalDesc = "This album was created via an automated test, and should be deleted momentarily...";
 
-			var newAlbum = client.CreateAlbum(new EditAlbumParameters()
+			var newAlbum = client.CreateAlbum(new EditAlbumParameters
 			{
 				Name = originalName,
 				Description = originalDesc,
@@ -360,9 +357,9 @@ namespace VimeoDotNet.Tests
 			});
 
 			newAlbum.ShouldNotBeNull();
-		    newAlbum.name.ShouldEqual(originalName);
+		    newAlbum.name.ShouldBe(originalName);
 
-		    newAlbum.description.ShouldEqual(originalDesc);
+		    newAlbum.description.ShouldBe(originalDesc);
 
 		        // retrieve albums for the current user...there should be at least one now...
 			var albums = client.GetAlbums();
@@ -371,16 +368,20 @@ namespace VimeoDotNet.Tests
 
 			// update the album...
 			const string updatedName = "Unit Test Album (Updated)";
-			var updatedAlbum = client.UpdateAlbum(newAlbum.GetAlbumId().Value, new EditAlbumParameters()
-			{
+		    var albumId = newAlbum.GetAlbumId();
+		    Debug.Assert(albumId != null, $"{nameof(albumId)} != null");
+		    var updatedAlbum = client.UpdateAlbum(albumId.Value, new EditAlbumParameters
+		    {
 				Name = updatedName,
 				Privacy = EditAlbumPrivacyOption.Anybody
 			});
 
-			updatedAlbum.name.ShouldEqual(updatedName);
+			updatedAlbum.name.ShouldBe(updatedName);
 
 			// delete the album...
-			var isDeleted = client.DeleteAlbum(updatedAlbum.GetAlbumId().Value);
+		    albumId = updatedAlbum.GetAlbumId();
+		    Debug.Assert(albumId != null, $"{nameof(albumId)} != null");
+		    var isDeleted = client.DeleteAlbum(albumId.Value);
 
 			isDeleted.ShouldBeTrue();
 		}
@@ -427,18 +428,16 @@ namespace VimeoDotNet.Tests
 		[Fact]
 		public async Task Integration_VimeoClient_UpdateTextTrackAsync()
 		{
-			// arrange
 			var client = CreateAuthenticatedClient();
 			var original = await client.GetTextTrackAsync(_vimeoSettings.VideoId, _vimeoSettings.TextTrackId);
 
 			original.ShouldNotBeNull();
 
-			// act
 			// update the text track record with some new values...
-			var testName = "NewTrackName";
-			var testType = "subtitles";
-			var testLanguage = "fr";
-			var testActive = false;
+			const string testName = "NewTrackName";
+			const string testType = "subtitles";
+			const string testLanguage = "fr";
+			const bool testActive = false;
 
 			var updated = await client.UpdateTextTrackAsync(
 									_vimeoSettings.VideoId,
@@ -452,11 +451,10 @@ namespace VimeoDotNet.Tests
 									});
 
 			// inspect the result and ensure the values match what we expect...
-			// assert
-			testName.ShouldEqual(updated.name);
-			testType.ShouldEqual(updated.type);
-			testLanguage.ShouldEqual(updated.language);
-			testActive.ShouldEqual(updated.active);
+			testName.ShouldBe(updated.name);
+			testType.ShouldBe(updated.type);
+			testLanguage.ShouldBe(updated.language);
+			updated.active.ShouldBeFalse();
 
 			// restore the original values...
 			var final = await client.UpdateTextTrackAsync(
@@ -477,7 +475,7 @@ namespace VimeoDotNet.Tests
 			}
 			else
 			{
-				original.name.ShouldEqual(final.name);
+				original.name.ShouldBe(final.name);
 			}
 
 			if (string.IsNullOrEmpty(original.type))
@@ -486,7 +484,7 @@ namespace VimeoDotNet.Tests
 			}
 			else
 			{
-				original.type.ShouldEqual(final.type);
+				original.type.ShouldBe(final.type);
 			}
 
 			if (string.IsNullOrEmpty(original.language))
@@ -495,10 +493,10 @@ namespace VimeoDotNet.Tests
 			}
 			else
 			{
-				original.language.ShouldEqual(final.language);
+				original.language.ShouldBe(final.language);
 			}
 
-			original.active.ShouldEqual(final.active);
+			original.active.ShouldBe(final.active);
 		}
 
 		[Fact]
@@ -507,7 +505,7 @@ namespace VimeoDotNet.Tests
 			// arrange
 			var client = CreateAuthenticatedClient();
 			TextTrack completedRequest;
-			using (var file = new BinaryContent(GetFullPath(TESTTEXTTRACKFILEPATH)))
+			using (var file = new BinaryContent(GetFullPath(Testtexttrackfilepath)))
 			{
 				// act
 				completedRequest = await client.UploadTextTrackFileAsync(
@@ -528,7 +526,7 @@ namespace VimeoDotNet.Tests
 
 		    // cleanup
 		    var uri = completedRequest.uri;
-		    var trackId = System.Convert.ToInt64(uri.Substring(uri.LastIndexOf('/') + 1));
+		    var trackId = Convert.ToInt64(uri.Substring(uri.LastIndexOf('/') + 1));
 		    await client.DeleteTextTrackAsync(_vimeoSettings.VideoId, trackId);
 		}
 
@@ -538,7 +536,7 @@ namespace VimeoDotNet.Tests
 			// arrange
 			TextTrack completedRequest;
 			var client = CreateAuthenticatedClient();
-			using (var file = new BinaryContent(GetFullPath(TESTTEXTTRACKFILEPATH)))
+			using (var file = new BinaryContent(GetFullPath(Testtexttrackfilepath)))
 			{
 				completedRequest = await client.UploadTextTrackFileAsync(
 								file,
@@ -554,7 +552,7 @@ namespace VimeoDotNet.Tests
 			completedRequest.ShouldNotBeNull();
 			completedRequest.uri.ShouldNotBeNull();
 			var uri = completedRequest.uri;
-			var trackId = System.Convert.ToInt64(uri.Substring(uri.LastIndexOf('/') + 1));
+			var trackId = Convert.ToInt64(uri.Substring(uri.LastIndexOf('/') + 1));
 			// act
 			await client.DeleteTextTrackAsync(_vimeoSettings.VideoId, trackId);
 
@@ -573,10 +571,10 @@ namespace VimeoDotNet.Tests
             return new VimeoClient(_vimeoSettings.AccessToken);
         }
 
-        private string GetFullPath(string relativePath)
+        private static string GetFullPath(string relativePath)
         {
             var dir = new DirectoryInfo(Directory.GetCurrentDirectory()); // /bin/debug
-            return Path.Combine(dir.Parent.Parent.FullName, relativePath);
+            return Path.Combine(dir.Parent?.Parent?.FullName ?? throw new InvalidOperationException(), relativePath);
         }
     }
 }
