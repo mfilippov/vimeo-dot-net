@@ -16,6 +16,7 @@ namespace VimeoDotNet.Authorization
         /// <param name="authorizationCode">AuthorizationCode</param>
         /// <param name="redirectUri">RedirectUri</param>
         /// <returns>Access token response</returns>
+        /// [Obsolete("Use async API instead sync wrapper")]
         AccessTokenResponse GetAccessToken(string authorizationCode, string redirectUri);
         /// <summary>
         /// GetAccessTokenAsync

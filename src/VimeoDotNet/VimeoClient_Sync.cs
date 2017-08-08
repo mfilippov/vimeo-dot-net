@@ -23,6 +23,7 @@ namespace VimeoDotNet
         /// <param name="redirectUrl">This field is required, and must match one of your application’s
         /// redirect URI’s</param>
         /// <returns>AccessTokenResponse</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public AccessTokenResponse GetAccessToken(string authorizationCode, string redirectUrl)
         {
             return OAuth2Client.GetAccessTokenAsync(authorizationCode, redirectUrl).RunSynchronouslyWithCurrentCulture();
@@ -36,6 +37,7 @@ namespace VimeoDotNet
         /// Get user information
         /// </summary>
         /// <returns>User information</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public User GetAccountInformation()
         {
             try
@@ -55,6 +57,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="parameters">User parameters</param>
         /// <returns>User information</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public User UpdateAccountInformation(EditUserParameters parameters)
         {
             try
@@ -74,6 +77,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="userId">User Id</param>
         /// <returns>User information object</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public User GetUserInformation(long userId)
         {
             try
@@ -97,6 +101,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="parameters">GetAlbumsParameters</param>
         /// <returns>Paginated albums</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public Paginated<Album> GetAlbums(GetAlbumsParameters parameters = null)
 		{
 			try
@@ -117,6 +122,7 @@ namespace VimeoDotNet
         /// <param name="userId">UserId</param>
         /// <param name="parameters">GetAlbumsParameters</param>
         /// <returns>Paginated albums</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public Paginated<Album> GetAlbums(long userId, GetAlbumsParameters parameters = null)
         {
             try
@@ -136,6 +142,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="albumId">AlbumId</param>
         /// <returns>Album</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public Album GetAlbum(long albumId)
 		{
 			try
@@ -156,6 +163,7 @@ namespace VimeoDotNet
         ///  <param name="userId">AlbumId</param>
         ///  <param name="albumId">UserId</param>
         ///  <returns>Album</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public Album GetAlbum(long userId, long albumId)
 		{
 			try
@@ -175,6 +183,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="parameters">Creation parameters</param>
         /// <returns>Album</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public Album CreateAlbum(EditAlbumParameters parameters = null)
         {
             try
@@ -195,6 +204,7 @@ namespace VimeoDotNet
         /// <param name="albumId">Albumid</param>
         /// <param name="parameters">Album parameters</param>
         /// <returns>Album</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public Album UpdateAlbum(long albumId, EditAlbumParameters parameters = null)
         {
             try
@@ -214,6 +224,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="albumId">AlbumId</param>
         /// <returns>Deletion result</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public bool DeleteAlbum(long albumId)
         {
             try
@@ -235,6 +246,7 @@ namespace VimeoDotNet
         /// <param name="albumId">AlbumId</param>
         /// <param name="clipId">ClipId</param>
         /// <returns>Adding result</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public bool AddToAlbum(long albumId, long clipId)
 		{
 			try
@@ -256,6 +268,7 @@ namespace VimeoDotNet
         /// <param name="albumId">AlbumId</param>
         /// <param name="clipId">ClipId</param>
         /// <returns>Adding result</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public bool AddToAlbum(long userId, long albumId, long clipId)
 		{
 			try
@@ -277,6 +290,7 @@ namespace VimeoDotNet
         /// <param name="albumId">AlbumId</param>
         /// <param name="clipId">ClipId</param>
         /// <returns>Removing result</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public bool RemoveFromAlbum(long albumId, long clipId)
 		{
 			try
@@ -298,6 +312,7 @@ namespace VimeoDotNet
         /// <param name="albumId">AlbumId</param>
         /// <param name="clipId">ClipId</param>
         /// <returns>Removing result</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public bool RemoveFromAlbum(long userId, long albumId, long clipId)
 		{
 			try
@@ -320,6 +335,7 @@ namespace VimeoDotNet
         /// Get paginated video for current account
         /// </summary>
         /// <returns>Paginated videos</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public Paginated<Video> GetVideos()
         {
             try
@@ -339,6 +355,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="clipId">ClipId</param>
         /// <returns>Video</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public Video GetVideo(long clipId)
         {
             try
@@ -359,6 +376,7 @@ namespace VimeoDotNet
         /// <param name="userId">UserId</param>
         /// <param name="query">Search query</param>
         /// <returns>Paginated videos</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public Paginated<Video> GetUserVideos(long userId, string query = null)
         {
             return GetUserVideos(userId, null, null, query);
@@ -373,6 +391,7 @@ namespace VimeoDotNet
         /// <param name="query">Search query</param>
         /// <param name="page">The page number to show</param>
         /// <returns>Paginated videos</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public Paginated<Video> GetUserVideos(long userId, int? page, int? perPage, string query = null)
         {
             try
@@ -393,6 +412,7 @@ namespace VimeoDotNet
         /// <param name="userId">UserId</param>
         /// <param name="clipId">ClipId</param>
         /// <returns>Video</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public Video GetUserVideo(long userId, long clipId)
         {
             try
@@ -416,6 +436,7 @@ namespace VimeoDotNet
         /// <param name="sort">The default sort order of an Album's videos</param>
         /// <param name="direction">The direction that the results are sorted</param>
         /// <returns>Paginated videos</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public Paginated<Video> GetAlbumVideos(long albumId, int? page, int? perPage, string sort = null, string direction = null)
         {
             try
@@ -436,6 +457,7 @@ namespace VimeoDotNet
         /// <param name="albumId">AlbumId</param>
         /// <param name="clipId">ClipId</param>
         /// <returns>Video</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public Video GetAlbumVideo(long albumId, long clipId)
         {
             try
@@ -456,6 +478,7 @@ namespace VimeoDotNet
         /// <param name="userId">UserId</param>
         /// <param name="albumId">AlbumId</param>
         /// <returns>Paginated videos</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public Paginated<Video> GetUserAlbumVideos(long userId, long albumId)
         {
             try
@@ -477,6 +500,7 @@ namespace VimeoDotNet
         /// <param name="albumId">UserId</param>
         /// <param name="clipId">ClipId</param>
         /// <returns>Video</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public Video GetUserAlbumVideo(long userId, long albumId, long clipId)
         {
             try
@@ -496,6 +520,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="clipId">ClipId</param>
         /// <param name="metaData">New video metadata</param>
+        [Obsolete("Use async API instead sync wrapper")]
         public void UpdateVideoMetadata(long clipId, VideoUpdateMetadata metaData)
         {
             try
@@ -514,6 +539,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="clipId">ClipId</param>
         /// <param name="domain">Domain</param>
+        [Obsolete("Use async API instead sync wrapper")]
         public void UpdateVideoAllowedDomain(long clipId, string domain)
         {
             try
@@ -531,6 +557,7 @@ namespace VimeoDotNet
         /// Delete video
         /// </summary>
         /// <param name="clipId">CliepId</param>
+        [Obsolete("Use async API instead sync wrapper")]
         public void DeleteVideo(long clipId)
         {
             try
@@ -553,6 +580,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="videoId">VideoId</param>
         /// <returns>Upload ticket</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public UploadTicket GetReplaceVideoUploadTicket(long videoId)
         {
             try
@@ -571,6 +599,7 @@ namespace VimeoDotNet
         /// Create new upload ticket
         /// </summary>
         /// <returns>Upload ticket</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public UploadTicket GetUploadTicket()
         {
             try
@@ -592,6 +621,7 @@ namespace VimeoDotNet
         /// <param name="chunkSize">ChunkSize</param>
         /// <param name="replaceVideoId">ReplaceVideoId</param>
         /// <returns>Upload request</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public IUploadRequest StartUploadFile(IBinaryContent fileContent, int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null)
         {
             try
@@ -613,6 +643,7 @@ namespace VimeoDotNet
         /// <param name="chunkSize">ChunkSize</param>
         /// <param name="replaceVideoId">ReplaceVideoId</param>
         /// <returns>Upload request</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public IUploadRequest UploadEntireFile(IBinaryContent fileContent, int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null)
         {
             try
@@ -632,6 +663,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="uploadRequest">UploadRequest</param>
         /// <returns>Verification upload response</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public VerifyUploadResponse ContinueUploadFile(IUploadRequest uploadRequest)
         {
             try
@@ -651,6 +683,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="uploadRequest">UploadRequest</param>
         /// <returns>Verification reponse</returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public VerifyUploadResponse VerifyUploadFile(IUploadRequest uploadRequest)
         {
             try
@@ -670,6 +703,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="uploadRequest">UploadRequest</param>
         /// <returns></returns>
+        [Obsolete("Use async API instead sync wrapper")]
         public void CompleteFileUpload(IUploadRequest uploadRequest)
         {
             try
