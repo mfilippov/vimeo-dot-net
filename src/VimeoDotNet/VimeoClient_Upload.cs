@@ -228,6 +228,32 @@ namespace VimeoDotNet
         }
 
         /// <summary>
+        /// Create new upload ticket asynchronously
+        /// </summary>
+        /// <returns>Upload ticket</returns>
+        public async Task<Video> UploadPullLinkAsync(string link)
+        {
+            try
+            {
+                IApiRequest request = GenerateUploadTicketRequest("pull");
+                request.Query.Add("link", link);
+                IRestResponse<Video> response = await request.ExecuteRequestAsync<Video>();
+                UpdateRateLimit(response);
+                CheckStatusCodeError(null, response, "Error generating upload ticket.");
+
+                return response.Data;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+                throw new VimeoUploadException("Error generating upload ticket.", null, ex);
+            }
+        }
+
+        /// <summary>
         /// Verify upload file part asynchronously
         /// </summary>
         /// <param name="uploadRequest">UploadRequest</param>
@@ -339,14 +365,14 @@ namespace VimeoDotNet
             return request;
         }
 
-        private IApiRequest GenerateUploadTicketRequest()
+        private IApiRequest GenerateUploadTicketRequest(string type = "streaming")
         {
             ThrowIfUnauthorized();
 
             IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
             request.Method = Method.POST;
             request.Path = Endpoints.UploadTicket;
-            request.Query.Add("type", "streaming");
+            request.Query.Add("type", type);
             return request;
         }
 

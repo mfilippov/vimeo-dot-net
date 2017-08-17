@@ -42,6 +42,10 @@ namespace VimeoDotNet.Models
         /// </summary>
         public string type { get; set; }
         /// <summary>
+        /// If your upload type is pull, Vimeo will download the video hosted at this public URL. This URL must be valid for at least 24 hours.
+        /// </summary>
+        public string link { get; set; }
+        /// <summary>
         /// User
         /// </summary>
         public User user { get; set; }
