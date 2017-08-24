@@ -600,6 +600,16 @@ namespace VimeoDotNet.Tests
             video.pictures.uri.ShouldNotBeNull();
         }
 
+        [Fact]
+        public async Task CheckRateLimits()
+        {
+            var client = await CreateUnauthenticatedClient();
+            await client.GetVideoAsync(_vimeoSettings.VideoId);
+            client.RateLimit.ShouldBeGreaterThan(0);
+            client.RateLimitRemaining.ShouldBeGreaterThan(0);
+            client.RateLimitReset.Kind.ShouldBe(DateTimeKind.Utc);
+        }
+
         private async Task<VimeoClient> CreateUnauthenticatedClient()
         {
             var authorizationClient = new AuthorizationClient(_vimeoSettings.ClientId, _vimeoSettings.ClientSecret);

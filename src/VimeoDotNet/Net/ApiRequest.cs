@@ -23,7 +23,8 @@ namespace VimeoDotNet.Net
         private readonly Dictionary<string, string> _urlSegments = new Dictionary<string, string>();
         private static readonly JsonSerializerSettings DateFormatSettings = new JsonSerializerSettings
         {
-            DateFormatString = "yyyy-MM-ddTHH:mm:sszzz"
+            DateFormatString = "yyyy-MM-ddTHH:mm:sszzz",
+            DateTimeZoneHandling = DateTimeZoneHandling.Utc
         };
 
         private string _path;

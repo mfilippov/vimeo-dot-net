@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using VimeoDotNet.Authorization;
 using VimeoDotNet.Constants;
 using VimeoDotNet.Exceptions;
@@ -63,13 +64,13 @@ namespace VimeoDotNet
 
         #region Constructors
 
-        /// <summary>
-        ///
-        /// </summary>
-        protected VimeoClient()
+        private VimeoClient()
         {
             AuthClientFactory = new AuthorizationClientFactory();
             ApiRequestFactory = new ApiRequestFactory();
+            RateLimit = 0;
+            RateLimitRemaining = 0;
+            RateLimitReset = DateTime.UtcNow;
         }
 
         /// <summary>
