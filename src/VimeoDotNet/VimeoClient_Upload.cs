@@ -224,11 +224,7 @@ namespace VimeoDotNet
             return uploadRequest;
         }
 
-        /// <summary>
-        /// Verify upload file part asynchronously
-        /// </summary>
-        /// <param name="uploadRequest">UploadRequest</param>
-        /// <returns>Verification reponse</returns>
+        /// <inheritdoc />
         public async Task<VerifyUploadResponse> VerifyUploadFileAsync(IUploadRequest uploadRequest)
         {
             try
@@ -239,6 +235,7 @@ namespace VimeoDotNet
                 var verify = new VerifyUploadResponse();
                 CheckStatusCodeError(uploadRequest, response, "Error verifying file upload.", (HttpStatusCode)308);
 
+                // ReSharper disable once ConvertIfStatementToSwitchStatement
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     verify.BytesWritten = uploadRequest.FileLength;
@@ -249,12 +246,11 @@ namespace VimeoDotNet
                     verify.Status = UploadStatusEnum.InProgress;
                     if (!response.Headers.Contains("Range")) 
                         return verify;
-                    var startIndex = 0;
-                    var endIndex = 0;
                     var match = RangeRegex.Match(response.Headers.GetValues("Range").First());
+                    // ReSharper disable once InvertIf
                     if (match.Success
-                        && int.TryParse(match.Groups["start"].Value, out startIndex)
-                        && int.TryParse(match.Groups["end"].Value, out endIndex))
+                        && long.TryParse(match.Groups["start"].Value, out var startIndex)
+                        && long.TryParse(match.Groups["end"].Value, out var endIndex))
                     {
                         verify.BytesWritten = endIndex - startIndex;
                         if (verify.BytesWritten == uploadRequest.FileLength)
