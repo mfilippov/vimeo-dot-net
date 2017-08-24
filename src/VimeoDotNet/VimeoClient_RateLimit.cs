@@ -1,56 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Net.Http.Headers;
 using VimeoDotNet.Net;
 
 namespace VimeoDotNet
 {
-	public partial class VimeoClient
-	{
-	    /// <summary>
-	    /// Return rate limit
-	    /// </summary>
-	    public long RateLimit
-		{
-			get
-			{
-				if (_headers == null || !_headers.Contains("X-RateLimit-Limit"))
-					return 0;
-				return Convert.ToInt64(_headers.GetValues("X-RateLimit-Limit").First());
-			}
-		}
+    public partial class VimeoClient
+    {
+        /// <inheritdoc />
+        public long RateLimit { get; private set; }
 
-	    /// <summary>
-	    /// Return remaning rate limit
-	    /// </summary>
-	    public long RateLimitRemaining
-		{
-			get
-			{
-				if (_headers == null || !_headers.Contains("X-RateLimit-Remaining"))
-					return 0;
-				return Convert.ToInt64(_headers.GetValues("X-RateLimit-Remaining").First());
-			}
-		}
+        /// <inheritdoc />
+        public long RateLimitRemaining { get; private set; }
 
-	    /// <summary>
-	    /// Return rate limit reset time
-	    /// </summary>
-	    public DateTime RateLimitReset
-		{
-			get
-			{
-				if (_headers == null || !_headers.Contains("X-RateLimit-Reset"))
-					return DateTime.UtcNow;
-				return DateTime.Parse(_headers.GetValues("X-RateLimit-Reset").First());
-			}
-		}
+        /// <inheritdoc />
+        public DateTime RateLimitReset { get; private set; }
 
-		private HttpResponseHeaders _headers = null;
-		private void UpdateRateLimit(IApiResponse response)
-		{
-			_headers = response.Headers;
-		}
-	}
+        private void UpdateRateLimit(IApiResponse response)
+        {
+            if (response.Headers == null || !response.Headers.Contains("X-RateLimit-Limit"))
+            {
+                RateLimit = 0;
+            }
+            else
+            {
+                RateLimit = Convert.ToInt64(response.Headers.GetValues("X-RateLimit-Limit").First());
+            }
+            if (response.Headers == null || !response.Headers.Contains("X-RateLimit-Remaining"))
+            {
+                RateLimitRemaining = 0;
+            }
+            else
+            {
+                RateLimitRemaining = Convert.ToInt64(response.Headers.GetValues("X-RateLimit-Remaining").First());
+            }
+
+            if (response.Headers == null || !response.Headers.Contains("X-RateLimit-Reset"))
+            {
+                RateLimitReset = DateTime.UtcNow;
+            }
+            else
+            {
+                RateLimitReset = DateTime.ParseExact(response.Headers.GetValues("X-RateLimit-Reset").First(), "yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+            }
+        }
+    }
 }
