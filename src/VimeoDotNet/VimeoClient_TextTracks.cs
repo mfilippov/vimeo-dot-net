@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using VimeoDotNet.Constants;
 using VimeoDotNet.Exceptions;
 using VimeoDotNet.Models;
@@ -213,7 +214,7 @@ namespace VimeoDotNet
             return request;
         }
 
-        private IApiRequest GenerateUpdateTextTrackRequest(long clipId, long trackId, TextTrack track)
+        private IApiRequest GenerateUpdateTextTrackRequest(long clipId, long trackId, [NotNull]TextTrack track)
         {
             ThrowIfUnauthorized();
 
@@ -223,8 +224,6 @@ namespace VimeoDotNet
             request.UrlSegments.Add("clipId", clipId.ToString());
             request.UrlSegments.Add("trackId", trackId.ToString());
 
-            if (track == null) 
-                return request;
             var parameters = new Dictionary<string, string>
             {
                 ["active"] = track.active.ToString().ToLower()

@@ -9,6 +9,7 @@ using VimeoDotNet.Net;
 using VimeoDotNet.Parameters;
 using VimeoDotNet.Tests.Settings;
 using Xunit;
+using static System.IO.File;
 
 namespace VimeoDotNet.Tests
 {
@@ -45,10 +46,43 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
-        public async Task Integration_VimeoClient_UploadEntireFile_UploadsFile()
+        public async Task Integration_VimeoClient_UploadEntireFile_UploadsFile_ByPath()
         {
             long length;
             IUploadRequest completedRequest;
+            var tempFilePath = Path.GetTempFileName() + ".mp4";
+            using (var fs = new FileStream(tempFilePath, FileMode.CreateNew))
+            {
+                GetFileFromEmbeddedResources(Testfilepath).CopyTo(fs);
+            }
+            using (var file = new BinaryContent(tempFilePath))
+            {
+                file.ContentType.ShouldBe("video/mp4");
+                length = file.Data.Length;
+                var client = CreateAuthenticatedClient();
+                completedRequest = await client.UploadEntireFileAsync(file);
+                Debug.Assert(completedRequest.ClipId != null, "completedRequest.ClipId != null");
+                await client.DeleteVideoAsync(completedRequest.ClipId.Value);
+            }
+            completedRequest.ShouldNotBeNull();
+            completedRequest.AllBytesWritten.ShouldBeTrue();
+            completedRequest.IsVerifiedComplete.ShouldBeTrue();
+            completedRequest.BytesWritten.ShouldBe(length);
+            completedRequest.ClipUri.ShouldNotBeNull();
+            completedRequest.ClipId.ShouldNotBeNull();
+            completedRequest.ClipId?.ShouldBeGreaterThan(0);
+            if (Exists(tempFilePath))
+            {
+                Delete(tempFilePath);
+            }
+        }
+
+        [Fact]
+        public async Task Integration_VimeoClient_UploadEntireFile_UploadsFile_ByStream()
+        {
+            long length;
+            IUploadRequest completedRequest;
+            
             using (var file = new BinaryContent(GetFileFromEmbeddedResources(Testfilepath), "video/mp4"))
             {
                 length = file.Data.Length;
@@ -64,6 +98,70 @@ namespace VimeoDotNet.Tests
             completedRequest.ClipUri.ShouldNotBeNull();
             completedRequest.ClipId.ShouldNotBeNull();
             completedRequest.ClipId?.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task Integration_VimeoClient_UploadEntireFile_UploadsFile_ByArray()
+        {
+            long length;
+            IUploadRequest completedRequest;
+            var stream = GetFileFromEmbeddedResources(Testfilepath);
+            var buffer = new byte[stream.Length];
+            await stream.ReadAsync(buffer, 0, (int)stream.Length);
+            using (var file = new BinaryContent(buffer, "video/mp4"))
+            {
+                length = file.Data.Length;
+                var client = CreateAuthenticatedClient();
+                completedRequest = await client.UploadEntireFileAsync(file);
+                Debug.Assert(completedRequest.ClipId != null, "completedRequest.ClipId != null");
+                await client.DeleteVideoAsync(completedRequest.ClipId.Value);
+            }
+            completedRequest.ShouldNotBeNull();
+            completedRequest.AllBytesWritten.ShouldBeTrue();
+            completedRequest.IsVerifiedComplete.ShouldBeTrue();
+            completedRequest.BytesWritten.ShouldBe(length);
+            completedRequest.ClipUri.ShouldNotBeNull();
+            completedRequest.ClipId.ShouldNotBeNull();
+            completedRequest.ClipId?.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task Integration_VimeoClient_UploadEntireFile_UploadsFile_ReadPartOfFile()
+        {
+            using (var file = new BinaryContent(GetFileFromEmbeddedResources(Testfilepath), "video/mp4"))
+            {
+                (await file.ReadAsync(17, 20)).Length.ShouldBe(3);
+                (await file.ReadAsync(17000, 17020)).Length.ShouldBe(20);
+            }
+        }
+
+        [Fact]
+        public async Task Integration_VimeoClient_UploadEntireFile_UploadsFile_DoubleRead()
+        {
+            using (var file = new BinaryContent(GetFileFromEmbeddedResources(Testfilepath), "video/mp4"))
+            {
+                (await file.ReadAllAsync()).Length.ShouldBe(818086);
+                (await file.ReadAllAsync()).Length.ShouldBe(818086);
+            }
+        }
+
+        [Fact]
+        public void Integration_VimeoClient_UploadEntireFile_UploadsFile_DisposedStreamAccess()
+        {
+            var file = new BinaryContent(GetFileFromEmbeddedResources(Testfilepath), "video/mp4");
+            file.Dispose();
+            Should.Throw<ObjectDisposedException>(() => file.Dispose());
+            Should.Throw<ObjectDisposedException>(() => file.Data.Length.ShouldBe(0));
+            Should.ThrowAsync<ObjectDisposedException>(async () => await file.ReadAllAsync());
+        }
+
+        [Fact]
+        public void Integration_VimeoClient_UploadEntireFile_UploadsFile_InvalidStreams()
+        {
+            var nonReadablefile = new BinaryContent(new NonReadableStream(), "video/mp4");
+            var nonSeekablefile = new BinaryContent(new NonSeekableStream(), "video/mp4");
+            Should.ThrowAsync<InvalidOperationException>(async () => await nonReadablefile.ReadAllAsync(), "Content should be a readable Stream");
+            Should.ThrowAsync<InvalidOperationException>(async () => await nonSeekablefile.ReadAsync(10, 20), "Content cannot be advanced to the specified start index: 10");
         }
 
         [Fact]
@@ -518,6 +616,74 @@ namespace VimeoDotNet.Tests
         {
             var assembly = typeof(VimeoClientAsyncTests).Assembly;
             return assembly.GetManifestResourceStream(relativePath);
+        }
+
+        private class NonReadableStream : Stream
+        {
+            public override void Flush()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override long Seek(long offset, SeekOrigin origin)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void SetLength(long value)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override int Read(byte[] buffer, int offset, int count)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void Write(byte[] buffer, int offset, int count)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override bool CanRead => false;
+            public override bool CanSeek { get; }
+            public override bool CanWrite { get; }
+            public override long Length { get; }
+            public override long Position { get; set; }
+        }
+
+        private class NonSeekableStream : Stream
+        {
+            public override void Flush()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override long Seek(long offset, SeekOrigin origin)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void SetLength(long value)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override int Read(byte[] buffer, int offset, int count)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void Write(byte[] buffer, int offset, int count)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override bool CanRead => true;
+            public override bool CanSeek => false;
+            public override bool CanWrite { get; }
+            public override long Length { get; }
+            public override long Position { get; set; }
         }
     }
 }
