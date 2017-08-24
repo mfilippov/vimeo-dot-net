@@ -58,10 +58,6 @@ namespace VimeoDotNet.Models
         /// </summary>
         public EmbedPresets embed_presets { get; set; }
         /// <summary>
-        /// Content rating
-        /// </summary>
-        public string content_rating { get; set; }
-        /// <summary>
         /// Duration
         /// </summary>
         public int duration { get; set; }
@@ -88,7 +84,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Pictures
         /// </summary>
-        public List<Picture> pictures { get; set; }
+        public Pictures pictures { get; set; }
         /// <summary>
         /// Files
         /// </summary>

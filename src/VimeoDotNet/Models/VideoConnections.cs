@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace VimeoDotNet.Models
 {
@@ -11,30 +12,41 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Comments
         /// </summary>
-        public string comments { get; set; }
+        public VideoConnectionsEntry comments { get; set; }
         /// <summary>
         /// Credits
         /// </summary>
-        public string credits { get; set; }
-        /// <summary>
-        /// Files
-        /// </summary>
-        public string files { get; set; }
+        public VideoConnectionsEntry credits { get; set; }
         /// <summary>
         /// Likes
         /// </summary>
-        public string likes { get; set; }
+        public VideoConnectionsEntry likes { get; set; }
         /// <summary>
         /// Presets
         /// </summary>
-        public string presets { get; set; }
+        public VideoConnectionsEntry puctires { get; set; }
         /// <summary>
         /// Text tracks
         /// </summary>
         public TextTracks texttracks { get; set; }
+    }
+
+    /// <summary>
+    /// Video connections entry
+    /// </summary>
+    public class VideoConnectionsEntry
+    {
         /// <summary>
-        /// Upload tickets
+        /// URI
         /// </summary>
-        public string upload_tickets { get; set; }
+        public string uri { get; set; }
+        /// <summary>
+        /// Options
+        /// </summary>
+        public List<string> options { get; set; }
+        /// <summary>
+        /// Total
+        /// </summary>
+        public int total { get; set; }
     }
 }

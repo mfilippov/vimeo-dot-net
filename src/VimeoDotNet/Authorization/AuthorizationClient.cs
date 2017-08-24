@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using RestSharp;
-using RestSharp.Extensions.MonoHttp;
 using VimeoDotNet.Constants;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
 
 namespace VimeoDotNet.Authorization
 {
+    /// <inheritdoc />
     /// <summary>
     /// Authorization client
     /// </summary>
@@ -19,13 +20,13 @@ namespace VimeoDotNet.Authorization
         #region Private Properties
 
         /// <summary>
-        ///
+        /// Client Id
         /// </summary>
-        protected string ClientId { get; set; }
+        private string ClientId { get; }
         /// <summary>
-        ///
+        /// Client secret
         /// </summary>
-        protected string ClientSecret { get; set; }
+        private string ClientSecret { get; }
 
         #endregion
 
@@ -42,15 +43,7 @@ namespace VimeoDotNet.Authorization
             ClientSecret = clientSecret;
         }
 
-        /// <summary>
-        /// Get authorization endpoint
-        /// </summary>
-        /// <param name="redirectUri">RedirectUri</param>
-        /// <param name="scope">Scope</param>
-        /// <param name="state">State</param>
-        /// <returns>Authorization endpoint</returns>
-        /// <exception cref="InvalidOperationException">Empty ClientId</exception>
-        /// <exception cref="ArgumentException">Empty redirectUri</exception>
+        /// <inheritdoc />
         public string GetAuthorizationEndpoint(string redirectUri, IEnumerable<string> scope, string state)
         {
             if (string.IsNullOrWhiteSpace(ClientId))
@@ -62,38 +55,57 @@ namespace VimeoDotNet.Authorization
                 throw new ArgumentException("redirectUri should be a valid Uri");
             }
 
-            string queryString = BuildAuthorizeQueryString(redirectUri, scope, state);
+            var queryString = BuildAuthorizeQueryString(redirectUri, scope, state);
             return BuildUrl(Endpoints.Authorize, queryString);
         }
 
-        /// <summary>
-        /// GetAccessToken
-        /// </summary>
-        /// <param name="authorizationCode">AuthorizationCode</param>
-        /// <param name="redirectUri">RedirectUri</param>
-        /// <returns>Access token response</returns>
+        /// <inheritdoc />
         public AccessTokenResponse GetAccessToken(string authorizationCode, string redirectUri)
         {
             return GetAccessTokenAsync(authorizationCode, redirectUri).Result;
         }
 
-        /// <summary>
-        /// Get access token asynchronously
-        /// </summary>
-        /// <param name="authorizationCode">AuthorizationCode</param>
-        /// <param name="redirectUri">RedirectUri</param>
-        /// <returns>Access token response</returns>
+        /// <inheritdoc />
         public async Task<AccessTokenResponse> GetAccessTokenAsync(string authorizationCode, string redirectUri)
         {
-            ApiRequest request = BuildAccessTokenRequest(authorizationCode, redirectUri);
-            IRestResponse<AccessTokenResponse> result = await request.ExecuteRequestAsync<AccessTokenResponse>();
-            return result.Data;
+            var request = BuildAccessTokenRequest(authorizationCode, redirectUri);
+            var result = await request.ExecuteRequestAsync<AccessTokenResponse>();
+            return result.Content;
+        }
+
+        /// <inheritdoc />
+        public async Task<AccessTokenResponse> GetUnauthenticatedTokenAsync()
+        {
+            var request = BuildUnauthenticatedTokenRequest();
+            var result = await request.ExecuteRequestAsync<AccessTokenResponse>();
+            return result.Content;
         }
 
         #endregion
 
         #region Private Methods
 
+        private ApiRequest BuildUnauthenticatedTokenRequest(List<string> scopes = null)
+        {
+            if (string.IsNullOrWhiteSpace(ClientId))
+                throw new InvalidOperationException("Authorization.ClientId should be a non-null, non-whitespace string");
+            if (string.IsNullOrWhiteSpace(ClientSecret))
+                throw new InvalidOperationException(
+                    "Authorization.ClientSecret should be a non-null, non-whitespace string");
+            var request = new ApiRequest(ClientId, ClientSecret)
+            {
+                Method = HttpMethod.Post,
+                Path = Endpoints.AuthorizeClient
+            };
+            var parameters = new Dictionary<string, string>
+            {
+                ["grant_type"] = "client_credentials"
+            };
+            if (scopes != null)
+                parameters["scope"] = string.Join(" ", scopes);
+            request.Body = new FormUrlEncodedContent(parameters);
+            return request;
+        }
         /// <summary>
         /// Build access token request
         /// </summary>
@@ -102,7 +114,7 @@ namespace VimeoDotNet.Authorization
         /// <returns>Access token request</returns>
         /// <exception cref="InvalidOperationException">Empty ClientId</exception>
         /// <exception cref="ArgumentException">Empty ClientSecret</exception>
-        protected ApiRequest BuildAccessTokenRequest(string authorizationCode, string redirectUri)
+        private ApiRequest BuildAccessTokenRequest(string authorizationCode, string redirectUri)
         {
             if (string.IsNullOrWhiteSpace(ClientId))
             {
@@ -122,9 +134,11 @@ namespace VimeoDotNet.Authorization
                 throw new ArgumentException("redirectUri should be a valid Uri");
             }
 
-            var request = new ApiRequest(ClientId, ClientSecret);
-            request.Method = Method.POST;
-            request.Path = Endpoints.AccessToken;
+            var request = new ApiRequest(ClientId, ClientSecret)
+            {
+                Method = HttpMethod.Post,
+                Path = Endpoints.AccessToken
+            };
             SetAccessTokenQueryParams(request, authorizationCode, redirectUri);
 
             return request;
@@ -136,9 +150,9 @@ namespace VimeoDotNet.Authorization
         /// <param name="route">Route</param>
         /// <param name="queryString">QueryString</param>
         /// <returns>URL</returns>
-        protected string BuildUrl(string route, string queryString)
+        private static string BuildUrl(string route, string queryString)
         {
-            return string.Format("{0}://{1}{2}{3}", Request.DefaultProtocol, Request.DefaultHostName, route, queryString);
+            return $"{Request.DefaultProtocol}://{Request.DefaultHostName}{route}{queryString}";
         }
 
         /// <summary>
@@ -147,7 +161,7 @@ namespace VimeoDotNet.Authorization
         /// <param name="request">Request</param>
         /// <param name="authorizationCode">AuthorizationCode</param>
         /// <param name="redirectUri">RedirectUri</param>
-        protected void SetAccessTokenQueryParams(ApiRequest request, string authorizationCode, string redirectUri)
+        private static void SetAccessTokenQueryParams(IApiRequest request, string authorizationCode, string redirectUri)
         {
             request.Query.Add("grant_type", "authorization_code");
             request.Query.Add("code", authorizationCode);
@@ -161,23 +175,15 @@ namespace VimeoDotNet.Authorization
         /// <param name="scope">Scope</param>
         /// <param name="state">State</param>
         /// <returns>Authorize query string</returns>
-        protected string BuildAuthorizeQueryString(string redirectUri, IEnumerable<string> scope, string state)
+        private string BuildAuthorizeQueryString(string redirectUri, IEnumerable<string> scope, string state)
         {
             var qsParams = new Dictionary<string, string>
             {
                 {"response_type", "code"},
                 {"client_id", ClientId},
-                {"redirect_uri", redirectUri}
+                {"redirect_uri", redirectUri},
+                {"scope", scope == null ? Scopes.Public : string.Join(" ", scope.ToArray())}
             };
-
-            if (scope == null)
-            {
-                qsParams.Add("scope", Scopes.Public);
-            }
-            else
-            {
-                qsParams.Add("scope", string.Join(" ", scope.ToArray()));
-            }
 
             if (!string.IsNullOrWhiteSpace(state))
             {
@@ -192,7 +198,7 @@ namespace VimeoDotNet.Authorization
         /// </summary>
         /// <param name="queryParams">QueryParams</param>
         /// <returns>Query string</returns>
-        protected string GetQueryString(IDictionary<string, string> queryParams)
+        private static string GetQueryString(IDictionary<string, string> queryParams)
         {
             var sb = new StringBuilder("");
             foreach (var qsParam in queryParams)
@@ -201,7 +207,8 @@ namespace VimeoDotNet.Authorization
                 {
                     sb.Append("&");
                 }
-                sb.AppendFormat("{0}={1}", HttpUtility.UrlEncode(qsParam.Key), HttpUtility.UrlEncode(qsParam.Value));
+                
+                sb.AppendFormat("{0}={1}", WebUtility.UrlEncode(qsParam.Key), WebUtility.UrlEncode(qsParam.Value));
             }
             sb.Insert(0, "?");
             return sb.ToString();

@@ -1,7 +1,7 @@
-﻿using RestSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using VimeoDotNet.Constants;
 using VimeoDotNet.Enums;
@@ -21,8 +21,8 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateVideoDeleteRequest(clipId);
-                IRestResponse response = await request.ExecuteRequestAsync();
+                var request = GenerateVideoDeleteRequest(clipId);
+                var response = await request.ExecuteRequestAsync();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error deleting video.");
             }
@@ -46,8 +46,8 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateAlbumVideosRequest(albumId, clipId: clipId);
-                IRestResponse<Video> response = await request.ExecuteRequestAsync<Video>();
+                var request = GenerateAlbumVideosRequest(albumId, clipId: clipId);
+                var response = await request.ExecuteRequestAsync<Video>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving user album video.", HttpStatusCode.NotFound);
 
@@ -55,7 +55,7 @@ namespace VimeoDotNet
                 {
                     return null;
                 }
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -81,8 +81,8 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateAlbumVideosRequest(albumId, page: page, perPage: perPage, sort: sort, direction: direction);
-                IRestResponse<Paginated<Video>> response = await request.ExecuteRequestAsync<Paginated<Video>>();
+                var request = GenerateAlbumVideosRequest(albumId, page: page, perPage: perPage, sort: sort, direction: direction);
+                var response = await request.ExecuteRequestAsync<Paginated<Video>>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving account album videos.", HttpStatusCode.NotFound);
 
@@ -95,7 +95,7 @@ namespace VimeoDotNet
                         total = 0
                     };
                 }
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -118,8 +118,8 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateAlbumVideosRequest(albumId, userId, clipId);
-                IRestResponse<Video> response = await request.ExecuteRequestAsync<Video>();
+                var request = GenerateAlbumVideosRequest(albumId, userId, clipId);
+                var response = await request.ExecuteRequestAsync<Video>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving user album video.", HttpStatusCode.NotFound);
 
@@ -127,7 +127,7 @@ namespace VimeoDotNet
                 {
                     return null;
                 }
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -149,8 +149,8 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateAlbumVideosRequest(albumId, userId);
-                IRestResponse<Paginated<Video>> response = await request.ExecuteRequestAsync<Paginated<Video>>();
+                var request = GenerateAlbumVideosRequest(albumId, userId);
+                var response = await request.ExecuteRequestAsync<Paginated<Video>>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving user album videos.", HttpStatusCode.NotFound);
 
@@ -163,7 +163,7 @@ namespace VimeoDotNet
                         total = 0
                     };
                 }
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -185,8 +185,8 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateVideosRequest(userId, clipId);
-                IRestResponse<Video> response = await request.ExecuteRequestAsync<Video>();
+                var request = GenerateVideosRequest(userId, clipId);
+                var response = await request.ExecuteRequestAsync<Video>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving user video.", HttpStatusCode.NotFound);
 
@@ -194,7 +194,7 @@ namespace VimeoDotNet
                 {
                     return null;
                 }
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -229,8 +229,8 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateVideosRequest(userId: userId, page: page, perPage: perPage, query: query);
-                IRestResponse<Paginated<Video>> response = await request.ExecuteRequestAsync<Paginated<Video>>();
+                var request = GenerateVideosRequest(userId: userId, page: page, perPage: perPage, query: query);
+                var response = await request.ExecuteRequestAsync<Paginated<Video>>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving user videos.", HttpStatusCode.NotFound);
 
@@ -243,7 +243,7 @@ namespace VimeoDotNet
                         total = 0
                     };
                 }
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -264,8 +264,8 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateVideosRequest(clipId: clipId);
-                IRestResponse<Video> response = await request.ExecuteRequestAsync<Video>();
+                var request = GenerateVideosRequest(clipId: clipId);
+                var response = await request.ExecuteRequestAsync<Video>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving account video.", HttpStatusCode.NotFound);
 
@@ -273,7 +273,7 @@ namespace VimeoDotNet
                 {
                     return null;
                 }
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -293,12 +293,12 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateVideosRequest(page: page, perPage: perPage);
-                IRestResponse<Paginated<Video>> response = await request.ExecuteRequestAsync<Paginated<Video>>();
+                var request = GenerateVideosRequest(page: page, perPage: perPage);
+                var response = await request.ExecuteRequestAsync<Paginated<Video>>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving account videos.");
 
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -319,8 +319,8 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateVideoPatchRequest(clipId, metaData);
-                IRestResponse response = await request.ExecuteRequestAsync();
+                var request = GenerateVideoPatchRequest(clipId, metaData);
+                var response = await request.ExecuteRequestAsync();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error updating user video metadata.");
             }
@@ -343,8 +343,8 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateVideoAllowedDomainPatchRequest(clipId, domain);
-                IRestResponse response = await request.ExecuteRequestAsync();
+                var request = GenerateVideoAllowedDomainPatchRequest(clipId, domain);
+                var response = await request.ExecuteRequestAsync();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error updating user video allowed domain.");
             }
@@ -366,7 +366,7 @@ namespace VimeoDotNet
             string endpoint = userId.HasValue
                 ? clipId.HasValue ? Endpoints.UserVideo : Endpoints.UserVideos
                 : clipId.HasValue ? Endpoints.Video : Endpoints.Videos;
-            request.Method = Method.GET;
+            request.Method = HttpMethod.Get;
             request.Path = endpoint;
 
             if (userId.HasValue)
@@ -399,7 +399,7 @@ namespace VimeoDotNet
 
             IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
             string endpoint = clipId.HasValue ? Endpoints.UserAlbumVideo : Endpoints.UserAlbumVideos;
-            request.Method = Method.GET;
+            request.Method = HttpMethod.Get;
             request.Path = userId.HasValue ? endpoint : Endpoints.GetCurrentUserEndpoint(endpoint);
 
             request.UrlSegments.Add("albumId", albumId.ToString());
@@ -436,7 +436,7 @@ namespace VimeoDotNet
             ThrowIfUnauthorized();
 
             IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
-            request.Method = Method.DELETE;
+            request.Method = HttpMethod.Delete;
             request.Path = Endpoints.Video;
 
             request.UrlSegments.Add("clipId", clipId.ToString());
@@ -448,38 +448,40 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
-            request.Method = Method.PATCH;
+            var request = ApiRequestFactory.GetApiRequest(AccessToken);
+            request.Method = new HttpMethod("PATCH");
             request.Path = Endpoints.Video;
 
             request.UrlSegments.Add("clipId", clipId.ToString());
+            var parameters = new Dictionary<string, string>();
             if (metaData.Name != null)
             {
-                request.Query.Add("name", metaData.Name.Trim());
+                parameters["name"] = metaData.Name.Trim();
             }
             if (metaData.Description != null)
             {
-                request.Query.Add("description", metaData.Description.Trim());
+                parameters["description"] = metaData.Description.Trim();
             }
             if (metaData.Privacy != VideoPrivacyEnum.Unknown)
             {
-                request.Query.Add("privacy.view", metaData.Privacy.ToString().ToLower());
+                parameters["privacy.view"] = metaData.Privacy.ToString().ToLower();
             }
             if (metaData.Privacy == VideoPrivacyEnum.Password)
             {
-                request.Query.Add("password", metaData.Password);
+                parameters["password"] = metaData.Password;
             }
             if (metaData.EmbedPrivacy != VideoEmbedPrivacyEnum.Unknown)
             {
-                request.Query.Add("privacy.embed", metaData.EmbedPrivacy.ToString().ToLower());
+                parameters["privacy.embed"] = metaData.EmbedPrivacy.ToString().ToLower();
             }
             if (metaData.Comments != VideoCommentsEnum.Unknown)
             {
-                request.Query.Add("privacy.comments", metaData.Comments.ToString().ToLower());
+                parameters["privacy.comments"] = metaData.Comments.ToString().ToLower();
             }
-            request.Query.Add("review_link", metaData.ReviewLinkEnabled.ToString().ToLower());
-            request.Query.Add("privacy.download", metaData.AllowDownloadVideo ? "true" : "false");
-            request.Query.Add("privacy.add", metaData.AllowAddToAlbumChannelGroup ? "true" : "false");
+            parameters["review_link"] = metaData.ReviewLinkEnabled.ToString().ToLower();
+            parameters["privacy.download"] = metaData.AllowDownloadVideo ? "true" : "false";
+            parameters["privacy.add"] = metaData.AllowAddToAlbumChannelGroup ? "true" : "false";
+            request.Body = new FormUrlEncodedContent(parameters);
 
             return request;
         }
@@ -489,7 +491,7 @@ namespace VimeoDotNet
             ThrowIfUnauthorized();
 
             IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
-            request.Method = Method.PUT;
+            request.Method = HttpMethod.Put;
             request.Path = Endpoints.VideoAllowedDomain;
 
             request.UrlSegments.Add("clipId", clipId.ToString());

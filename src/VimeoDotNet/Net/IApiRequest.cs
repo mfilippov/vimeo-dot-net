@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
-using RestSharp;
 
 namespace VimeoDotNet.Net
 {
@@ -16,7 +16,7 @@ namespace VimeoDotNet.Net
         /// <summary>
         /// Method
         /// </summary>
-        Method Method { get; set; }
+        HttpMethod Method { get; set; }
         /// <summary>
         /// Path
         /// </summary>
@@ -40,7 +40,7 @@ namespace VimeoDotNet.Net
         /// <summary>
         /// Body
         /// </summary>
-        object Body { get; set; }
+        HttpContent Body { get; set; }
         /// <summary>
         /// Response type
         /// </summary>
@@ -52,36 +52,21 @@ namespace VimeoDotNet.Net
         /// <summary>
         ///
         /// </summary>
-        IDictionary<string, string> Headers { get; }
-        /// <summary>
-        ///
-        /// </summary>
         IDictionary<string, string> Query { get; }
         /// <summary>
         ///
         /// </summary>
         IDictionary<string, string> UrlSegments { get; }
         /// <summary>
-        /// Execute request
-        /// </summary>
-        /// <returns>Rest repons</returns>
-        IRestResponse ExecuteRequest();
-        /// <summary>
-        /// Execute request
-        /// </summary>
-        /// <typeparam name="T">Type</typeparam>
-        /// <returns>Rest repons</returns>
-        IRestResponse<T> ExecuteRequest<T>() where T : new();
-        /// <summary>
         /// Execute request asynchronously
         /// </summary>
         /// <returns>Rest reponse</returns>
-        Task<IRestResponse> ExecuteRequestAsync();
+        Task<IApiResponse> ExecuteRequestAsync();
         /// <summary>
         /// Execute request asynchronously
         /// </summary>
         /// <typeparam name="T">Type</typeparam>
-        /// <returns>Rest repons</returns>
-        Task<IRestResponse<T>> ExecuteRequestAsync<T>() where T : new();
+        /// <returns>Rest reponse</returns>
+        Task<IApiResponse<T>> ExecuteRequestAsync<T>() where T : new();
     }
 }

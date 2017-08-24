@@ -13,25 +13,13 @@ namespace VimeoDotNet.Net
         /// </summary>
         string ContentType { get; set; }
         /// <summary>
-        /// Data
+        /// Content
         /// </summary>
-        Stream Data { get; set; }
+        Stream Data { get; }
         /// <summary>
         /// Original file name
         /// </summary>
         string OriginalFileName { get; set; }
-        /// <summary>
-        /// Read bytes to byte array
-        /// </summary>
-        /// <param name="startIndex">Start index</param>
-        /// <param name="endIndex">End index</param>
-        /// <returns>Byte array</returns>
-        byte[] Read(int startIndex, int endIndex);
-        /// <summary>
-        /// Read all bytes to array
-        /// </summary>
-        /// <returns>Byte array</returns>
-        byte[] ReadAll();
         /// <summary>
         /// Read all bytes to byte array asynchronously
         /// </summary>
