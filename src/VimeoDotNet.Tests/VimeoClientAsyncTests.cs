@@ -592,7 +592,7 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
-        public async Task GetAccountVideoWtihUnauthenticatedToken()
+        public async Task GetAccountVideoWithUnauthenticatedToken()
         {
             var client = await CreateUnauthenticatedClient();
             var video = await client.GetVideoAsync(_vimeoSettings.VideoId);
