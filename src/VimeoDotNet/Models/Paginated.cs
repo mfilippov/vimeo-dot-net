@@ -11,7 +11,7 @@ namespace VimeoDotNet.Models
     public class Paginated<T> where T : class
     {
         /// <summary>
-        /// Data
+        /// Content
         /// </summary>
         public List<T> data { get; set; }
         /// <summary>

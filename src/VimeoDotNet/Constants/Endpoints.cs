@@ -4,6 +4,7 @@
     {
         public const string Authorize = "/oauth/authorize";
         public const string AccessToken = "/oauth/access_token";
+        public const string AuthorizeClient = "/oauth/authorize/client";
 
         public const string Albums = "/albums";
         public const string Album = "/albums/{albumId}";

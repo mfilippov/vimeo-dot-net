@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using VimeoDotNet.Helpers;
 
 namespace VimeoDotNet.Net
 {
+    /// <inheritdoc cref="IDisposable" />
     /// <summary>
     /// Binary content
     /// </summary>
@@ -13,33 +15,34 @@ namespace VimeoDotNet.Net
     {
         #region Private Fields
 
-        private const int BUFFER_SIZE = 16384; //16k
+        private const int BufferSize = 16384; //16k
 
-        private bool disposeStream = true;
+        private readonly bool _shouldDisposeStream = true;
+        private bool _disposed;
 
         [NonSerialized]
         private Stream _data;
+
 
         #endregion
 
         #region Properties
 
-        /// <summary>
-        /// Original file name
-        /// </summary>
+        /// <inheritdoc />
         public string OriginalFileName { get; set; }
-        /// <summary>
-        /// Content type
-        /// </summary>
+        /// <inheritdoc />
         public string ContentType { get; set; }
 
-        /// <summary>
-        /// Data
-        /// </summary>
+        /// <inheritdoc />
+        [NotNull]
         public Stream Data
         {
-            get { return _data; }
-            set { _data = value; }
+            get
+            {
+                if(_disposed)
+                    throw new ObjectDisposedException("BinaryContent");
+                return _data;
+            }
         }
 
         #endregion
@@ -49,100 +52,66 @@ namespace VimeoDotNet.Net
         /// <summary>
         /// Binary content
         /// </summary>
-        public BinaryContent()
-        {
-        }
-
-        /// <summary>
-        /// Binary content
-        /// </summary>
         /// <param name="filePath">FilePath</param>
+        [PublicAPI]
         public BinaryContent(string filePath)
         {
             OriginalFileName = Path.GetFileName(filePath);
             ContentType = MimeHelpers.GetMimeMapping(OriginalFileName);
-            Data = File.OpenRead(filePath);
+            _data = File.OpenRead(filePath);
         }
 
         /// <summary>
         /// Binary content
         /// </summary>
-        /// <param name="data">Data</param>
+        /// <param name="data">Content</param>
         /// <param name="contentType">Content type</param>
-        public BinaryContent(Stream data, string contentType)
+        public BinaryContent([NotNull]Stream data, string contentType)
         {
             ContentType = contentType;
-            Data = data;
-            disposeStream = false;
+            _data = data;
+            _shouldDisposeStream = false;
         }
         /// <summary>
         /// Binary content
         /// </summary>
-        /// <param name="data">Data</param>
+        /// <param name="data">Content</param>
         /// <param name="contentType">Content type</param>
         public BinaryContent(byte[] data, string contentType)
         {
             ContentType = contentType;
-            Data = new MemoryStream(data);
+            _data = new MemoryStream(data);
         }
 
         #endregion
 
         #region Public Functions
 
-        /// <summary>
-        /// Read bytes to byte array
-        /// </summary>
-        /// <param name="startIndex">Start index</param>
-        /// <param name="endIndex">End index</param>
-        /// <returns>Byte array</returns>
-        public byte[] Read(int startIndex, int endIndex)
-        {
-            return ReadAsync(startIndex, endIndex).Result;
-        }
-
-        /// <summary>
-        /// Read all bytes to array
-        /// </summary>
-        /// <returns>Byte array</returns>
-        public byte[] ReadAll()
-        {
-            return ReadAllAsync().Result;
-        }
-
-        /// <summary>
-        /// Read all bytes to byte array asynchronously
-        /// </summary>
-        /// <returns>Byte array</returns>
+        /// <inheritdoc />
         public async Task<byte[]> ReadAllAsync()
         {
             VerifyCanRead(0);
-            return await ReadDataStream(Data.Length);
+            return await ReadDataStream(0, Data.Length);
         }
 
-        /// <summary>
-        /// Read bytes to byte array asynchronously
-        /// </summary>
-        /// <param name="startIndex">Start index</param>
-        /// <param name="endIndex">End index</param>
-        /// <returns>Byte array</returns>
+        /// <inheritdoc />
         public async Task<byte[]> ReadAsync(long startIndex, long endIndex)
         {
             VerifyCanRead(startIndex);
-            return await ReadDataStream(endIndex - startIndex);
+            return await ReadDataStream(startIndex, endIndex - startIndex);
         }
 
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing,
-        /// releasing, or resetting unmanaged resources.
-        /// </summary>
+        /// <inheritdoc />
         public void Dispose()
         {
-            if (Data != null && disposeStream)
+            if (_disposed)
+                throw new ObjectDisposedException("BinaryContent");
+            if (_shouldDisposeStream)
             {
-                Data.Dispose();
-                Data = null;
+                _data.Dispose();
+                _data = null;
             }
+            _disposed = true;
         }
 
         #endregion
@@ -151,35 +120,32 @@ namespace VimeoDotNet.Net
 
         private void VerifyCanRead(long startIndex)
         {
-            if (Data == null)
-            {
-                throw new InvalidOperationException("Data should be populated with a Stream");
-            }
+            if (_disposed)
+                throw new ObjectDisposedException("BinaryContent");
             if (!Data.CanRead)
             {
-                throw new InvalidOperationException("Data should be a readable Stream");
+                throw new InvalidOperationException("Content should be a readable Stream");
             }
-            if (Data.Position != startIndex)
+            if (Data.Position == startIndex) return;
+            if (!Data.CanSeek)
             {
-                if (!Data.CanSeek)
-                {
-                    throw new InvalidOperationException("Data cannot be advanced to the specified start index: " +
-                                                        startIndex);
-                }
-                Data.Position = startIndex;
+                throw new InvalidOperationException("Content cannot be advanced to the specified start index: " +
+                                                    startIndex);
             }
+            Data.Position = startIndex;
         }
 
-        private async Task<byte[]> ReadDataStream(long totalLength)
+        private async Task<byte[]> ReadDataStream(long startIndex, long length)
         {
-            var buffer = new byte[BUFFER_SIZE];
-            int read = 0;
-            int totalRead = 0;
+            var buffer = new byte[BufferSize];
+            var totalRead = 0;
             using (var ms = new MemoryStream())
             {
-                while (totalRead < totalLength)
+                if (startIndex != 0)
+                    Data.Seek(startIndex, SeekOrigin.Begin);
+                while (totalRead < length)
                 {
-                    read = await Data.ReadAsync(buffer, 0, buffer.Length);
+                    var read = await Data.ReadAsync(buffer, 0, length - totalRead > buffer.Length ? buffer.Length: (int)(length - totalRead));
                     totalRead += read;
                     await ms.WriteAsync(buffer, 0, read);
                 }

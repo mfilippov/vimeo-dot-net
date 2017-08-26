@@ -11,7 +11,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Added time
         /// </summary>
-        public DateTime added_time { get; set; }
+        public DateTime? added_time { get; set; }
         /// <summary>
         /// URI
         /// </summary>

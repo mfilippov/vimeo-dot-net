@@ -9,10 +9,6 @@ namespace VimeoDotNet.Models
     public class VideoInteractions
     {
         /// <summary>
-        /// Like
-        /// </summary>
-        public Like like { get; set; }
-        /// <summary>
         /// Watch later
         /// </summary>
         public WatchLater watchlater { get; set; }
