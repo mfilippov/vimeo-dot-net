@@ -165,6 +165,14 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
+        public async Task Integration_VimeoClient_UploadPullLink()
+        {
+            var client = CreateAuthenticatedClient();
+            var video = await client.UploadPullLinkAsync("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");
+            video.ShouldNotBeNull();
+        }
+
+        [Fact]
         public async Task Integration_VimeoClient_DeleteVideo_DeletesVideo()
         {
             using (var file = new BinaryContent(GetFileFromEmbeddedResources(Testfilepath), "video/mp4"))

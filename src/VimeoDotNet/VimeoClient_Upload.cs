@@ -224,7 +224,37 @@ namespace VimeoDotNet
             return uploadRequest;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Create new upload ticket asynchronously
+        /// </summary>
+        /// <returns>Upload ticket</returns>
+        public async Task<Video> UploadPullLinkAsync(string link)
+        {
+            try
+            {
+                var request = GenerateUploadTicketRequest("pull");
+                request.Query.Add("link", link);
+                var response = await request.ExecuteRequestAsync<Video>();
+                UpdateRateLimit(response);
+                CheckStatusCodeError(null, response, "Error generating upload ticket.");
+
+                return response.Content;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+                throw new VimeoUploadException("Error generating upload ticket.", null, ex);
+            }
+        }
+
+        /// <summary>
+        /// Verify upload file part asynchronously
+        /// </summary>
+        /// <param name="uploadRequest">UploadRequest</param>
+        /// <returns>Verification reponse</returns>
         public async Task<VerifyUploadResponse> VerifyUploadFileAsync(IUploadRequest uploadRequest)
         {
             try
@@ -248,17 +278,17 @@ namespace VimeoDotNet
                         return verify;
                     var match = RangeRegex.Match(response.Headers.GetValues("Range").First());
                     // ReSharper disable once InvertIf
-                    if (match.Success
+                        if (match.Success
                         && long.TryParse(match.Groups["start"].Value, out var startIndex)
                         && long.TryParse(match.Groups["end"].Value, out var endIndex))
-                    {
-                        verify.BytesWritten = endIndex - startIndex;
-                        if (verify.BytesWritten == uploadRequest.FileLength)
                         {
-                            verify.Status = UploadStatusEnum.Completed;
+                            verify.BytesWritten = endIndex - startIndex;
+                            if (verify.BytesWritten == uploadRequest.FileLength)
+                            {
+                                verify.Status = UploadStatusEnum.Completed;
+                            }
                         }
                     }
-                }
                 else
                 {
                     verify.Status = UploadStatusEnum.NotFound;
@@ -324,14 +354,14 @@ namespace VimeoDotNet
             return request;
         }
 
-        private IApiRequest GenerateUploadTicketRequest()
+        private IApiRequest GenerateUploadTicketRequest(string type = "streaming")
         {
             ThrowIfUnauthorized();
 
             IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
             request.Method = HttpMethod.Post;
             request.Path = Endpoints.UploadTicket;
-            request.Query.Add("type", "streaming");
+            request.Query.Add("type", type);
             return request;
         }
 
