@@ -35,13 +35,16 @@
     <DocumentationFile>bin\Release\VimeoDotNet.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="JetBrains.Annotations, Version=11.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\JetBrains.Annotations.11.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\AccountTypeEnum.cs" />
@@ -56,15 +59,19 @@
     <Compile Include="Helpers\MimeHelpers.cs" />
     <Compile Include="IVimeoClient.cs" />
     <Compile Include="IVimeoClientFactory.cs" />
+    <Compile Include="Models\AlbumConnectionsEntry.cs" />
     <Compile Include="Models\Download.cs" />
     <Compile Include="Models\EmbedPresets.cs" />
+    <Compile Include="Models\Pictures.cs" />
     <Compile Include="Models\PresetButtons.cs" />
     <Compile Include="Models\PresetLogos.cs" />
     <Compile Include="Models\PresetSettings.cs" />
     <Compile Include="Models\Size.cs" />
     <Compile Include="Models\TextTrack.cs" />
     <Compile Include="Models\TextTracks.cs" />
+    <Compile Include="Models\UserConnectionsEntry.cs" />
     <Compile Include="Models\VideoUpdateMetadata.cs" />
+    <Compile Include="Net\IApiResponse.cs" />
     <Compile Include="Parameters\EditAlbumParameters.cs" />
     <Compile Include="Parameters\EditUserParameters.cs" />
     <Compile Include="Parameters\GetAlbumsParameters.cs" />
@@ -139,7 +146,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

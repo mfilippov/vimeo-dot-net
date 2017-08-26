@@ -1,8 +1,7 @@
-﻿using RestSharp;
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
+using System.Net.Http;
 using System.Threading.Tasks;
 using VimeoDotNet.Constants;
 using VimeoDotNet.Enums;
@@ -25,15 +24,13 @@ namespace VimeoDotNet
 
             try
             {
-                IApiRequest request = GenerateCompleteUploadRequest(uploadRequest.Ticket);
-                IRestResponse response = await request.ExecuteRequestAsync();
+                var request = GenerateCompleteUploadRequest(uploadRequest.Ticket);
+                var response = await request.ExecuteRequestAsync();
                 CheckStatusCodeError(uploadRequest, response, "Error marking file upload as complete.");
 
-                Parameter locationHeader =
-                    response.Headers.FirstOrDefault(h => string.Compare(h.Name, "Location", true) == 0);
-                if (locationHeader != null && locationHeader.Value != null)
+                if (response.Headers.Location != null)
                 {
-                    uploadRequest.ClipUri = locationHeader.Value as string;
+                    uploadRequest.ClipUri = response.Headers.Location.ToString();
                 }
             }
             catch (Exception ex)
@@ -65,9 +62,9 @@ namespace VimeoDotNet
 
             try
             {
-                IApiRequest request = await GenerateFileStreamRequest(uploadRequest.File, uploadRequest.Ticket,
+                var request = await GenerateFileStreamRequest(uploadRequest.File, uploadRequest.Ticket,
                     chunkSize: uploadRequest.ChunkSize, written: uploadRequest.BytesWritten);
-                IRestResponse response = await request.ExecuteRequestAsync();
+                var response = await request.ExecuteRequestAsync();
                 CheckStatusCodeError(uploadRequest, response, "Error uploading file chunk.", HttpStatusCode.BadRequest);
 
                 if (response.StatusCode == HttpStatusCode.BadRequest)
@@ -103,12 +100,12 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateUploadTicketRequest();
-                IRestResponse<UploadTicket> response = await request.ExecuteRequestAsync<UploadTicket>();
+                var request = GenerateUploadTicketRequest();
+                var response = await request.ExecuteRequestAsync<UploadTicket>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(null, response, "Error generating upload ticket.");
 
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -129,12 +126,12 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateReplaceVideoUploadTicketRequest(videoId);
-                IRestResponse<UploadTicket> response = await request.ExecuteRequestAsync<UploadTicket>();
+                var request = GenerateReplaceVideoUploadTicketRequest(videoId);
+                var response = await request.ExecuteRequestAsync<UploadTicket>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(null, response, "Error generating upload ticket to replace video.");
 
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -262,12 +259,13 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request =
+                var request =
                     await GenerateFileStreamRequest(uploadRequest.File, uploadRequest.Ticket, verifyOnly: true);
-                IRestResponse response = await request.ExecuteRequestAsync();
+                var response = await request.ExecuteRequestAsync();
                 var verify = new VerifyUploadResponse();
                 CheckStatusCodeError(uploadRequest, response, "Error verifying file upload.", (HttpStatusCode)308);
 
+                // ReSharper disable once ConvertIfStatementToSwitchStatement
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     verify.BytesWritten = uploadRequest.FileLength;
@@ -276,16 +274,13 @@ namespace VimeoDotNet
                 else if (response.StatusCode == (HttpStatusCode)308)
                 {
                     verify.Status = UploadStatusEnum.InProgress;
-                    int startIndex = 0;
-                    int endIndex = 0;
-                    Parameter rangeHeader =
-                        response.Headers.FirstOrDefault(h => string.Compare(h.Name, "Range", true) == 0);
-                    if (rangeHeader != null && rangeHeader.Value != null)
-                    {
-                        Match match = RangeRegex.Match(rangeHeader.Value as string);
+                    if (!response.Headers.Contains("Range")) 
+                        return verify;
+                    var match = RangeRegex.Match(response.Headers.GetValues("Range").First());
+                    // ReSharper disable once InvertIf
                         if (match.Success
-                            && int.TryParse(match.Groups["start"].Value, out startIndex)
-                            && int.TryParse(match.Groups["end"].Value, out endIndex))
+                        && long.TryParse(match.Groups["start"].Value, out var startIndex)
+                        && long.TryParse(match.Groups["end"].Value, out var endIndex))
                         {
                             verify.BytesWritten = endIndex - startIndex;
                             if (verify.BytesWritten == uploadRequest.FileLength)
@@ -294,7 +289,6 @@ namespace VimeoDotNet
                             }
                         }
                     }
-                }
                 else
                 {
                     verify.Status = UploadStatusEnum.NotFound;
@@ -315,7 +309,7 @@ namespace VimeoDotNet
         private IApiRequest GenerateCompleteUploadRequest(UploadTicket ticket)
         {
             IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
-            request.Method = Method.DELETE;
+            request.Method = HttpMethod.Delete;
             request.Path = ticket.complete_uri;
             return request;
         }
@@ -334,31 +328,26 @@ namespace VimeoDotNet
                     ticket.quota.free_space + ".");
             }
 
-            IApiRequest request = ApiRequestFactory.GetApiRequest();
-            request.Method = Method.PUT;
+            var request = ApiRequestFactory.GetApiRequest();
+            request.Method = HttpMethod.Put;
             request.ExcludeAuthorizationHeader = true;
             request.Path = ticket.upload_link_secure;
-            request.Headers.Add(Request.HeaderContentType, fileContent.ContentType);
+            
             if (verifyOnly)
             {
-                request.Headers.Add(Request.HeaderContentLength, "0");
-                request.Headers.Add(Request.HeaderContentRange, "bytes */*");
+                request.Body = new ByteArrayContent(new byte [0]);
             }
             else
             {
                 if (chunkSize.HasValue)
                 {
-                    long startIndex = fileContent.Data.CanSeek ? fileContent.Data.Position : written;
-                    long endIndex = Math.Min(startIndex + chunkSize.Value, fileContent.Data.Length);
-                    request.Headers.Add(Request.HeaderContentLength, (endIndex - startIndex).ToString());
-                    request.Headers.Add(Request.HeaderContentRange,
-                        string.Format("bytes {0}-{1}/{2}", startIndex, endIndex, fileContent.Data.Length));
-                    request.BinaryContent = await fileContent.ReadAsync(startIndex, endIndex);
+                    var startIndex = fileContent.Data.CanSeek ? fileContent.Data.Position : written;
+                    var endIndex = Math.Min(startIndex + chunkSize.Value, fileContent.Data.Length);
+                    request.Body = new ByteArrayContent(await fileContent.ReadAsync(startIndex, endIndex), (int)startIndex, (int)endIndex);
                 }
                 else
                 {
-                    request.Headers.Add(Request.HeaderContentLength, fileContent.Data.Length.ToString());
-                    request.BinaryContent = await fileContent.ReadAllAsync();
+                    request.Body = new ByteArrayContent(await fileContent.ReadAllAsync());
                 }
             }
 
@@ -370,7 +359,7 @@ namespace VimeoDotNet
             ThrowIfUnauthorized();
 
             IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
-            request.Method = Method.POST;
+            request.Method = HttpMethod.Post;
             request.Path = Endpoints.UploadTicket;
             request.Query.Add("type", type);
             return request;
@@ -380,8 +369,8 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
-            request.Method = Method.PUT;
+            var request = ApiRequestFactory.GetApiRequest(AccessToken);
+            request.Method = HttpMethod.Put;
             request.Path = Endpoints.VideoReplaceFile;
             request.UrlSegments.Add("clipId", clipId.ToString());
             request.Query.Add("type", "streaming");

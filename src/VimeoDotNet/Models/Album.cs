@@ -48,7 +48,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Pictures
         /// </summary>
-        public List<Picture> pictures { get; set; }
+        public Pictures pictures { get; set; }
 
         /// <summary>
         /// Privacy

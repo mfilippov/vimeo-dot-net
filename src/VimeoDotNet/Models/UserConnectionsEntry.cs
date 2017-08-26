@@ -1,29 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
-    /// Text tracks
+    /// User connection
     /// </summary>
-    [Serializable]
-    public class TextTracks
+    public class UserConnectionsEntry
     {
         /// <summary>
         /// URI
         /// </summary>
         public string uri { get; set; }
+        
         /// <summary>
         /// Options
         /// </summary>
         public List<string> options { get; set; }
-        /// <summary>
-        /// Content
-        /// </summary>
-        public List<TextTrack> data { get; set; }
+
         /// <summary>
         /// Total
         /// </summary>
-        public string total { get; set; }
+        public int total { get; set; }
     }
 }

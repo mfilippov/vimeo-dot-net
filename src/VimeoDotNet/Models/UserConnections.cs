@@ -3,7 +3,7 @@
 namespace VimeoDotNet.Models
 {
     /// <summary>
-    /// User connections
+    /// User connections entry
     /// </summary>
     [Serializable]
     public class UserConnections
@@ -11,46 +11,46 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Activities
         /// </summary>
-        public string activities { get; set; }
+        public UserConnectionsEntry activities { get; set; }
         /// <summary>
         /// Albums
         /// </summary>
-        public string albums { get; set; }
+        public UserConnectionsEntry albums { get; set; }
         /// <summary>
         /// Channels
         /// </summary>
-        public string channels { get; set; }
+        public UserConnectionsEntry channels { get; set; }
         /// <summary>
         /// Feed
         /// </summary>
-        public string feed { get; set; }
+        public UserConnectionsEntry feed { get; set; }
         /// <summary>
         /// Followers
         /// </summary>
-        public string followers { get; set; }
+        public UserConnectionsEntry followers { get; set; }
         /// <summary>
         /// Following
         /// </summary>
-        public string following { get; set; }
+        public UserConnectionsEntry following { get; set; }
         /// <summary>
         /// Groups
         /// </summary>
-        public string groups { get; set; }
+        public UserConnectionsEntry groups { get; set; }
         /// <summary>
         /// Likes
         /// </summary>
-        public string likes { get; set; }
+        public UserConnectionsEntry likes { get; set; }
         /// <summary>
         /// Portfolios
         /// </summary>
-        public string portfolios { get; set; }
+        public UserConnectionsEntry portfolios { get; set; }
         /// <summary>
         /// Videos
         /// </summary>
-        public string videos { get; set; }
+        public UserConnectionsEntry videos { get; set; }
         /// <summary>
         /// Watch later
         /// </summary>
-        public string watchlater { get; set; }
+        public UserConnectionsEntry watchlater { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using RestSharp;
+﻿using System.Net.Http;
 
 namespace VimeoDotNet.Constants
 {
@@ -15,6 +15,6 @@ namespace VimeoDotNet.Constants
         public const string DefaultHostName = "api.vimeo.com";
         public const int DefaultHttpPort = 80;
         public const int DefaultHttpsPort = 443;
-        public const Method DefaultMethod = Method.GET;
+        public static readonly HttpMethod DefaultMethod = HttpMethod.Get;
     }
 }

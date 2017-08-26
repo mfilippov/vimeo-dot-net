@@ -11,6 +11,6 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Videos
         /// </summary>
-        public string videos { get; set; }
+        public AlbumConnectionsEntry videos { get; set; }
     }
 }

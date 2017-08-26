@@ -50,11 +50,11 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Content filter
         /// </summary>
-        public string content_filter { get; set; }
+        public string[] content_filter { get; set; }
         /// <summary>
         /// Pictures
         /// </summary>
-        public List<Picture> pictures { get; set; }
+        public Pictures pictures { get; set; }
         /// <summary>
         /// Web sites
         /// </summary>
