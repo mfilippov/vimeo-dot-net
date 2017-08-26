@@ -232,13 +232,13 @@ namespace VimeoDotNet
         {
             try
             {
-                IApiRequest request = GenerateUploadTicketRequest("pull");
+                var request = GenerateUploadTicketRequest("pull");
                 request.Query.Add("link", link);
-                IRestResponse<Video> response = await request.ExecuteRequestAsync<Video>();
+                var response = await request.ExecuteRequestAsync<Video>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(null, response, "Error generating upload ticket.");
 
-                return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {
