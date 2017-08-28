@@ -61,12 +61,12 @@ namespace VimeoDotNet.Net
         /// Execute request asynchronously
         /// </summary>
         /// <returns>Rest reponse</returns>
-        Task<IApiResponse> ExecuteRequestAsync();
+        Task<IApiResponse> ExecuteRequestAsync(string method = null);
         /// <summary>
         /// Execute request asynchronously
         /// </summary>
         /// <typeparam name="T">Type</typeparam>
         /// <returns>Rest reponse</returns>
-        Task<IApiResponse<T>> ExecuteRequestAsync<T>() where T : new();
+        Task<IApiResponse<T>> ExecuteRequestAsync<T>(string method = null) where T : new();
     }
 }

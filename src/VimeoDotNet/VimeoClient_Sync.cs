@@ -103,16 +103,16 @@ namespace VimeoDotNet
         /// <returns>Paginated albums</returns>
         [Obsolete("Use async API instead sync wrapper")]
         public Paginated<Album> GetAlbums(GetAlbumsParameters parameters = null)
-		{
-			try
-			{
-				return GetAlbumsAsync(parameters).RunSynchronouslyWithCurrentCulture();
-			}
-			catch (AggregateException ex)
-			{
-				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-			}
-		    return null;
+        {
+            try
+            {
+                return GetAlbumsAsync(parameters).RunSynchronouslyWithCurrentCulture();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+            }
+            return null;
         }
 
         /// <inheritdoc />
@@ -144,16 +144,16 @@ namespace VimeoDotNet
         /// <returns>Album</returns>
         [Obsolete("Use async API instead sync wrapper")]
         public Album GetAlbum(long albumId)
-		{
-			try
-			{
-				return GetAlbumAsync(albumId).RunSynchronouslyWithCurrentCulture();
-			}
-			catch (AggregateException ex)
-			{
-				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-			}
-		    return null;
+        {
+            try
+            {
+                return GetAlbumAsync(albumId).RunSynchronouslyWithCurrentCulture();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+            }
+            return null;
         }
 
         /// <inheritdoc />
@@ -165,16 +165,16 @@ namespace VimeoDotNet
         ///  <returns>Album</returns>
         [Obsolete("Use async API instead sync wrapper")]
         public Album GetAlbum(long userId, long albumId)
-		{
-			try
-			{
-				return GetAlbumAsync(userId, albumId).RunSynchronouslyWithCurrentCulture();
-			}
-			catch (AggregateException ex)
-			{
-				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-			}
-		    return null;
+        {
+            try
+            {
+                return GetAlbumAsync(userId, albumId).RunSynchronouslyWithCurrentCulture();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+            }
+            return null;
         }
 
         /// <inheritdoc />
@@ -248,16 +248,16 @@ namespace VimeoDotNet
         /// <returns>Adding result</returns>
         [Obsolete("Use async API instead sync wrapper")]
         public bool AddToAlbum(long albumId, long clipId)
-		{
-			try
-			{
-				return AddToAlbumAsync(albumId, clipId).RunSynchronouslyWithCurrentCulture();
-			}
-			catch (AggregateException ex)
-			{
-				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-			}
-		    return false;
+        {
+            try
+            {
+                return AddToAlbumAsync(albumId, clipId).RunSynchronouslyWithCurrentCulture();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+            }
+            return false;
         }
 
         /// <inheritdoc />
@@ -270,16 +270,16 @@ namespace VimeoDotNet
         /// <returns>Adding result</returns>
         [Obsolete("Use async API instead sync wrapper")]
         public bool AddToAlbum(long userId, long albumId, long clipId)
-		{
-			try
-			{
-				return AddToAlbumAsync(userId, albumId, clipId).RunSynchronouslyWithCurrentCulture();
-			}
-			catch (AggregateException ex)
-			{
-				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-			}
-		    return false;
+        {
+            try
+            {
+                return AddToAlbumAsync(userId, albumId, clipId).RunSynchronouslyWithCurrentCulture();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+            }
+            return false;
         }
 
 
@@ -292,16 +292,16 @@ namespace VimeoDotNet
         /// <returns>Removing result</returns>
         [Obsolete("Use async API instead sync wrapper")]
         public bool RemoveFromAlbum(long albumId, long clipId)
-		{
-			try
-			{
-				return RemoveFromAlbumAsync(albumId, clipId).RunSynchronouslyWithCurrentCulture();
-			}
-			catch (AggregateException ex)
-			{
-				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-			}
-		    return false;
+        {
+            try
+            {
+                return RemoveFromAlbumAsync(albumId, clipId).RunSynchronouslyWithCurrentCulture();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+            }
+            return false;
         }
 
         /// <inheritdoc />
@@ -314,16 +314,16 @@ namespace VimeoDotNet
         /// <returns>Removing result</returns>
         [Obsolete("Use async API instead sync wrapper")]
         public bool RemoveFromAlbum(long userId, long albumId, long clipId)
-		{
-			try
-			{
-				return RemoveFromAlbumAsync(userId, albumId, clipId).RunSynchronouslyWithCurrentCulture();
-			}
-			catch (AggregateException ex)
-			{
-				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-			}
-		    return false;
+        {
+            try
+            {
+                return RemoveFromAlbumAsync(userId, albumId, clipId).RunSynchronouslyWithCurrentCulture();
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+            }
+            return false;
         }
 
         #endregion
@@ -713,6 +713,28 @@ namespace VimeoDotNet
             catch (AggregateException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+            }
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Upload thumbnail
+        /// </summary>
+        /// <param name="clipId"></param>
+        /// <param name="fileContent"></param>
+        public Picture UploadThumbnail(long clipId, IBinaryContent fileContent)
+        {
+            try
+            {
+                Picture pic = GetPictureAsync(clipId).RunSynchronouslyWithCurrentCulture();
+                UploadPictureAsync(fileContent, pic.link).RunSynchronouslyWithCurrentCulture();
+                SetThumbnailActiveAsync(pic.uri).RunSynchronouslyWithCurrentCulture();
+                return pic;
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null;
             }
         }
 
