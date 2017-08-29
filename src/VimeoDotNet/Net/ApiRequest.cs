@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using VimeoDotNet.Constants;
-using VimeoDotNet.Extensions;
 
 namespace VimeoDotNet.Net
 {
@@ -186,16 +185,9 @@ namespace VimeoDotNet.Net
         /// Execute request asynchronously
         /// </summary>
         /// <returns>Rest reponse</returns>
-        public async Task<IApiResponse> ExecuteRequestAsync(string method = null)
+        public async Task<IApiResponse> ExecuteRequestAsync()
         {
-            HttpResponseMessage response;
-            var request = PrepareRequest();
-            if (string.IsNullOrEmpty(method))
-                response = await Client.SendAsync(request);
-            else if (string.Equals(method, "PATCH"))
-                response = await Client.PatchAsync(request);
-            else
-                throw new Exception("Unsupported HTTP request method");
+            var response = await Client.SendAsync(PrepareRequest());
             var text = await response.Content.ReadAsStringAsync();
             return new ApiResponse(response.StatusCode, response.Headers, text);
         }
@@ -205,16 +197,10 @@ namespace VimeoDotNet.Net
         /// </summary>
         /// <typeparam name="T">Type</typeparam>
         /// <returns>Rest repons</returns>
-        public async Task<IApiResponse<T>> ExecuteRequestAsync<T>(string method = null) where T : new()
+        public async Task<IApiResponse<T>> ExecuteRequestAsync<T>() where T : new()
         {
-            HttpResponseMessage response;
             var request = PrepareRequest();
-            if (string.IsNullOrEmpty(method))
-                response = await Client.SendAsync(request);
-            else if (string.Equals(method, "PATCH"))
-                response = await Client.PatchAsync(request);
-            else
-                throw new Exception("Unsupported HTTP request method");
+            var response = await Client.SendAsync(request);
             var text = await response.Content.ReadAsStringAsync();
             return new ApiResponse<T>(response.StatusCode, response.Headers, text,
                 JsonConvert.DeserializeObject<T>(text, DateFormatSettings));

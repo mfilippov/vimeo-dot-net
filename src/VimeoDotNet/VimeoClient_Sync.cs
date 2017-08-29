@@ -722,6 +722,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="clipId"></param>
         /// <param name="fileContent"></param>
+        [Obsolete("Use async API instead sync wrapper")]
         public Picture UploadThumbnail(long clipId, IBinaryContent fileContent)
         {
             try

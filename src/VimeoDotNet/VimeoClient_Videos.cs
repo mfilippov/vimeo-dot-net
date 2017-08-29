@@ -591,10 +591,11 @@ namespace VimeoDotNet
             {
                 ThrowIfUnauthorized();
                 IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
+                request.Method = new HttpMethod("PATCH");
                 request.Path = link;
                 request.Query.Add("active", "true");
 
-                var response = await request.ExecuteRequestAsync("PATCH");
+                var response = await request.ExecuteRequestAsync();
 
                 CheckStatusCodeError(null, response, "Error Setting thumbnail image active.");
             }
