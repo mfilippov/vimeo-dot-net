@@ -19,5 +19,13 @@ namespace VimeoDotNet.Models {
         /// Sizes
         /// </summary>
         public List<Size> sizes { get; set; }
+        ///
+        /// link
+        ///
+        public string link { get; set; }
+        ///
+        /// resource_key
+        ///
+        public string resource_key { get; set; }
     }
 }

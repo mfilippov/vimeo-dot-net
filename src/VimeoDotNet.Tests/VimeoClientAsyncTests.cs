@@ -22,13 +22,15 @@ namespace VimeoDotNet.Tests
 
         private const string Testtexttrackfilepath = @"VimeoDotNet.Tests.Resources.test.vtt";
 
+        private const string Textthumbnailfilepath = @"VimeoDotNet.Tests.Resources.test.png";
+
         public VimeoClientAsyncTests()
         {
             // Load the settings from a file that is not under version control for security
             // The settings loader will create this file in the bin/ folder if it doesn't exist
-            _vimeoSettings = SettingsLoader.LoadSettings(); 
+            _vimeoSettings = SettingsLoader.LoadSettings();
         }
-        
+
         [Fact]
         public async Task Integration_VimeoClient_GetReplaceVideoUploadTicket_CanGenerateStreamingTicket()
         {
@@ -82,7 +84,7 @@ namespace VimeoDotNet.Tests
         {
             long length;
             IUploadRequest completedRequest;
-            
+
             using (var file = new BinaryContent(GetFileFromEmbeddedResources(Testfilepath), "video/mp4"))
             {
                 length = file.Data.Length;
@@ -173,6 +175,17 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
+        public async Task Integration_VimeoClient_UploadThumbnail()
+        {
+            var client = CreateAuthenticatedClient();
+            using (var file = new BinaryContent(GetFileFromEmbeddedResources(Textthumbnailfilepath), "image/png"))
+            {
+                var picture = await client.UploadThumbnailAsync(_vimeoSettings.VideoId, file);
+                picture.ShouldNotBeNull();
+            }
+        }
+
+        [Fact]
         public async Task Integration_VimeoClient_DeleteVideo_DeletesVideo()
         {
             using (var file = new BinaryContent(GetFileFromEmbeddedResources(Testfilepath), "video/mp4"))
@@ -254,7 +267,7 @@ namespace VimeoDotNet.Tests
             {
                 final.name.ShouldBe(original.name);
             }
-                
+
             if (string.IsNullOrEmpty(original.bio))
             {
                 final.bio.ShouldBeNull();
@@ -263,11 +276,11 @@ namespace VimeoDotNet.Tests
             {
                 final.bio.ShouldBe(original.bio);
             }
-                
+
             if (string.IsNullOrEmpty(original.location))
             {
                 final.location.ShouldBeNull();
-            } 
+            }
             else
             {
                 final.location.ShouldBe(original.location);
@@ -290,7 +303,7 @@ namespace VimeoDotNet.Tests
         public async Task Integration_VimeoClient_GetAccountVideos_RetrievesCurrentAccountVideos()
         {
             var client = CreateAuthenticatedClient();
-            var videos = await client.GetUserVideosAsync(_vimeoSettings.UserId); 
+            var videos = await client.GetUserVideosAsync(_vimeoSettings.UserId);
             videos.ShouldNotBeNull();
         }
 
@@ -383,7 +396,7 @@ namespace VimeoDotNet.Tests
         public async Task Integration_VimeoClient_AlbumManagement()
         {
             var client = CreateAuthenticatedClient();
-        
+
             // create a new album...
             const string originalName = "Unit Test Album";
             const string originalDesc = "This album was created via an automated test, and should be deleted momentarily...";
@@ -402,7 +415,7 @@ namespace VimeoDotNet.Tests
 
             newAlbum.description.ShouldBe(originalDesc);
 
-                // retrieve albums for the current user...there should be at least one now...
+            // retrieve albums for the current user...there should be at least one now...
             var albums = await client.GetAlbumsAsync();
 
             albums.total.ShouldBeGreaterThan(0);
@@ -443,7 +456,7 @@ namespace VimeoDotNet.Tests
 
             // act
             var texttracks = await client.GetTextTracksAsync(_vimeoSettings.VideoId);
-            
+
             // assert
             texttracks.ShouldNotBeNull();
         }

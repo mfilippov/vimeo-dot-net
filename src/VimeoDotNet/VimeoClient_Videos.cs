@@ -499,5 +499,114 @@ namespace VimeoDotNet
 
             return request;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="clipId"></param>
+        /// <returns></returns>
+        public async Task<Picture> GetPictureAsync(long clipId)
+        {
+            try
+            {
+                ThrowIfUnauthorized();
+                IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
+                request.Method = HttpMethod.Post;
+                request.Path = Endpoints.Pictures;
+                request.UrlSegments.Add("clipId", clipId.ToString());
+
+                var response = await request.ExecuteRequestAsync<Picture>();
+                UpdateRateLimit(response);
+                CheckStatusCodeError(response, "Error retrieving account video.", HttpStatusCode.NotFound);
+
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                return response.Content;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+                throw new VimeoApiException("Error retrieving account video.", ex);
+            }
+        }
+
+        /// <summary>
+        /// upload picture asynchronously
+        /// </summary>        
+        /// <param name="fileContent">fileContent</param>
+        /// <param name="link">link</param>
+        /// <returns>upload pic </returns>
+        public async Task UploadPictureAsync(IBinaryContent fileContent, string link)
+        {
+            try
+            {
+                if (!fileContent.Data.CanRead)
+                {
+                    throw new ArgumentException("fileContent should be readable");
+                }
+                if (fileContent.Data.CanSeek && fileContent.Data.Position > 0)
+                {
+                    fileContent.Data.Position = 0;
+                }
+                ThrowIfUnauthorized();
+                var request = ApiRequestFactory.GetApiRequest(AccessToken);
+                request.Method = HttpMethod.Put;
+                request.Path = link;
+                //request.Header.Add(Request.HeaderContentType, "image/jpeg");
+                //request.Headers.Add(Request.HeaderContentLength, fileContent.Data.Length.ToString());
+
+                request.Body = new ByteArrayContent(await fileContent.ReadAllAsync());
+
+                var response = await request.ExecuteRequestAsync();
+
+                CheckStatusCodeError(null, response, "Error generating upload ticket to replace video.");
+
+                //return response.Data;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+                throw new VimeoUploadException("Error Uploading picture.", null, ex);
+            }
+        }
+
+
+        /// <summary>
+        /// set thumbnail picture asynchronously
+        /// </summary>                
+        /// <param name="link">link</param>
+        /// <returns>Set thumbnail pic </returns>
+        public async Task SetThumbnailActiveAsync(string link)
+        {
+            try
+            {
+                ThrowIfUnauthorized();
+                IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
+                request.Method = new HttpMethod("PATCH");
+                request.Path = link;
+                request.Query.Add("active", "true");
+
+                var response = await request.ExecuteRequestAsync();
+
+                CheckStatusCodeError(null, response, "Error Setting thumbnail image active.");
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+                throw new VimeoUploadException("Error Setting thumbnail image active.", null, ex);
+            }
+        }
     }
 }

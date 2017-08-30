@@ -82,6 +82,8 @@
         public const string TextTracks = "/videos/{clipId}/texttracks/";
         public const string TextTrack = "/videos/{clipId}/texttracks/{trackId}";
 
+        public const string Pictures = "/videos/{clipId}/pictures";
+
         public static string GetCurrentUserEndpoint(string endpoint)
         {
             return endpoint.Replace("users/{userId}", "me");

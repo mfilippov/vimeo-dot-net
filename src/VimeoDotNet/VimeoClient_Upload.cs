@@ -251,6 +251,32 @@ namespace VimeoDotNet
         }
 
         /// <summary>
+        /// Upload and set thumbnail active
+        /// </summary>
+        /// <param name="clipId"></param>
+        /// <param name="fileContent"></param>
+        /// <returns></returns>
+        /// <exception cref="VimeoUploadException"></exception>
+        public async Task<Picture> UploadThumbnailAsync(long clipId, IBinaryContent fileContent)
+        {
+            try
+            {
+                Picture pic = await GetPictureAsync(clipId);
+                await UploadPictureAsync(fileContent, pic.link);
+                await SetThumbnailActiveAsync(pic.uri);
+                return pic;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+                throw new VimeoUploadException("Error generating upload ticket.", null, ex);
+            }
+        }
+
+        /// <summary>
         /// Verify upload file part asynchronously
         /// </summary>
         /// <param name="uploadRequest">UploadRequest</param>
