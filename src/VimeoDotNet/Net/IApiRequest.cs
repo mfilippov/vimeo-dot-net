@@ -50,6 +50,10 @@ namespace VimeoDotNet.Net
         /// </summary>
         bool ExcludeAuthorizationHeader { get; set; }
         /// <summary>
+        /// 
+        /// </summary>
+        List<string> Fields { get; }
+        /// <summary>
         ///
         /// </summary>
         IDictionary<string, string> Query { get; }
