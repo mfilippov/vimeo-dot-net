@@ -21,6 +21,7 @@ namespace VimeoDotNet.Net
         private readonly Dictionary<string, string> _hashValues = new Dictionary<string, string>();
         private readonly Dictionary<string, string> _queryString = new Dictionary<string, string>();
         private readonly Dictionary<string, string> _urlSegments = new Dictionary<string, string>();
+        private readonly List<string> _fields = new List<string>();
         private static readonly JsonSerializerSettings DateFormatSettings = new JsonSerializerSettings
         {
             DateFormatString = "yyyy-MM-ddTHH:mm:sszzz",
@@ -95,6 +96,14 @@ namespace VimeoDotNet.Net
         public IDictionary<string, string> Query
         {
             get { return _queryString; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public List<string> Fields
+        {
+            get { return _fields; }
         }
 
         /// <summary>
@@ -438,6 +447,10 @@ namespace VimeoDotNet.Net
             foreach (var urlSegment in UrlSegments)
             {
                 path = path.Replace($"{{{urlSegment.Key}}}", urlSegment.Value);
+            }
+            if (_fields.Count > 0)
+            {
+                Query.Add("fields", string.Concat(",", _fields));
             }
             sb.Append(path);
             if (Query.Keys.Count == 0)

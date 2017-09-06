@@ -167,9 +167,10 @@ namespace VimeoDotNet
         /// <param name="perPage">Number of items to show on each page. Max 50.</param>
         /// <param name="sort">The default sort order of an Album's videos</param>
         /// <param name="direction">The direction that the results are sorted.</param>
+        /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter </param>
         /// <returns>Paginated videos</returns>
         Task<Paginated<Video>> GetAlbumVideosAsync(long albumId, int? page, int? perPage,
-            string sort = null, string direction = null);
+            string sort = null, string direction = null, string[] fields = null);
 
         /// <summary>
         /// Get video from album by AlbumId and ClipId

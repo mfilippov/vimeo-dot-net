@@ -76,12 +76,13 @@ namespace VimeoDotNet
         /// <param name="perPage">Number of items to show on each page. Max 50.</param>
         /// <param name="sort">The default sort order of an Album's videos</param>
         /// <param name="direction">The direction that the results are sorted.</param>
+        /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter </param>
         /// <returns>Paginated videos</returns>
-        public async Task<Paginated<Video>> GetAlbumVideosAsync(long albumId, int? page, int? perPage, string sort = null, string direction = null)
+        public async Task<Paginated<Video>> GetAlbumVideosAsync(long albumId, int? page, int? perPage, string sort = null, string direction = null, string[] fields = null)
         {
             try
             {
-                var request = GenerateAlbumVideosRequest(albumId, page: page, perPage: perPage, sort: sort, direction: direction);
+                var request = GenerateAlbumVideosRequest(albumId, page: page, perPage: perPage, sort: sort, direction: direction, fields: fields);
                 var response = await request.ExecuteRequestAsync<Paginated<Video>>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving account album videos.", HttpStatusCode.NotFound);
@@ -393,7 +394,7 @@ namespace VimeoDotNet
             return request;
         }
 
-        private IApiRequest GenerateAlbumVideosRequest(long albumId, long? userId = null, long? clipId = null, int? page = null, int? perPage = null, string sort = null, string direction = null)
+        private IApiRequest GenerateAlbumVideosRequest(long albumId, long? userId = null, long? clipId = null, int? page = null, int? perPage = null, string sort = null, string direction = null, string[] fields = null)
         {
             ThrowIfUnauthorized();
 
@@ -410,6 +411,13 @@ namespace VimeoDotNet
             if (clipId.HasValue)
             {
                 request.UrlSegments.Add("clipId", clipId.ToString());
+            }
+            if (fields != null)
+            {
+                foreach (var field in fields)
+                {
+                    request.Fields.Add(field);
+                }
             }
             if (page.HasValue)
             {
