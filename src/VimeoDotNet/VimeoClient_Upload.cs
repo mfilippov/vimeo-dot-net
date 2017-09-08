@@ -8,6 +8,7 @@ using VimeoDotNet.Enums;
 using VimeoDotNet.Exceptions;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
+using VimeoDotNet.Parameters;
 
 namespace VimeoDotNet
 {
@@ -232,13 +233,19 @@ namespace VimeoDotNet
         {
             try
             {
-                var request = GenerateUploadTicketRequest("pull");
-                request.Query.Add("link", link);
-                var response = await request.ExecuteRequestAsync<Video>();
-                UpdateRateLimit(response);
-                CheckStatusCodeError(null, response, "Error generating upload ticket.");
+                var param = new ParameterDictionary();
+                param.Add("type", "pull");
+                param.Add("link", link);
 
-                return response.Content;
+                var request = ApiRequestFactory.AuthorizedRequest(
+                    AccessToken,
+                    HttpMethod.Post,
+                    Endpoints.UploadTicket,
+                    null,
+                    param
+                );
+
+                return await ExecuteApiRequest<Video>(request);
             }
             catch (Exception ex)
             {
