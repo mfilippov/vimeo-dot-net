@@ -336,11 +336,11 @@ namespace VimeoDotNet
         /// </summary>
         /// <returns>Paginated videos</returns>
         [Obsolete("Use async API instead sync wrapper")]
-        public Paginated<Video> GetVideos()
+        public Paginated<Video> GetVideos(string[] fields = null)
         {
             try
             {
-                return GetVideosAsync().RunSynchronouslyWithCurrentCulture();
+                return GetVideosAsync(fields:fields).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -354,13 +354,14 @@ namespace VimeoDotNet
         /// Get video by ClipId
         /// </summary>
         /// <param name="clipId">ClipId</param>
+        /// <param name="fields"></param>
         /// <returns>Video</returns>
         [Obsolete("Use async API instead sync wrapper")]
-        public Video GetVideo(long clipId)
+        public Video GetVideo(long clipId, string[] fields = null)
         {
             try
             {
-                return GetVideoAsync(clipId).RunSynchronouslyWithCurrentCulture();
+                return GetVideoAsync(clipId, fields).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -375,11 +376,12 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="userId">UserId</param>
         /// <param name="query">Search query</param>
+        /// <param name="fields"></param>
         /// <returns>Paginated videos</returns>
         [Obsolete("Use async API instead sync wrapper")]
-        public Paginated<Video> GetUserVideos(long userId, string query = null)
+        public Paginated<Video> GetUserVideos(long userId, string query = null, string[] fields = null)
         {
-            return GetUserVideos(userId, null, null, query);
+            return GetUserVideos(userId, null, null, query, fields);
         }
 
         /// <inheritdoc />
@@ -390,13 +392,14 @@ namespace VimeoDotNet
         /// <param name="perPage">Number of items to show on each page. Max 50</param>
         /// <param name="query">Search query</param>
         /// <param name="page">The page number to show</param>
+        /// <param name="fields"></param>
         /// <returns>Paginated videos</returns>
         [Obsolete("Use async API instead sync wrapper")]
-        public Paginated<Video> GetUserVideos(long userId, int? page, int? perPage, string query = null)
+        public Paginated<Video> GetUserVideos(long userId, int? page, int? perPage, string query = null, string[] fields = null)
         {
             try
             {
-                return GetUserVideosAsync(userId, page, perPage, query).RunSynchronouslyWithCurrentCulture();
+                return GetUserVideosAsync(userId, page, perPage, query, fields).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -411,13 +414,14 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="userId">UserId</param>
         /// <param name="clipId">ClipId</param>
+        /// <param name="fields"></param>
         /// <returns>Video</returns>
         [Obsolete("Use async API instead sync wrapper")]
-        public Video GetUserVideo(long userId, long clipId)
+        public Video GetUserVideo(long userId, long clipId, string[] fields = null)
         {
             try
             {
-                return GetUserVideoAsync(userId, clipId).RunSynchronouslyWithCurrentCulture();
+                return GetUserVideoAsync(userId, clipId, fields).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -435,13 +439,14 @@ namespace VimeoDotNet
         /// <param name="perPage">Number of items to show on each page. Max 50</param>
         /// <param name="sort">The default sort order of an Album's videos</param>
         /// <param name="direction">The direction that the results are sorted</param>
+        /// <param name="fields"></param>
         /// <returns>Paginated videos</returns>
         [Obsolete("Use async API instead sync wrapper")]
-        public Paginated<Video> GetAlbumVideos(long albumId, int? page, int? perPage, string sort = null, string direction = null)
+        public Paginated<Video> GetAlbumVideos(long albumId, int? page, int? perPage, string sort = null, string direction = null, string[] fields = null)
         {
             try
             {
-                return GetAlbumVideosAsync(albumId, page, perPage, sort, direction).RunSynchronouslyWithCurrentCulture();
+                return GetAlbumVideosAsync(albumId, page, perPage, sort, direction, fields).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -456,13 +461,14 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="albumId">AlbumId</param>
         /// <param name="clipId">ClipId</param>
+        /// <param name="fields"></param>
         /// <returns>Video</returns>
         [Obsolete("Use async API instead sync wrapper")]
-        public Video GetAlbumVideo(long albumId, long clipId)
+        public Video GetAlbumVideo(long albumId, long clipId, string[] fields = null)
         {
             try
             {
-                return GetAlbumVideoAsync(albumId, clipId).RunSynchronouslyWithCurrentCulture();
+                return GetAlbumVideoAsync(albumId, clipId, fields).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -477,13 +483,14 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="userId">UserId</param>
         /// <param name="albumId">AlbumId</param>
+        /// <param name="fields"></param>
         /// <returns>Paginated videos</returns>
         [Obsolete("Use async API instead sync wrapper")]
-        public Paginated<Video> GetUserAlbumVideos(long userId, long albumId)
+        public Paginated<Video> GetUserAlbumVideos(long userId, long albumId, string[] fields = null)
         {
             try
             {
-                return GetUserAlbumVideosAsync(userId, albumId).RunSynchronouslyWithCurrentCulture();
+                return GetUserAlbumVideosAsync(userId, albumId, fields).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {
@@ -499,13 +506,14 @@ namespace VimeoDotNet
         /// <param name="userId">AlbumId</param>
         /// <param name="albumId">UserId</param>
         /// <param name="clipId">ClipId</param>
+        /// <param name="fields"></param>
         /// <returns>Video</returns>
         [Obsolete("Use async API instead sync wrapper")]
-        public Video GetUserAlbumVideo(long userId, long albumId, long clipId)
+        public Video GetUserAlbumVideo(long userId, long albumId, long clipId, string[] fields = null)
         {
             try
             {
-                return GetUserAlbumVideoAsync(userId, albumId, clipId).RunSynchronouslyWithCurrentCulture();
+                return GetUserAlbumVideoAsync(userId, albumId, clipId, fields).RunSynchronouslyWithCurrentCulture();
             }
             catch (AggregateException ex)
             {

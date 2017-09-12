@@ -448,11 +448,11 @@ namespace VimeoDotNet.Net
             {
                 path = path.Replace($"{{{urlSegment.Key}}}", urlSegment.Value);
             }
+            sb.Append(path);
             if (_fields.Count > 0)
             {
-                Query.Add("fields", string.Concat(",", _fields));
+                Query.Add("fields", string.Join(",", _fields));
             }
-            sb.Append(path);
             if (Query.Keys.Count == 0)
                 return sb.ToString();
             sb.Append("?");

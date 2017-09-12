@@ -325,6 +325,17 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
+        public async Task Integration_VimeoClient_GetAccountVideo_WithFields_RetrievesVideo()
+        {
+            var client = CreateAuthenticatedClient();
+            var video = await client.GetVideoAsync(_vimeoSettings.VideoId, new []{"uri", "name"});
+            video.ShouldNotBeNull();
+            video.uri.ShouldNotBeNull();
+            video.name.ShouldNotBeNull();
+            video.pictures.ShouldBeNull();
+        }
+
+        [Fact]
         public async Task Integration_VimeoClient_GetAccountAlbumVideos_RetrievesCurrentAccountAlbumVideos()
         {
             var client = CreateAuthenticatedClient();
