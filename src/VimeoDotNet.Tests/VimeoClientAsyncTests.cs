@@ -325,7 +325,7 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
-        public async Task Integration_VimeoClient_GetAccountVideo_WithFields_RetrievesVideo()
+        public async Task Integration_VimeoClient_GetAccountVideoWithFields_RetrievesVideo()
         {
             var client = CreateAuthenticatedClient();
             var video = await client.GetVideoAsync(_vimeoSettings.VideoId, new []{"uri", "name"});
@@ -345,10 +345,27 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
+        public async Task Integration_VimeoClient_GetAccountAlbumVideosWithFields_RetrievesCurrentAccountAlbumVideos()
+        {
+            var client = CreateAuthenticatedClient();
+            var videos = await client.GetAlbumVideosAsync(_vimeoSettings.AlbumId, 1, null, fields: new[] { "uri", "name" });
+            videos.ShouldNotBeNull();
+            videos.data.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
         public async Task Integration_VimeoClient_GetAccountAlbumVideo_RetrievesVideo()
         {
             var client = CreateAuthenticatedClient();
             var video = await client.GetAlbumVideoAsync(_vimeoSettings.AlbumId, _vimeoSettings.VideoId);
+            video.ShouldNotBeNull();
+        }
+
+        [Fact]
+        public async Task Integration_VimeoClient_GetAccountAlbumVideoWithFields_RetrievesVideo()
+        {
+            var client = CreateAuthenticatedClient();
+            var video = await client.GetAlbumVideoAsync(_vimeoSettings.AlbumId, _vimeoSettings.VideoId, new[] { "uri", "name" });
             video.ShouldNotBeNull();
         }
 
@@ -362,6 +379,15 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
+        public async Task Integration_VimeoClient_GetUserAlbumVideosWithFields_RetrievesUserAlbumVideos()
+        {
+            var client = CreateAuthenticatedClient();
+            var videos = await client.GetUserAlbumVideosAsync(_vimeoSettings.UserId, _vimeoSettings.AlbumId, new []{"name", "link"});
+            videos.ShouldNotBeNull();
+            videos.data.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
         public async Task Integration_VimeoClient_GetUserAlbumVideo_RetrievesVideo()
         {
             var client = CreateAuthenticatedClient();
@@ -370,10 +396,26 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
+        public async Task Integration_VimeoClient_GetUserAlbumVideoWithFields_RetrievesVideo()
+        {
+            var client = CreateAuthenticatedClient();
+            var video = await client.GetUserAlbumVideoAsync(_vimeoSettings.UserId, _vimeoSettings.AlbumId, _vimeoSettings.VideoId, new []{"uri", "name"});
+            video.ShouldNotBeNull();
+        }
+
+        [Fact]
         public async Task Integration_VimeoClient_GetAccountAlbums_NotNull()
         {
             var client = CreateAuthenticatedClient();
             var albums = await client.GetAlbumsAsync();
+            albums.ShouldNotBeNull();
+        }
+
+        [Fact]
+        public async Task Integration_VimeoClientWithFields_GetAccountAlbums_NotNull()
+        {
+            var client = CreateAuthenticatedClient();
+            var albums = await client.GetAlbumsAsync(fields: new []{"name"});
             albums.ShouldNotBeNull();
         }
 

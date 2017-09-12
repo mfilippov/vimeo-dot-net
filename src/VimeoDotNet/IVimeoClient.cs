@@ -462,8 +462,9 @@ namespace VimeoDotNet
         /// Get album by parameters asynchronously
         /// </summary>
         /// <param name="parameters">GetAlbumsParameters</param>
+        /// <param name="fields"></param>
         /// <returns>Paginated albums</returns>
-        Task<Paginated<Album>> GetAlbumsAsync(GetAlbumsParameters parameters = null);
+        Task<Paginated<Album>> GetAlbumsAsync(GetAlbumsParameters parameters = null, string[] fields = null);
 
         /// <summary>
         /// Get album by UserId and parameters
