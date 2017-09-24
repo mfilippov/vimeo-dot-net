@@ -228,8 +228,9 @@ namespace VimeoDotNet
         /// Get album by parameters asynchronously
         /// </summary>
         /// <param name="parameters">GetAlbumsParameters</param>
+        /// <param name="fields"></param>
         /// <returns>Paginated albums</returns>
-        public async Task<Paginated<Album>> GetAlbumsAsync(GetAlbumsParameters parameters = null)
+        public async Task<Paginated<Album>> GetAlbumsAsync(GetAlbumsParameters parameters = null, string[] fields = null)
 		{
 			var request = ApiRequestFactory.AuthorizedRequest(
 				AccessToken,
@@ -238,6 +239,14 @@ namespace VimeoDotNet
 				null,
 				parameters
 			);
+
+		    if (fields != null)
+		    {
+		        foreach (var field in fields)
+		        {
+		            request.Fields.Add(field);
+		        }
+		    }
 
 			return await ExecuteApiRequest<Paginated<Album>>(request);
 		}

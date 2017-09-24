@@ -41,12 +41,13 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="albumId">AlbumId</param>
         /// <param name="clipId">ClipId</param>
+        /// <param name="fields"></param>
         /// <returns>Video</returns>
-        public async Task<Video> GetAlbumVideoAsync(long albumId, long clipId)
+        public async Task<Video> GetAlbumVideoAsync(long albumId, long clipId, string[] fields = null)
         {
             try
             {
-                var request = GenerateAlbumVideosRequest(albumId, clipId: clipId);
+                var request = GenerateAlbumVideosRequest(albumId, clipId: clipId, fields:fields);
                 var response = await request.ExecuteRequestAsync<Video>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving user album video.", HttpStatusCode.NotFound);
@@ -76,12 +77,13 @@ namespace VimeoDotNet
         /// <param name="perPage">Number of items to show on each page. Max 50.</param>
         /// <param name="sort">The default sort order of an Album's videos</param>
         /// <param name="direction">The direction that the results are sorted.</param>
+        /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter </param>
         /// <returns>Paginated videos</returns>
-        public async Task<Paginated<Video>> GetAlbumVideosAsync(long albumId, int? page, int? perPage, string sort = null, string direction = null)
+        public async Task<Paginated<Video>> GetAlbumVideosAsync(long albumId, int? page, int? perPage, string sort = null, string direction = null, string[] fields = null)
         {
             try
             {
-                var request = GenerateAlbumVideosRequest(albumId, page: page, perPage: perPage, sort: sort, direction: direction);
+                var request = GenerateAlbumVideosRequest(albumId, page: page, perPage: perPage, sort: sort, direction: direction, fields: fields);
                 var response = await request.ExecuteRequestAsync<Paginated<Video>>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving account album videos.", HttpStatusCode.NotFound);
@@ -113,12 +115,13 @@ namespace VimeoDotNet
         /// <param name="userId">AlbumId</param>
         /// <param name="albumId">UserId</param>
         /// <param name="clipId">ClipId</param>
+        /// <param name="fields"></param>
         /// <returns>Video</returns>
-        public async Task<Video> GetUserAlbumVideoAsync(long userId, long albumId, long clipId)
+        public async Task<Video> GetUserAlbumVideoAsync(long userId, long albumId, long clipId, string[] fields = null)
         {
             try
             {
-                var request = GenerateAlbumVideosRequest(albumId, userId, clipId);
+                var request = GenerateAlbumVideosRequest(albumId, userId, clipId, fields:fields);
                 var response = await request.ExecuteRequestAsync<Video>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving user album video.", HttpStatusCode.NotFound);
@@ -144,12 +147,13 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="userId">UserId</param>
         /// <param name="albumId">AlbumId</param>
+        /// <param name="fields"></param>
         /// <returns>Paginated videos</returns>
-        public async Task<Paginated<Video>> GetUserAlbumVideosAsync(long userId, long albumId)
+        public async Task<Paginated<Video>> GetUserAlbumVideosAsync(long userId, long albumId, string[] fields = null)
         {
             try
             {
-                var request = GenerateAlbumVideosRequest(albumId, userId);
+                var request = GenerateAlbumVideosRequest(albumId, userId, fields:fields);
                 var response = await request.ExecuteRequestAsync<Paginated<Video>>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving user album videos.", HttpStatusCode.NotFound);
@@ -180,12 +184,13 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="userId">UserId</param>
         /// <param name="clipId">ClipId</param>
+        /// <param name="fields"></param>
         /// <returns>Video</returns>
-        public async Task<Video> GetUserVideoAsync(long userId, long clipId)
+        public async Task<Video> GetUserVideoAsync(long userId, long clipId, string[] fields = null)
         {
             try
             {
-                var request = GenerateVideosRequest(userId, clipId);
+                var request = GenerateVideosRequest(userId, clipId, fields:fields);
                 var response = await request.ExecuteRequestAsync<Video>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving user video.", HttpStatusCode.NotFound);
@@ -211,10 +216,11 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="userId">UserId</param>
         /// <param name="query">Search query</param>
+        /// <param name="fields"></param>
         /// <returns>Paginated videos</returns>
-        public async Task<Paginated<Video>> GetUserVideosAsync(long userId, string query = null)
+        public async Task<Paginated<Video>> GetUserVideosAsync(long userId, string query = null, string[] fields = null)
         {
-            return await GetUserVideosAsync(userId, null, null, query);
+            return await GetUserVideosAsync(userId, null, null, query, fields);
         }
 
         /// <summary>
@@ -224,12 +230,13 @@ namespace VimeoDotNet
         /// <param name="perPage">Number of items to show on each page. Max 50</param>
         /// <param name="query">Search query</param>
         /// <param name="page">The page number to show</param>
+        /// <param name="fields"></param>
         /// <returns>Paginated videos</returns>
-        public async Task<Paginated<Video>> GetUserVideosAsync(long userId, int? page, int? perPage, string query = null)
+        public async Task<Paginated<Video>> GetUserVideosAsync(long userId, int? page, int? perPage, string query = null, string[] fields = null)
         {
             try
             {
-                var request = GenerateVideosRequest(userId: userId, page: page, perPage: perPage, query: query);
+                var request = GenerateVideosRequest(userId: userId, page: page, perPage: perPage, query: query, fields:fields);
                 var response = await request.ExecuteRequestAsync<Paginated<Video>>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving user videos.", HttpStatusCode.NotFound);
@@ -259,12 +266,13 @@ namespace VimeoDotNet
         /// Get video by ClipId asynchronously
         /// </summary>
         /// <param name="clipId">ClipId</param>
+        /// <param name="fields"></param>
         /// <returns>Video</returns>
-        public async Task<Video> GetVideoAsync(long clipId)
+        public async Task<Video> GetVideoAsync(long clipId, string[] fields = null)
         {
             try
             {
-                var request = GenerateVideosRequest(clipId: clipId);
+                var request = GenerateVideosRequest(clipId: clipId, fields:fields);
                 var response = await request.ExecuteRequestAsync<Video>();
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving account video.", HttpStatusCode.NotFound);
@@ -289,7 +297,7 @@ namespace VimeoDotNet
         /// Get paginated video for current account asynchronously
         /// </summary>
         /// <returns>Paginated videos</returns>
-        public async Task<Paginated<Video>> GetVideosAsync(int? page = null, int? perPage = null)
+        public async Task<Paginated<Video>> GetVideosAsync(int? page = null, int? perPage = null, string[] fields = null)
         {
             try
             {
@@ -358,7 +366,7 @@ namespace VimeoDotNet
             }
         }
 
-        private IApiRequest GenerateVideosRequest(long? userId = null, long? clipId = null, int? page = null, int? perPage = null, string query = null)
+        private IApiRequest GenerateVideosRequest(long? userId = null, long? clipId = null, int? page = null, int? perPage = null, string query = null, string[] fields = null)
         {
             ThrowIfUnauthorized();
 
@@ -377,6 +385,13 @@ namespace VimeoDotNet
             {
                 request.UrlSegments.Add("clipId", clipId.ToString());
             }
+            if (fields != null)
+            {
+                foreach (var field in fields)
+                {
+                    request.Fields.Add(field);
+                }
+            }
             if (page.HasValue)
             {
                 request.Query.Add("page", page.ToString());
@@ -393,7 +408,7 @@ namespace VimeoDotNet
             return request;
         }
 
-        private IApiRequest GenerateAlbumVideosRequest(long albumId, long? userId = null, long? clipId = null, int? page = null, int? perPage = null, string sort = null, string direction = null)
+        private IApiRequest GenerateAlbumVideosRequest(long albumId, long? userId = null, long? clipId = null, int? page = null, int? perPage = null, string sort = null, string direction = null, string[] fields = null)
         {
             ThrowIfUnauthorized();
 
@@ -410,6 +425,13 @@ namespace VimeoDotNet
             if (clipId.HasValue)
             {
                 request.UrlSegments.Add("clipId", clipId.ToString());
+            }
+            if (fields != null)
+            {
+                foreach (var field in fields)
+                {
+                    request.Fields.Add(field);
+                }
             }
             if (page.HasValue)
             {
