@@ -376,7 +376,8 @@ namespace VimeoDotNet
                 {
                     var startIndex = fileContent.Data.CanSeek ? fileContent.Data.Position : written;
                     var endIndex = Math.Min(startIndex + chunkSize.Value, fileContent.Data.Length);
-                    request.Body = new ByteArrayContent(await fileContent.ReadAsync(startIndex, endIndex), (int)startIndex, (int)endIndex);
+                    var byteArray = await fileContent.ReadAsync(startIndex, endIndex);
+                    request.Body = new ByteArrayContent(byteArray, 0, byteArray.Length);
                 }
                 else
                 {
