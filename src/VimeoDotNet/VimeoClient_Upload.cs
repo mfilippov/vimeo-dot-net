@@ -316,6 +316,7 @@ namespace VimeoDotNet
                         && long.TryParse(match.Groups["end"].Value, out var endIndex))
                         {
                             verify.BytesWritten = endIndex - startIndex;
+                            uploadRequest.BytesWritten = verify.BytesWritten;
                             if (verify.BytesWritten == uploadRequest.FileLength)
                             {
                                 verify.Status = UploadStatusEnum.Completed;
@@ -368,7 +369,10 @@ namespace VimeoDotNet
             
             if (verifyOnly)
             {
-                request.Body = new ByteArrayContent(new byte [0]);
+                var body = new ByteArrayContent(new byte[0]);
+                body.Headers.Add("Content-Range", "bytes */*");
+                body.Headers.ContentLength = 0;
+                request.Body = body;
             }
             else
             {
@@ -377,7 +381,10 @@ namespace VimeoDotNet
                     var startIndex = fileContent.Data.CanSeek ? fileContent.Data.Position : written;
                     var endIndex = Math.Min(startIndex + chunkSize.Value, fileContent.Data.Length);
                     var byteArray = await fileContent.ReadAsync(startIndex, endIndex);
-                    request.Body = new ByteArrayContent(byteArray, 0, byteArray.Length);
+                    var body = new ByteArrayContent(byteArray, 0, byteArray.Length);
+                    body.Headers.Add("Content-Range", $"bytes {startIndex}-{endIndex}/*");
+                    body.Headers.ContentLength = endIndex - startIndex;
+                    request.Body = body;
                 }
                 else
                 {
