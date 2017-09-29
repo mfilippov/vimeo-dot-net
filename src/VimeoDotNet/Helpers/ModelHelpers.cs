@@ -12,9 +12,14 @@ namespace VimeoDotNet.Helpers
             {
                 return null;
             }
-            string[] pieces = uri.Split(new[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
+            var pieces = uri.Split(new[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
             long userId = 0;
-            if (long.TryParse(pieces[pieces.Length - 1], out userId))
+            var idString = pieces[pieces.Length - 1];
+            if (idString.Contains(":"))
+            {
+                idString = idString.Split(':')[0];
+            }
+            if (long.TryParse(idString, out userId))
             {
                 return userId;
             }

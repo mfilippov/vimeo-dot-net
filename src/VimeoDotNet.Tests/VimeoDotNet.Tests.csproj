@@ -82,6 +82,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AuthorizationClientAsyncTests.cs" />
+    <Compile Include="Helpers\ModelHelpersTests.cs" />
     <Compile Include="Settings\SettingsLoader.cs" />
     <Compile Include="Settings\VimeoApiTestSettings.cs" />
     <Compile Include="VimeoClientAsyncTests.cs" />
