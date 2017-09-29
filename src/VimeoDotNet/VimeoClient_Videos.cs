@@ -523,23 +523,25 @@ namespace VimeoDotNet
         }
 
         /// <summary>
-        /// 
+        /// Get a video thumbnail
         /// </summary>
-        /// <param name="clipId"></param>
+        /// <param name="clipId">clipdId</param>
+        /// <param name="pictureId">pictureId</param>
         /// <returns></returns>
-        public async Task<Picture> GetPictureAsync(long clipId)
+        public async Task<Picture> GetPictureAsync(long clipId, long pictureId)
         {
             try
             {
                 ThrowIfUnauthorized();
-                IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
-                request.Method = HttpMethod.Post;
-                request.Path = Endpoints.Pictures;
+                var request = ApiRequestFactory.GetApiRequest(AccessToken);
+                request.Method = HttpMethod.Get;
+                request.Path = Endpoints.Picture;
                 request.UrlSegments.Add("clipId", clipId.ToString());
+                request.UrlSegments.Add("pictureId", clipId.ToString());
 
                 var response = await request.ExecuteRequestAsync<Picture>();
                 UpdateRateLimit(response);
-                CheckStatusCodeError(response, "Error retrieving account video.", HttpStatusCode.NotFound);
+                CheckStatusCodeError(response, "Error retrieving video picture.", HttpStatusCode.NotFound);
 
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
@@ -554,7 +556,43 @@ namespace VimeoDotNet
                 {
                     throw;
                 }
-                throw new VimeoApiException("Error retrieving account video.", ex);
+                throw new VimeoApiException("Error retrieving video picture.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Get all thumbnails on a video
+        /// </summary>
+        /// <param name="clipId"></param>
+        /// <returns></returns>
+        public async Task<Paginated<Picture>> GetPicturesAsync(long clipId)
+        {
+            try
+            {
+                ThrowIfUnauthorized();
+                IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
+                request.Method = HttpMethod.Get;
+                request.Path = Endpoints.Pictures;
+                request.UrlSegments.Add("clipId", clipId.ToString());
+
+                var response = await request.ExecuteRequestAsync<Paginated<Picture>>();
+                UpdateRateLimit(response);
+                CheckStatusCodeError(response, "Error retrieving video picture.", HttpStatusCode.NotFound);
+
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                return response.Content;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+                throw new VimeoApiException("Error retrieving video picture.", ex);
             }
         }
 
