@@ -51,10 +51,22 @@ namespace VimeoDotNet.Net
                     request.UrlSegments.Add(item);
                 }
             }
-
+            
             // Add query or body parameters if present...
             if (additionalParameters != null)
-                request.Body = new FormUrlEncodedContent(additionalParameters.GetParameterValues());
+            {
+                if (method == HttpMethod.Get)
+                {
+                    foreach (var parameter in additionalParameters.GetParameterValues())
+                    {
+                        request.Query.Add(parameter);
+                    }
+                }
+                else
+                {
+                    request.Body = new FormUrlEncodedContent(additionalParameters.GetParameterValues());
+                }
+            }
 
             return request;
         }

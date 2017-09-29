@@ -423,6 +423,14 @@ namespace VimeoDotNet.Tests
             var albums = await client.GetAlbumsAsync();
             albums.ShouldNotBeNull();
         }
+        
+        [Fact]
+        public async Task Integration_VimeoClient_GetAccountAlbums_WithParameters()
+        {
+            var client = CreateAuthenticatedClient();
+            var albums = await client.GetAlbumsAsync(new GetAlbumsParameters { PerPage = 50 });
+            albums.ShouldNotBeNull();
+        }
 
         [Fact]
         public async Task Integration_VimeoClientWithFields_GetAccountAlbums_NotNull()
