@@ -360,6 +360,19 @@ namespace VimeoDotNet.Tests
             var video = await client.GetAlbumVideoAsync(_vimeoSettings.AlbumId, _vimeoSettings.VideoId);
             video.ShouldNotBeNull();
         }
+        
+        [Fact]
+        public async Task Integration_VimeoClient_GetAccountAlbumVideo_GetThumbnails()
+        {
+            var client = CreateAuthenticatedClient();
+            var pictures = await client.GetPicturesAsync(_vimeoSettings.VideoId);
+            pictures.ShouldNotBeNull();
+            pictures.data.Count.ShouldBeGreaterThan(0);
+            var uriParts = pictures.data[0].uri.Split('/');
+            var pictureId = long.Parse(uriParts[uriParts.Length - 1]);
+            var picture = await client.GetPictureAsync(_vimeoSettings.VideoId, pictureId);
+            picture.ShouldNotBeNull();            
+        }
 
         [Fact]
         public async Task Integration_VimeoClient_GetAccountAlbumVideoWithFields_RetrievesVideo()

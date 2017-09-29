@@ -735,10 +735,10 @@ namespace VimeoDotNet
         {
             try
             {
-                Picture pic = GetPictureAsync(clipId).RunSynchronouslyWithCurrentCulture();
-                UploadPictureAsync(fileContent, pic.link).RunSynchronouslyWithCurrentCulture();
-                SetThumbnailActiveAsync(pic.uri).RunSynchronouslyWithCurrentCulture();
-                return pic;
+                var pics = GetPicturesAsync(clipId).RunSynchronouslyWithCurrentCulture().data;
+                UploadPictureAsync(fileContent, pics[0].link).RunSynchronouslyWithCurrentCulture();
+                SetThumbnailActiveAsync(pics[0].uri).RunSynchronouslyWithCurrentCulture();
+                return pics[0];
             }
             catch (AggregateException ex)
             {
