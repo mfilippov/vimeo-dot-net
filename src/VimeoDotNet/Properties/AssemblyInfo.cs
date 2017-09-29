@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("VimeoDotNet")]
@@ -7,6 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © 2014-2016, Stephen Commisso, Mikhael Filippov")]
 [assembly: AssemblyVersion("1.0.0")]
 [assembly: AssemblyFileVersion("1.0.0")]
+[assembly: InternalsVisibleTo("VimeoDotNet.Tests")]
 
 [assembly: AssemblyDescription("Core library for accessing the Vimeo REST API")]
 
