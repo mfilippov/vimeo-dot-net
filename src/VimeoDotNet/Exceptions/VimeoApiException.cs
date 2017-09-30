@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace VimeoDotNet.Exceptions
 {
     /// <summary>
     /// VimeoApiException
     /// </summary>
-    [Serializable]
-    public class VimeoApiException : ApplicationException
+    public class VimeoApiException : Exception
     {
         /// <summary>
         /// Create new VimeoApiException
@@ -32,14 +30,6 @@ namespace VimeoDotNet.Exceptions
         /// <param name="innerException"></param>
         public VimeoApiException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Create new VimeoApiException
-        /// </summary>
-        public VimeoApiException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }
