@@ -143,8 +143,8 @@ namespace VimeoDotNet.Tests
         {
             using (var file = new BinaryContent(GetFileFromEmbeddedResources(Testfilepath), "video/mp4"))
             {
-                (await file.ReadAllAsync()).Length.ShouldBe(818086);
-                (await file.ReadAllAsync()).Length.ShouldBe(818086);
+                (await file.ReadAllAsync()).Length.ShouldBe(5510872);
+                (await file.ReadAllAsync()).Length.ShouldBe(5510872);
             }
         }
 
