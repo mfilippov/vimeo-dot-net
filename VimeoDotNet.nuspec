@@ -26,8 +26,11 @@
             </dependencies>
         </metadata>
         <files>
-            <file src="src\VimeoDotNet\bin\Release\VimeoDotNet.dll" target="lib\net45" />
-            <file src="src\VimeoDotNet\bin\Release\VimeoDotNet.pdb" target="lib\net45" />
-            <file src="src\VimeoDotNet\bin\Release\VimeoDotNet.xml" target="lib\net45" />
+            <file src="src\VimeoDotNet\bin\Release\net45\VimeoDotNet.dll" target="lib\net45" />
+            <file src="src\VimeoDotNet\bin\Release\net45\VimeoDotNet.pdb" target="lib\net45" />
+            <file src="src\VimeoDotNet\bin\Release\net45\VimeoDotNet.xml" target="lib\net45" />
+            <file src="src\VimeoDotNet\bin\Release\netstandard1.3\VimeoDotNet.dll" target="lib\netstandard1.3" />
+            <file src="src\VimeoDotNet\bin\Release\netstandard1.3\VimeoDotNet.pdb" target="lib\netstandard1.3" />
+            <file src="src\VimeoDotNet\bin\Release\netstandard1.3\VimeoDotNet.xml" target="lib\netstandard1.3" />
       </files>
   </package>
