@@ -40,11 +40,6 @@ namespace VimeoDotNet.Exceptions
             Request = request;
         }
 
-        public VimeoUploadException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-
         public IUploadRequest Request
         {
             get { return _request; }

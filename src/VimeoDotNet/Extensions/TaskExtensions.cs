@@ -36,6 +36,7 @@ namespace VimeoDotNet.Extensions
 
         public static Task<TResult> RunWithCulture<TResult>(Func<TResult> task)
         {
+#if NET45
             var culture = Thread.CurrentThread.CurrentCulture;
             var uiCulture = Thread.CurrentThread.CurrentUICulture;
             return Task.Run<TResult>(() =>
@@ -45,10 +46,21 @@ namespace VimeoDotNet.Extensions
                 if (uiCulture != null) t.CurrentUICulture = uiCulture;
                 return task();
             });
+#else
+            var culture = CultureInfo.CurrentCulture;
+            var uiCulture = CultureInfo.CurrentUICulture;
+            return Task.Run<TResult>(() =>
+            {
+                if (culture != null) CultureInfo.CurrentCulture = culture;
+                if (uiCulture != null) CultureInfo.CurrentUICulture = uiCulture;
+                return task();
+            });
+#endif
         }
 
         public static Task<TResult> RunWithCulture<TResult>(Func<Task<TResult>> task)
         {
+#if NET45
             var culture = Thread.CurrentThread.CurrentCulture;
             var uiCulture = Thread.CurrentThread.CurrentUICulture;
             return Task.Run<TResult>(async () =>
@@ -58,10 +70,21 @@ namespace VimeoDotNet.Extensions
                 if (uiCulture != null) t.CurrentUICulture = uiCulture;
                 return await task().KeepCulture();
             });
+#else
+            var culture = CultureInfo.CurrentCulture;
+            var uiCulture = CultureInfo.CurrentUICulture;
+            return Task.Run<TResult>(async () =>
+            {
+                if (culture != null) CultureInfo.CurrentCulture = culture;
+                if (uiCulture != null) CultureInfo.CurrentUICulture = uiCulture;
+                return await task().KeepCulture();
+            });
+#endif
         }
 
         public static Task RunWithCulture<TResult>(Action task)
         {
+#if NET45
             var culture = Thread.CurrentThread.CurrentCulture;
             var uiCulture = Thread.CurrentThread.CurrentUICulture;
             return Task.Run(() =>
@@ -71,10 +94,21 @@ namespace VimeoDotNet.Extensions
                 if (uiCulture != null) t.CurrentUICulture = uiCulture;
                 task();
             });
+#else
+            var culture = CultureInfo.CurrentCulture;
+            var uiCulture = CultureInfo.CurrentUICulture;
+            return Task.Run(() =>
+            {
+                if (culture != null) CultureInfo.CurrentCulture = culture;
+                if (uiCulture != null) CultureInfo.CurrentUICulture = uiCulture;
+                task();
+            });
+#endif
         }
 
         public static Task RunWithCulture(Func<Task> task)
         {
+#if NET45
             var culture = Thread.CurrentThread.CurrentCulture;
             var uiCulture = Thread.CurrentThread.CurrentUICulture;
             return Task.Run(async () =>
@@ -84,6 +118,16 @@ namespace VimeoDotNet.Extensions
                 if (uiCulture != null) t.CurrentUICulture = uiCulture;
                 await task().KeepCulture();
             });
+#else
+            var culture = CultureInfo.CurrentCulture;
+            var uiCulture = CultureInfo.CurrentUICulture;
+            return Task.Run(async () =>
+            {
+                if (culture != null) CultureInfo.CurrentCulture = culture;
+                if (uiCulture != null) CultureInfo.CurrentUICulture = uiCulture;
+                await task().KeepCulture();
+            });
+#endif
         }
     }
 
@@ -104,18 +148,23 @@ namespace VimeoDotNet.Extensions
 
         public void OnCompleted(Action continuation)
         {
-            var t = Thread.CurrentThread;
-            culture = t.CurrentCulture;
-            uiCulture = t.CurrentUICulture;
+            culture = CultureInfo.CurrentCulture;
+            uiCulture = CultureInfo.CurrentUICulture;
             waiter.OnCompleted(continuation);
         }
 
         public void GetResult()
         {
+#if NET45
             var t = Thread.CurrentThread;
             if (culture != null) t.CurrentCulture = culture;
             if (uiCulture != null) t.CurrentUICulture = uiCulture;
             waiter.GetResult();
+#else
+            if (culture != null) CultureInfo.CurrentCulture = culture;
+            if (uiCulture != null) CultureInfo.CurrentUICulture = uiCulture;
+            waiter.GetResult();
+#endif
         }
     }
 
@@ -136,18 +185,23 @@ namespace VimeoDotNet.Extensions
 
         public void OnCompleted(Action continuation)
         {
-            var t = Thread.CurrentThread;
-            culture = t.CurrentCulture;
-            uiCulture = t.CurrentUICulture;
+            culture = CultureInfo.CurrentCulture;
+            uiCulture = CultureInfo.CurrentUICulture;
             waiter.OnCompleted(continuation);
         }
 
         public TResult GetResult()
         {
+#if NET45
             var t = Thread.CurrentThread;
             if (culture != null) t.CurrentCulture = culture;
             if (uiCulture != null) t.CurrentUICulture = uiCulture;
             return waiter.GetResult();
+#else
+            if (culture != null) CultureInfo.CurrentCulture = culture;
+            if (uiCulture != null) CultureInfo.CurrentUICulture = uiCulture;
+            return waiter.GetResult();
+#endif
         }
     }
 }

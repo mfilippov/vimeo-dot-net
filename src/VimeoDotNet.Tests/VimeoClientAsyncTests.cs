@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using Shouldly;
 using VimeoDotNet.Authorization;
@@ -719,7 +720,7 @@ namespace VimeoDotNet.Tests
 
         private static Stream GetFileFromEmbeddedResources(string relativePath)
         {
-            var assembly = typeof(VimeoClientAsyncTests).Assembly;
+            var assembly = typeof(VimeoClientAsyncTests).GetTypeInfo().Assembly;
             return assembly.GetManifestResourceStream(relativePath);
         }
 
