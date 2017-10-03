@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using VimeoDotNet.Constants;
 using VimeoDotNet.Enums;
 using VimeoDotNet.Exceptions;
@@ -600,9 +601,8 @@ namespace VimeoDotNet
         /// upload picture asynchronously
         /// </summary>        
         /// <param name="fileContent">fileContent</param>
-        /// <param name="link">link</param>
         /// <returns>upload pic </returns>
-        public async Task UploadPictureAsync(IBinaryContent fileContent, string link)
+        public async Task<Picture> UploadPictureAsync(IBinaryContent fileContent, long clipId)
         {
             try
             {
@@ -616,18 +616,17 @@ namespace VimeoDotNet
                 }
                 ThrowIfUnauthorized();
                 var request = ApiRequestFactory.GetApiRequest(AccessToken);
-                request.Method = HttpMethod.Put;
-                request.Path = link;
-                //request.Header.Add(Request.HeaderContentType, "image/jpeg");
-                //request.Headers.Add(Request.HeaderContentLength, fileContent.Data.Length.ToString());
+                request.Method = HttpMethod.Post;
+                request.Path = Endpoints.Pictures;
+                request.UrlSegments.Add("clipId", clipId.ToString());
 
                 request.Body = new ByteArrayContent(await fileContent.ReadAllAsync());
 
-                var response = await request.ExecuteRequestAsync();
+                var response = await request.ExecuteRequestAsync<Picture>();
 
                 CheckStatusCodeError(null, response, "Error generating upload ticket to replace video.");
 
-                //return response.Data;
+                return response.Content;
             }
             catch (Exception ex)
             {

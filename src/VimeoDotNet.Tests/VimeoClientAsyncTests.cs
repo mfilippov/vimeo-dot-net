@@ -173,6 +173,10 @@ namespace VimeoDotNet.Tests
             var client = CreateAuthenticatedClient();
             var video = await client.UploadPullLinkAsync("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");
             video.ShouldNotBeNull();
+            video.id.ShouldNotBeNull();
+            await client.DeleteVideoAsync(video.id.Value);
+            video = await client.GetVideoAsync(video.id.Value);
+            video.ShouldBeNull();
         }
 
         [Fact]
