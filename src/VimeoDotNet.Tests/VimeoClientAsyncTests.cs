@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Shouldly;
 using VimeoDotNet.Authorization;
+using VimeoDotNet.Exceptions;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
 using VimeoDotNet.Parameters;
@@ -316,8 +317,25 @@ namespace VimeoDotNet.Tests
         public async Task Integration_VimeoClient_GetAccountVideos_SecondPage()
         {
             var client = CreateAuthenticatedClient();
-            var videos = await client.GetVideosAsync(page: 2, perPage: 5);
-            videos.ShouldNotBeNull();
+
+            for (var i = 0; i < 5; i++)
+            {
+                try
+                {
+                    var videos = await client.GetVideosAsync(page: 2, perPage: 5);
+                    videos.ShouldNotBeNull();
+                    return;
+                }
+                catch (VimeoApiException ex)
+                {
+                    if (ex.Message.Contains("Please try again."))
+                    {
+                        continue;
+                    }
+                    throw;
+                }
+            }
+
         }
 
         [Fact]
@@ -730,6 +748,13 @@ namespace VimeoDotNet.Tests
 
         private class NonReadableStream : Stream
         {
+            public NonReadableStream()
+            {
+                CanSeek = false;
+                CanWrite = false;
+                Length = 0;
+            }
+
             public override void Flush()
             {
                 throw new NotImplementedException();
@@ -764,6 +789,12 @@ namespace VimeoDotNet.Tests
 
         private class NonSeekableStream : Stream
         {
+            public NonSeekableStream()
+            {
+                CanWrite = false;
+                Length = 0;
+            }
+
             public override void Flush()
             {
                 throw new NotImplementedException();
