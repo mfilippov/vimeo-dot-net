@@ -268,10 +268,9 @@ namespace VimeoDotNet
         {
             try
             {
-                var pics = await GetPicturesAsync(clipId);
-                await UploadPictureAsync(fileContent, pics.data[0].link);
-                await SetThumbnailActiveAsync(pics.data[0].uri);
-                return pics.data[0];
+                var pic = await UploadPictureAsync(fileContent, clipId);
+                await SetThumbnailActiveAsync(pic.uri);
+                return pic;
             }
             catch (Exception ex)
             {

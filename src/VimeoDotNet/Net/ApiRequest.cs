@@ -130,7 +130,7 @@ namespace VimeoDotNet.Net
         /// <summary>
         /// Rest client
         /// </summary>
-        protected static readonly HttpClient Client = new HttpClient();
+        protected static readonly HttpClient Client = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false });
 
         /// <summary>
         /// Client Id
@@ -226,7 +226,6 @@ namespace VimeoDotNet.Net
         {
             SetDefaults();
             var request = new HttpRequestMessage(Method, BuildUrl());
-
             if (!ExcludeAuthorizationHeader)
             {
                 SetAuth(request);
@@ -262,115 +261,6 @@ namespace VimeoDotNet.Net
             var encoded = Convert.ToBase64String(tokenBytes);
             request.Headers.Authorization = new AuthenticationHeaderValue("Basic", encoded);
         }
-
-        //        /// <summary>
-        //        /// Set request body
-        //        /// </summary>
-        //        /// <param name="request">Request</param>
-        //        protected void SetBody(HttpRequestMessage request)
-        //        {
-        //            string mediaType;
-        //            
-        //            if (!Headers.ContainsKey(Request.HeaderContentType) &&
-        //                (Method == HttpMethod.Post || Method.Method == "PATCH" || Method == HttpMethod.Put))
-        //            {
-        //                mediaType = "application/x-www-form-urlencoded";
-        //            }
-        //            else
-        //            {
-        //                mediaType = Headers[Request.HeaderContentRange];
-        //            }
-        //            
-        //            if (Body != null)
-        //            {
-        //                request.Content = new StringContent(JsonConvert.SerializeObject(Body), Encoding.UTF8, mediaType);
-        //            }
-        //            else if (BinaryContent != null)
-        //            {
-        //                request.Content = new ByteArrayContent(BinaryContent, );
-        //            }
-        //            
-        //            foreach (var header in Headers)
-        //            {
-        //                if (header.Key == Request.HeaderContentType 
-        //                    || header.Key == Request.HeaderAccepts 
-        //                    || header.Key == Request.HeaderContentLength)
-        //                    continue;
-        //                request.Headers.Add(header.Key, header.Value);
-        //            }
-        //        }
-        //        
-        //        /// <summary>
-        //        /// Set json response
-        //        /// </summary>
-        //        /// <param name="request">Request</param>
-        //        protected void SetJsonResponse(HttpRequestMessage request)
-        //        {
-        //            request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
-        //            //request.DateFormat = "yyyy-MM-ddTHH:mm:sszzz";
-        //        }
-        //        
-        //        
-
-        //        /// <summary>
-        //        /// Retrun authenticator
-        //        /// </summary>
-        //        /// <returns>Authenticator</returns>
-        //        protected void GetAuthenticator(HttpRequestMessage request)
-        //        {
-        //            if (!string.IsNullOrWhiteSpace(AccessToken))
-        //            {
-        //                return GetBearerAuthenticator();
-        //            }
-        //            if (!string.IsNullOrWhiteSpace(ClientId) && !string.IsNullOrWhiteSpace(ClientSecret))
-        //            {
-        //                return GetBasicAuthenticator();
-        //            }
-        //            return null;
-        //        }
-        ////        /// <summary>
-        //        /// Retrun bearer authenticator
-        //        /// </summary>
-        //        /// <returns>Bearer authenticator</returns>
-        //        protected IAuthenticator GetBearerAuthenticator()
-        //        {
-        //            return new OAuth2AuthorizationRequestHeaderAuthenticator(AccessToken, "Bearer");
-        //        }
-        //        /// <summary>
-        //        /// Retrun basic authenticator
-        //        /// </summary>
-        //        /// <returns>Basic authenticator</returns>
-        //        protected IAuthenticator GetBasicAuthenticator()
-        //        {
-        //            string token = string.Format("{0}:{1}", ClientId, ClientSecret);
-        //            byte[] tokenBytes = Encoding.ASCII.GetBytes(token);
-        //            string encoded = Convert.ToBase64String(tokenBytes);
-        //
-        //            return new OAuth2AuthorizationRequestHeaderAuthenticator(encoded, "Basic");
-        //        }
-        //        /// <summary>
-        //        /// Set request url segment
-        //        /// </summary>
-        //        /// <param name="request">Request</param>
-        //        protected void SetUrlSegments(IRestRequest request)
-        //        {
-        //            foreach (var segment in UrlSegments)
-        //            {
-        //                request.AddUrlSegment(segment.Key, segment.Value);
-        //            }
-        //        }
-        //
-        //        /// <summary>
-        //        /// Set request query params
-        //        /// </summary>
-        //        /// <param name="request">Request</param>
-        //        protected void SetQueryParams(IRestRequest request)
-        //        {
-        //            foreach (var qsParam in Query)
-        //            {
-        //                request.AddParameter(qsParam.Key, qsParam.Value);
-        //            }
-        //        }
 
         /// <summary>
         /// Set defaults
