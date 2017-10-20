@@ -74,6 +74,24 @@ namespace VimeoDotNet.Authorization
         }
 
         /// <inheritdoc />
+        public Boolean VerifyAccessToken(string AccessToken)
+        {
+            return VerifyAccessTokenAsync(AccessToken).Result;
+        }
+
+        /// <inheritdoc />
+        public async Task<Boolean> VerifyAccessTokenAsync(string AccessToken)
+        {
+            var request = GenerateVerifyRequest(AccessToken);
+            var result = await request.ExecuteRequestAsync();
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <inheritdoc />
         public async Task<AccessTokenResponse> GetUnauthenticatedTokenAsync()
         {
             var request = BuildUnauthenticatedTokenRequest();
@@ -140,6 +158,16 @@ namespace VimeoDotNet.Authorization
                 Path = Endpoints.AccessToken
             };
             SetAccessTokenQueryParams(request, authorizationCode, redirectUri);
+
+            return request;
+        }
+
+        private IApiRequest GenerateVerifyRequest(string AccessToken)
+        {
+            IApiRequest request = new ApiRequest(AccessToken);
+            string endpoint = Endpoints.Verify;
+            request.Method = HttpMethod.Get;
+            request.Path = endpoint;
 
             return request;
         }
