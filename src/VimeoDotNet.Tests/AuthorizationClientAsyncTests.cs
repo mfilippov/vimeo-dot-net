@@ -26,5 +26,16 @@ namespace VimeoDotNet.Tests
             token.access_token.ShouldNotBeNull();
             token.user.ShouldBeNull();
         }
+
+        [Fact]
+        public async Task VerifyAuthenticatedAccess()
+        {
+            var client = new AuthorizationClient(_vimeoSettings.ClientId, _vimeoSettings.ClientSecret);
+
+            var b = await client.VerifyAccessTokenAsync(_vimeoSettings.AccessToken);
+            b.ShouldBeTrue();
+            b = await client.VerifyAccessTokenAsync("abadaccesstoken");
+            b.ShouldBeFalse();
+        }
     }
 }

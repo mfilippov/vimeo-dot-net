@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using VimeoDotNet.Constants;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
+using VimeoDotNet.Exceptions;
 
 namespace VimeoDotNet.Authorization
 {
@@ -68,9 +69,39 @@ namespace VimeoDotNet.Authorization
         /// <inheritdoc />
         public async Task<AccessTokenResponse> GetAccessTokenAsync(string authorizationCode, string redirectUri)
         {
-            var request = BuildAccessTokenRequest(authorizationCode, redirectUri);
-            var result = await request.ExecuteRequestAsync<AccessTokenResponse>();
-            return result.Content;
+            try
+            {
+              var request = BuildAccessTokenRequest(authorizationCode, redirectUri);
+              var result = await request.ExecuteRequestAsync<AccessTokenResponse>();
+              CheckStatusCodeError(result, "Error getting access token.");
+              return result.Content;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+                throw new VimeoApiException("Error getting access token.", ex);
+            }
+        }
+
+        /// <inheritdoc />
+        public Boolean VerifyAccessToken(string accessToken)
+        {
+            return VerifyAccessTokenAsync(accessToken).Result;
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> VerifyAccessTokenAsync(string accessToken)
+        {
+            var request = GenerateVerifyRequest(accessToken);
+            var result = await request.ExecuteRequestAsync();
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                return true;
+            }
+            return false;
         }
 
         /// <inheritdoc />
@@ -139,7 +170,22 @@ namespace VimeoDotNet.Authorization
                 Method = HttpMethod.Post,
                 Path = Endpoints.AccessToken
             };
-            SetAccessTokenQueryParams(request, authorizationCode, redirectUri);
+            var parameters = new Dictionary<string, string>
+            {
+                ["grant_type"] = "authorization_code",
+                ["code"] = authorizationCode,
+                ["redirect_uri"] = redirectUri
+            };
+            request.Body = new FormUrlEncodedContent(parameters);
+            return request;
+        }
+
+        private IApiRequest GenerateVerifyRequest(string AccessToken)
+        {
+            IApiRequest request = new ApiRequest(AccessToken);
+            string endpoint = Endpoints.Verify;
+            request.Method = HttpMethod.Get;
+            request.Path = endpoint;
 
             return request;
         }
@@ -153,19 +199,6 @@ namespace VimeoDotNet.Authorization
         private static string BuildUrl(string route, string queryString)
         {
             return $"{Request.DefaultProtocol}://{Request.DefaultHostName}{route}{queryString}";
-        }
-
-        /// <summary>
-        /// Set access token query params
-        /// </summary>
-        /// <param name="request">Request</param>
-        /// <param name="authorizationCode">AuthorizationCode</param>
-        /// <param name="redirectUri">RedirectUri</param>
-        private static void SetAccessTokenQueryParams(IApiRequest request, string authorizationCode, string redirectUri)
-        {
-            request.Query.Add("grant_type", "authorization_code");
-            request.Query.Add("code", authorizationCode);
-            request.Query.Add("redirect_uri", redirectUri);
         }
 
         /// <summary>
@@ -212,6 +245,27 @@ namespace VimeoDotNet.Authorization
             }
             sb.Insert(0, "?");
             return sb.ToString();
+        }
+
+        #endregion
+
+        #region Helper Functions
+
+        private void CheckStatusCodeError(IApiResponse response, string message,
+            params HttpStatusCode[] validStatusCodes)
+        {
+            if (!IsSuccessStatusCode(response.StatusCode) && validStatusCodes != null &&
+                !validStatusCodes.Contains(response.StatusCode))
+            {
+                throw new VimeoApiException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
+                    Environment.NewLine, message, response.StatusCode, response.Text));
+            }
+        }
+
+        private bool IsSuccessStatusCode(HttpStatusCode statusCode)
+        {
+            var code = (int)statusCode;
+            return code >= 200 && code < 300;
         }
 
         #endregion
