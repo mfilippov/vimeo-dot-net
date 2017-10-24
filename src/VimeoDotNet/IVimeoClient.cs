@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using VimeoDotNet.Exceptions;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
 using VimeoDotNet.Parameters;
@@ -250,6 +251,36 @@ namespace VimeoDotNet
         /// <param name="clipId">ClipId</param>
         /// <param name="domain">Domain</param>
         Task UpdateVideoAllowedDomainAsync(long clipId, string domain);
+
+        /// <summary>
+        /// Create new upload ticket asynchronously
+        /// </summary>
+        /// <returns>Upload ticket</returns>
+        Task<Video> UploadPullLinkAsync(string link);
+
+        /// <summary>
+        /// Upload and set thumbnail active
+        /// </summary>
+        /// <param name="clipId"></param>
+        /// <param name="fileContent"></param>
+        /// <returns></returns>
+        /// <exception cref="VimeoUploadException"></exception>
+        Task<Picture> UploadThumbnailAsync(long clipId, IBinaryContent fileContent);
+
+        /// <summary>
+        /// Get all thumbnails on a video
+        /// </summary>
+        /// <param name="clipId"></param>
+        /// <returns></returns>
+        Task<Paginated<Picture>> GetPicturesAsync(long clipId);
+
+        /// <summary>
+        /// Get a video thumbnail
+        /// </summary>
+        /// <param name="clipId">clipdId</param>
+        /// <param name="pictureId">pictureId</param>
+        /// <returns></returns>
+        Task<Picture> GetPictureAsync(long clipId, long pictureId);
         #endregion
 
         #region Update video metadata
@@ -452,27 +483,12 @@ namespace VimeoDotNet
 
         #region Albums
         /// <summary>
-        /// Get album by parameters
-        /// </summary>
-        /// <param name="parameters">GetAlbumsParameters</param>
-        /// <returns>Paginated albums</returns>
-        Paginated<Album> GetAlbums(GetAlbumsParameters parameters = null);
-
-        /// <summary>
-        /// Get album by parameters asynchronously
-        /// </summary>
-        /// <param name="parameters">GetAlbumsParameters</param>
-        /// <param name="fields"></param>
-        /// <returns>Paginated albums</returns>
-        Task<Paginated<Album>> GetAlbumsAsync(GetAlbumsParameters parameters = null, string[] fields = null);
-
-        /// <summary>
-        /// Get album by UserId and parameters
+        /// Get album by AlbumId and UserId asynchronously
         /// </summary>
         /// <param name="userId">UserId</param>
-        /// <param name="parameters">GetAlbumsParameters</param>
-        /// <returns>Paginated albums</returns>
-        Paginated<Album> GetAlbums(long userId, GetAlbumsParameters parameters = null);
+        /// <param name="albumId">AlbumId</param>
+        /// <returns>Album</returns>
+        Task<Album> GetAlbumAsync(UserId userId, long albumId);
 
         /// <summary>
         /// Get album by UserId and parameters asynchronously
@@ -480,106 +496,31 @@ namespace VimeoDotNet
         /// <param name="userId">UserId</param>
         /// <param name="parameters">GetAlbumsParameters</param>
         /// <returns>Paginated albums</returns>
-        Task<Paginated<Album>> GetAlbumsAsync(long userId, GetAlbumsParameters parameters = null);
-
-        /// <summary>
-        /// Get album by AlbumId
-        /// </summary>
-        /// <param name="albumId">AlbumId</param>
-        /// <returns>Album</returns>
-        Album GetAlbum(long albumId);
-
-        /// <summary>
-        /// Get album by AlbumId asynchronously
-        /// </summary>
-        /// <param name="albumId">AlbumId</param>
-        /// <returns>Album</returns>
-        Task<Album> GetAlbumAsync(long albumId);
-
-        /// <summary>
-        ///Get album by AlbumId and UserId
-        /// </summary>
-        /// <param name="userId">AlbumId</param>
-        /// <param name="albumId">UserId</param>
-        /// <returns>Album</returns>
-        Album GetAlbum(long userId, long albumId);
-
-        /// <summary>
-        /// Get album by AlbumId and UserId asynchronously
-        /// </summary>
-        /// <param name="userId">UserId</param>
-        /// <param name="albumId">AlbumId</param>
-        /// <returns>Album</returns>
-        Task<Album> GetAlbumAsync(long userId, long albumId);
-
-        /// <summary>
-        /// Create new album
-        /// </summary>
-        /// <param name="parameters">Creation parameters</param>
-        /// <returns>Album</returns>
-        Album CreateAlbum(EditAlbumParameters parameters = null);
+        Task<Paginated<Album>> GetAlbumsAsync(UserId userId, GetAlbumsParameters parameters = null);
 
         /// <summary>
         /// Create new album asynchronously
         /// </summary>
         /// <param name="parameters">Creation parameters</param>
         /// <returns>Album</returns>
-        Task<Album> CreateAlbumAsync(EditAlbumParameters parameters = null);
-
-        /// <summary>
-        /// Update album
-        /// </summary>
-        /// <param name="albumId">Albumid</param>
-        /// <param name="parameters">Album parameters</param>
-        /// <returns>Album</returns>
-        Album UpdateAlbum(long albumId, EditAlbumParameters parameters = null);
+        Task<Album> CreateAlbumAsync(UserId userId, EditAlbumParameters parameters = null);
 
         /// <summary>
         /// Update album asynchronously
         /// </summary>
+        /// <param name="userId">UserId</param>
         /// <param name="albumId">Albumid</param>
         /// <param name="parameters">Album parameters</param>
         /// <returns>Album</returns>
-        Task<Album> UpdateAlbumAsync(long albumId, EditAlbumParameters parameters = null);
-
-        /// <summary>
-        /// Delete album
-        /// </summary>
-        /// <param name="albumId">AlbumId</param>
-        /// <returns>Deletion result</returns>
-        bool DeleteAlbum(long albumId);
+        Task<Album> UpdateAlbumAsync(UserId userId, long albumId, EditAlbumParameters parameters = null);
 
         /// <summary>
         /// Delete album asynchronously
         /// </summary>
-        /// <param name="albumId">AlbumId</param>
-        /// <returns>Deletion result</returns>
-        Task<bool> DeleteAlbumAsync(long albumId);
-
-        /// <summary>
-        /// Add video to album by AlbumId and ClipId
-        /// </summary>
-        /// <param name="albumId">AlbumId</param>
-        /// <param name="clipId">ClipId</param>
-        /// <returns>Adding result</returns>
-        bool AddToAlbum(long albumId, long clipId);
-
-        /// <summary>
-        /// Add video to album by AlbumId and ClipId asynchronously
-        /// </summary>
-        /// <param name="albumId">AlbumId</param>
-        /// <param name="clipId">ClipId</param>
-        /// <returns>Adding result</returns>
-        Task<bool> AddToAlbumAsync(long albumId, long clipId);
-
-        /// <summary>
-        /// Add video to album by UserId and AlbumId and ClipId
-        /// </summary>
         /// <param name="userId">UserId</param>
         /// <param name="albumId">AlbumId</param>
-        /// <param name="clipId">ClipId</param>
-        /// <returns>Adding result</returns>
-        bool AddToAlbum(long userId, long albumId, long clipId);
+        /// <returns>Deletion result</returns>
+        Task<bool> DeleteAlbumAsync(UserId userId, long albumId);
 
         /// <summary>
         /// Add video to album by UserId and AlbumId and ClipId asynchronously
@@ -588,32 +529,7 @@ namespace VimeoDotNet
         /// <param name="albumId">AlbumId</param>
         /// <param name="clipId">ClipId</param>
         /// <returns>Adding result</returns>
-        Task<bool> AddToAlbumAsync(long userId, long albumId, long clipId);
-
-        /// <summary>
-        /// Remove video from album by AlbumId and ClipId
-        /// </summary>
-        /// <param name="albumId">AlbumId</param>
-        /// <param name="clipId">ClipId</param>
-        /// <returns>Removing result</returns>
-        bool RemoveFromAlbum(long albumId, long clipId);
-
-        /// <summary>
-        /// Remove video from album by AlbumId and ClipId asynchronously
-        /// </summary>
-        /// <param name="albumId">AlbumId</param>
-        /// <param name="clipId">ClipId</param>
-        /// <returns>Removing result</returns>
-        Task<bool> RemoveFromAlbumAsync(long albumId, long clipId);
-
-        /// <summary>
-        /// Remove video from album by AlbumId and ClipId and UserId
-        /// </summary>
-        /// <param name="userId">UserId</param>
-        /// <param name="albumId">AlbumId</param>
-        /// <param name="clipId">ClipId</param>
-        /// <returns>Removing result</returns>
-        bool RemoveFromAlbum(long userId, long albumId, long clipId);
+        Task<bool> AddToAlbumAsync(UserId userId, long albumId, long clipId);
 
         /// <summary>
         /// Remove video from album by AlbumId and ClipId and UserId asynchronously
@@ -622,7 +538,7 @@ namespace VimeoDotNet
         /// <param name="albumId">AlbumId</param>
         /// <param name="clipId">ClipId</param>
         /// <returns>Removing result</returns>
-        Task<bool> RemoveFromAlbumAsync(long userId, long albumId, long clipId);
+        Task<bool> RemoveFromAlbumAsync(UserId userId, long albumId, long clipId);
         #endregion
 
         #region Deleting videos
