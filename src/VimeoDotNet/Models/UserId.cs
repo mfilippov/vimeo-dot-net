@@ -17,5 +17,10 @@ namespace VimeoDotNet.Models
         {
             return new UserId(id);
         }
+
+        public override string ToString()
+        {
+            return IsMe ? "me" : Id.ToString();
+        }
     }
 }

@@ -38,9 +38,9 @@
         public const string Users = "/users";
         public const string User = "/users/{userId}";
         public const string UserActivities = "/users/{userId}/activities";
-        public const string MeAlbums = "/users/me/albums";
+        public const string MeAlbums = "/me/albums";
         public const string UserAlbums = "/users/{userId}/albums";
-        public const string MeAlbum = "/users/{userId}/albums/{albumId}";
+        public const string MeAlbum = "/me/albums/{albumId}";
         public const string UserAlbum = "/users/{userId}/albums/{albumId}";
         public const string UserAlbumVideos = "/users/{userId}/albums/{albumId}/videos";
         public const string UserAlbumVideo = "/users/{userId}/albums/{albumId}/videos/{clipId}";

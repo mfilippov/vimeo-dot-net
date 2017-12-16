@@ -33,27 +33,28 @@ namespace VimeoDotNet.Tests
             albums.data.Count.ShouldBe(1);
             albums.paging.next.ShouldBeNull();
             albums.paging.previous.ShouldBeNull();
-            albums.paging.first.ShouldBe("/me/albums?direction=asc&page=1");
-            albums.paging.last.ShouldBe("/me/albums?direction=asc&page=1");
+            albums.paging.first.ShouldBe("/me/albums?page=1");
+            albums.paging.last.ShouldBe("/me/albums?page=1");
         }
 
         [Fact]
         public async Task GetAlbumsShouldCorrectlyWorkForUserId()
         {
             var client = CreateAuthenticatedClient();
-            var albums = await client.GetAlbumsAsync(VimeoSettings.PublicAlbumId);
+            var albums = await client.GetAlbumsAsync(VimeoSettings.UserId);
             albums.total.ShouldBe(1);
             albums.per_page.ShouldBe(25);
             albums.data.Count.ShouldBe(1);
             albums.paging.next.ShouldBeNull();
             albums.paging.previous.ShouldBeNull();
-            albums.paging.first.ShouldBe("/me/albums?direction=asc&page=1");
-            albums.paging.last.ShouldBe("/me/albums?direction=asc&page=1");
+            albums.paging.first.ShouldBe($"/users/{VimeoSettings.UserId}/albums?page=1");
+            albums.paging.last.ShouldBe($"/users/{VimeoSettings.UserId}/albums?page=1");
             var album = albums.data[0];
             album.name.ShouldBe("Test album");
             album.description.ShouldBe("Test description");
         }
 
+        [Fact]
         public async Task AlbumManagementShouldWorkCorrectlyForMe()
         {
             var client = CreateAuthenticatedClient();
