@@ -8,21 +8,6 @@ namespace VimeoDotNet.Tests
 {
     public class AlbumTests : BaseTest
     {
-//        [Fact]
-//        public async Task Integration_VimeoClient_GetAccountAlbums_WithParameters()
-//        {
-//            var client = CreateAuthenticatedClient();
-//            var albums = await client.GetAlbumsAsync(new GetAlbumsParameters { PerPage = 50 });
-//            albums.ShouldNotBeNull();
-//        }
-//
-//        [Fact]
-//        public async Task Integration_VimeoClientWithFields_GetAccountAlbums_NotNull()
-//        {
-//            var client = CreateAuthenticatedClient();
-//            var albums = await client.GetAlbumsAsync(fields: new []{"name"});
-//            albums.ShouldNotBeNull();
-//        }
         [Fact]
         public async Task GetAlbumsShouldCorrectlyWorkForMe()
         {
@@ -148,6 +133,15 @@ namespace VimeoDotNet.Tests
             var isDeleted = await client.DeleteAlbumAsync(VimeoSettings.PublicUserId, albumId.Value);
 
             isDeleted.ShouldBeTrue();
+        }
+
+        [Fact]
+        public async Task GetAlbumsShouldCorrectlyWorkWithParameters()
+        {
+            var client = CreateAuthenticatedClient();
+            var albums = await client.GetAlbumsAsync(UserId.Me, new GetAlbumsParameters { PerPage = 50 });
+            albums.ShouldNotBeNull();
+            albums.per_page.ShouldBe(50);
         }
     }
 }

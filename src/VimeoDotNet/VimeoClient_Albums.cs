@@ -20,13 +20,12 @@ namespace VimeoDotNet
                 {
                     {"userId", userId.ToString()},
                     {"albumId", albumId.ToString()}
-                },
-                null
+                }
             );
 
             return await ExecuteApiRequest<Album>(request);
         }
- 
+
         /// <inheritdoc />
         public async Task<Paginated<Album>> GetAlbumsAsync(UserId userId, GetAlbumsParameters parameters = null)
         {
@@ -43,8 +42,6 @@ namespace VimeoDotNet
 
             return await ExecuteApiRequest<Paginated<Album>>(request);
         }
-
-        
 
         /// <inheritdoc />
         public async Task<Album> CreateAlbumAsync(UserId userId, EditAlbumParameters parameters = null)
