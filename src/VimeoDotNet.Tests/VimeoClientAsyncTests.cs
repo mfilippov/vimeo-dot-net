@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Shouldly;
 using VimeoDotNet.Exceptions;
-using VimeoDotNet.Models;
 using VimeoDotNet.Net;
 using VimeoDotNet.Parameters;
 using Xunit;
@@ -338,8 +337,6 @@ namespace VimeoDotNet.Tests
             video.name.ShouldNotBeNull();
             video.pictures.ShouldBeNull();
         }
-
-        
 
         [Fact]
         public async Task Integration_VimeoClient_GetAccountAlbumVideosWithFields_RetrievesCurrentAccountAlbumVideos()
