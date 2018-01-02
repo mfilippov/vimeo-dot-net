@@ -10,14 +10,14 @@ namespace VimeoDotNet.Tests
     {
         protected readonly VimeoApiTestSettings VimeoSettings;
 
-        protected const string Testfilepath = @"VimeoDotNet.Tests.Resources.test.mp4";
+        protected const string TestFilePath = @"VimeoDotNet.Tests.Resources.test.mp4";
         // http://download.wavetlan.com/SVV/Media/HTTP/http-mp4.htm
 
-        protected const string Testtexttrackfilepath = @"VimeoDotNet.Tests.Resources.test.vtt";
+        protected const string TestTextTrackFilePath = @"VimeoDotNet.Tests.Resources.test.vtt";
 
-        protected const string Textthumbnailfilepath = @"VimeoDotNet.Tests.Resources.test.png";
+        protected const string TextThumbnailFilePath = @"VimeoDotNet.Tests.Resources.test.png";
 
-        public BaseTest()
+        protected BaseTest()
         {
             // Load the settings from a file that is not under version control for security
             // The settings loader will create this file in the bin/ folder if it doesn't exist

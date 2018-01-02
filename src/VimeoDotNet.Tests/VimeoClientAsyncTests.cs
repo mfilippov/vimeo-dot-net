@@ -38,7 +38,7 @@ namespace VimeoDotNet.Tests
             var tempFilePath = Path.GetTempFileName() + ".mp4";
             using (var fs = new FileStream(tempFilePath, FileMode.CreateNew))
             {
-                GetFileFromEmbeddedResources(Testfilepath).CopyTo(fs);
+                GetFileFromEmbeddedResources(TestFilePath).CopyTo(fs);
             }
             using (var file = new BinaryContent(tempFilePath))
             {
@@ -68,7 +68,7 @@ namespace VimeoDotNet.Tests
             long length;
             IUploadRequest completedRequest;
 
-            using (var file = new BinaryContent(GetFileFromEmbeddedResources(Testfilepath), "video/mp4"))
+            using (var file = new BinaryContent(GetFileFromEmbeddedResources(TestFilePath), "video/mp4"))
             {
                 length = file.Data.Length;
                 var client = CreateAuthenticatedClient();
@@ -90,7 +90,7 @@ namespace VimeoDotNet.Tests
         {
             long length;
             IUploadRequest completedRequest;
-            var stream = GetFileFromEmbeddedResources(Testfilepath);
+            var stream = GetFileFromEmbeddedResources(TestFilePath);
             var buffer = new byte[stream.Length];
             await stream.ReadAsync(buffer, 0, (int)stream.Length);
             using (var file = new BinaryContent(buffer, "video/mp4"))
@@ -113,7 +113,7 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task Integration_VimeoClient_UploadEntireFile_UploadsFile_ReadPartOfFile()
         {
-            using (var file = new BinaryContent(GetFileFromEmbeddedResources(Testfilepath), "video/mp4"))
+            using (var file = new BinaryContent(GetFileFromEmbeddedResources(TestFilePath), "video/mp4"))
             {
                 (await file.ReadAsync(17, 20)).Length.ShouldBe(3);
                 (await file.ReadAsync(17000, 17020)).Length.ShouldBe(20);
@@ -123,7 +123,7 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task Integration_VimeoClient_UploadEntireFile_UploadsFile_DoubleRead()
         {
-            using (var file = new BinaryContent(GetFileFromEmbeddedResources(Testfilepath), "video/mp4"))
+            using (var file = new BinaryContent(GetFileFromEmbeddedResources(TestFilePath), "video/mp4"))
             {
                 (await file.ReadAllAsync()).Length.ShouldBe(5510872);
                 (await file.ReadAllAsync()).Length.ShouldBe(5510872);
@@ -133,7 +133,7 @@ namespace VimeoDotNet.Tests
         [Fact]
         public void Integration_VimeoClient_UploadEntireFile_UploadsFile_DisposedStreamAccess()
         {
-            var file = new BinaryContent(GetFileFromEmbeddedResources(Testfilepath), "video/mp4");
+            var file = new BinaryContent(GetFileFromEmbeddedResources(TestFilePath), "video/mp4");
             file.Dispose();
             Should.Throw<ObjectDisposedException>(() => file.Dispose());
             Should.Throw<ObjectDisposedException>(() => file.Data.Length.ShouldBe(0));
@@ -165,7 +165,7 @@ namespace VimeoDotNet.Tests
         public async Task Integration_VimeoClient_UploadThumbnail()
         {
             var client = CreateAuthenticatedClient();
-            using (var file = new BinaryContent(GetFileFromEmbeddedResources(Textthumbnailfilepath), "image/png"))
+            using (var file = new BinaryContent(GetFileFromEmbeddedResources(TextThumbnailFilePath), "image/png"))
             {
                 var picture = await client.UploadThumbnailAsync(VimeoSettings.VideoId, file);
                 picture.ShouldNotBeNull();
@@ -175,7 +175,7 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task Integration_VimeoClient_DeleteVideo_DeletesVideo()
         {
-            using (var file = new BinaryContent(GetFileFromEmbeddedResources(Testfilepath), "video/mp4"))
+            using (var file = new BinaryContent(GetFileFromEmbeddedResources(TestFilePath), "video/mp4"))
             {
                 var length = file.Data.Length;
                 var client = CreateAuthenticatedClient();
@@ -419,170 +419,6 @@ namespace VimeoDotNet.Tests
             var client = CreateAuthenticatedClient();
             var albums = await client.GetAlbumsAsync(VimeoSettings.UserId);
             albums.ShouldNotBeNull();
-        }
-
-        [Fact]
-        public async Task Integration_VimeoClient_GetTextTracksAsync()
-        {
-            // arrange
-            var client = CreateAuthenticatedClient();
-
-            // act
-            var texttracks = await client.GetTextTracksAsync(VimeoSettings.VideoId);
-
-            // assert
-            texttracks.ShouldNotBeNull();
-        }
-
-        [Fact]
-        public async Task Integration_VimeoClient_GetTextTrackAsync()
-        {
-            // arrange
-            var client = CreateAuthenticatedClient();
-
-            // act
-            var texttrack = await client.GetTextTrackAsync(VimeoSettings.VideoId, VimeoSettings.TextTrackId);
-
-            // assert
-            texttrack.ShouldNotBeNull();
-        }
-
-        [Fact]
-        public async Task Integration_VimeoClient_UpdateTextTrackAsync()
-        {
-            var client = CreateAuthenticatedClient();
-            var original = await client.GetTextTrackAsync(VimeoSettings.VideoId, VimeoSettings.TextTrackId);
-
-            original.ShouldNotBeNull();
-
-            // update the text track record with some new values...
-            const string testName = "NewTrackName";
-            const string testType = "subtitles";
-            const string testLanguage = "fr";
-            const bool testActive = false;
-
-            var updated = await client.UpdateTextTrackAsync(
-                                    VimeoSettings.VideoId,
-                                    VimeoSettings.TextTrackId,
-                                    new TextTrack
-                                    {
-                                        name = testName,
-                                        type = testType,
-                                        language = testLanguage,
-                                        active = testActive
-                                    });
-
-            // inspect the result and ensure the values match what we expect...
-            testName.ShouldBe(updated.name);
-            testType.ShouldBe(updated.type);
-            testLanguage.ShouldBe(updated.language);
-            updated.active.ShouldBeFalse();
-
-            // restore the original values...
-            var final = await client.UpdateTextTrackAsync(
-                                    VimeoSettings.VideoId,
-                                    VimeoSettings.TextTrackId,
-                                    new TextTrack
-                                    {
-                                        name = original.name,
-                                        type = original.type,
-                                        language = original.language,
-                                        active = original.active
-                                    });
-
-            // inspect the result and ensure the values match our originals...
-            if (string.IsNullOrEmpty(original.name))
-            {
-                final.name.ShouldBeNull();
-            }
-            else
-            {
-                original.name.ShouldBe(final.name);
-            }
-
-            if (string.IsNullOrEmpty(original.type))
-            {
-                final.type.ShouldBeNull();
-            }
-            else
-            {
-                original.type.ShouldBe(final.type);
-            }
-
-            if (string.IsNullOrEmpty(original.language))
-            {
-                final.language.ShouldBeNull();
-            }
-            else
-            {
-                original.language.ShouldBe(final.language);
-            }
-
-            original.active.ShouldBe(final.active);
-        }
-
-        [Fact]
-        public async Task Integration_VimeoClient_UploadTextTrackFileAsync()
-        {
-            // arrange
-            var client = CreateAuthenticatedClient();
-            TextTrack completedRequest;
-            using (var file = new BinaryContent(GetFileFromEmbeddedResources(Testtexttrackfilepath), "application/octet-stream"))
-            {
-                // act
-                completedRequest = await client.UploadTextTrackFileAsync(
-                                file,
-                                VimeoSettings.VideoId,
-                                new TextTrack
-                                {
-                                    active = false,
-                                    name = "UploadTest",
-                                    language = "en",
-                                    type = "captions"
-                                });
-            }
-
-            // assert
-            completedRequest.ShouldNotBeNull();
-            completedRequest.uri.ShouldNotBeNull();
-
-            // cleanup
-            var uri = completedRequest.uri;
-            var trackId = Convert.ToInt64(uri.Substring(uri.LastIndexOf('/') + 1));
-            await client.DeleteTextTrackAsync(VimeoSettings.VideoId, trackId);
-        }
-
-        [Fact]
-        public async Task Integration_VimeoClient_DeleteTextTrack()
-        {
-            // arrange
-            TextTrack completedRequest;
-            var client = CreateAuthenticatedClient();
-            var fileStream = GetFileFromEmbeddedResources(Testtexttrackfilepath);
-            fileStream.ShouldNotBeNull();
-            using (var file = new BinaryContent(fileStream, "application/octet-stream"))
-            {
-                completedRequest = await client.UploadTextTrackFileAsync(
-                                file,
-                                VimeoSettings.VideoId,
-                                new TextTrack
-                                {
-                                    active = false,
-                                    name = "DeleteTest",
-                                    language = "en",
-                                    type = "captions"
-                                });
-            }
-            completedRequest.ShouldNotBeNull();
-            completedRequest.uri.ShouldNotBeNull();
-            var uri = completedRequest.uri;
-            var trackId = Convert.ToInt64(uri.Substring(uri.LastIndexOf('/') + 1));
-            // act
-            await client.DeleteTextTrackAsync(VimeoSettings.VideoId, trackId);
-
-            //assert
-            var texttrack = await client.GetTextTrackAsync(VimeoSettings.VideoId, trackId);
-            texttrack.ShouldBeNull();
         }
 
         [Fact]

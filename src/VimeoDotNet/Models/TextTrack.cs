@@ -1,4 +1,6 @@
 ﻿using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace VimeoDotNet.Models
 {
@@ -19,7 +21,8 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Type
         /// </summary>
-        public string type { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public TextTrackType? type { get; set; }
         /// <summary>
         /// Language
         /// </summary>
@@ -36,5 +39,15 @@ namespace VimeoDotNet.Models
         /// Name
         /// </summary>
         public string name { get; set; }
+    }
+
+    
+    public enum TextTrackType
+    {
+        captions,
+        chapters,
+        descriptions,
+        metadata,
+        subtitles
     }
 }
