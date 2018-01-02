@@ -158,11 +158,13 @@ namespace VimeoDotNet
             request.UrlSegments.Add("clipId", clipId.ToString());
             if (track == null)
                 return request;
-            var parameters = new Dictionary<string, string>();
-            parameters["active"] = track.active.ToString().ToLower();
-            parameters["name"] = track.name;
-            parameters["language"] = track.language;
-            parameters["type"] = track.type.ToString();
+            var parameters = new Dictionary<string, string>
+            {
+                ["active"] = track.active.ToString().ToLower(),
+                ["name"] = track.name,
+                ["language"] = track.language,
+                ["type"] = track.type.ToString()
+            };
             request.Body = new FormUrlEncodedContent(parameters);
             return request;
         }
