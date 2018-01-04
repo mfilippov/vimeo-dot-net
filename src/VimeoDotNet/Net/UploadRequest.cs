@@ -70,17 +70,6 @@ namespace VimeoDotNet.Net
         }
 
         /// <summary>
-        /// All bytes written
-        /// </summary>
-        public bool AllBytesWritten
-        {
-            get
-            {
-                return FileLength > 0 && BytesWritten == FileLength;
-            }
-        }
-
-        /// <summary>
         /// Clip id
         /// </summary>
         public long? ClipId

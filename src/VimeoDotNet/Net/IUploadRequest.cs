@@ -8,10 +8,6 @@ namespace VimeoDotNet.Net
     public interface IUploadRequest
     {
         /// <summary>
-        /// All bytes written
-        /// </summary>
-        bool AllBytesWritten { get; }
-        /// <summary>
         /// Bytes written
         /// </summary>
         long BytesWritten { get; set; }

@@ -344,11 +344,6 @@ namespace VimeoDotNet
         #endregion
 
         #region Uploading files
-        /// <summary>
-        /// Create new upload ticket
-        /// </summary>
-        /// <returns>Upload ticket</returns>
-        UploadTicket GetUploadTicket();
 
         /// <summary>
         /// Create new upload ticket asynchronously
@@ -357,28 +352,11 @@ namespace VimeoDotNet
         Task<UploadTicket> GetUploadTicketAsync();
 
         /// <summary>
-        /// Create new upload ticket for replace video
-        /// </summary>
-        /// <param name="videoId">VideoId</param>
-        /// <returns>Upload ticket</returns>
-        UploadTicket GetReplaceVideoUploadTicket(long videoId);
-
-        /// <summary>
         /// Create new upload ticket for replace video asynchronously
         /// </summary>
         /// <param name="videoId">VideoId</param>
         /// <returns>Upload ticket</returns>
         Task<UploadTicket> GetReplaceVideoUploadTicketAsync(long videoId);
-
-        /// <summary>
-        /// Upload file part
-        /// </summary>
-        /// <param name="fileContent">FileContent</param>
-        /// <param name="chunkSize">ChunkSize</param>
-        /// <param name="replaceVideoId">ReplaceVideoId</param>
-        /// <returns>Upload request</returns>
-        IUploadRequest UploadEntireFile(IBinaryContent fileContent,
-            int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
 
         /// <summary>
         /// Upload file part asynchronously
@@ -390,67 +368,6 @@ namespace VimeoDotNet
         Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent,
             int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
 
-        /// <summary>
-        /// Verify upload file part
-        /// </summary>
-        /// <param name="uploadRequest">UploadRequest</param>
-        /// <returns>Verification reponse</returns>
-        VerifyUploadResponse VerifyUploadFile(IUploadRequest uploadRequest);
-
-        /// <summary>
-        /// Verify upload file part asynchronously
-        /// </summary>
-        /// <param name="uploadRequest">UploadRequest</param>
-        /// <returns>Verification reponse</returns>
-        Task<VerifyUploadResponse> VerifyUploadFileAsync(IUploadRequest uploadRequest);
-
-        /// <summary>
-        /// Start upload file
-        /// </summary>
-        /// <param name="fileContent">FileContent</param>
-        /// <param name="chunkSize">ChunkSize</param>
-        /// <param name="replaceVideoId">ReplaceVideoId</param>
-        /// <returns>Upload request</returns>
-        IUploadRequest StartUploadFile(IBinaryContent fileContent,
-            int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
-
-        /// <summary>
-        /// Start upload file asynchronously
-        /// </summary>
-        /// <param name="fileContent">FileContent</param>
-        /// <param name="chunkSize">ChunkSize</param>
-        /// <param name="replaceVideoId">ReplaceVideoId</param>
-        /// <returns></returns>
-        Task<IUploadRequest> StartUploadFileAsync(IBinaryContent fileContent,
-            int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
-
-        /// <summary>
-        /// Continue upload file
-        /// </summary>
-        /// <param name="uploadRequest">UploadRequest</param>
-        /// <returns>Verification upload response</returns>
-        VerifyUploadResponse ContinueUploadFile(IUploadRequest uploadRequest);
-
-        /// <summary>
-        /// Continue upload file asynchronously
-        /// </summary>
-        /// <param name="uploadRequest">UploadRequest</param>
-        /// <returns>Verification upload response</returns>
-        Task<VerifyUploadResponse> ContinueUploadFileAsync(IUploadRequest uploadRequest);
-
-        /// <summary>
-        /// Complete upload file
-        /// </summary>
-        /// <param name="uploadRequest">UploadRequest</param>
-        /// <returns></returns>
-        void CompleteFileUpload(IUploadRequest uploadRequest);
-
-        /// <summary>
-        /// Complete upload file asynchronously
-        /// </summary>
-        /// <param name="uploadRequest">UploadRequest</param>
-        /// <returns></returns>
-        Task CompleteFileUploadAsync(IUploadRequest uploadRequest);
         #endregion
 
         #region Account information
