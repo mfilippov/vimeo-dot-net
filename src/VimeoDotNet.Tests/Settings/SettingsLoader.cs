@@ -33,6 +33,7 @@ namespace VimeoDotNet.Tests.Settings
             long.TryParse(Environment.GetEnvironmentVariable("ChannelId"), out var channelId);
             long.TryParse(Environment.GetEnvironmentVariable("VideoId"), out var videoId);
             long.TryParse(Environment.GetEnvironmentVariable("TextTrackId"), out var textTrackId);
+            long.TryParse(Environment.GetEnvironmentVariable("PublicUserId"), out var publicUserId);
             return new VimeoApiTestSettings
             {
                 ClientId = Environment.GetEnvironmentVariable("ClientId"),
@@ -42,7 +43,8 @@ namespace VimeoDotNet.Tests.Settings
                 AlbumId = albumId,
                 ChannelId = channelId,
                 VideoId = videoId,
-                TextTrackId = textTrackId
+                TextTrackId = textTrackId,
+                PublicUserId = publicUserId
             };
         }
 
