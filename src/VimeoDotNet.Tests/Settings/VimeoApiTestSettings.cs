@@ -15,8 +15,5 @@
         public long TextTrackId { get; set; }
 
         public long PublicUserId { get; set; }
-        public long PublicAlbumId { get; set; }
-        public long PublicChannelId { get; set; }
-        public long PublicVideoId { get; set; }
     }
 }
