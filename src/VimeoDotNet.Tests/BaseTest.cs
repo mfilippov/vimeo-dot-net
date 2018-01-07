@@ -38,7 +38,7 @@ namespace VimeoDotNet.Tests
 
         protected static Stream GetFileFromEmbeddedResources(string relativePath)
         {
-            var assembly = typeof(VimeoClientAsyncTests).GetTypeInfo().Assembly;
+            var assembly = typeof(BaseTest).GetTypeInfo().Assembly;
             return assembly.GetManifestResourceStream(relativePath);
         }
     }

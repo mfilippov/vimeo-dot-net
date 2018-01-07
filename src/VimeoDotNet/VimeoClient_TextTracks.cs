@@ -74,7 +74,7 @@ namespace VimeoDotNet
             }
 
             var ticket = await GetUploadTextTrackTicketAsync(videoId, track);
-            var request = ApiRequestFactory.GetApiRequest();
+            var request = _apiRequestFactory.GetApiRequest();
             request.Method = HttpMethod.Put;
             request.ExcludeAuthorizationHeader = true;
             request.Path = ticket.link;
@@ -152,7 +152,7 @@ namespace VimeoDotNet
 
         private IApiRequest GenerateUploadTextTrackTicketRequest(long clipId, TextTrack track)
         {
-            var request = ApiRequestFactory.GetApiRequest(AccessToken);
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = HttpMethod.Post;
             request.Path = Endpoints.TextTracks;
             request.UrlSegments.Add("clipId", clipId.ToString());
@@ -173,7 +173,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            var request = ApiRequestFactory.GetApiRequest(AccessToken);
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = new HttpMethod("PATCH");
             request.Path = Endpoints.TextTrack;
             request.UrlSegments.Add("clipId", clipId.ToString());
@@ -201,7 +201,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
+            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
             string endpoint = trackId.HasValue ? Endpoints.TextTrack : Endpoints.TextTracks;
             request.Method = HttpMethod.Get;
             request.Path = endpoint;
@@ -218,7 +218,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            var request = ApiRequestFactory.GetApiRequest(AccessToken);
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
             var endpoint = Endpoints.TextTrack;
             request.Method = HttpMethod.Delete;
             request.Path = endpoint;

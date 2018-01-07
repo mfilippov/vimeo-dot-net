@@ -62,7 +62,7 @@ namespace VimeoDotNet
 
         /// <inheritdoc />
         public async Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent,
-            int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE,
+            int chunkSize = DefaultUploadChunkSize,
             long? replaceVideoId = null)
         {
             var uploadRequest = await StartUploadFileAsync(fileContent, chunkSize, replaceVideoId);
@@ -104,7 +104,7 @@ namespace VimeoDotNet
             {
                 var param = new ParameterDictionary {{"type", "pull"}, {"link", link}};
 
-                var request = ApiRequestFactory.AuthorizedRequest(
+                var request = _apiRequestFactory.AuthorizedRequest(
                     AccessToken,
                     HttpMethod.Post,
                     Endpoints.UploadTicket,
@@ -153,7 +153,7 @@ namespace VimeoDotNet
         /// <param name="replaceVideoId">ReplaceVideoId</param>
         /// <returns></returns>
         private async Task<IUploadRequest> StartUploadFileAsync(IBinaryContent fileContent,
-            int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE,
+            int chunkSize = DefaultUploadChunkSize,
             long? replaceVideoId = null)
         {
             if (!fileContent.Data.CanRead)
@@ -325,7 +325,7 @@ namespace VimeoDotNet
 
         private IApiRequest GenerateCompleteUploadRequest(UploadTicket ticket)
         {
-            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
+            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = HttpMethod.Delete;
             request.Path = ticket.complete_uri;
             return request;
@@ -346,7 +346,7 @@ namespace VimeoDotNet
                     ticket.quota.free_space + ".");
             }
 
-            var request = ApiRequestFactory.GetApiRequest();
+            var request = _apiRequestFactory.GetApiRequest();
             request.Method = HttpMethod.Put;
             request.ExcludeAuthorizationHeader = true;
             request.Path = ticket.upload_link_secure;
@@ -383,7 +383,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
+            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = HttpMethod.Post;
             request.Path = Endpoints.UploadTicket;
             request.Query.Add("type", type);
@@ -394,7 +394,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            var request = ApiRequestFactory.GetApiRequest(AccessToken);
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = HttpMethod.Put;
             request.Path = Endpoints.VideoReplaceFile;
             request.UrlSegments.Add("clipId", clipId.ToString());

@@ -15,28 +15,31 @@ using VimeoDotNet.Parameters;
 
 namespace VimeoDotNet
 {
-    public partial class VimeoClient: IVimeoClient
+    public partial class VimeoClient : IVimeoClient
     {
         #region Constants
 
-        internal const int DEFAULT_UPLOAD_CHUNK_SIZE = 1048576; // 1MB
+        internal const int DefaultUploadChunkSize = 1048576; // 1MB
+
         /// <summary>
         /// Range regex
         /// </summary>
-        protected static readonly Regex RangeRegex = new Regex(@"bytes\s*=\s*(?<start>\d+)-(?<end>\d+)",
+        private static readonly Regex RangeRegex = new Regex(@"bytes\s*=\s*(?<start>\d+)-(?<end>\d+)",
             RegexOptions.IgnoreCase);
 
         #endregion
 
         #region Fields
+
         /// <summary>
         /// Api request factory
         /// </summary>
-        protected IApiRequestFactory ApiRequestFactory;
+        private readonly IApiRequestFactory _apiRequestFactory;
+
         /// <summary>
         /// Auth client factory
         /// </summary>
-        protected IAuthorizationClientFactory AuthClientFactory;
+        private readonly IAuthorizationClientFactory _authClientFactory;
 
         #endregion
 
@@ -45,20 +48,22 @@ namespace VimeoDotNet
         /// <summary>
         /// ClientId
         /// </summary>
-        protected string ClientId { get; set; }
+        private string ClientId { get; }
+
         /// <summary>
         /// ClientSecret
         /// </summary>
-        protected string ClientSecret { get; set; }
+        private string ClientSecret { get; }
+
         /// <summary>
         /// AccessToken
         /// </summary>
-        protected string AccessToken { get; set; }
+        private string AccessToken { get; }
 
         /// <summary>
         /// OAuth2Client
         /// </summary>
-        protected IAuthorizationClient OAuth2Client { get; set; }
+        private IAuthorizationClient OAuth2Client { get; set; }
 
         #endregion
 
@@ -66,8 +71,8 @@ namespace VimeoDotNet
 
         private VimeoClient()
         {
-            AuthClientFactory = new AuthorizationClientFactory();
-            ApiRequestFactory = new ApiRequestFactory();
+            _authClientFactory = new AuthorizationClientFactory();
+            _apiRequestFactory = new ApiRequestFactory();
             RateLimit = 0;
             RateLimitRemaining = 0;
             RateLimitReset = DateTime.UtcNow;
@@ -78,6 +83,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="clientId">ClientId</param>
         /// <param name="clientSecret">ClientSecret</param>
+        [PublicAPI]
         public VimeoClient(string clientId, string clientSecret)
             : this()
         {
@@ -107,8 +113,8 @@ namespace VimeoDotNet
             string clientId, string clientSecret)
             : this(clientId, clientSecret)
         {
-            AuthClientFactory = authClientFactory;
-            ApiRequestFactory = apiRequestFactory;
+            _authClientFactory = authClientFactory;
+            _apiRequestFactory = apiRequestFactory;
         }
 
         /// <summary>
@@ -121,8 +127,8 @@ namespace VimeoDotNet
             string accessToken)
             : this(accessToken)
         {
-            AuthClientFactory = authClientFactory;
-            ApiRequestFactory = apiRequestFactory;
+            _authClientFactory = authClientFactory;
+            _apiRequestFactory = apiRequestFactory;
         }
 
         #endregion
@@ -159,7 +165,7 @@ namespace VimeoDotNet
         {
             if (OAuth2Client == null)
             {
-                OAuth2Client = AuthClientFactory.GetAuthorizationClient(ClientId, ClientSecret);
+                OAuth2Client = _authClientFactory.GetAuthorizationClient(ClientId, ClientSecret);
             }
         }
 
@@ -173,13 +179,13 @@ namespace VimeoDotNet
         /// <returns>User information</returns>
         public async Task<User> GetAccountInformationAsync()
         {
-			var request = ApiRequestFactory.AuthorizedRequest(
-				AccessToken,
-				HttpMethod.Get,
-				Endpoints.GetCurrentUserEndpoint(Endpoints.User)
-			);
+            var request = _apiRequestFactory.AuthorizedRequest(
+                AccessToken,
+                HttpMethod.Get,
+                Endpoints.GetCurrentUserEndpoint(Endpoints.User)
+            );
 
-			return await ExecuteApiRequest<User>(request);
+            return await ExecuteApiRequest<User>(request);
         }
 
         /// <summary>
@@ -188,17 +194,17 @@ namespace VimeoDotNet
         /// <param name="parameters">User parameters</param>
         /// <returns>User information</returns>
         public async Task<User> UpdateAccountInformationAsync(EditUserParameters parameters)
-		{
-			var request = ApiRequestFactory.AuthorizedRequest(
-				AccessToken,
-				new HttpMethod("PATCH"),
-				Endpoints.GetCurrentUserEndpoint(Endpoints.User),
-				null,
-				parameters
-			);
+        {
+            var request = _apiRequestFactory.AuthorizedRequest(
+                AccessToken,
+                new HttpMethod("PATCH"),
+                Endpoints.GetCurrentUserEndpoint(Endpoints.User),
+                null,
+                parameters
+            );
 
-			return await ExecuteApiRequest<User>(request);
-		}
+            return await ExecuteApiRequest<User>(request);
+        }
 
 
         /// <summary>
@@ -208,130 +214,134 @@ namespace VimeoDotNet
         /// <returns>User information object</returns>
         public async Task<User> GetUserInformationAsync(long userId)
         {
-			var request = ApiRequestFactory.AuthorizedRequest(
-				AccessToken,
-				HttpMethod.Get,
-				Endpoints.User,
-				new Dictionary<string, string>(){
-					{ "userId", userId.ToString() }
-				}
-			);
+            var request = _apiRequestFactory.AuthorizedRequest(
+                AccessToken,
+                HttpMethod.Get,
+                Endpoints.User,
+                new Dictionary<string, string>()
+                {
+                    {"userId", userId.ToString()}
+                }
+            );
 
-			return await ExecuteApiRequest<User>(request);
+            return await ExecuteApiRequest<User>(request);
         }
 
-		#endregion
+        #endregion
 
-		#region Utility
+        #region Utility
 
-		/// <summary>
-		/// Utility method for calling ExecuteApiRequest with the most common use case (returning
-		/// null for NotFound responses).
-		/// </summary>
-		/// <typeparam name="T">Type of the expected response data.</typeparam>
-		/// <param name="request"></param>
-		/// <returns></returns>
-		private async Task<T> ExecuteApiRequest<T>(IApiRequest request) where T : new()
-		{
-			return await ExecuteApiRequest<T>(request, (statusCode) => default(T), new []{ HttpStatusCode.NotFound } );
-		}
+        /// <summary>
+        /// Utility method for calling ExecuteApiRequest with the most common use case (returning
+        /// null for NotFound responses).
+        /// </summary>
+        /// <typeparam name="T">Type of the expected response data.</typeparam>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        private async Task<T> ExecuteApiRequest<T>(IApiRequest request) where T : new()
+        {
+            return await ExecuteApiRequest(request, statusCode => default(T), HttpStatusCode.NotFound);
+        }
 
-		/// <summary>
-		/// Utility method for performing API requests that retrieve data in a consistent manner.  
-		/// 
-		/// The given request will be performed, and if the response is an outright success then
-		/// the response data will be unwrapped and returned.  
-		/// 
-		/// If the call is not an outright success, but the status code is among the other acceptable 
-		/// results (provided via validStatusCodes), the getValueForStatusCode method will be called
-		/// to generate a return value. This allows the caller to return null or an empty list as 
-		/// desired.
-		/// 
-		/// If neither of the above is possible, an exception will be thrown.
-		/// </summary>
-		/// <typeparam name="T">Type of the expected response data.</typeparam>
-		/// <param name="request"></param>
-		/// <param name="getValueForStatusCode"></param>
-		/// <param name="validStatusCodes"></param>
-		/// <returns></returns>
-		private async Task<T> ExecuteApiRequest<T>(IApiRequest request, Func<HttpStatusCode, T> getValueForStatusCode, params HttpStatusCode[] validStatusCodes) where T : new()
-		{			
-			try
-			{
-				var response = await request.ExecuteRequestAsync<T>();
-				UpdateRateLimit(response);
+        /// <summary>
+        /// Utility method for performing API requests that retrieve data in a consistent manner.
+        ///
+        /// The given request will be performed, and if the response is an outright success then
+        /// the response data will be unwrapped and returned.
+        ///
+        /// If the call is not an outright success, but the status code is among the other acceptable
+        /// results (provided via validStatusCodes), the getValueForStatusCode method will be called
+        /// to generate a return value. This allows the caller to return null or an empty list as
+        /// desired.
+        ///
+        /// If neither of the above is possible, an exception will be thrown.
+        /// </summary>
+        /// <typeparam name="T">Type of the expected response data.</typeparam>
+        /// <param name="request"></param>
+        /// <param name="getValueForStatusCode"></param>
+        /// <param name="validStatusCodes"></param>
+        /// <returns></returns>
+        private async Task<T> ExecuteApiRequest<T>(IApiRequest request, Func<HttpStatusCode, T> getValueForStatusCode,
+            params HttpStatusCode[] validStatusCodes) where T : new()
+        {
+            try
+            {
+                var response = await request.ExecuteRequestAsync<T>();
+                UpdateRateLimit(response);
 
-				// if request was successful, return immediately...
-				if (IsSuccessStatusCode(response.StatusCode))
-				{
-					return response.Content;
-				}
+                // if request was successful, return immediately...
+                if (IsSuccessStatusCode(response.StatusCode))
+                {
+                    return response.Content;
+                }
 
-				// if request is among other accepted status codes, return the corresponding value...
-				if (validStatusCodes != null && validStatusCodes.Contains(response.StatusCode))
-				{
-					return getValueForStatusCode(response.StatusCode);
-				}
+                // if request is among other accepted status codes, return the corresponding value...
+                if (validStatusCodes != null && validStatusCodes.Contains(response.StatusCode))
+                {
+                    return getValueForStatusCode(response.StatusCode);
+                }
 
-				// at this point, we've eliminated all acceptable responses, throw an exception...
-				throw new VimeoApiException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
-					Environment.NewLine, 
-					"Error retrieving information from Vimeo API.", 
-					response.StatusCode,
-				    response.Text
-                ));
-			}
-			catch (Exception ex)
-			{
-				if (ex is VimeoApiException)
-				{
-					throw;
-				}
-				throw new VimeoApiException("Error retrieving information from Vimeo API.", ex);
-			}
-		}
-
-		private async Task<bool> ExecuteApiRequest(IApiRequest request, params HttpStatusCode[] validStatusCodes)
-		{
-			try
-			{
-				var response = await request.ExecuteRequestAsync();
-				UpdateRateLimit(response);
-				// if request was successful, return immediately...
-				if (IsSuccessStatusCode(response.StatusCode))
-				{
-					return true;
-				}
-
-				// if request is among other accepted status codes, return the corresponding value...
-				if (validStatusCodes != null && validStatusCodes.Contains(response.StatusCode))
-				{
-					return true;
-				}
-
-				// at this point, we've eliminated all acceptable responses, throw an exception...
-				throw new VimeoApiException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
-					Environment.NewLine,
-					"Error retrieving information from Vimeo API.",
-					response.StatusCode, 
+                // at this point, we've eliminated all acceptable responses, throw an exception...
+                throw new VimeoApiException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
+                    Environment.NewLine,
+                    "Error retrieving information from Vimeo API.",
+                    response.StatusCode,
                     response.Text
                 ));
-			}
-			catch (Exception ex)
-			{
-				if (ex is VimeoApiException)
-				{
-					throw;
-				}
-				throw new VimeoApiException("Error retrieving information from Vimeo API.", ex);
-			}
-		}
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
 
-		#endregion
+                throw new VimeoApiException("Error retrieving information from Vimeo API.", ex);
+            }
+        }
 
-		#region Helper Functions
+        private async Task<bool> ExecuteApiRequest(IApiRequest request, params HttpStatusCode[] validStatusCodes)
+        {
+            try
+            {
+                var response = await request.ExecuteRequestAsync();
+                UpdateRateLimit(response);
+                // if request was successful, return immediately...
+                if (IsSuccessStatusCode(response.StatusCode))
+                {
+                    return true;
+                }
 
-		private void ThrowIfUnauthorized()
+                // if request is among other accepted status codes, return the corresponding value...
+                if (validStatusCodes != null && validStatusCodes.Contains(response.StatusCode))
+                {
+                    return true;
+                }
+
+                // at this point, we've eliminated all acceptable responses, throw an exception...
+                throw new VimeoApiException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
+                    Environment.NewLine,
+                    "Error retrieving information from Vimeo API.",
+                    response.StatusCode,
+                    response.Text
+                ));
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+
+                throw new VimeoApiException("Error retrieving information from Vimeo API.", ex);
+            }
+        }
+
+        #endregion
+
+        #region Helper Functions
+
+        private void ThrowIfUnauthorized()
         {
             if (string.IsNullOrWhiteSpace(AccessToken))
             {
@@ -339,19 +349,19 @@ namespace VimeoDotNet
             }
         }
 
-        private void CheckStatusCodeError(IUploadRequest request, IApiResponse response, string message,
+        private static void CheckStatusCodeError(IUploadRequest request, IApiResponse response, string message,
             params HttpStatusCode[] validStatusCodes)
         {
             if (!IsSuccessStatusCode(response.StatusCode) && validStatusCodes != null &&
                 !validStatusCodes.Contains(response.StatusCode))
             {
                 throw new VimeoUploadException(string.Format("{1}{0}Code: {2}{0}Message: {3}",
-                    Environment.NewLine, message, response.StatusCode, response.Text),
+                        Environment.NewLine, message, response.StatusCode, response.Text),
                     request);
             }
         }
 
-        private void CheckStatusCodeError(IApiResponse response, string message,
+        private static void CheckStatusCodeError(IApiResponse response, string message,
             params HttpStatusCode[] validStatusCodes)
         {
             if (!IsSuccessStatusCode(response.StatusCode) && validStatusCodes != null &&
@@ -362,9 +372,9 @@ namespace VimeoDotNet
             }
         }
 
-        private bool IsSuccessStatusCode(HttpStatusCode statusCode)
+        private static bool IsSuccessStatusCode(HttpStatusCode statusCode)
         {
-            var code = (int)statusCode;
+            var code = (int) statusCode;
             return code >= 200 && code < 300;
         }
 

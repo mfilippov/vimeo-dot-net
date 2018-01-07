@@ -207,7 +207,7 @@ namespace VimeoDotNet
         /// <param name="replaceVideoId">ReplaceVideoId</param>
         /// <returns>Upload request</returns>
         Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent,
-            int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
+            int chunkSize = VimeoClient.DefaultUploadChunkSize, long? replaceVideoId = null);
 
         /// <summary>
         /// Create new upload ticket asynchronously

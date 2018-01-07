@@ -12,7 +12,7 @@ namespace VimeoDotNet
         /// <inheritdoc />
         public async Task<Album> GetAlbumAsync(UserId userId, long albumId)
         {
-            var request = ApiRequestFactory.AuthorizedRequest(
+            var request = _apiRequestFactory.AuthorizedRequest(
                 AccessToken,
                 HttpMethod.Get,
                 userId.IsMe ? Endpoints.MeAlbum : Endpoints.UserAlbum,
@@ -29,7 +29,7 @@ namespace VimeoDotNet
         /// <inheritdoc />
         public async Task<Paginated<Album>> GetAlbumsAsync(UserId userId, GetAlbumsParameters parameters = null)
         {
-            var request = ApiRequestFactory.AuthorizedRequest(
+            var request = _apiRequestFactory.AuthorizedRequest(
                 AccessToken,
                 HttpMethod.Get,
                 userId.IsMe ? Endpoints.MeAlbums : Endpoints.UserAlbums,
@@ -46,7 +46,7 @@ namespace VimeoDotNet
         /// <inheritdoc />
         public async Task<Album> CreateAlbumAsync(UserId userId, EditAlbumParameters parameters = null)
         {
-            var request = ApiRequestFactory.AuthorizedRequest(
+            var request = _apiRequestFactory.AuthorizedRequest(
                 AccessToken,
                 HttpMethod.Post,
                 Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbums),
@@ -63,7 +63,7 @@ namespace VimeoDotNet
         /// <inheritdoc />
         public async Task<Album> UpdateAlbumAsync(UserId userId, long albumId, EditAlbumParameters parameters = null)
         {
-            var request = ApiRequestFactory.AuthorizedRequest(
+            var request = _apiRequestFactory.AuthorizedRequest(
                 AccessToken,
                 new HttpMethod("PATCH"),
                 Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbum),
@@ -81,7 +81,7 @@ namespace VimeoDotNet
         /// <inheritdoc />
         public async Task<bool> DeleteAlbumAsync(UserId userId, long albumId)
         {
-            var request = ApiRequestFactory.AuthorizedRequest(
+            var request = _apiRequestFactory.AuthorizedRequest(
                 AccessToken,
                 HttpMethod.Delete,
                 Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbum),
@@ -98,7 +98,7 @@ namespace VimeoDotNet
         /// <inheritdoc />
         public async Task<bool> AddToAlbumAsync(UserId userId, long albumId, long clipId)
         {
-            var request = ApiRequestFactory.AuthorizedRequest(
+            var request = _apiRequestFactory.AuthorizedRequest(
                 AccessToken,
                 HttpMethod.Put,
                 Endpoints.UserAlbumVideo,
@@ -116,7 +116,7 @@ namespace VimeoDotNet
         /// <inheritdoc />
         public async Task<bool> RemoveFromAlbumAsync(UserId userId, long albumId, long clipId)
         {
-            var request = ApiRequestFactory.AuthorizedRequest(
+            var request = _apiRequestFactory.AuthorizedRequest(
                 AccessToken,
                 HttpMethod.Delete,
                 Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbumVideo),

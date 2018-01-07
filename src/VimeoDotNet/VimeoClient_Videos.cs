@@ -174,7 +174,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            var request = ApiRequestFactory.GetApiRequest(AccessToken);
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
             string endpoint;
             if (userId == null)
             {
@@ -238,7 +238,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
+            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
             string endpoint = clipId.HasValue ? Endpoints.UserAlbumVideo : Endpoints.UserAlbumVideos;
             request.Method = HttpMethod.Get;
             request.Path = userId.HasValue ? endpoint : Endpoints.GetCurrentUserEndpoint(endpoint);
@@ -289,7 +289,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            var request = ApiRequestFactory.GetApiRequest(AccessToken);
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = HttpMethod.Delete;
             request.Path = Endpoints.Video;
 
@@ -302,7 +302,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            var request = ApiRequestFactory.GetApiRequest(AccessToken);
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = new HttpMethod("PATCH");
             request.Path = Endpoints.Video;
 
@@ -362,7 +362,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            var request = ApiRequestFactory.GetApiRequest(AccessToken);
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = HttpMethod.Put;
             request.Path = Endpoints.VideoAllowedDomain;
 
@@ -378,7 +378,7 @@ namespace VimeoDotNet
             try
             {
                 ThrowIfUnauthorized();
-                var request = ApiRequestFactory.GetApiRequest(AccessToken);
+                var request = _apiRequestFactory.GetApiRequest(AccessToken);
                 request.Method = HttpMethod.Get;
                 request.Path = Endpoints.Picture;
                 request.UrlSegments.Add("clipId", clipId.ToString());
@@ -412,7 +412,7 @@ namespace VimeoDotNet
             try
             {
                 ThrowIfUnauthorized();
-                var request = ApiRequestFactory.GetApiRequest(AccessToken);
+                var request = _apiRequestFactory.GetApiRequest(AccessToken);
                 request.Method = HttpMethod.Get;
                 request.Path = Endpoints.Pictures;
                 request.UrlSegments.Add("clipId", clipId.ToString());
@@ -455,7 +455,7 @@ namespace VimeoDotNet
                 }
 
                 ThrowIfUnauthorized();
-                var request = ApiRequestFactory.GetApiRequest(AccessToken);
+                var request = _apiRequestFactory.GetApiRequest(AccessToken);
                 request.Method = HttpMethod.Post;
                 request.Path = Endpoints.Pictures;
                 request.UrlSegments.Add("clipId", clipId.ToString());
@@ -490,7 +490,7 @@ namespace VimeoDotNet
             try
             {
                 ThrowIfUnauthorized();
-                var request = ApiRequestFactory.GetApiRequest(AccessToken);
+                var request = _apiRequestFactory.GetApiRequest(AccessToken);
                 request.Method = new HttpMethod("PATCH");
                 request.Path = link;
                 request.Query.Add("active", "true");

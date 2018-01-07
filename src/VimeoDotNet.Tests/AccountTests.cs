@@ -1,18 +1,14 @@
-﻿using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Shouldly;
-using VimeoDotNet.Exceptions;
-using VimeoDotNet.Net;
 using VimeoDotNet.Parameters;
 using Xunit;
 
-
 namespace VimeoDotNet.Tests
 {
-    public class VimeoClientAsyncTests : BaseTest
+    public class AccountTests : BaseTest
     {
         [Fact]
-        public async Task Integration_VimeoClient_GetAccountInformation_RetrievesCurrentAccountInfo()
+        public async Task ShouldCorrectlyGetAccountInformation()
         {
             var client = CreateAuthenticatedClient();
             var account = await client.GetAccountInformationAsync();
@@ -20,7 +16,18 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
-        public async Task Integration_VimeoClient_UpdateAccountInformation_UpdatesCurrentAccountInfo()
+        public async Task ShouldCorrectlyGetUserInformation()
+        {
+            var client = CreateAuthenticatedClient();
+            var user = await client.GetUserInformationAsync(VimeoSettings.UserId);
+            user.ShouldNotBeNull();
+            user.id.ShouldNotBeNull();
+            user.id.ShouldNotBeNull();
+            user.id.Value.ShouldBe(VimeoSettings.UserId);
+        }
+
+        [Fact]
+        public async Task ShouldCorrectlyUpdateAccountInformation()
         {
             // first, ensure we can retrieve the current user...
             var client = CreateAuthenticatedClient();
@@ -28,9 +35,9 @@ namespace VimeoDotNet.Tests
             original.ShouldNotBeNull();
 
             // next, update the user record with some new values...
-            var testName = "King Henry VIII";
-            var testBio = "";
-            var testLocation = "England";
+            const string testName = "Jonh Wayne";
+            const string testBio = "Test bio";
+            const string testLocation = "England";
 
             var updated = await client.UpdateAccountInformationAsync(new EditUserParameters
             {
@@ -91,18 +98,6 @@ namespace VimeoDotNet.Tests
             {
                 final.location.ShouldBe(original.location);
             }
-        }
-
-
-        [Fact]
-        public async Task Integration_VimeoClient_GetUserInformation_RetrievesUserInfo()
-        {
-            var client = CreateAuthenticatedClient();
-            var user = await client.GetUserInformationAsync(VimeoSettings.UserId);
-            user.ShouldNotBeNull();
-            user.id.ShouldNotBeNull();
-            Debug.Assert(user.id != null, "user.id != null");
-            user.id.Value.ShouldBe(VimeoSettings.UserId);
         }
     }
 }
