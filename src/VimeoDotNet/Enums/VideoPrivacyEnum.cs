@@ -6,10 +6,6 @@
     public enum VideoPrivacyEnum
     {
         /// <summary>
-        /// Unknown
-        /// </summary>
-        Unknown,
-        /// <summary>
         /// Nobody
         /// </summary>
         Nobody,

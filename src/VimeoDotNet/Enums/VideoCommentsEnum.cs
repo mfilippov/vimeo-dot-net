@@ -6,10 +6,6 @@ namespace VimeoDotNet.Enums
     public enum VideoCommentsEnum
     {
         /// <summary>
-        /// Unknown
-        /// </summary>
-        Unknown,
-        /// <summary>
         /// Anybody
         /// </summary>
         Anybody,

@@ -50,7 +50,10 @@ namespace VimeoDotNet
                 AccessToken,
                 HttpMethod.Post,
                 Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbums),
-                null,
+                new Dictionary<string, string>
+                {
+                    {"userId", userId.ToString()}
+                },
                 parameters
             );
 
@@ -64,8 +67,9 @@ namespace VimeoDotNet
                 AccessToken,
                 new HttpMethod("PATCH"),
                 Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbum),
-                new Dictionary<string, string>()
+                new Dictionary<string, string>
                 {
+                    {"userId", userId.ToString()},
                     {"albumId", albumId.ToString()}
                 },
                 parameters
@@ -81,8 +85,9 @@ namespace VimeoDotNet
                 AccessToken,
                 HttpMethod.Delete,
                 Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbum),
-                new Dictionary<string, string>()
+                new Dictionary<string, string>
                 {
+                    {"userId", userId.ToString()},
                     {"albumId", albumId.ToString()}
                 }
             );
@@ -97,7 +102,7 @@ namespace VimeoDotNet
                 AccessToken,
                 HttpMethod.Put,
                 Endpoints.UserAlbumVideo,
-                new Dictionary<string, string>()
+                new Dictionary<string, string>
                 {
                     {"userId", userId.ToString()},
                     {"albumId", albumId.ToString()},

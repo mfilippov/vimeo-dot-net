@@ -14,6 +14,7 @@ namespace VimeoDotNet
     public interface IVimeoClient
     {
         #region User authentication
+
         /// <summary>
         /// Exchange the code for an access token
         /// </summary>
@@ -56,18 +57,12 @@ namespace VimeoDotNet
         /// <param name="userId">User Id</param>
         /// <returns>User information object</returns>
         Task<User> GetUserInformationAsync(long userId);
+
         #endregion
 
         #region Videos
-        // ...by id
 
-        /// <summary>
-        /// Get video by ClipId
-        /// </summary>
-        /// <param name="clipId">ClipId</param>
-        /// <param name="fields"></param>
-        /// <returns>Video</returns>
-        Video GetVideo(long clipId, string[] fields = null);
+        // ...by id
 
         /// <summary>
         /// Get video by ClipId asynchronously
@@ -76,71 +71,6 @@ namespace VimeoDotNet
         /// <param name="fields"></param>
         /// <returns>Video</returns>
         Task<Video> GetVideoAsync(long clipId, string[] fields = null);
-
-
-        // ...for current account
-
-        /// <summary>
-        /// Get paginated video for current account
-        /// </summary>
-        /// <returns>Paginated videos</returns>
-        Paginated<Video> GetVideos(string[] fields = null);
-
-        /// <summary>
-        /// Get paginated video for current account asynchronously
-        /// </summary>
-        /// <returns>Paginated videos</returns>
-        Task<Paginated<Video>> GetVideosAsync(int? page, int? perPage, string[] fields = null);
-
-
-        // ...for another account
-
-        /// <summary>
-        /// Get video by ClipId for UserId
-        /// </summary>
-        /// <param name="userId">UserId</param>
-        /// <param name="clipId">ClipId</param>
-        /// <param name="fields"></param>
-        /// <returns>Video</returns>
-        Video GetUserVideo(long userId, long clipId, string[] fields = null);
-
-        /// <summary>
-        /// Get video by ClipId for UserId asynchronously
-        /// </summary>
-        /// <param name="userId">UserId</param>
-        /// <param name="clipId">ClipId</param>
-        /// <param name="fields"></param>
-        /// <returns>Video</returns>
-        Task<Video> GetUserVideoAsync(long userId, long clipId, string[] fields = null);
-
-        /// <summary>
-        /// Get videos  by UserId and query
-        /// </summary>
-        /// <param name="userId">UserId</param>
-        /// <param name="query">Search query</param>
-        /// <param name="fields"></param>
-        /// <returns>Paginated videos</returns>
-        Paginated<Video> GetUserVideos(long userId, string query = null, string[] fields = null);
-
-        /// <summary>
-        /// Get videos by UserId and query asynchronously
-        /// </summary>
-        /// <param name="userId">UserId</param>
-        /// <param name="query">Search query</param>
-        /// <param name="fields"></param>
-        /// <returns>Paginated videos</returns>
-        Task<Paginated<Video>> GetUserVideosAsync(long userId, string query = null, string[] fields = null);
-
-        /// <summary>
-        /// Get videos by UserId and query and page parameters
-        /// </summary>
-        /// <param name="userId">UserId</param>
-        /// <param name="perPage">Number of items to show on each page. Max 50</param>
-        /// <param name="query">Search query</param>
-        /// <param name="fields"></param>
-        /// <param name="page">The page number to show</param>
-        /// <returns>Paginated videos</returns>
-        Paginated<Video> GetUserVideos(long userId, int? page, int? perPage, string query = null, string[] fields = null);
 
         /// <summary>
         /// Get videos by UserId and query and page parameters asynchronously
@@ -151,27 +81,15 @@ namespace VimeoDotNet
         /// <param name="fields"></param>
         /// <param name="page">The page number to show</param>
         /// <returns>Paginated videos</returns>
-        Task<Paginated<Video>> GetUserVideosAsync(long userId, int? page, int? perPage, string query = null, string[] fields = null);
+        Task<Paginated<Video>> GetVideosAsync(UserId userId, int? page = null, int? perPage = null,
+            string query = null, string[] fields = null);
 
-
-        // ...for an album
-
-        /// <summary>
-        /// Get videos by AlbumId
-        /// </summary>
-        /// <param name="albumId">AlbumId</param>
-        /// <param name="page">The page number to show</param>
-        /// <param name="perPage">Number of items to show on each page. Max 50</param>
-        /// <param name="sort">The default sort order of an Album's videos</param>
-        /// <param name="direction">The direction that the results are sorted</param>
-        /// <param name="fields"></param>
-        /// <returns>Paginated videos</returns>
-        Paginated<Video> GetAlbumVideos(long albumId, int? page, int? perPage,
-            string sort = null, string direction = null, string[] fields = null);
+        // ... for an album
 
         /// <summary>
         /// Get videos by AlbumId asynchronously
         /// </summary>
+        /// <param name="userId">User Id</param>
         /// <param name="albumId">AlbumId</param>
         /// <param name="page">The page number to show.</param>
         /// <param name="perPage">Number of items to show on each page. Max 50.</param>
@@ -179,71 +97,8 @@ namespace VimeoDotNet
         /// <param name="direction">The direction that the results are sorted.</param>
         /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter </param>
         /// <returns>Paginated videos</returns>
-        Task<Paginated<Video>> GetAlbumVideosAsync(long albumId, int? page, int? perPage,
+        Task<Paginated<Video>> GetAlbumVideosAsync(UserId userId, long albumId, int? page = null, int? perPage = null,
             string sort = null, string direction = null, string[] fields = null);
-
-        /// <summary>
-        /// Get video from album by AlbumId and ClipId
-        /// </summary>
-        /// <param name="albumId">AlbumId</param>
-        /// <param name="clipId">ClipId</param>
-        /// <param name="fields"></param>
-        /// <returns>Video</returns>
-        Video GetAlbumVideo(long albumId, long clipId, string[] fields = null);
-
-        /// <summary>
-        /// Get video from album by AlbumId and ClipId asynchronously
-        /// </summary>
-        /// <param name="albumId">AlbumId</param>
-        /// <param name="clipId">ClipId</param>
-        /// <param name="fields"></param>
-        /// <returns>Video</returns>
-        Task<Video> GetAlbumVideoAsync(long albumId, long clipId, string[] fields = null);
-
-        /// <summary>
-        /// Get videos from album by AlbumId and UserId
-        /// </summary>
-        /// <param name="userId">UserId</param>
-        /// <param name="albumId">AlbumId</param>
-        /// <param name="fields"></param>
-        /// <returns>Paginated videos</returns>
-        Paginated<Video> GetUserAlbumVideos(long userId, long albumId, string[] fields = null);
-
-        /// <summary>
-        /// Get videos from album by AlbumId and UserId asynchronously
-        /// </summary>
-        /// <param name="userId">UserId</param>
-        /// <param name="albumId">AlbumId</param>
-        /// <param name="fields"></param>
-        /// <returns>Paginated videos</returns>
-        Task<Paginated<Video>> GetUserAlbumVideosAsync(long userId, long albumId, string[] fields = null);
-
-        /// <summary>
-        /// Get video from album by AlbumId and UserId and ClipId
-        /// </summary>
-        /// <param name="userId">AlbumId</param>
-        /// <param name="albumId">UserId</param>
-        /// <param name="clipId">ClipId</param>
-        /// <param name="fields"></param>
-        /// <returns>Video</returns>
-        Video GetUserAlbumVideo(long userId, long albumId, long clipId, string[] fields = null);
-
-        /// <summary>
-        /// Get video from album by AlbumId and UserId and ClipId asynchronously
-        /// </summary>
-        /// <param name="userId">AlbumId</param>
-        /// <param name="albumId">UserId</param>
-        /// <param name="clipId">ClipId</param>
-        /// <param name="fields"></param>
-        /// <returns>Video</returns>
-        Task<Video> GetUserAlbumVideoAsync(long userId, long albumId, long clipId, string[] fields = null);
-
-        /// <summary>
-        /// Update allowed domain for clip
-        /// </summary>
-        /// <param name="clipId">ClipId</param>
-        /// <param name="domain">Domain</param>
-        void UpdateVideoAllowedDomain(long clipId, string domain);
 
         /// <summary>
         /// Update allowed domain for clip asynchronously
@@ -252,20 +107,6 @@ namespace VimeoDotNet
         /// <param name="domain">Domain</param>
         Task UpdateVideoAllowedDomainAsync(long clipId, string domain);
 
-        /// <summary>
-        /// Create new upload ticket asynchronously
-        /// </summary>
-        /// <returns>Upload ticket</returns>
-        Task<Video> UploadPullLinkAsync(string link);
-
-        /// <summary>
-        /// Upload and set thumbnail active
-        /// </summary>
-        /// <param name="clipId"></param>
-        /// <param name="fileContent"></param>
-        /// <returns></returns>
-        /// <exception cref="VimeoUploadException"></exception>
-        Task<Picture> UploadThumbnailAsync(long clipId, IBinaryContent fileContent);
 
         /// <summary>
         /// Get all thumbnails on a video
@@ -281,15 +122,6 @@ namespace VimeoDotNet
         /// <param name="pictureId">pictureId</param>
         /// <returns></returns>
         Task<Picture> GetPictureAsync(long clipId, long pictureId);
-        #endregion
-
-        #region Update video metadata
-        /// <summary>
-        /// Update video metadata by ClipId
-        /// </summary>
-        /// <param name="clipId">ClipId</param>
-        /// <param name="metaData">New video metadata</param>
-        void UpdateVideoMetadata(long clipId, VideoUpdateMetadata metaData);
 
         /// <summary>
         /// Update video metadata by ClipId asynchronously
@@ -297,9 +129,17 @@ namespace VimeoDotNet
         /// <param name="clipId">ClipId</param>
         /// <param name="metaData">New video metadata</param>
         Task UpdateVideoMetadataAsync(long clipId, VideoUpdateMetadata metaData);
+
+        /// <summary>
+        /// Delete video asynchronously
+        /// </summary>
+        /// <param name="clipId">CliepId</param>
+        Task DeleteVideoAsync(long clipId);
+
         #endregion
 
         #region Text tracks
+
         /// <summary>
         /// Get text tracks asynchronously
         /// </summary>
@@ -341,6 +181,7 @@ namespace VimeoDotNet
         /// <param name="trackId">TrackId</param>
         /// <returns></returns>
         Task DeleteTextTrackAsync(long videoId, long trackId);
+
         #endregion
 
         #region Uploading files
@@ -368,9 +209,25 @@ namespace VimeoDotNet
         Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent,
             int chunkSize = VimeoClient.DEFAULT_UPLOAD_CHUNK_SIZE, long? replaceVideoId = null);
 
+        /// <summary>
+        /// Create new upload ticket asynchronously
+        /// </summary>
+        /// <returns>Upload ticket</returns>
+        Task<Video> UploadPullLinkAsync(string link);
+
+        /// <summary>
+        /// Upload and set thumbnail active
+        /// </summary>
+        /// <param name="clipId"></param>
+        /// <param name="fileContent"></param>
+        /// <returns></returns>
+        /// <exception cref="VimeoUploadException"></exception>
+        Task<Picture> UploadThumbnailAsync(long clipId, IBinaryContent fileContent);
+
         #endregion
 
         #region Account information
+
         /// <summary>
         /// Get user information
         /// </summary>
@@ -396,9 +253,11 @@ namespace VimeoDotNet
         /// <param name="parameters">User parameters</param>
         /// <returns>User information</returns>
         Task<User> UpdateAccountInformationAsync(EditUserParameters parameters);
+
         #endregion
 
         #region Albums
+
         /// <summary>
         /// Get album by AlbumId and UserId asynchronously
         /// </summary>
@@ -418,6 +277,7 @@ namespace VimeoDotNet
         /// <summary>
         /// Create new album asynchronously
         /// </summary>
+        /// <param name="userId">UserId</param>
         /// <param name="parameters">Creation parameters</param>
         /// <returns>Album</returns>
         Task<Album> CreateAlbumAsync(UserId userId, EditAlbumParameters parameters = null);
@@ -425,8 +285,8 @@ namespace VimeoDotNet
         /// <summary>
         /// Update album asynchronously
         /// </summary>
-        /// <param name="userId">UserId</param>
-        /// <param name="albumId">Albumid</param>
+        /// <param name="userId">User Id</param>
+        /// <param name="albumId">Album Id</param>
         /// <param name="parameters">Album parameters</param>
         /// <returns>Album</returns>
         Task<Album> UpdateAlbumAsync(UserId userId, long albumId, EditAlbumParameters parameters = null);
@@ -456,35 +316,26 @@ namespace VimeoDotNet
         /// <param name="clipId">ClipId</param>
         /// <returns>Removing result</returns>
         Task<bool> RemoveFromAlbumAsync(UserId userId, long albumId, long clipId);
-        #endregion
 
-        #region Deleting videos
-        /// <summary>
-        /// Delete video
-        /// </summary>
-        /// <param name="clipId">CliepId</param>
-        void DeleteVideo(long clipId);
-
-        /// <summary>
-        /// Delete video asynchronously
-        /// </summary>
-        /// <param name="clipId">CliepId</param>
-        Task DeleteVideoAsync(long clipId);
         #endregion
 
         #region Rate Limit
+
         /// <summary>
         /// Return rate limit
         /// </summary>
         long RateLimit { get; }
+
         /// <summary>
         /// Return remaning rate limit
         /// </summary>
         long RateLimitRemaining { get; }
+
         /// <summary>
         /// Return rate limit reset time
         /// </summary>
         DateTime RateLimitReset { get; }
+
         #endregion
     }
 }
