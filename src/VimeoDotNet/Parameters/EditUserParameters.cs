@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using VimeoDotNet.Enums;
 
 namespace VimeoDotNet.Parameters
@@ -6,6 +9,7 @@ namespace VimeoDotNet.Parameters
     /// <summary>
     /// Edit user privacy comment option
     /// </summary>
+    [PublicAPI]
     public enum EditUserPrivacyCommentOption
     {
         /// <summary>
@@ -27,6 +31,7 @@ namespace VimeoDotNet.Parameters
     /// <summary>
     /// Edit user privacy view option
     /// </summary>
+    [PublicAPI]
     public enum EditUserPrivacyViewOption
     {
         /// <summary>
@@ -63,6 +68,7 @@ namespace VimeoDotNet.Parameters
     /// <summary>
     ///Edit user privacy embed option
     /// </summary>
+    [PublicAPI]
     public enum EditUserPrivacyEmbedOption
     {
         /// <summary>
@@ -81,68 +87,73 @@ namespace VimeoDotNet.Parameters
         Whitelist
     }
 
-    /// <summary>
-    /// Edit user parameters
-    /// </summary>
+    /// <inheritdoc />
     public class EditUserParameters : IParameterProvider
     {
         /// <summary>
         /// Sets the default download setting for all future videos uploaded by this user. If true, the video can be downloaded by any user.
         /// </summary>
+        [PublicAPI]
         public bool? VideosPrivacyDownload { get; set; }
 
         /// <summary>
         /// Sets the default add setting for all future videos uploaded by this user. If true, anyone can add the video to an album, channel, or group.
         /// </summary>
+        [PublicAPI]
         public bool? VideosPrivacyAdd { get; set; }
 
         /// <summary>
         /// Sets the default comment setting for all future videos uploaded by this user. It specifies who can comment on the video.
         /// </summary>
+        [PublicAPI]
+        [JsonConverter(typeof(StringEnumConverter))]
         public EditUserPrivacyCommentOption? VideosPrivacyComments { get; set; }
 
         /// <summary>
         /// Sets the default view setting for all future videos uploaded by this user. It specifies who can view the video.
         /// </summary>
+        [PublicAPI]
+        [JsonConverter(typeof(StringEnumConverter))]
         public EditUserPrivacyViewOption? VideosPrivacyView { get; set; }
 
         /// <summary>
         /// Sets the default embed setting for all future videos uploaded by this user. Whitelist allows you to define all valid embed domains.
         /// </summary>
+        [PublicAPI]
+        [JsonConverter(typeof(StringEnumConverter))]
         public EditUserPrivacyEmbedOption? VideosPrivacyEmbed { get; set; }
 
         /// <summary>
         /// The user's display name
         /// </summary>
+        [PublicAPI]
         public string Name { get; set; }
 
         /// <summary>
         /// The user's location
         /// </summary>
+        [PublicAPI]
         public string Location { get; set; }
 
         /// <summary>
         /// The user's bio
         /// </summary>
+        [PublicAPI]
         public string Bio { get; set; }
 
-        /// <summary>
-        /// Performs validation and returns a description of the first error encountered.
-        /// </summary>
-        /// <returns>Description of first error, or null if none found.</returns>
+        /// <inheritdoc />
+        [PublicAPI]
         public string ValidationError()
         {
             // no parameter restrictions indicated
             return null;
         }
 
-        /// <summary>
-        /// Provides universal interface to retrieve parameter values.
-        /// </summary>
-        /// <returns>Returns all parameters as name/value pairs.</returns>
+        /// <inheritdoc />
+        [PublicAPI]
         public IDictionary<string, string> GetParameterValues()
         {
-            Dictionary<string, string> parameterValues = new Dictionary<string, string>();
+            var parameterValues = new Dictionary<string, string>();
 
             if (VideosPrivacyDownload.HasValue)
             {
@@ -184,6 +195,7 @@ namespace VimeoDotNet.Parameters
                 parameterValues.Add("bio", Bio);
             }
 
+            // ReSharper disable once ConvertIfStatementToReturnStatement
             if (parameterValues.Keys.Count > 0)
             {
                 return parameterValues;

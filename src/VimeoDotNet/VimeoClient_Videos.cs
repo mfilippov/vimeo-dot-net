@@ -42,7 +42,7 @@ namespace VimeoDotNet
         {
             try
             {
-                var request = GenerateVideosRequest(userId: userId, page: page, perPage: perPage, query: query,
+                var request = GenerateVideosRequest(userId, page: page, perPage: perPage, query: query,
                     fields: fields);
                 var response = await request.ExecuteRequestAsync<Paginated<Video>>();
                 UpdateRateLimit(response);
@@ -238,8 +238,8 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
-            string endpoint = clipId.HasValue ? Endpoints.UserAlbumVideo : Endpoints.UserAlbumVideos;
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
+            var endpoint = clipId.HasValue ? Endpoints.UserAlbumVideo : Endpoints.UserAlbumVideos;
             request.Method = HttpMethod.Get;
             request.Path = userId.HasValue ? endpoint : Endpoints.GetCurrentUserEndpoint(endpoint);
 
@@ -388,12 +388,7 @@ namespace VimeoDotNet
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving video picture.", HttpStatusCode.NotFound);
 
-                if (response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return null;
-                }
-
-                return response.Content;
+                return response.StatusCode == HttpStatusCode.NotFound ? null : response.Content;
             }
             catch (Exception ex)
             {

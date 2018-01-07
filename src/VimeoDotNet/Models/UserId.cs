@@ -1,7 +1,10 @@
+using JetBrains.Annotations;
+
 namespace VimeoDotNet.Models
 {
     public class UserId
     {
+        [PublicAPI]
         public long Id { get; }
 
         public static UserId Me => -1;

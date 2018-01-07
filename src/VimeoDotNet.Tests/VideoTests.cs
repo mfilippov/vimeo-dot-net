@@ -152,7 +152,7 @@ namespace VimeoDotNet.Tests
             var client = CreateAuthenticatedClient();
             var video = await client.GetVideoAsync(VimeoSettings.VideoId);
             video.Privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Public);
-            await client.UpdateVideoMetadataAsync(VimeoSettings.VideoId, new VideoUpdateMetadata()
+            await client.UpdateVideoMetadataAsync(VimeoSettings.VideoId, new VideoUpdateMetadata
             {
                 EmbedPrivacy = VideoEmbedPrivacyEnum.Private
             });
@@ -162,7 +162,7 @@ namespace VimeoDotNet.Tests
             await Should.ThrowAsync<VimeoApiException>(async () =>
                 await client.UpdateVideoAllowedDomainAsync(VimeoSettings.VideoId, "example.com"));
 
-            await client.UpdateVideoMetadataAsync(VimeoSettings.VideoId, new VideoUpdateMetadata()
+            await client.UpdateVideoMetadataAsync(VimeoSettings.VideoId, new VideoUpdateMetadata
             {
                 EmbedPrivacy = VideoEmbedPrivacyEnum.Public
             });

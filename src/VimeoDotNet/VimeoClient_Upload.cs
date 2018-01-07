@@ -87,9 +87,7 @@ namespace VimeoDotNet
                     // Supposedly all bytes are written, but Vimeo doesn't think so, so just
                     // bail out
                     throw new VimeoUploadException(
-                        string.Format(
-                            "Vimeo failed to mark file as completed, Bytes Written: {0:N0}, Expected: {1:N0}.",
-                            uploadStatus.BytesWritten, uploadRequest.FileLength),
+                        $"Vimeo failed to mark file as completed, Bytes Written: {uploadStatus.BytesWritten:N0}, Expected: {uploadRequest.FileLength:N0}.",
                         uploadRequest);
                 }
             }
@@ -325,7 +323,7 @@ namespace VimeoDotNet
 
         private IApiRequest GenerateCompleteUploadRequest(UploadTicket ticket)
         {
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = HttpMethod.Delete;
             request.Path = ticket.CompleteUri;
             return request;
@@ -383,7 +381,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = HttpMethod.Post;
             request.Path = Endpoints.UploadTicket;
             request.Query.Add("type", type);

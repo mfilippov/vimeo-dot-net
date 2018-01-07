@@ -1,81 +1,54 @@
-﻿using System;
-using VimeoDotNet.Helpers;
+﻿using VimeoDotNet.Helpers;
 using VimeoDotNet.Models;
 
 namespace VimeoDotNet.Net
 {
-    /// <summary>
-    /// Upload request
-    /// </summary>
-    [Serializable]
+    /// <inheritdoc />
     public class UploadRequest : IUploadRequest
     {
         #region Private Fields
 
         private IBinaryContent _file;
-        private long _fileLength;
 
         #endregion
 
         #region Public Properties
 
-        /// <summary>
-        /// Ticket
-        /// </summary>
+        /// <inheritdoc />
         public UploadTicket Ticket { get; set; }
 
-        /// <summary>
-        /// Chunk size
-        /// </summary>
+        /// <inheritdoc />
         public int ChunkSize { get; set; }
 
-        /// <summary>
-        /// Bytes written
-        /// </summary>
+        /// <inheritdoc />
         public long BytesWritten { get; set; }
 
-        /// <summary>
-        /// Is verified complete
-        /// </summary>
+        /// <inheritdoc />
         public bool IsVerifiedComplete { get; set; }
 
-        /// <summary>
-        /// Clip URI
-        /// </summary>
+        /// <inheritdoc />
         public string ClipUri { get; set; }
 
-        /// <summary>
-        /// File
-        /// </summary>
+        /// <inheritdoc />
         public IBinaryContent File
         {
-            get { return _file; }
+            get => _file;
             set
             {
                 _file = value;
-                _fileLength = 0;
-                if (_file != null && _file.Data != null)
+                FileLength = 0;
+                if (_file?.Data != null)
                 {
-                    _fileLength = _file.Data.Length;
+                    FileLength = _file.Data.Length;
                 }
             }
         }
 
-        /// <summary>
-        /// File length
-        /// </summary>
-        public long FileLength
-        {
-            get { return _fileLength; }
-        }
+        /// <inheritdoc />
+        public long FileLength { get; private set; }
 
-        /// <summary>
-        /// Clip id
-        /// </summary>
-        public long? ClipId
-        {
-            get { return ModelHelpers.ParseModelUriId(ClipUri); }
-        }
+        /// <inheritdoc />
+        public long? ClipId => ModelHelpers.ParseModelUriId(ClipUri);
 
         #endregion
     }

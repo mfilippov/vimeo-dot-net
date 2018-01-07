@@ -30,16 +30,9 @@ namespace VimeoDotNet.Helpers
 
         public static T GetEnumValue<T>(string value, IDictionary<string, string> mappings = null) where T : struct
         {
-            T enumVal;
-            if (!Enum.TryParse(FindKeyMapping(value, mappings), true, out enumVal))
-            {
-                if (!Enum.TryParse("Unknown", true, out enumVal))
-                {
-                    return default(T);
-                }
-            }
-
-            return enumVal;
+            if (Enum.TryParse(FindKeyMapping(value, mappings), true, out T enumVal))
+                return enumVal;
+            return !Enum.TryParse("Unknown", true, out enumVal) ? default(T) : enumVal;
         }
 
         public static string GetEnumString(Enum value, IDictionary<string, string> mappings = null)

@@ -1,5 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using VimeoDotNet.Enums;
 
 namespace VimeoDotNet.Parameters
@@ -7,6 +9,7 @@ namespace VimeoDotNet.Parameters
     /// <summary>
     /// GetAlbumsSortOption
     /// </summary>
+    [PublicAPI]
     public enum GetAlbumsSortOption
     {
         /// <summary>
@@ -33,6 +36,7 @@ namespace VimeoDotNet.Parameters
     /// <summary>
     /// Get albums sort direction option
     /// </summary>
+    [PublicAPI]
     public enum GetAlbumsSortDirectionOption
     {
         /// <summary>
@@ -46,55 +50,51 @@ namespace VimeoDotNet.Parameters
         Desc
     }
 
-    /// <summary>
-    /// Get albums parameters
-    /// </summary>
+    /// <inheritdoc />
     public class GetAlbumsParameters : IParameterProvider
     {
         /// <summary>
         /// Page
         /// </summary>
+        [PublicAPI]
         public int? Page { get; set; }
 
         /// <summary>
         /// Per page
         /// </summary>
+        [PublicAPI]
         public int? PerPage { get; set; }
 
         /// <summary>
         /// Query
         /// </summary>
+        [PublicAPI]
         public string Query { get; set; }
 
         /// <summary>
         /// Sort
         /// </summary>
+        [PublicAPI]
+        [JsonConverter(typeof(StringEnumConverter))]
         public GetAlbumsSortOption? Sort { get; set; }
 
         /// <summary>
         /// Direction
         /// </summary>
+        [PublicAPI]
+        [JsonConverter(typeof(StringEnumConverter))]
         public GetAlbumsSortDirectionOption? Direction { get; set; }
 
-        /// <summary>
-        /// Performs validation and returns a description of the first error encountered.
-        /// </summary>
-        /// <returns>Description of first error, or null if none found.</returns>
+        /// <inheritdoc />
         public string ValidationError()
         {
-            if (PerPage > 50)
-                return "Maximum number of items allowed per page is 50.";
-
-            return null;
+            return PerPage > 50 ? "Maximum number of items allowed per page is 50." : null;
         }
 
-        /// <summary>
-        /// Provides universal interface to retrieve parameter values.
-        /// </summary>
-        /// <returns>Returns all parameters as name/value pairs.</returns>
+        /// <inheritdoc />
         public IDictionary<string, string> GetParameterValues()
         {
-            Dictionary<string, string> parameterValues = new Dictionary<string, string>();
+            var parameterValues = new Dictionary<string, string>();
 
             if (Page.HasValue)
             {
@@ -106,7 +106,7 @@ namespace VimeoDotNet.Parameters
                 parameterValues.Add("per_page", PerPage.Value.ToString());
             }
 
-            if (!String.IsNullOrEmpty(Query))
+            if (!string.IsNullOrEmpty(Query))
             {
                 parameterValues.Add("query", Query);
             }
@@ -121,12 +121,7 @@ namespace VimeoDotNet.Parameters
                 parameterValues.Add("direction", Direction.Value.GetParameterValue());
             }
 
-            if (parameterValues.Keys.Count > 0)
-            {
-                return parameterValues;
-            }
-
-            return null;
+            return parameterValues.Keys.Count > 0 ? parameterValues : null;
         }
     }
 }

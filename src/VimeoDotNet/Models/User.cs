@@ -114,8 +114,8 @@ namespace VimeoDotNet.Models
         [PublicAPI]
         public AccountTypeEnum AccountType
         {
-            get { return ModelHelpers.GetEnumValue<AccountTypeEnum>(Account); }
-            set { Account = ModelHelpers.GetEnumString(value); }
+            get => ModelHelpers.GetEnumValue<AccountTypeEnum>(Account);
+            set => Account = ModelHelpers.GetEnumString(value);
         }
     }
 }

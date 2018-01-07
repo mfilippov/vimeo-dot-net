@@ -18,8 +18,8 @@ namespace VimeoDotNet.Tests.Settings
                 // File was not found so create a new one with blanks 
                 SaveSettings(new VimeoApiTestSettings());
 
-                throw new Exception(string.Format(
-                    "The file {0} was not found. A file was created, please fill in the information", SettingsFile));
+                throw new Exception(
+                    $"The file {SettingsFile} was not found. A file was created, please fill in the information");
             }
 
             var json = File.ReadAllText(SettingsFile);
@@ -30,7 +30,6 @@ namespace VimeoDotNet.Tests.Settings
         {
             long.TryParse(Environment.GetEnvironmentVariable("UserId"), out var userId);
             long.TryParse(Environment.GetEnvironmentVariable("AlbumId"), out var albumId);
-            long.TryParse(Environment.GetEnvironmentVariable("ChannelId"), out var channelId);
             long.TryParse(Environment.GetEnvironmentVariable("VideoId"), out var videoId);
             long.TryParse(Environment.GetEnvironmentVariable("TextTrackId"), out var textTrackId);
             long.TryParse(Environment.GetEnvironmentVariable("PublicUserId"), out var publicUserId);
@@ -41,7 +40,6 @@ namespace VimeoDotNet.Tests.Settings
                 AccessToken = Environment.GetEnvironmentVariable("AccessToken"),
                 UserId = userId,
                 AlbumId = albumId,
-                ChannelId = channelId,
                 VideoId = videoId,
                 TextTrackId = textTrackId,
                 PublicUserId = publicUserId

@@ -102,13 +102,7 @@ namespace VimeoDotNet
             AccessToken = accessToken;
         }
 
-        /// <summary>
-        ///     Multi-user Constructor for use with IVimeoClientFactory
-        /// </summary>
-        /// <param name="authClientFactory">The IAuthorizationClientFactory</param>
-        /// <param name="apiRequestFactory">The IApiRequestFactory</param>
-        /// <param name="clientId">ClientId</param>
-        /// <param name="clientSecret">ClientSecret</param>
+        /// <inheritdoc />
         internal VimeoClient(IAuthorizationClientFactory authClientFactory, IApiRequestFactory apiRequestFactory,
             string clientId, string clientSecret)
             : this(clientId, clientSecret)
@@ -117,12 +111,7 @@ namespace VimeoDotNet
             _apiRequestFactory = apiRequestFactory;
         }
 
-        /// <summary>
-        ///     Single-user Constructor for use with IVimeoClientFactory
-        /// </summary>
-        /// <param name="authClientFactory">The IAuthorizationClientFactory</param>
-        /// <param name="apiRequestFactory">The IApiRequestFactory</param>
-        /// <param name="accessToken">AccessToken</param>
+        /// <inheritdoc />
         internal VimeoClient(IAuthorizationClientFactory authClientFactory, IApiRequestFactory apiRequestFactory,
             string accessToken)
             : this(accessToken)
@@ -135,26 +124,14 @@ namespace VimeoDotNet
 
         #region Authorization
 
-        /// <summary>
-        /// Return authorztion URL
-        /// </summary>
-        /// <param name="redirectUri"></param>
-        /// <param name="scope">Defaults to "public" and "private"; this is a space-separated list of <a href="#supported-scopes">scopes</a> you want to access</param>
-        /// <param name="state">A unique value which the client will return alongside access tokens</param>
-        /// <returns>Authorization URL</returns>
+        /// <inheritdoc />
         public string GetOauthUrl(string redirectUri, IEnumerable<string> scope, string state)
         {
             PrepAuthorizationClient();
             return OAuth2Client.GetAuthorizationEndpoint(redirectUri, scope, state);
         }
 
-        /// <summary>
-        /// Exchange the code for an access token asynchronously
-        /// </summary>
-        /// <param name="authorizationCode">A string token you must exchange for your access token</param>
-        /// <param name="redirectUrl">This field is required, and must match one of your application’s
-        /// redirect URI’s</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public async Task<AccessTokenResponse> GetAccessTokenAsync(string authorizationCode, string redirectUrl)
         {
             PrepAuthorizationClient();
@@ -173,10 +150,7 @@ namespace VimeoDotNet
 
         #region Account
 
-        /// <summary>
-        /// Get user information asynchronously
-        /// </summary>
-        /// <returns>User information</returns>
+        /// <inheritdoc />
         public async Task<User> GetAccountInformationAsync()
         {
             var request = _apiRequestFactory.AuthorizedRequest(
@@ -188,11 +162,7 @@ namespace VimeoDotNet
             return await ExecuteApiRequest<User>(request);
         }
 
-        /// <summary>
-        /// Update user information asynchronously
-        /// </summary>
-        /// <param name="parameters">User parameters</param>
-        /// <returns>User information</returns>
+        /// <inheritdoc />
         public async Task<User> UpdateAccountInformationAsync(EditUserParameters parameters)
         {
             var request = _apiRequestFactory.AuthorizedRequest(
@@ -207,18 +177,14 @@ namespace VimeoDotNet
         }
 
 
-        /// <summary>
-        /// Get user information async
-        /// </summary>
-        /// <param name="userId">User Id</param>
-        /// <returns>User information object</returns>
+        /// <inheritdoc />
         public async Task<User> GetUserInformationAsync(long userId)
         {
             var request = _apiRequestFactory.AuthorizedRequest(
                 AccessToken,
                 HttpMethod.Get,
                 Endpoints.User,
-                new Dictionary<string, string>()
+                new Dictionary<string, string>
                 {
                     {"userId", userId.ToString()}
                 }

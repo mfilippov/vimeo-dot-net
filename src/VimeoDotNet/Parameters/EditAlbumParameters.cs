@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using VimeoDotNet.Enums;
 
 namespace VimeoDotNet.Parameters
@@ -22,6 +25,7 @@ namespace VimeoDotNet.Parameters
     /// <summary>
     /// Edit album sort option
     /// </summary>
+    [PublicAPI]
     public enum EditAlbumSortOption
     {
         /// <summary>
@@ -70,40 +74,41 @@ namespace VimeoDotNet.Parameters
         Alphbetical
     }
 
-    /// <summary>
-    /// Edit album parameters
-    /// </summary>
+    /// <inheritdoc />
     public class EditAlbumParameters : IParameterProvider
     {
         /// <summary>
         /// Name
         /// </summary>
+        [PublicAPI]
         public string Name { get; set; }
 
         /// <summary>
         /// Description
         /// </summary>
+        [PublicAPI]
         public string Description { get; set; }
 
         /// <summary>
         /// Privacy
         /// </summary>
+        [PublicAPI]
+        [JsonConverter(typeof(StringEnumConverter))]
         public EditAlbumPrivacyOption? Privacy { get; set; }
 
         /// <summary>
         /// Password
         /// </summary>
+        [PublicAPI]
         public string Password { get; set; }
 
         /// <summary>
         /// Sort
         /// </summary>
+        [PublicAPI]
         public EditAlbumSortOption? Sort { get; set; }
 
-        /// <summary>
-        /// Performs validation and returns a description of the first error encountered.
-        /// </summary>
-        /// <returns>Description of first error, or null if none found.</returns>
+        /// <inheritdoc />
         public string ValidationError()
         {
             if (Privacy.HasValue && Privacy.Value == EditAlbumPrivacyOption.Password && Password == null)
@@ -114,13 +119,10 @@ namespace VimeoDotNet.Parameters
             return null;
         }
 
-        /// <summary>
-        /// Provides universal interface to retrieve parameter values.
-        /// </summary>
-        /// <returns>Returns all parameters as name/value pairs.</returns>
+        /// <inheritdoc />
         public IDictionary<string, string> GetParameterValues()
         {
-            Dictionary<string, string> parameterValues = new Dictionary<string, string>();
+            var parameterValues = new Dictionary<string, string>();
 
             if (Privacy.HasValue)
             {
@@ -147,12 +149,7 @@ namespace VimeoDotNet.Parameters
                 parameterValues.Add("password", Password);
             }
 
-            if (parameterValues.Keys.Count > 0)
-            {
-                return parameterValues;
-            }
-
-            return null;
+            return parameterValues.Keys.Count > 0 ? parameterValues : null;
         }
     }
 }

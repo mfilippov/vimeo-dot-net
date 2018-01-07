@@ -23,12 +23,7 @@ namespace VimeoDotNet
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving text tracks for video.", HttpStatusCode.NotFound);
 
-                if (response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return null;
-                }
-
-                return response.Content;
+                return response.StatusCode == HttpStatusCode.NotFound ? null : response.Content;
             }
             catch (Exception ex)
             {
@@ -210,8 +205,8 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
-            string endpoint = trackId.HasValue ? Endpoints.TextTrack : Endpoints.TextTracks;
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
+            var endpoint = trackId.HasValue ? Endpoints.TextTrack : Endpoints.TextTracks;
             request.Method = HttpMethod.Get;
             request.Path = endpoint;
 
@@ -229,7 +224,7 @@ namespace VimeoDotNet
             ThrowIfUnauthorized();
 
             var request = _apiRequestFactory.GetApiRequest(AccessToken);
-            var endpoint = Endpoints.TextTrack;
+            const string endpoint = Endpoints.TextTrack;
             request.Method = HttpMethod.Delete;
             request.Path = endpoint;
 

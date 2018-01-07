@@ -120,7 +120,7 @@ namespace VimeoDotNet
                 AccessToken,
                 HttpMethod.Delete,
                 Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbumVideo),
-                new Dictionary<string, string>()
+                new Dictionary<string, string>
                 {
                     {"albumId", albumId.ToString()},
                     {"clipId", clipId.ToString()}

@@ -39,13 +39,8 @@ namespace VimeoDotNet.Helpers
                 videoFileName = Path.GetExtension(videoFileName);
             }
 
-            string normalized = videoFileName.Trim().ToLower();
-            if (!MimeMappings.ContainsKey(normalized))
-            {
-                return DefaultContentType;
-            }
-
-            return MimeMappings[normalized];
+            var normalized = videoFileName.Trim().ToLower();
+            return !MimeMappings.ContainsKey(normalized) ? DefaultContentType : MimeMappings[normalized];
         }
     }
 }

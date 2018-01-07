@@ -91,7 +91,7 @@ namespace VimeoDotNet.Authorization
         }
 
         /// <inheritdoc />
-        public Boolean VerifyAccessToken(string accessToken)
+        public bool VerifyAccessToken(string accessToken)
         {
             return VerifyAccessTokenAsync(accessToken).Result;
         }
@@ -101,12 +101,7 @@ namespace VimeoDotNet.Authorization
         {
             var request = GenerateVerifyRequest(accessToken);
             var result = await request.ExecuteRequestAsync();
-            if (result.StatusCode == HttpStatusCode.OK)
-            {
-                return true;
-            }
-
-            return false;
+            return result.StatusCode == HttpStatusCode.OK;
         }
 
         /// <inheritdoc />
@@ -121,7 +116,7 @@ namespace VimeoDotNet.Authorization
 
         #region Private Methods
 
-        private ApiRequest BuildUnauthenticatedTokenRequest(List<string> scopes = null)
+        private ApiRequest BuildUnauthenticatedTokenRequest(IReadOnlyCollection<string> scopes = null)
         {
             if (string.IsNullOrWhiteSpace(ClientId))
                 throw new InvalidOperationException(
@@ -194,7 +189,7 @@ namespace VimeoDotNet.Authorization
         private static IApiRequest GenerateVerifyRequest(string accessToken)
         {
             IApiRequest request = new ApiRequest(accessToken);
-            string endpoint = Endpoints.Verify;
+            const string endpoint = Endpoints.Verify;
             request.Method = HttpMethod.Get;
             request.Path = endpoint;
 
@@ -263,7 +258,7 @@ namespace VimeoDotNet.Authorization
 
         #region Helper Functions
 
-        private void CheckStatusCodeError(IApiResponse response, string message,
+        private static void CheckStatusCodeError(IApiResponse response, string message,
             params HttpStatusCode[] validStatusCodes)
         {
             if (!IsSuccessStatusCode(response.StatusCode) && validStatusCodes != null &&
@@ -274,7 +269,7 @@ namespace VimeoDotNet.Authorization
             }
         }
 
-        private bool IsSuccessStatusCode(HttpStatusCode statusCode)
+        private static bool IsSuccessStatusCode(HttpStatusCode statusCode)
         {
             var code = (int) statusCode;
             return code >= 200 && code < 300;
