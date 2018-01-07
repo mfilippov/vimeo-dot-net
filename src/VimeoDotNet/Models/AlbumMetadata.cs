@@ -1,4 +1,6 @@
 ﻿using System;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
@@ -11,6 +13,8 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Connections
         /// </summary>
-        public AlbumConnections connections { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "connections")]
+        public AlbumConnections Connections { get; set; }
     }
 }

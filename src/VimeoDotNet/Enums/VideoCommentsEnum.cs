@@ -9,10 +9,12 @@ namespace VimeoDotNet.Enums
         /// Anybody
         /// </summary>
         Anybody,
+
         /// <summary>
         /// Nobody
         /// </summary>
         Nobody,
+
         /// <summary>
         /// Only contacts
         /// </summary>

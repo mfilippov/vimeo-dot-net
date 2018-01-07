@@ -3,7 +3,6 @@ using System.Net.Http.Headers;
 
 namespace VimeoDotNet.Net
 {
-
     /// <summary>
     ///  Interface of REST response without payload type
     /// </summary>
@@ -11,7 +10,7 @@ namespace VimeoDotNet.Net
     {
         /// <summary>HTTP response status code</summary>
         HttpStatusCode StatusCode { get; }
-        
+
         /// <summary>
         /// HTTP response headers
         /// </summary>
@@ -34,7 +33,7 @@ namespace VimeoDotNet.Net
         /// </summary>
         T Content { get; }
     }
-    
+
     internal class ApiResponse : IApiResponse
     {
         public ApiResponse(HttpStatusCode statusCode, HttpResponseHeaders headers, string text)
@@ -43,12 +42,12 @@ namespace VimeoDotNet.Net
             Headers = headers;
             Text = text;
         }
-        
+
         public HttpStatusCode StatusCode { get; }
         public HttpResponseHeaders Headers { get; }
         public string Text { get; }
     }
-    
+
     internal class ApiResponse<T> : IApiResponse<T>
     {
         public ApiResponse(HttpStatusCode statusCode, HttpResponseHeaders headers, string text, T content)

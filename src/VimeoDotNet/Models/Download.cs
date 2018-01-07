@@ -1,46 +1,61 @@
 ﻿using System;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
     /// Download model
     /// </summary>
-    [Serializable]
     public class Download
     {
         /// <summary>
         /// Quality
         /// </summary>
-        public string quality { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "quality")]
+        public string Quality { get; set; }
 
         /// <summary>
         /// Type
         /// </summary>
-        public string type { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
 
         /// <summary>
         /// Width
         /// </summary>
-        public int width { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "width")]
+        public int Width { get; set; }
 
         /// <summary>
         /// Height
         /// </summary>
-        public int height { get; set; }
-        
+        [PublicAPI]
+        [JsonProperty(PropertyName = "height")]
+        public int Height { get; set; }
+
         /// <summary>
         /// File size
         /// </summary>
-        public long size { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "size")]
+        public long Size { get; set; }
 
         /// <summary>
         /// Expires
         /// </summary>
-        public DateTime? expires { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "expires")]
+        public DateTime? Expires { get; set; }
 
         /// <summary>
         /// Link
         /// </summary>
-        public string link { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "link")]
+        public string Link { get; set; }
     }
 }

@@ -1,36 +1,53 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
     /// Preset buttons
     /// </summary>
-    [Serializable]
     public class PresetButtons
     {
         /// <summary>
         /// Like
         /// </summary>
-        public bool like { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "like")]
+        public bool Like { get; set; }
+
         /// <summary>
         /// Watch later
         /// </summary>
-        public bool watchlater { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "watchlater")]
+        public bool WatchLater { get; set; }
+
         /// <summary>
         /// Share
         /// </summary>
-        public bool share { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "share")]
+        public bool Share { get; set; }
+
         /// <summary>
         /// Embed
         /// </summary>
-        public bool embed { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "embed")]
+        public bool Embed { get; set; }
+
         /// <summary>
         /// Vote
         /// </summary>
-        public bool vote { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "vote")]
+        public bool Vote { get; set; }
+
         /// <summary>
         /// HD
         /// </summary>
-        public bool hd { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "hd")]
+        public bool Hd { get; set; }
     }
 }

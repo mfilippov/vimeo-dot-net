@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 using VimeoDotNet.Enums;
 using VimeoDotNet.Helpers;
 
@@ -7,42 +8,54 @@ namespace VimeoDotNet.Models
     /// <summary>
     /// Privacy
     /// </summary>
-    [Serializable]
     public class Privacy
     {
         /// <summary>
         /// View
         /// </summary>
-        public string view { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "view")]
+        public string View { get; set; }
+
         /// <summary>
         /// Embed
         /// </summary>
-        public string embed { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "embed")]
+        public string Embed { get; set; }
+
         /// <summary>
         /// Download
         /// </summary>
-        public bool download { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "download")]
+        public bool Download { get; set; }
+
         /// <summary>
         /// Add
         /// </summary>
-        public bool add { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "add")]
+        public bool Add { get; set; }
 
         /// <summary>
         /// View privacy
         /// </summary>
+        [PublicAPI]
         public VideoPrivacyEnum ViewPrivacy
         {
-            get { return ModelHelpers.GetEnumValue<VideoPrivacyEnum>(view); }
-            set { view = ModelHelpers.GetEnumString(value); }
+            get => ModelHelpers.GetEnumValue<VideoPrivacyEnum>(View);
+            set => View = ModelHelpers.GetEnumString(value);
         }
 
         /// <summary>
         /// Embed privacy
         /// </summary>
+        [PublicAPI]
         public VideoEmbedPrivacyEnum EmbedPrivacy
         {
-            get { return ModelHelpers.GetEnumValue<VideoEmbedPrivacyEnum>(embed); }
-            set { embed = ModelHelpers.GetEnumString(value); }
+            get => ModelHelpers.GetEnumValue<VideoEmbedPrivacyEnum>(Embed);
+            set => Embed = ModelHelpers.GetEnumString(value);
         }
     }
 }

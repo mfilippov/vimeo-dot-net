@@ -23,12 +23,12 @@ namespace VimeoDotNet.Tests
             // The settings loader will create this file in the bin/ folder if it doesn't exist
             VimeoSettings = SettingsLoader.LoadSettings();
         }
-        
+
         protected async Task<VimeoClient> CreateUnauthenticatedClient()
         {
             var authorizationClient = new AuthorizationClient(VimeoSettings.ClientId, VimeoSettings.ClientSecret);
             var unauthenticatedToken = await authorizationClient.GetUnauthenticatedTokenAsync();
-            return new VimeoClient(unauthenticatedToken.access_token);
+            return new VimeoClient(unauthenticatedToken.AccessToken);
         }
 
         protected IVimeoClient CreateAuthenticatedClient()

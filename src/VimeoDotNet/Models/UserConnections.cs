@@ -1,56 +1,88 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
     /// User connections entry
     /// </summary>
-    [Serializable]
     public class UserConnections
     {
         /// <summary>
         /// Activities
         /// </summary>
-        public UserConnectionsEntry activities { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "activities")]
+        public UserConnectionsEntry Activities { get; set; }
+
         /// <summary>
         /// Albums
         /// </summary>
-        public UserConnectionsEntry albums { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "albums")]
+        public UserConnectionsEntry Albums { get; set; }
+
         /// <summary>
         /// Channels
         /// </summary>
-        public UserConnectionsEntry channels { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "channels")]
+        public UserConnectionsEntry Channels { get; set; }
+
         /// <summary>
         /// Feed
         /// </summary>
-        public UserConnectionsEntry feed { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "feed")]
+        public UserConnectionsEntry Feed { get; set; }
+
         /// <summary>
         /// Followers
         /// </summary>
-        public UserConnectionsEntry followers { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "followers")]
+        public UserConnectionsEntry Followers { get; set; }
+
         /// <summary>
         /// Following
         /// </summary>
-        public UserConnectionsEntry following { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "following")]
+        public UserConnectionsEntry Following { get; set; }
+
         /// <summary>
         /// Groups
         /// </summary>
-        public UserConnectionsEntry groups { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "groups")]
+        public UserConnectionsEntry Groups { get; set; }
+
         /// <summary>
         /// Likes
         /// </summary>
-        public UserConnectionsEntry likes { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "likes")]
+        public UserConnectionsEntry Likes { get; set; }
+
         /// <summary>
         /// Portfolios
         /// </summary>
-        public UserConnectionsEntry portfolios { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "portfolios")]
+        public UserConnectionsEntry Portfolios { get; set; }
+
         /// <summary>
         /// Videos
         /// </summary>
-        public UserConnectionsEntry videos { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "videos")]
+        public UserConnectionsEntry Videos { get; set; }
+
         /// <summary>
         /// Watch later
         /// </summary>
-        public UserConnectionsEntry watchlater { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "watchlater")]
+        public UserConnectionsEntry Watchlater { get; set; }
     }
 }

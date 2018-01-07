@@ -26,6 +26,7 @@ namespace VimeoDotNet
             {
                 RateLimit = Convert.ToInt64(response.Headers.GetValues("X-RateLimit-Limit").First());
             }
+
             if (response.Headers == null || !response.Headers.Contains("X-RateLimit-Remaining"))
             {
                 RateLimitRemaining = 0;
@@ -41,7 +42,8 @@ namespace VimeoDotNet
             }
             else
             {
-                RateLimitReset = DateTime.ParseExact(response.Headers.GetValues("X-RateLimit-Reset").First(), "yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+                RateLimitReset = DateTime.ParseExact(response.Headers.GetValues("X-RateLimit-Reset").First(),
+                    "yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
             }
         }
     }

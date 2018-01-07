@@ -1,42 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
     /// Comment model
     /// </summary>
-    [Serializable]
     public class Comment
     {
         /// <summary>
         /// URI
         /// </summary>
-        public string uri { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "uri")]
+        public string Uri { get; set; }
 
         /// <summary>
         /// User
         /// </summary>
-        public User user { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "user")]
+        public User User { get; set; }
 
         /// <summary>
         /// Description
         /// </summary>
-        public string description { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
 
         /// <summary>
         /// Link
         /// </summary>
-        public string link { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "link")]
+        public string Link { get; set; }
 
         /// <summary>
         /// Created time
         /// </summary>
-        public DateTime created_time { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "created_time")]
+        public DateTime CreatedTime { get; set; }
 
         /// <summary>
         /// Comments
         /// </summary>
-        public List<Comment> comments { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "comments")]
+        public List<Comment> Comments { get; set; }
     }
 }

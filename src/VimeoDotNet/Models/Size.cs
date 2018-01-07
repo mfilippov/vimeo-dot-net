@@ -1,19 +1,32 @@
-﻿namespace VimeoDotNet.Models {
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
+
+namespace VimeoDotNet.Models
+{
     /// <summary>
     /// Size
     /// </summary>
-    public class Size {
+    public class Size
+    {
         /// <summary>
         /// Width
         /// </summary>
-        public int width { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "width")]
+        public int Width { get; set; }
+
         /// <summary>
         /// Height
         /// </summary>
-        public int height { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "height")]
+        public int Height { get; set; }
+
         /// <summary>
         /// Link
         /// </summary>
-        public string link { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "link")]
+        public string Link { get; set; }
     }
 }

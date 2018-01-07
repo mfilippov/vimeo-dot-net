@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 using VimeoDotNet.Helpers;
 
 namespace VimeoDotNet.Models
@@ -6,30 +7,33 @@ namespace VimeoDotNet.Models
     /// <summary>
     /// Embed presets
     /// </summary>
-    [Serializable]
     public class EmbedPresets
     {
         /// <summary>
         /// Id
         /// </summary>
-        public long? id
-        {
-            get { return ModelHelpers.ParseModelUriId(uri); }
-        }
+        [PublicAPI]
+        public long? Id => ModelHelpers.ParseModelUriId(Uri);
 
         /// <summary>
         /// URI
         /// </summary>
-        public string uri { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "uri")]
+        public string Uri { get; set; }
 
         /// <summary>
         /// Name
         /// </summary>
-        public string name { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
 
         /// <summary>
         /// Settings
         /// </summary>
-        public PresetSettings settings { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "settings")]
+        public PresetSettings Settings { get; set; }
     }
 }

@@ -1,40 +1,60 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
     /// User stats
     /// </summary>
-    [Serializable]
     public class UserStats
     {
         /// <summary>
         /// Videos
         /// </summary>
-        public int videos { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "videos")]
+        public int Videos { get; set; }
+
         /// <summary>
         /// Contacts
         /// </summary>
-        public int contacts { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "contacts")]
+        public int Contacts { get; set; }
+
         /// <summary>
         /// Likes
         /// </summary>
-        public int likes { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "likes")]
+        public int Likes { get; set; }
+
         /// <summary>
         /// Albums
         /// </summary>
-        public int albums { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "albums")]
+        public int Albums { get; set; }
+
         /// <summary>
         /// Channels
         /// </summary>
-        public int channels { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "channels")]
+        public int Channels { get; set; }
+
         /// <summary>
         /// Followers
         /// </summary>
-        public int followers { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "followers")]
+        public int Followers { get; set; }
+
         /// <summary>
         /// Following
         /// </summary>
-        public int following { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "following")]
+        public int Following { get; set; }
     }
 }

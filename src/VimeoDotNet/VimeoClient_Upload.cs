@@ -89,7 +89,7 @@ namespace VimeoDotNet
                     throw new VimeoUploadException(
                         string.Format(
                             "Vimeo failed to mark file as completed, Bytes Written: {0:N0}, Expected: {1:N0}.",
-                            uploadStatus.BytesWritten),
+                            uploadStatus.BytesWritten, uploadRequest.FileLength),
                         uploadRequest);
                 }
             }
@@ -131,7 +131,7 @@ namespace VimeoDotNet
             try
             {
                 var pic = await UploadPictureAsync(fileContent, clipId);
-                await SetThumbnailActiveAsync(pic.uri);
+                await SetThumbnailActiveAsync(pic.Uri);
                 return pic;
             }
             catch (Exception ex)
@@ -327,29 +327,29 @@ namespace VimeoDotNet
         {
             IApiRequest request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = HttpMethod.Delete;
-            request.Path = ticket.complete_uri;
+            request.Path = ticket.CompleteUri;
             return request;
         }
 
         private async Task<IApiRequest> GenerateFileStreamRequest(IBinaryContent fileContent, UploadTicket ticket,
             long written = 0, int? chunkSize = null, bool verifyOnly = false)
         {
-            if (string.IsNullOrWhiteSpace(ticket?.ticket_id))
+            if (string.IsNullOrWhiteSpace(ticket?.TicketId))
             {
                 throw new ArgumentException("Invalid upload ticket.");
             }
 
-            if (fileContent.Data.Length > ticket.user.upload_quota.space.free)
+            if (fileContent.Data.Length > ticket.User.UploadQuota.Space.Free)
             {
                 throw new InvalidOperationException(
                     "User does not have enough free space to upload this video. Remaining space: " +
-                    ticket.quota.free_space + ".");
+                    ticket.Quota.FreeSpace + ".");
             }
 
             var request = _apiRequestFactory.GetApiRequest();
             request.Method = HttpMethod.Put;
             request.ExcludeAuthorizationHeader = true;
-            request.Path = ticket.upload_link_secure;
+            request.Path = ticket.UploadLinkSecure;
 
             if (verifyOnly)
             {

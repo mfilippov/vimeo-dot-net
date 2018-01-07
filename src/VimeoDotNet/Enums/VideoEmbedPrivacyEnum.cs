@@ -9,10 +9,12 @@
         /// Public
         /// </summary>
         Public,
+
         /// <summary>
         /// Private
         /// </summary>
         Private,
+
         /// <summary>
         /// Whitelist domain
         /// </summary>

@@ -1,24 +1,32 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
     /// Transcode
     /// </summary>
-    [Serializable]
     public class Transcode
     {
         /// <summary>
         /// State
         /// </summary>
-        public string state { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "state")]
+        public string State { get; set; }
+
         /// <summary>
         /// Progress
         /// </summary>
-        public int progress { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "progress")]
+        public int Progress { get; set; }
+
         /// <summary>
         /// Message
         /// </summary>
-        public string message { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "message")]
+        public string Message { get; set; }
     }
 }

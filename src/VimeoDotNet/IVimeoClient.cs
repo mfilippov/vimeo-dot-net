@@ -16,15 +16,6 @@ namespace VimeoDotNet
         #region User authentication
 
         /// <summary>
-        /// Exchange the code for an access token
-        /// </summary>
-        /// <param name="authorizationCode">A string token you must exchange for your access token</param>
-        /// <param name="redirectUrl">This field is required, and must match one of your application’s
-        /// redirect URI’s</param>
-        /// <returns>AccessTokenResponse</returns>
-        AccessTokenResponse GetAccessToken(string authorizationCode, string redirectUrl);
-
-        /// <summary>
         /// Exchange the code for an access token asynchronously
         /// </summary>
         /// <param name="authorizationCode">A string token you must exchange for your access token</param>
@@ -41,14 +32,6 @@ namespace VimeoDotNet
         /// <param name="state">A unique value which the client will return alongside access tokens</param>
         /// <returns>Authorization URL</returns>
         string GetOauthUrl(string redirectUri, IEnumerable<string> scope, string state);
-
-        // User Information
-        /// <summary>
-        /// Get user information
-        /// </summary>
-        /// <param name="userId">User Id</param>
-        /// <returns>User information object</returns>
-        User GetUserInformation(long userId);
 
         // User Information
         /// <summary>
@@ -229,23 +212,10 @@ namespace VimeoDotNet
         #region Account information
 
         /// <summary>
-        /// Get user information
-        /// </summary>
-        /// <returns>User information</returns>
-        User GetAccountInformation();
-
-        /// <summary>
         /// Get user information asynchronously
         /// </summary>
         /// <returns>User information</returns>
         Task<User> GetAccountInformationAsync();
-
-        /// <summary>
-        /// Update user information
-        /// </summary>
-        /// <param name="parameters">User parameters</param>
-        /// <returns>User information</returns>
-        User UpdateAccountInformation(EditUserParameters parameters);
 
         /// <summary>
         /// Update user information asynchronously

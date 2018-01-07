@@ -52,9 +52,9 @@ namespace VimeoDotNet
                 {
                     return new Paginated<Video>
                     {
-                        data = new List<Video>(),
-                        page = 0,
-                        total = 0
+                        Data = new List<Video>(),
+                        Page = 0,
+                        Total = 0
                     };
                 }
 
@@ -108,9 +108,9 @@ namespace VimeoDotNet
                 {
                     return new Paginated<Video>
                     {
-                        data = new List<Video>(),
-                        page = 0,
-                        total = 0
+                        Data = new List<Video>(),
+                        Page = 0,
+                        Total = 0
                     };
                 }
 

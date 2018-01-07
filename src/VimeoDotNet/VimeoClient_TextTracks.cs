@@ -27,6 +27,7 @@ namespace VimeoDotNet
                 {
                     return null;
                 }
+
                 return response.Content;
             }
             catch (Exception ex)
@@ -35,6 +36,7 @@ namespace VimeoDotNet
                 {
                     throw;
                 }
+
                 throw new VimeoApiException("Error retrieving text tracks for video.", ex);
             }
         }
@@ -57,6 +59,7 @@ namespace VimeoDotNet
                 {
                     throw;
                 }
+
                 throw new VimeoApiException("Error retrieving text track for video.", ex);
             }
         }
@@ -68,6 +71,7 @@ namespace VimeoDotNet
             {
                 throw new ArgumentException("fileContent should be readable");
             }
+
             if (fileContent.Data.CanSeek && fileContent.Data.Position > 0)
             {
                 fileContent.Data.Position = 0;
@@ -77,8 +81,8 @@ namespace VimeoDotNet
             var request = _apiRequestFactory.GetApiRequest();
             request.Method = HttpMethod.Put;
             request.ExcludeAuthorizationHeader = true;
-            request.Path = ticket.link;
-            
+            request.Path = ticket.Link;
+
             request.Body = new ByteArrayContent(await fileContent.ReadAllAsync());
 
             var response = await request.ExecuteRequestAsync();
@@ -105,6 +109,7 @@ namespace VimeoDotNet
                 {
                     throw;
                 }
+
                 throw new VimeoApiException("Error updating text track for video.", ex);
             }
         }
@@ -125,6 +130,7 @@ namespace VimeoDotNet
                 {
                     throw;
                 }
+
                 throw new VimeoApiException("Error updating text track for video.", ex);
             }
         }
@@ -146,6 +152,7 @@ namespace VimeoDotNet
                 {
                     throw;
                 }
+
                 throw new VimeoUploadException("Error generating upload text track ticket.", null, ex);
             }
         }
@@ -160,16 +167,16 @@ namespace VimeoDotNet
                 return request;
             var parameters = new Dictionary<string, string>
             {
-                ["active"] = track.active.ToString().ToLower(),
-                ["name"] = track.name,
-                ["language"] = track.language,
-                ["type"] = track.type.ToString()
+                ["active"] = track.Active.ToString().ToLower(),
+                ["name"] = track.Name,
+                ["language"] = track.Language,
+                ["type"] = track.Type.ToString().ToLowerInvariant()
             };
             request.Body = new FormUrlEncodedContent(parameters);
             return request;
         }
 
-        private IApiRequest GenerateUpdateTextTrackRequest(long clipId, long trackId, [NotNull]TextTrack track)
+        private IApiRequest GenerateUpdateTextTrackRequest(long clipId, long trackId, [NotNull] TextTrack track)
         {
             ThrowIfUnauthorized();
 
@@ -181,17 +188,19 @@ namespace VimeoDotNet
 
             var parameters = new Dictionary<string, string>
             {
-                ["active"] = track.active.ToString().ToLower()
+                ["active"] = track.Active.ToString().ToLower()
             };
-            if (track.name != null)
+            if (track.Name != null)
             {
-                parameters["name"] = track.name;
+                parameters["name"] = track.Name;
             }
-            if (track.language != null)
+
+            if (track.Language != null)
             {
-                parameters["language"] =track.language;
+                parameters["language"] = track.Language;
             }
-            parameters["type"] = track.type.ToString();
+
+            parameters["type"] = track.Type.ToString().ToLowerInvariant();
             request.Body = new FormUrlEncodedContent(parameters);
 
             return request;
@@ -211,6 +220,7 @@ namespace VimeoDotNet
             {
                 request.UrlSegments.Add("trackId", trackId.ToString());
             }
+
             return request;
         }
 

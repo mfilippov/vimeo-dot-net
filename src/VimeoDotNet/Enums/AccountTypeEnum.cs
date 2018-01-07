@@ -9,10 +9,12 @@
         /// Unknown account type
         /// </summary>
         Unknown,
-		/// <summary>
-		/// Basic account
-		/// </summary>
-		Basic,
+
+        /// <summary>
+        /// Basic account
+        /// </summary>
+        Basic,
+
         /// <summary>
         /// Pro account
         /// </summary>

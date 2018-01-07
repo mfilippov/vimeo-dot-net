@@ -1,28 +1,39 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
     /// Paging
     /// </summary>
-    [Serializable]
     public class Paging
     {
         /// <summary>
         /// Next
         /// </summary>
-        public string next { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "next")]
+        public string Next { get; set; }
+
         /// <summary>
         /// Previous
         /// </summary>
-        public string previous { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "previous")]
+        public string Previous { get; set; }
+
         /// <summary>
         /// First
         /// </summary>
-        public string first { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "first")]
+        public string First { get; set; }
+
         /// <summary>
         /// Last
         /// </summary>
-        public string last { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "last")]
+        public string Last { get; set; }
     }
 }

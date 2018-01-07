@@ -35,16 +35,16 @@ namespace VimeoDotNet.Tests
             var client = CreateAuthenticatedClient();
             var video = await client.GetVideoAsync(VimeoSettings.VideoId);
             video.ShouldNotBeNull();
-            video.id.ShouldBe(VimeoSettings.VideoId);
-
+            video.Id.ShouldBe(VimeoSettings.VideoId);
         }
+
         [Fact]
         public async Task ShouldCorrectlyRetrievesVideosByUserId()
         {
             var client = CreateAuthenticatedClient();
             var videos = await client.GetVideosAsync(VimeoSettings.UserId);
             videos.ShouldNotBeNull();
-            videos.data.Count.ShouldBeGreaterThan(0);
+            videos.Data.Count.ShouldBeGreaterThan(0);
         }
 
         [Fact]
@@ -74,6 +74,7 @@ namespace VimeoDotNet.Tests
                     {
                         continue;
                     }
+
                     throw;
                 }
             }
@@ -83,11 +84,11 @@ namespace VimeoDotNet.Tests
         public async Task ShouldCorrectlyGetVideoWithFields()
         {
             var client = CreateAuthenticatedClient();
-            var video = await client.GetVideoAsync(VimeoSettings.VideoId, new []{"uri", "name"});
+            var video = await client.GetVideoAsync(VimeoSettings.VideoId, new[] {"uri", "name"});
             video.ShouldNotBeNull();
-            video.uri.ShouldNotBeNull();
-            video.name.ShouldNotBeNull();
-            video.pictures.ShouldBeNull();
+            video.Uri.ShouldNotBeNull();
+            video.Name.ShouldNotBeNull();
+            video.Pictures.ShouldBeNull();
         }
 
         [Fact]
@@ -96,7 +97,7 @@ namespace VimeoDotNet.Tests
             var client = CreateAuthenticatedClient();
             var videos = await client.GetAlbumVideosAsync(VimeoSettings.UserId, VimeoSettings.AlbumId);
             videos.ShouldNotBeNull();
-            videos.data.Count.ShouldBeGreaterThan(0);
+            videos.Data.Count.ShouldBeGreaterThan(0);
         }
 
         [Fact]
@@ -105,7 +106,7 @@ namespace VimeoDotNet.Tests
             var client = CreateAuthenticatedClient();
             var videos = await client.GetAlbumVideosAsync(UserId.Me, VimeoSettings.AlbumId);
             videos.ShouldNotBeNull();
-            videos.data.Count.ShouldBeGreaterThan(0);
+            videos.Data.Count.ShouldBeGreaterThan(0);
         }
 
         [Fact]
@@ -113,14 +114,14 @@ namespace VimeoDotNet.Tests
         {
             var client = CreateAuthenticatedClient();
             var videos =
-                await client.GetAlbumVideosAsync(VimeoSettings.AlbumId, 1, null, fields: new[] { "uri", "name" });
+                await client.GetAlbumVideosAsync(VimeoSettings.AlbumId, 1, null, fields: new[] {"uri", "name"});
             videos.ShouldNotBeNull();
-            videos.data.Count.ShouldBeGreaterThan(0);
-            var video = videos.data[0];
+            videos.Data.Count.ShouldBeGreaterThan(0);
+            var video = videos.Data[0];
             video.ShouldNotBeNull();
-            video.uri.ShouldNotBeNull();
-            video.name.ShouldNotBeNull();
-            video.pictures.ShouldBeNull();
+            video.Uri.ShouldNotBeNull();
+            video.Name.ShouldNotBeNull();
+            video.Pictures.ShouldBeNull();
         }
 
         [Fact]
@@ -129,8 +130,8 @@ namespace VimeoDotNet.Tests
             var client = CreateAuthenticatedClient();
             var pictures = await client.GetPicturesAsync(VimeoSettings.VideoId);
             pictures.ShouldNotBeNull();
-            pictures.data.Count.ShouldBeGreaterThan(0);
-            var uriParts = pictures.data[0].uri.Split('/');
+            pictures.Data.Count.ShouldBeGreaterThan(0);
+            var uriParts = pictures.Data[0].Uri.Split('/');
             var pictureId = long.Parse(uriParts[uriParts.Length - 1]);
             var picture = await client.GetPictureAsync(VimeoSettings.VideoId, pictureId);
             picture.ShouldNotBeNull();
@@ -142,7 +143,7 @@ namespace VimeoDotNet.Tests
             var client = await CreateUnauthenticatedClient();
             var video = await client.GetVideoAsync(VimeoSettings.VideoId);
             video.ShouldNotBeNull();
-            video.pictures.uri.ShouldNotBeNull();
+            video.Pictures.Uri.ShouldNotBeNull();
         }
 
         [Fact]
@@ -150,13 +151,13 @@ namespace VimeoDotNet.Tests
         {
             var client = CreateAuthenticatedClient();
             var video = await client.GetVideoAsync(VimeoSettings.VideoId);
-            video.privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Public);
+            video.Privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Public);
             await client.UpdateVideoMetadataAsync(VimeoSettings.VideoId, new VideoUpdateMetadata()
             {
                 EmbedPrivacy = VideoEmbedPrivacyEnum.Private
             });
             video = await client.GetVideoAsync(VimeoSettings.VideoId);
-            video.privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Private);
+            video.Privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Private);
 
             await Should.ThrowAsync<VimeoApiException>(async () =>
                 await client.UpdateVideoAllowedDomainAsync(VimeoSettings.VideoId, "example.com"));
@@ -166,7 +167,7 @@ namespace VimeoDotNet.Tests
                 EmbedPrivacy = VideoEmbedPrivacyEnum.Public
             });
             video = await client.GetVideoAsync(VimeoSettings.VideoId);
-            video.privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Public);
+            video.Privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Public);
         }
 
         [Fact]
@@ -174,13 +175,12 @@ namespace VimeoDotNet.Tests
         {
             var client = CreateAuthenticatedClient();
             var pictures = await client.GetPicturesAsync(VimeoSettings.VideoId);
-            pictures.data.Count.ShouldBeGreaterThan(0);
-            var picture = pictures.data[0];
-            var parts = picture.uri.Split('/');
+            pictures.Data.Count.ShouldBeGreaterThan(0);
+            var picture = pictures.Data[0];
+            var parts = picture.Uri.Split('/');
             var pictureId = long.Parse(parts[parts.Length - 1]);
             var pictureById = await client.GetPictureAsync(VimeoSettings.VideoId, pictureId);
             pictureById.ShouldNotBeNull();
         }
-
     }
 }

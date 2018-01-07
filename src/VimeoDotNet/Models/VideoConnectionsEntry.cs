@@ -5,9 +5,9 @@ using Newtonsoft.Json;
 namespace VimeoDotNet.Models
 {
     /// <summary>
-    /// Album connections entry
+    /// Video connections entry
     /// </summary>
-    public class AlbumConnectionsEntry
+    public class VideoConnectionsEntry
     {
         /// <summary>
         /// URI

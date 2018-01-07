@@ -24,6 +24,7 @@ namespace VimeoDotNet.Authorization
         /// Client Id
         /// </summary>
         private string ClientId { get; }
+
         /// <summary>
         /// Client secret
         /// </summary>
@@ -49,8 +50,10 @@ namespace VimeoDotNet.Authorization
         {
             if (string.IsNullOrWhiteSpace(ClientId))
             {
-                throw new InvalidOperationException("Authorization.ClientId should be a non-null, non-whitespace string");
+                throw new InvalidOperationException(
+                    "Authorization.ClientId should be a non-null, non-whitespace string");
             }
+
             if (string.IsNullOrWhiteSpace(redirectUri))
             {
                 throw new ArgumentException("redirectUri should be a valid Uri");
@@ -71,10 +74,10 @@ namespace VimeoDotNet.Authorization
         {
             try
             {
-              var request = BuildAccessTokenRequest(authorizationCode, redirectUri);
-              var result = await request.ExecuteRequestAsync<AccessTokenResponse>();
-              CheckStatusCodeError(result, "Error getting access token.");
-              return result.Content;
+                var request = BuildAccessTokenRequest(authorizationCode, redirectUri);
+                var result = await request.ExecuteRequestAsync<AccessTokenResponse>();
+                CheckStatusCodeError(result, "Error getting access token.");
+                return result.Content;
             }
             catch (Exception ex)
             {
@@ -82,6 +85,7 @@ namespace VimeoDotNet.Authorization
                 {
                     throw;
                 }
+
                 throw new VimeoApiException("Error getting access token.", ex);
             }
         }
@@ -101,6 +105,7 @@ namespace VimeoDotNet.Authorization
             {
                 return true;
             }
+
             return false;
         }
 
@@ -119,7 +124,8 @@ namespace VimeoDotNet.Authorization
         private ApiRequest BuildUnauthenticatedTokenRequest(List<string> scopes = null)
         {
             if (string.IsNullOrWhiteSpace(ClientId))
-                throw new InvalidOperationException("Authorization.ClientId should be a non-null, non-whitespace string");
+                throw new InvalidOperationException(
+                    "Authorization.ClientId should be a non-null, non-whitespace string");
             if (string.IsNullOrWhiteSpace(ClientSecret))
                 throw new InvalidOperationException(
                     "Authorization.ClientSecret should be a non-null, non-whitespace string");
@@ -137,6 +143,7 @@ namespace VimeoDotNet.Authorization
             request.Body = new FormUrlEncodedContent(parameters);
             return request;
         }
+
         /// <summary>
         /// Build access token request
         /// </summary>
@@ -149,17 +156,21 @@ namespace VimeoDotNet.Authorization
         {
             if (string.IsNullOrWhiteSpace(ClientId))
             {
-                throw new InvalidOperationException("Authorization.ClientId should be a non-null, non-whitespace string");
+                throw new InvalidOperationException(
+                    "Authorization.ClientId should be a non-null, non-whitespace string");
             }
+
             if (string.IsNullOrWhiteSpace(ClientSecret))
             {
                 throw new InvalidOperationException(
                     "Authorization.ClientSecret should be a non-null, non-whitespace string");
             }
+
             if (string.IsNullOrWhiteSpace(authorizationCode))
             {
                 throw new ArgumentException("authorizationCode should be a non-null, non-whitespace string");
             }
+
             if (string.IsNullOrWhiteSpace(redirectUri))
             {
                 throw new ArgumentException("redirectUri should be a valid Uri");
@@ -180,9 +191,9 @@ namespace VimeoDotNet.Authorization
             return request;
         }
 
-        private IApiRequest GenerateVerifyRequest(string AccessToken)
+        private static IApiRequest GenerateVerifyRequest(string accessToken)
         {
-            IApiRequest request = new ApiRequest(AccessToken);
+            IApiRequest request = new ApiRequest(accessToken);
             string endpoint = Endpoints.Verify;
             request.Method = HttpMethod.Get;
             request.Path = endpoint;
@@ -240,9 +251,10 @@ namespace VimeoDotNet.Authorization
                 {
                     sb.Append("&");
                 }
-                
+
                 sb.AppendFormat("{0}={1}", WebUtility.UrlEncode(qsParam.Key), WebUtility.UrlEncode(qsParam.Value));
             }
+
             sb.Insert(0, "?");
             return sb.ToString();
         }
@@ -264,7 +276,7 @@ namespace VimeoDotNet.Authorization
 
         private bool IsSuccessStatusCode(HttpStatusCode statusCode)
         {
-            var code = (int)statusCode;
+            var code = (int) statusCode;
             return code >= 200 && code < 300;
         }
 

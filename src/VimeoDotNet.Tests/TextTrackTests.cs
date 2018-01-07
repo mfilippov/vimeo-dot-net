@@ -15,29 +15,29 @@ namespace VimeoDotNet.Tests
             var client = CreateAuthenticatedClient();
             var textTracks = await client.GetTextTracksAsync(VimeoSettings.VideoId);
             textTracks.ShouldNotBeNull();
-            textTracks.data.Count.ShouldBe(1);
-            var textTrack = textTracks.data[0];
+            textTracks.Data.Count.ShouldBe(1);
+            var textTrack = textTracks.Data[0];
             textTrack.ShouldNotBeNull();
-            textTrack.active.ShouldBeTrue();
-            textTrack.name.ShouldBe("test.vtt");
-            textTrack.type.ShouldBe(TextTrackType.subtitles);
-            textTrack.language.ShouldBe("en");
-            textTrack.uri.ShouldBe("/videos/236281380/texttracks/5303777");
-            textTrack.link.ShouldNotBeEmpty();
+            textTrack.Active.ShouldBeTrue();
+            textTrack.Name.ShouldBe("test.vtt");
+            textTrack.Type.ShouldBe(TextTrackType.SubTitles);
+            textTrack.Language.ShouldBe("en");
+            textTrack.Uri.ShouldBe("/videos/236281380/texttracks/5303777");
+            textTrack.Link.ShouldNotBeEmpty();
         }
-       
+
         [Fact]
         public async Task ShouldCorrectlyGetTextTrack()
         {
             var client = CreateAuthenticatedClient();
             var textTrack = await client.GetTextTrackAsync(VimeoSettings.VideoId, VimeoSettings.TextTrackId);
             textTrack.ShouldNotBeNull();
-            textTrack.active.ShouldBeTrue();
-            textTrack.name.ShouldBe("test.vtt");
-            textTrack.type.ShouldBe(TextTrackType.subtitles);
-            textTrack.language.ShouldBe("en");
-            textTrack.uri.ShouldBe("/videos/236281380/texttracks/5303777");
-            textTrack.link.ShouldNotBeEmpty();
+            textTrack.Active.ShouldBeTrue();
+            textTrack.Name.ShouldBe("test.vtt");
+            textTrack.Type.ShouldBe(TextTrackType.SubTitles);
+            textTrack.Language.ShouldBe("en");
+            textTrack.Uri.ShouldBe("/videos/236281380/texttracks/5303777");
+            textTrack.Link.ShouldNotBeEmpty();
         }
 
         [Fact]
@@ -47,30 +47,32 @@ namespace VimeoDotNet.Tests
             TextTrack textTrack;
             const string textTrackName = "UploadtTest.vtt";
             const string textTrackLanguage = "en";
-            using (var file = new BinaryContent(GetFileFromEmbeddedResources(TestTextTrackFilePath), "application/octet-stream"))
+            using (var file = new BinaryContent(GetFileFromEmbeddedResources(TestTextTrackFilePath),
+                "application/octet-stream"))
             {
                 textTrack = await client.UploadTextTrackFileAsync(
                     file,
                     VimeoSettings.VideoId,
                     new TextTrack
                     {
-                        active = false,
-                        name = textTrackName,
-                        language = textTrackLanguage,
-                        type = TextTrackType.captions
+                        Active = false,
+                        Name = textTrackName,
+                        Language = textTrackLanguage,
+                        Type = TextTrackType.Captions
                     });
             }
+
             textTrack.ShouldNotBeNull();
-            textTrack.name.ShouldBe(textTrackName);
-            textTrack.active.ShouldBeFalse();
-            textTrack.language.ShouldBe(textTrackLanguage);
-            textTrack.uri.ShouldNotBeEmpty();
-            textTrack.link.ShouldNotBeEmpty();
-            
-            var uri = textTrack.uri;
+            textTrack.Name.ShouldBe(textTrackName);
+            textTrack.Active.ShouldBeFalse();
+            textTrack.Language.ShouldBe(textTrackLanguage);
+            textTrack.Uri.ShouldNotBeEmpty();
+            textTrack.Link.ShouldNotBeEmpty();
+
+            var uri = textTrack.Uri;
             var trackId = Convert.ToInt64(uri.Substring(uri.LastIndexOf('/') + 1));
             await client.DeleteTextTrackAsync(VimeoSettings.VideoId, trackId);
-            
+
             var texttrack = await client.GetTextTrackAsync(VimeoSettings.VideoId, trackId);
             texttrack.ShouldBeNull();
         }
@@ -85,45 +87,45 @@ namespace VimeoDotNet.Tests
 
             // update the text track record with some new values...
             const string testName = "NewTrackName";
-            const TextTrackType testType = TextTrackType.metadata;
+            const TextTrackType testType = TextTrackType.Metadata;
             const string testLanguage = "fr";
             const bool testActive = false;
 
             var updated = await client.UpdateTextTrackAsync(
-                                    VimeoSettings.VideoId,
-                                    VimeoSettings.TextTrackId,
-                                    new TextTrack
-                                    {
-                                        name = testName,
-                                        type = testType,
-                                        language = testLanguage,
-                                        active = testActive
-                                    });
+                VimeoSettings.VideoId,
+                VimeoSettings.TextTrackId,
+                new TextTrack
+                {
+                    Name = testName,
+                    Type = testType,
+                    Language = testLanguage,
+                    Active = testActive
+                });
 
             // inspect the result and ensure the values match what we expect...
-            updated.name.ShouldBe(testName);
-            updated.type.ShouldNotBeNull();
-            updated.type.ShouldBe(testType);
-            updated.language.ShouldBe(testLanguage);
-            updated.active.ShouldBeFalse();
+            updated.Name.ShouldBe(testName);
+            updated.Type.ShouldNotBeNull();
+            updated.Type.ShouldBe(testType);
+            updated.Language.ShouldBe(testLanguage);
+            updated.Active.ShouldBeFalse();
 
             // restore the original values...
             var final = await client.UpdateTextTrackAsync(
-                                    VimeoSettings.VideoId,
-                                    VimeoSettings.TextTrackId,
-                                    new TextTrack
-                                    {
-                                        name = original.name,
-                                        type = original.type,
-                                        language = original.language,
-                                        active = original.active
-                                    });
+                VimeoSettings.VideoId,
+                VimeoSettings.TextTrackId,
+                new TextTrack
+                {
+                    Name = original.Name,
+                    Type = original.Type,
+                    Language = original.Language,
+                    Active = original.Active
+                });
 
             // inspect the result and ensure the values match our originals...
-            final.name.ShouldBe(original.name);
-            final.type.ShouldBe(original.type);
-            final.language.ShouldBe(original.language);
-            final.active.ShouldBe(original.active);
+            final.Name.ShouldBe(original.Name);
+            final.Type.ShouldBe(original.Type);
+            final.Language.ShouldBe(original.Language);
+            final.Active.ShouldBe(original.Active);
         }
     }
 }

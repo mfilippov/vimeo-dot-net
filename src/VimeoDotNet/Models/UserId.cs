@@ -7,7 +7,7 @@ namespace VimeoDotNet.Models
         public static UserId Me => -1;
 
         public bool IsMe => Id == -1;
-        
+
         private UserId(long id)
         {
             Id = id;

@@ -10,17 +10,14 @@ using VimeoDotNet.Constants;
 
 namespace VimeoDotNet.Net
 {
-    /// <summary>
-    /// Api request
-    /// </summary>
+    /// <inheritdoc />
     public class ApiRequest : IApiRequest
     {
         #region Private Fields
 
-        private readonly Dictionary<string, string> _hashValues = new Dictionary<string, string>();
         private readonly Dictionary<string, string> _queryString = new Dictionary<string, string>();
         private readonly Dictionary<string, string> _urlSegments = new Dictionary<string, string>();
-        private readonly List<string> _fields = new List<string>();
+
         private static readonly JsonSerializerSettings DateFormatSettings = new JsonSerializerSettings
         {
             DateFormatString = "yyyy-MM-ddTHH:mm:sszzz",
@@ -33,44 +30,29 @@ namespace VimeoDotNet.Net
 
         #region Public Properties
 
-        /// <summary>
-        /// Api version
-        /// </summary>
+        /// <inheritdoc />
         public string ApiVersion { get; set; }
-        /// <summary>
-        /// response type
-        /// </summary>
+        /// <inheritdoc />
         public string ResponseType { get; set; }
-        /// <summary>
-        /// Protocol
-        /// </summary>
+        /// <inheritdoc />
         public string Protocol { get; set; }
 
-        /// <summary>
-        /// Host
-        /// </summary>
+        /// <inheritdoc />
         public string Host { get; set; }
 
-        /// <summary>
-        /// Port
-        /// </summary>
+        /// <inheritdoc />
         public int Port { get; set; }
 
-        /// <summary>
-        /// Method
-        /// </summary>
+        /// <inheritdoc />
         public HttpMethod Method { get; set; }
 
-        /// <summary>
-        /// Path
-        /// </summary>
+        /// <inheritdoc />
         public string Path
         {
-            get { return _path; }
+            get => _path;
             set
             {
-                Uri parsed;
-                if (Uri.TryCreate(value, UriKind.Absolute, out parsed))
+                if (Uri.TryCreate(value, UriKind.Absolute, out var parsed))
                 {
                     Protocol = parsed.Scheme;
                     Host = parsed.Host;
@@ -84,43 +66,22 @@ namespace VimeoDotNet.Net
             }
         }
 
-        /// <summary>
-        /// Body
-        /// </summary>
+        /// <inheritdoc />
         public HttpContent Body { get; set; }
 
-        /// <summary>
-        ///
-        /// </summary>
-        public IDictionary<string, string> Query
-        {
-            get { return _queryString; }
-        }
+        /// <inheritdoc />
+        public IDictionary<string, string> Query => _queryString;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public List<string> Fields
-        {
-            get { return _fields; }
-        }
+        /// <inheritdoc />
+        public List<string> Fields { get; } = new List<string>();
 
-        /// <summary>
-        ///
-        /// </summary>
-        public IDictionary<string, string> UrlSegments
-        {
-            get { return _urlSegments; }
-        }
+        /// <inheritdoc />
+        public IDictionary<string, string> UrlSegments => _urlSegments;
 
-        /// <summary>
-        /// Binary content
-        /// </summary>
+        /// <inheritdoc />
         public byte[] BinaryContent { get; set; }
 
-        /// <summary>
-        /// Exclude authorization header
-        /// </summary>
+        /// <inheritdoc />
         public bool ExcludeAuthorizationHeader { get; set; }
 
         #endregion
@@ -130,20 +91,21 @@ namespace VimeoDotNet.Net
         /// <summary>
         /// Rest client
         /// </summary>
-        protected static readonly HttpClient Client = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false });
+        private static readonly HttpClient Client = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false });
 
         /// <summary>
         /// Client Id
         /// </summary>
-        protected string ClientId { get; set; }
+        private string ClientId { get; }
+
         /// <summary>
         /// Client secret
         /// </summary>
-        protected string ClientSecret { get; set; }
+        private string ClientSecret { get; }
         /// <summary>
         /// Access token
         /// </summary>
-        protected string AccessToken { get; set; }
+        private string AccessToken { get; }
 
         #endregion
 
@@ -163,11 +125,7 @@ namespace VimeoDotNet.Net
             ExcludeAuthorizationHeader = false;
         }
 
-        /// <summary>
-        /// Create new request with ClientId and ClientSecret
-        /// </summary>
-        /// <param name="clientId">ClientId</param>
-        /// <param name="clientSecret">ClientSecret</param>
+        /// <inheritdoc />
         public ApiRequest(string clientId, string clientSecret)
             : this()
         {
@@ -175,10 +133,7 @@ namespace VimeoDotNet.Net
             ClientSecret = clientSecret;
         }
 
-        /// <summary>
-        /// Create new request with AccessToken
-        /// </summary>
-        /// <param name="accessToken">AccessToken</param>
+        /// <inheritdoc />
         public ApiRequest(string accessToken)
             : this()
         {
@@ -189,10 +144,7 @@ namespace VimeoDotNet.Net
 
         #region Public Methods
 
-        /// <summary>
-        /// Execute request asynchronously
-        /// </summary>
-        /// <returns>Rest reponse</returns>
+        /// <inheritdoc />
         public async Task<IApiResponse> ExecuteRequestAsync()
         {
             var response = await Client.SendAsync(PrepareRequest());
@@ -200,11 +152,7 @@ namespace VimeoDotNet.Net
             return new ApiResponse(response.StatusCode, response.Headers, text);
         }
 
-        /// <summary>
-        /// Execute request asynchronously
-        /// </summary>
-        /// <typeparam name="T">Type</typeparam>
-        /// <returns>Rest repons</returns>
+        /// <inheritdoc />
         public async Task<IApiResponse<T>> ExecuteRequestAsync<T>() where T : new()
         {
             var request = PrepareRequest();
@@ -222,7 +170,7 @@ namespace VimeoDotNet.Net
         /// PrepareRequest
         /// </summary>
         /// <returns>Rest request</returns>
-        protected HttpRequestMessage PrepareRequest()
+        private HttpRequestMessage PrepareRequest()
         {
             SetDefaults();
             var request = new HttpRequestMessage(Method, BuildUrl());
@@ -239,7 +187,7 @@ namespace VimeoDotNet.Net
         /// Set request headers
         /// </summary>
         /// <param name="request">Request</param>
-        protected void SetHeaders(HttpRequestMessage request)
+        private void SetHeaders(HttpRequestMessage request)
         {
             request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse(BuildAcceptsHeader()));
             request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
@@ -248,7 +196,7 @@ namespace VimeoDotNet.Net
         /// <summary>
         /// Set authentication
         /// </summary>
-        protected void SetAuth(HttpRequestMessage request)
+        private void SetAuth(HttpRequestMessage request)
         {
             if (!string.IsNullOrWhiteSpace(AccessToken))
             {
@@ -265,7 +213,7 @@ namespace VimeoDotNet.Net
         /// <summary>
         /// Set defaults
         /// </summary>
-        protected void SetDefaults()
+        private void SetDefaults()
         {
             Protocol = string.IsNullOrWhiteSpace(Protocol) ? Request.DefaultProtocol : Protocol;
             Host = string.IsNullOrWhiteSpace(Host) ? Request.DefaultHostName : Host;
@@ -282,9 +230,9 @@ namespace VimeoDotNet.Net
         /// Build accepts header
         /// </summary>
         /// <returns>Accepts header</returns>
-        protected string BuildAcceptsHeader()
+        private string BuildAcceptsHeader()
         {
-            return string.Format("{0};{1}", ResponseType, ApiVersion);
+            return $"{ResponseType};{ApiVersion}";
         }
 
         /// <summary>
@@ -292,22 +240,18 @@ namespace VimeoDotNet.Net
         /// </summary>
         /// <param name="protocol">Protocol</param>
         /// <returns>Port</returns>
-        protected int GetDefaultPort(string protocol)
+        private static int GetDefaultPort(string protocol)
         {
-            if (Protocol == Request.ProtocolHttps)
-            {
-                return Request.DefaultHttpsPort;
-            }
-            return Request.DefaultHttpPort;
+            return protocol == Request.ProtocolHttps ? Request.DefaultHttpsPort : Request.DefaultHttpPort;
         }
 
         /// <summary>
         /// Retrun base URL
         /// </summary>
         /// <returns>Base URL</returns>
-        protected string GetBaseUrl()
+        private string GetBaseUrl()
         {
-            string url = Protocol.ToLower() + "://";
+            var url = Protocol.ToLower() + "://";
 
             if (Host.EndsWith("/"))
             {
@@ -327,7 +271,7 @@ namespace VimeoDotNet.Net
         /// Build request URL
         /// </summary>
         /// <returns>Request URL</returns>
-        protected string BuildUrl()
+        private string BuildUrl()
         {
             var sb = new StringBuilder();
             sb.Append(GetBaseUrl());
@@ -338,9 +282,9 @@ namespace VimeoDotNet.Net
                 path = path.Replace($"{{{urlSegment.Key}}}", urlSegment.Value);
             }
             sb.Append(path);
-            if (_fields.Count > 0)
+            if (Fields.Count > 0)
             {
-                Query.Add("fields", string.Join(",", _fields));
+                Query.Add("fields", string.Join(",", Fields));
             }
             if (Query.Keys.Count == 0)
                 return sb.ToString();

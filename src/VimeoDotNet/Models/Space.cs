@@ -1,24 +1,32 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
     /// Space
     /// </summary>
-    [Serializable]
     public class Space
     {
         /// <summary>
         /// Max
         /// </summary>
-        public long max { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "max")]
+        public long Max { get; set; }
+
         /// <summary>
         /// Free
         /// </summary>
-        public long free { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "free")]
+        public long Free { get; set; }
+
         /// <summary>
         /// Used
         /// </summary>
-        public long used { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "used")]
+        public long Used { get; set; }
     }
 }

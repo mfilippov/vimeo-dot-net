@@ -1,24 +1,33 @@
-﻿using System;
+﻿
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
     /// User  metadata
     /// </summary>
-    [Serializable]
     public class UserMetadata
     {
         /// <summary>
         /// Connections
         /// </summary>
-        public UserConnections connections { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "connections")]
+        public UserConnections Connections { get; set; }
+
         /// <summary>
         /// Interactions
         /// </summary>
-        public UserInteractions interactions { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "interactions")]
+        public UserInteractions Interactions { get; set; }
+
         /// <summary>
         /// Follower
         /// </summary>
-        public Follower follower { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "follower")]
+        public Follower Follower { get; set; }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 using VimeoDotNet.Enums;
 using VimeoDotNet.Helpers;
 
@@ -8,77 +10,112 @@ namespace VimeoDotNet.Models
     /// <summary>
     /// User
     /// </summary>
-    [Serializable]
     public class User
     {
         /// <summary>
         /// Id
         /// </summary>
-        public long? id
-        {
-            get { return ModelHelpers.ParseModelUriId(uri); }
-        }
+        public long? Id => ModelHelpers.ParseModelUriId(Uri);
 
         /// <summary>
         /// URI
         /// </summary>
-        public string uri { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "uri")]
+        public string Uri { get; set; }
+
         /// <summary>
         /// Name
         /// </summary>
-        public string name { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
         /// <summary>
         /// Link
         /// </summary>
-        public string link { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "link")]
+        public string Link { get; set; }
+
         /// <summary>
         /// Location
         /// </summary>
-        public string location { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "location")]
+        public string Location { get; set; }
+
         /// <summary>
         /// Bio
         /// </summary>
-        public string bio { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "bio")]
+        public string Bio { get; set; }
+
         /// <summary>
         /// Created time
         /// </summary>
-        public DateTime created_time { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "created_time")]
+        public DateTime CreatedTime { get; set; }
+
         /// <summary>
         /// Account
         /// </summary>
-        public string account { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "account")]
+        public string Account { get; set; }
+
         /// <summary>
         /// Content filter
         /// </summary>
-        public string[] content_filter { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "content_filter")]
+        public string[] ContentFilter { get; set; }
+
         /// <summary>
         /// Pictures
         /// </summary>
-        public Pictures pictures { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "pictures")]
+        public Pictures Pictures { get; set; }
+
         /// <summary>
         /// Web sites
         /// </summary>
-        public List<Website> websites { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "websites")]
+        public List<Website> Websites { get; set; }
+
         /// <summary>
         /// Stats
         /// </summary>
-        public UserStats stats { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "stats")]
+        public UserStats Stats { get; set; }
+
         /// <summary>
         /// Metadata
         /// </summary>
-        public UserMetadata metadata { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "metadata")]
+        public UserMetadata Metadata { get; set; }
+
         /// <summary>
         /// Upload quota
         /// </summary>
-        public UserUploadQuota upload_quota { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "upload_quota")]
+        public UserUploadQuota UploadQuota { get; set; }
 
         /// <summary>
         /// Account type
         /// </summary>
+        [PublicAPI]
         public AccountTypeEnum AccountType
         {
-            get { return ModelHelpers.GetEnumValue<AccountTypeEnum>(account); }
-            set { account = ModelHelpers.GetEnumString(value); }
+            get { return ModelHelpers.GetEnumValue<AccountTypeEnum>(Account); }
+            set { Account = ModelHelpers.GetEnumString(value); }
         }
     }
 }

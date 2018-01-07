@@ -14,12 +14,12 @@ namespace VimeoDotNet.Tests
             var client = CreateAuthenticatedClient();
             var ticket = await client.GetUploadTicketAsync();
             ticket.ShouldNotBeNull();
-            ticket.complete_uri.ShouldNotBeEmpty();
-            ticket.ticket_id.ShouldNotBeEmpty();
-            ticket.upload_link.ShouldNotBeEmpty();
-            ticket.upload_link_secure.ShouldNotBeEmpty();
-            ticket.uri.ShouldNotBeEmpty();
-            ticket.user.id.ShouldBe(VimeoSettings.UserId);
+            ticket.CompleteUri.ShouldNotBeEmpty();
+            ticket.TicketId.ShouldNotBeEmpty();
+            ticket.UploadLink.ShouldNotBeEmpty();
+            ticket.UploadLinkSecure.ShouldNotBeEmpty();
+            ticket.Uri.ShouldNotBeEmpty();
+            ticket.User.Id.ShouldBe(VimeoSettings.UserId);
         }
 
         [Fact]
@@ -28,12 +28,12 @@ namespace VimeoDotNet.Tests
             var client = CreateAuthenticatedClient();
             var ticket = await client.GetReplaceVideoUploadTicketAsync(VimeoSettings.VideoId);
             ticket.ShouldNotBeNull();
-            ticket.complete_uri.ShouldNotBeEmpty();
-            ticket.ticket_id.ShouldNotBeEmpty();
-            ticket.upload_link.ShouldNotBeEmpty();
-            ticket.upload_link_secure.ShouldNotBeEmpty();
-            ticket.uri.ShouldNotBeEmpty();
-            ticket.user.id.ShouldBe(VimeoSettings.UserId);
+            ticket.CompleteUri.ShouldNotBeEmpty();
+            ticket.TicketId.ShouldNotBeEmpty();
+            ticket.UploadLink.ShouldNotBeEmpty();
+            ticket.UploadLinkSecure.ShouldNotBeEmpty();
+            ticket.Uri.ShouldNotBeEmpty();
+            ticket.User.Id.ShouldBe(VimeoSettings.UserId);
         }
 
         [Fact]
@@ -46,6 +46,7 @@ namespace VimeoDotNet.Tests
             {
                 GetFileFromEmbeddedResources(TestFilePath).CopyTo(fs);
             }
+
             using (var file = new BinaryContent(tempFilePath))
             {
                 file.ContentType.ShouldBe("video/mp4");
@@ -55,6 +56,7 @@ namespace VimeoDotNet.Tests
                 completedRequest.ClipId.ShouldNotBeNull();
                 await client.DeleteVideoAsync(completedRequest.ClipId.Value);
             }
+
             completedRequest.ShouldNotBeNull();
             completedRequest.IsVerifiedComplete.ShouldBeTrue();
             completedRequest.BytesWritten.ShouldBe(length);
@@ -81,6 +83,7 @@ namespace VimeoDotNet.Tests
                 completedRequest.ClipId.ShouldNotBeNull();
                 await client.DeleteVideoAsync(completedRequest.ClipId.Value);
             }
+
             completedRequest.ShouldNotBeNull();
             completedRequest.IsVerifiedComplete.ShouldBeTrue();
             completedRequest.BytesWritten.ShouldBe(length);
@@ -96,7 +99,7 @@ namespace VimeoDotNet.Tests
             IUploadRequest completedRequest;
             var stream = GetFileFromEmbeddedResources(TestFilePath);
             var buffer = new byte[stream.Length];
-            await stream.ReadAsync(buffer, 0, (int)stream.Length);
+            await stream.ReadAsync(buffer, 0, (int) stream.Length);
             using (var file = new BinaryContent(buffer, "video/mp4"))
             {
                 length = file.Data.Length;
@@ -105,6 +108,7 @@ namespace VimeoDotNet.Tests
                 completedRequest.ClipId.ShouldNotBeNull();
                 await client.DeleteVideoAsync(completedRequest.ClipId.Value);
             }
+
             completedRequest.ShouldNotBeNull();
             completedRequest.IsVerifiedComplete.ShouldBeTrue();
             completedRequest.BytesWritten.ShouldBe(length);
@@ -119,9 +123,9 @@ namespace VimeoDotNet.Tests
             var client = CreateAuthenticatedClient();
             var video = await client.UploadPullLinkAsync("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");
             video.ShouldNotBeNull();
-            video.id.ShouldNotBeNull();
-            await client.DeleteVideoAsync(video.id.Value);
-            video = await client.GetVideoAsync(video.id.Value);
+            video.Id.ShouldNotBeNull();
+            await client.DeleteVideoAsync(video.Id.Value);
+            video = await client.GetVideoAsync(video.Id.Value);
             video.ShouldBeNull();
         }
 

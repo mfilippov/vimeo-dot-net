@@ -18,6 +18,7 @@ namespace VimeoDotNet.Authorization
         /// <returns>Access token response</returns>
         /// [Obsolete("Use async API instead sync wrapper")]
         AccessTokenResponse GetAccessToken(string authorizationCode, string redirectUri);
+
         /// <summary>
         /// GetAccessTokenAsync
         /// </summary>
@@ -25,6 +26,7 @@ namespace VimeoDotNet.Authorization
         /// <param name="redirectUri">RedirectUri</param>
         /// <returns>Access token response</returns>
         Task<AccessTokenResponse> GetAccessTokenAsync(string authorizationCode, string redirectUri);
+
         /// <summary>
         /// VerifyAccessToken
         /// </summary>
@@ -32,6 +34,7 @@ namespace VimeoDotNet.Authorization
         /// <returns>true if access token works, false otherwise</returns>
         /// [Obsolete("Use async API instead sync wrapper")]
         bool VerifyAccessToken(string accessToken);
+
         /// <summary>
         /// VerifyAccessToken
         /// </summary>
@@ -39,11 +42,13 @@ namespace VimeoDotNet.Authorization
         /// <returns>true if access token works, false otherwise</returns>
         /// [Obsolete("Use async API instead sync wrapper")]
         Task<bool> VerifyAccessTokenAsync(string accessToken);
+
         /// <summary>
         /// Return unauthenticated token
         /// </summary>
         /// <returns>Access token response</returns>
         Task<AccessTokenResponse> GetUnauthenticatedTokenAsync();
+
         /// <summary>
         /// GetAuthorizationEndpoint
         /// </summary>

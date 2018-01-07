@@ -13,13 +13,13 @@ namespace VimeoDotNet.Tests
         {
             var client = CreateAuthenticatedClient();
             var albums = await client.GetAlbumsAsync(UserId.Me);
-            albums.total.ShouldBe(1);
-            albums.per_page.ShouldBe(25);
-            albums.data.Count.ShouldBe(1);
-            albums.paging.next.ShouldBeNull();
-            albums.paging.previous.ShouldBeNull();
-            albums.paging.first.ShouldBe("/me/albums?page=1");
-            albums.paging.last.ShouldBe("/me/albums?page=1");
+            albums.Total.ShouldBe(1);
+            albums.PerPage.ShouldBe(25);
+            albums.Data.Count.ShouldBe(1);
+            albums.Paging.Next.ShouldBeNull();
+            albums.Paging.Previous.ShouldBeNull();
+            albums.Paging.First.ShouldBe("/me/albums?page=1");
+            albums.Paging.Last.ShouldBe("/me/albums?page=1");
         }
 
         [Fact]
@@ -27,16 +27,16 @@ namespace VimeoDotNet.Tests
         {
             var client = CreateAuthenticatedClient();
             var albums = await client.GetAlbumsAsync(VimeoSettings.UserId);
-            albums.total.ShouldBe(1);
-            albums.per_page.ShouldBe(25);
-            albums.data.Count.ShouldBe(1);
-            albums.paging.next.ShouldBeNull();
-            albums.paging.previous.ShouldBeNull();
-            albums.paging.first.ShouldBe($"/users/{VimeoSettings.UserId}/albums?page=1");
-            albums.paging.last.ShouldBe($"/users/{VimeoSettings.UserId}/albums?page=1");
-            var album = albums.data[0];
-            album.name.ShouldBe("Test album");
-            album.description.ShouldBe("Test description");
+            albums.Total.ShouldBe(1);
+            albums.PerPage.ShouldBe(25);
+            albums.Data.Count.ShouldBe(1);
+            albums.Paging.Next.ShouldBeNull();
+            albums.Paging.Previous.ShouldBeNull();
+            albums.Paging.First.ShouldBe($"/users/{VimeoSettings.UserId}/albums?page=1");
+            albums.Paging.Last.ShouldBe($"/users/{VimeoSettings.UserId}/albums?page=1");
+            var album = albums.Data[0];
+            album.Name.ShouldBe("Test album");
+            album.Description.ShouldBe("Test description");
         }
 
         [Fact]
@@ -46,7 +46,8 @@ namespace VimeoDotNet.Tests
 
             // create a new album...
             const string originalName = "Unit Test Album";
-            const string originalDesc = "This album was created via an automated test, and should be deleted momentarily...";
+            const string originalDesc =
+                "This album was created via an automated test, and should be deleted momentarily...";
 
             var newAlbum = await client.CreateAlbumAsync(UserId.Me, new EditAlbumParameters
             {
@@ -58,14 +59,14 @@ namespace VimeoDotNet.Tests
             });
 
             newAlbum.ShouldNotBeNull();
-            newAlbum.name.ShouldBe(originalName);
+            newAlbum.Name.ShouldBe(originalName);
 
-            newAlbum.description.ShouldBe(originalDesc);
+            newAlbum.Description.ShouldBe(originalDesc);
 
             // retrieve albums for the current user...there should be at least one now...
             var albums = await client.GetAlbumsAsync(UserId.Me);
 
-            albums.total.ShouldBeGreaterThan(0);
+            albums.Total.ShouldBeGreaterThan(0);
 
             // update the album...
             const string updatedName = "Unit Test Album (Updated)";
@@ -77,7 +78,7 @@ namespace VimeoDotNet.Tests
                 Privacy = EditAlbumPrivacyOption.Anybody
             });
 
-            updatedAlbum.name.ShouldBe(updatedName);
+            updatedAlbum.Name.ShouldBe(updatedName);
 
             // delete the album...
             albumId = updatedAlbum.GetAlbumId();
@@ -94,7 +95,8 @@ namespace VimeoDotNet.Tests
 
             // create a new album...
             const string originalName = "Unit Test Album";
-            const string originalDesc = "This album was created via an automated test, and should be deleted momentarily...";
+            const string originalDesc =
+                "This album was created via an automated test, and should be deleted momentarily...";
 
             var newAlbum = await client.CreateAlbumAsync(VimeoSettings.PublicUserId, new EditAlbumParameters
             {
@@ -106,26 +108,27 @@ namespace VimeoDotNet.Tests
             });
 
             newAlbum.ShouldNotBeNull();
-            newAlbum.name.ShouldBe(originalName);
+            newAlbum.Name.ShouldBe(originalName);
 
-            newAlbum.description.ShouldBe(originalDesc);
+            newAlbum.Description.ShouldBe(originalDesc);
 
             // retrieve albums for the current user...there should be at least one now...
             var albums = await client.GetAlbumsAsync(VimeoSettings.PublicUserId);
 
-            albums.total.ShouldBeGreaterThan(0);
+            albums.Total.ShouldBeGreaterThan(0);
 
             // update the album...
             const string updatedName = "Unit Test Album (Updated)";
             var albumId = newAlbum.GetAlbumId();
             albumId.ShouldNotBeNull();
-            var updatedAlbum = await client.UpdateAlbumAsync(VimeoSettings.PublicUserId, albumId.Value, new EditAlbumParameters
-            {
-                Name = updatedName,
-                Privacy = EditAlbumPrivacyOption.Anybody
-            });
+            var updatedAlbum = await client.UpdateAlbumAsync(VimeoSettings.PublicUserId, albumId.Value,
+                new EditAlbumParameters
+                {
+                    Name = updatedName,
+                    Privacy = EditAlbumPrivacyOption.Anybody
+                });
 
-            updatedAlbum.name.ShouldBe(updatedName);
+            updatedAlbum.Name.ShouldBe(updatedName);
 
             // delete the album...
             albumId = updatedAlbum.GetAlbumId();
@@ -139,9 +142,9 @@ namespace VimeoDotNet.Tests
         public async Task GetAlbumsShouldCorrectlyWorkWithParameters()
         {
             var client = CreateAuthenticatedClient();
-            var albums = await client.GetAlbumsAsync(UserId.Me, new GetAlbumsParameters { PerPage = 50 });
+            var albums = await client.GetAlbumsAsync(UserId.Me, new GetAlbumsParameters {PerPage = 50});
             albums.ShouldNotBeNull();
-            albums.per_page.ShouldBe(50);
+            albums.PerPage.ShouldBe(50);
         }
     }
 }

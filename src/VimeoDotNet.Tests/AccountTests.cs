@@ -21,9 +21,9 @@ namespace VimeoDotNet.Tests
             var client = CreateAuthenticatedClient();
             var user = await client.GetUserInformationAsync(VimeoSettings.UserId);
             user.ShouldNotBeNull();
-            user.id.ShouldNotBeNull();
-            user.id.ShouldNotBeNull();
-            user.id.Value.ShouldBe(VimeoSettings.UserId);
+            user.Id.ShouldNotBeNull();
+            user.Id.ShouldNotBeNull();
+            user.Id.Value.ShouldBe(VimeoSettings.UserId);
         }
 
         [Fact]
@@ -50,53 +50,53 @@ namespace VimeoDotNet.Tests
             // the vimeo api will set string fields to null if the value passed in is an empty string
             // so check against null if that is what we are passing in, otherwise, expect the passed value...
             if (string.IsNullOrEmpty(testName))
-                updated.name.ShouldBeNull();
+                updated.Name.ShouldBeNull();
             else
-                updated.name.ShouldBe(testName);
+                updated.Name.ShouldBe(testName);
             if (string.IsNullOrEmpty(testBio))
-                updated.bio.ShouldBeNull();
+                updated.Bio.ShouldBeNull();
             else
-                updated.bio.ShouldBe(testBio);
+                updated.Bio.ShouldBe(testBio);
 
             if (string.IsNullOrEmpty(testLocation))
-                updated.location.ShouldBeNull();
+                updated.Location.ShouldBeNull();
             else
-                updated.location.ShouldBe(testLocation);
+                updated.Location.ShouldBe(testLocation);
 
             // restore the original values...
             var final = await client.UpdateAccountInformationAsync(new EditUserParameters
             {
-                Name = original.name ?? string.Empty,
-                Bio = original.bio ?? string.Empty,
-                Location = original.location ?? string.Empty
+                Name = original.Name ?? string.Empty,
+                Bio = original.Bio ?? string.Empty,
+                Location = original.Location ?? string.Empty
             });
 
             // inspect the result and ensure the values match our originals...
-            if (string.IsNullOrEmpty(original.name))
+            if (string.IsNullOrEmpty(original.Name))
             {
-                final.name.ShouldBeNull();
+                final.Name.ShouldBeNull();
             }
             else
             {
-                final.name.ShouldBe(original.name);
+                final.Name.ShouldBe(original.Name);
             }
 
-            if (string.IsNullOrEmpty(original.bio))
+            if (string.IsNullOrEmpty(original.Bio))
             {
-                final.bio.ShouldBeNull();
+                final.Bio.ShouldBeNull();
             }
             else
             {
-                final.bio.ShouldBe(original.bio);
+                final.Bio.ShouldBe(original.Bio);
             }
 
-            if (string.IsNullOrEmpty(original.location))
+            if (string.IsNullOrEmpty(original.Location))
             {
-                final.location.ShouldBeNull();
+                final.Location.ShouldBeNull();
             }
             else
             {
-                final.location.ShouldBe(original.location);
+                final.Location.ShouldBe(original.Location);
             }
         }
     }

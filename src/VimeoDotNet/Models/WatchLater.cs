@@ -1,29 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
     /// Watch later
     /// </summary>
-    [Serializable]
     public class WatchLater
     {
         /// <summary>
         /// Added
         /// </summary>
-        public bool added { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "added")]
+        public bool Added { get; set; }
+
         /// <summary>
         /// Options
         /// </summary>
-        public List<string> options { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "options")]
+        public List<string> Options { get; set; }
+
         /// <summary>
         /// Added time
         /// </summary>
-        public DateTime? added_time { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "added_time")]
+        public DateTime? AddedTime { get; set; }
+
         /// <summary>
         /// URI
         /// </summary>
-        public string uri { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "uri")]
+        public string Uri { get; set; }
     }
 }
