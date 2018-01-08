@@ -51,7 +51,7 @@ namespace VimeoDotNet
         /// Get video by ClipId asynchronously
         /// </summary>
         /// <param name="clipId">ClipId</param>
-        /// <param name="fields"></param>
+        /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter</param>
         /// <returns>Video</returns>
         Task<Video> GetVideoAsync(long clipId, string[] fields = null);
 
@@ -61,7 +61,7 @@ namespace VimeoDotNet
         /// <param name="userId">UserId</param>
         /// <param name="perPage">Number of items to show on each page. Max 50</param>
         /// <param name="query">Search query</param>
-        /// <param name="fields"></param>
+        /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter</param>
         /// <param name="page">The page number to show</param>
         /// <returns>Paginated videos</returns>
         Task<Paginated<Video>> GetVideosAsync(UserId userId, int? page = null, int? perPage = null,
@@ -305,6 +305,53 @@ namespace VimeoDotNet
         /// Return rate limit reset time
         /// </summary>
         DateTime RateLimitReset { get; }
+
+        #endregion
+
+        #region Tags
+
+        /// <summary>
+        /// Add a tag to a video
+        /// </summary>
+        /// <param name="clipId">Clip Id</param>
+        /// <param name="tag">Tag</param>
+        /// <returns>Tag</returns>
+        Task<Tag> AddVideoTagAsync(long clipId, string tag);
+
+        /// <summary>
+        /// Delete a tag from a video
+        /// </summary>
+        Task DeleteVideoTagAsync(long clipId, string tag);
+
+        /// <summary>
+        /// List a videos' tags
+        /// </summary>
+        /// <param name="clipId">Clip Id</param>
+        /// <param name="page">Page number</param>
+        /// <param name="perPage">Tags per page</param>
+        /// <returns></returns>
+        /// <returns>Paginated tags</returns>
+        Task<Paginated<Tag>> GetVideoTags(long clipId, int? page = null, int? perPage = null);
+
+        /// <summary>
+        /// Get a tag
+        /// </summary>
+        /// <param name="tag">Tag word</param>
+        /// <returns>Tag</returns>
+        Task<Tag> GetVideoTagAsync(string tag);
+
+        /// <summary>
+        /// Get all videos tagged with a specific word
+        /// </summary>
+        /// <param name="tag">Tag id</param>
+        /// <param name="page">Page number</param>
+        /// <param name="perPage">Video per page</param>
+        /// <param name="sort">Technique used to sort the results.</param>
+        /// <param name="direction">The direction that the results are sorted.</param>
+        /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter</param>
+        /// <returns>Paginated videos</returns>
+        Task<Paginated<Video>> GetVideoByTag(string tag,  int? page = null,
+            int? perPage = null, GetVideoByTagSort? sort = null, GetVideoByTagDirection? direction = null, string[] fields = null);
 
         #endregion
     }

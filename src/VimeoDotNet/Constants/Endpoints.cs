@@ -74,7 +74,8 @@
         public const string VideoLikes = "/videos/{clipId}/likes";
         public const string VideoPreset = "/videos/{clipId}/presets/{presetId}";
         public const string VideoTags = "/videos/{clipId}/tags";
-        public const string VideoTag = "/videos/{clipId}/tags/{tag}";
+        public const string VideoTag = "/videos/{clipId}/tags/{tagId}";
+        public const string VideosByTag = "/tags/{tagId}/videos";
         public const string VideoAllowedUsers = "/videos/{clipId}/privacy/users";
         public const string VideoAllowedUser = "/videos/{clipId}/privacy/users/{userId}";
         public const string VideoAllowedDomains = "/videos/{clipId}/privacy/domains";
@@ -87,6 +88,8 @@
 
         public const string Picture = "/videos/{clipId}/pictures/{pictureId}";
         public const string Pictures = "/videos/{clipId}/pictures";
+
+        public const string Tag = "/tags/{tagId}";
 
         public static string GetCurrentUserEndpoint(string endpoint)
         {
