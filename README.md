@@ -1,7 +1,7 @@
 vimeo-dot-net
 =============
 
-A .NET 4.5 wrapper for Vimeo API v3.0. Provides asynchronous API operations.
+A .NET 4.5/.NET Standard 1.3 wrapper for Vimeo API v3.0. Provides asynchronous API operations.
 
 [NuGet URL](https://www.nuget.org/packages/VimeoDotNet/)
 
@@ -17,11 +17,6 @@ COMPLETED
 - Chunked video upload with retry capability
 - Video metadata update
 
-TODO
-----
-- Verify OAuth2 functionality for multi-user clients.
-- *Everything else...*
-
 API COVERAGE
 ----
 
@@ -29,7 +24,6 @@ API COVERAGE
 |:---|:---:|:---|
 | Get user information | :heavy_check_mark: | `GetAccountInformationAsync()` |
 | Edit user information | :heavy_check_mark: | `UpdateAccountInformationAsync()` |
-| [/me/albums](https://developer.vimeo.com/api/endpoints/me#/albums)|Complete?|API Method|
 | Get a list of a user's Albums. | :heavy_check_mark:  | `GetAccountAlbumsAsync()`  |
 | Create an Album. | :heavy_check_mark:  | `CreateAlbumAsync()`  |
 | Get info on an Album. | :heavy_check_mark: | `GetAlbumAsync()` |
@@ -39,7 +33,6 @@ API COVERAGE
 | Check if an Album contains a video. | :heavy_check_mark: | `GetAlbumVideoAsync()` |
 | Add a video to an Album. | :heavy_check_mark: | `AddToAlbumAsync()` |
 | Remove a video from an Album. | :heavy_check_mark: | `RemoveFromAlbumAsync()` |
-| [/me/videos](https://developer.vimeo.com/api/endpoints/me#/videos)|Complete?|API Method|
 | Get a list of videos uploaded by a user. | :heavy_check_mark: | `GetVideosAsync()` |
 | Begin the video upload process. | :heavy_check_mark: | `GetUploadTicketAsync()` |
 | Check if a user owns a clip. | :heavy_check_mark: | `GetUserVideo()` |
@@ -51,7 +44,3 @@ REFERENCE
 ---------
 [API 3 Guide](https://developer.vimeo.com/api/start)  
 [API 3 Endpoints](https://developer.vimeo.com/api/endpoints)
-
-Pushing to NuGet:  
-`nuget pack VimeoDotNet.csproj -Prop Configuration=Release`  
-`nuget push VimeoDotNet.version.nupkg`
