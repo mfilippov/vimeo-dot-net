@@ -1,58 +1,55 @@
 ﻿using System;
 using System.IO;
-using Newtonsoft.Json; 
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Tests.Settings
 {
-    internal class SettingsLoader
+    internal static class SettingsLoader
     {
-        private const string SETTINGS_FILE = "vimeoSettings.json";
+        private const string SettingsFile = "vimeoSettings.json";
 
         public static VimeoApiTestSettings LoadSettings()
         {
             var fromEnv = GetSettingsFromEnvVars();
             if (fromEnv.UserId != 0)
                 return fromEnv;
-            if (!File.Exists(SETTINGS_FILE))
+            if (!File.Exists(SettingsFile))
             {
                 // File was not found so create a new one with blanks 
                 SaveSettings(new VimeoApiTestSettings());
 
-                throw new Exception(string.Format("The file {0} was not found. A file was created, please fill in the information", SETTINGS_FILE));
+                throw new Exception(
+                    $"The file {SettingsFile} was not found. A file was created, please fill in the information");
             }
-            var json = File.ReadAllText(SETTINGS_FILE);
+
+            var json = File.ReadAllText(SettingsFile);
             return JsonConvert.DeserializeObject<VimeoApiTestSettings>(json);
         }
 
         private static VimeoApiTestSettings GetSettingsFromEnvVars()
         {
-            long userId;
-            long.TryParse(Environment.GetEnvironmentVariable("UserId"), out userId);
-            long albumId;
-            long.TryParse(Environment.GetEnvironmentVariable("AlbumId"), out albumId);
-            long channelId;
-            long.TryParse(Environment.GetEnvironmentVariable("ChannelId"), out channelId);
-            long videoId;
-            long.TryParse(Environment.GetEnvironmentVariable("VideoId"), out videoId);
-            long textTrackId;
-            long.TryParse(Environment.GetEnvironmentVariable("TextTrackId"), out textTrackId);
-            return new VimeoApiTestSettings()
+            long.TryParse(Environment.GetEnvironmentVariable("UserId"), out var userId);
+            long.TryParse(Environment.GetEnvironmentVariable("AlbumId"), out var albumId);
+            long.TryParse(Environment.GetEnvironmentVariable("VideoId"), out var videoId);
+            long.TryParse(Environment.GetEnvironmentVariable("TextTrackId"), out var textTrackId);
+            long.TryParse(Environment.GetEnvironmentVariable("PublicUserId"), out var publicUserId);
+            return new VimeoApiTestSettings
             {
                 ClientId = Environment.GetEnvironmentVariable("ClientId"),
                 ClientSecret = Environment.GetEnvironmentVariable("ClientSecret"),
                 AccessToken = Environment.GetEnvironmentVariable("AccessToken"),
                 UserId = userId,
                 AlbumId = albumId,
-                ChannelId = channelId,
                 VideoId = videoId,
-                TextTrackId = textTrackId
+                TextTrackId = textTrackId,
+                PublicUserId = publicUserId
             };
         }
 
-        public static void SaveSettings(VimeoApiTestSettings settings)
+        private static void SaveSettings(VimeoApiTestSettings settings)
         {
             var json = JsonConvert.SerializeObject(settings, Formatting.Indented);
-            System.IO.File.WriteAllText(SETTINGS_FILE, json);
+            File.WriteAllText(SettingsFile, json);
         }
     }
 }

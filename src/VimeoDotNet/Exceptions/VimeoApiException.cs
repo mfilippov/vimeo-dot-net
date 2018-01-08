@@ -1,33 +1,24 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace VimeoDotNet.Exceptions
 {
-    /// <summary>
-    /// VimeoApiException
-    /// </summary>
+    /// <inheritdoc />
     public class VimeoApiException : Exception
     {
-        /// <summary>
-        /// Create new VimeoApiException
-        /// </summary>
+        /// <inheritdoc />
+        [PublicAPI]
         public VimeoApiException()
         {
         }
 
-        /// <summary>
-        /// Create new VimeoApiException with message
-        /// </summary>
-        /// <param name="message">Message</param>
+        /// <inheritdoc />
         public VimeoApiException(string message)
             : base(message)
         {
         }
 
-        /// <summary>
-        /// Create new VimeoApiException with message and inner exception
-        /// </summary>
-        /// <param name="message">Message</param>
-        /// <param name="innerException"></param>
+        /// <inheritdoc />
         public VimeoApiException(string message, Exception innerException)
             : base(message, innerException)
         {

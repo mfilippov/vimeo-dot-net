@@ -1,29 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
     /// Text tracks
     /// </summary>
-    [Serializable]
     public class TextTracks
     {
         /// <summary>
         /// URI
         /// </summary>
-        public string uri { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "uri")]
+        public string Uri { get; set; }
+
         /// <summary>
         /// Options
         /// </summary>
-        public List<string> options { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "options")]
+        public List<string> Options { get; set; }
+
         /// <summary>
         /// Content
         /// </summary>
-        public List<TextTrack> data { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "data")]
+        public List<TextTrack> Data { get; set; }
+
         /// <summary>
         /// Total
         /// </summary>
-        public string total { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "total")]
+        public string Total { get; set; }
     }
 }

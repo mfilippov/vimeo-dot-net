@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
@@ -10,16 +12,22 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// URI
         /// </summary>
-        public string uri { get; set; }
-        
+        [PublicAPI]
+        [JsonProperty(PropertyName = "uri")]
+        public string Uri { get; set; }
+
         /// <summary>
         /// Options
         /// </summary>
-        public List<string> options { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "options")]
+        public List<string> Options { get; set; }
 
         /// <summary>
         /// Total
         /// </summary>
-        public int total { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "total")]
+        public int Total { get; set; }
     }
 }

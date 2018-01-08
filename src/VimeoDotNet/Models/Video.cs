@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 using VimeoDotNet.Enums;
 using VimeoDotNet.Helpers;
 
@@ -9,10 +11,9 @@ namespace VimeoDotNet.Models
     /// <summary>
     /// Video
     /// </summary>
-    [Serializable]
     public class Video
     {
-        private static readonly IDictionary<string, string> _statusMappings = new Dictionary<string, string>
+        private static readonly IDictionary<string, string> StatusMappings = new Dictionary<string, string>
         {
             {"uploading_error", "UploadError"}
         };
@@ -20,177 +21,220 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Id
         /// </summary>
-        public long? id
-        {
-            get { return ModelHelpers.ParseModelUriId(uri); }
-        }
+        public long? Id => ModelHelpers.ParseModelUriId(Uri);
 
         /// <summary>
         /// URI
         /// </summary>
-        public string uri { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "uri")]
+        public string Uri { get; set; }
+
         /// <summary>
         /// User
         /// </summary>
-        public User user { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "user")]
+        public User User { get; set; }
+
         /// <summary>
         /// Name
         /// </summary>
-        public string name { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
         /// <summary>
         /// Description
         /// </summary>
-        public string description { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
+
         /// <summary>
         /// Link
         /// </summary>
-        public string link { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "link")]
+        public string Link { get; set; }
+
         /// <summary>
         /// Review link
         /// </summary>
-        public string review_link { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "review_link")]
+        public string ReviewLink { get; set; }
+
         /// <summary>
         /// Status
         /// </summary>
-        public string status { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "status")]
+        public string Status { get; set; }
+
         /// <summary>
         /// Embed presets
         /// </summary>
-        public EmbedPresets embed_presets { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "embed_presets")]
+        public EmbedPresets EmbedPresets { get; set; }
+
         /// <summary>
         /// Duration
         /// </summary>
-        public int duration { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "duration")]
+        public int Duration { get; set; }
+
         /// <summary>
         /// Width
         /// </summary>
-        public int width { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "width")]
+        public int Width { get; set; }
+
         /// <summary>
         /// Height
         /// </summary>
-        public int height { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "height")]
+        public int Height { get; set; }
+
         /// <summary>
         /// Created time
         /// </summary>
-        public DateTime created_time { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "created_time")]
+        public DateTime CreatedTime { get; set; }
+
         /// <summary>
         /// Modified time
         /// </summary>
-        public DateTime modified_time { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "modified_time")]
+        public DateTime ModifiedTime { get; set; }
+
         /// <summary>
         /// Privacy
         /// </summary>
-        public Privacy privacy { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "privacy")]
+        public Privacy Privacy { get; set; }
+
         /// <summary>
         /// Pictures
         /// </summary>
-        public Pictures pictures { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "pictures")]
+        public Pictures Pictures { get; set; }
+
         /// <summary>
         /// Files
         /// </summary>
-        public List<File> files { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "files")]
+        public List<File> Files { get; set; }
+
         /// <summary>
         /// Download
         /// </summary>
-        public List<Download> download { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "download")]
+        public List<Download> Download { get; set; }
+
         /// <summary>
         /// Tags
         /// </summary>
-        public List<Tag> tags { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "tags")]
+        public List<Tag> Tags { get; set; }
+
         /// <summary>
         /// Stats
         /// </summary>
-        public VideoStats stats { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "stats")]
+        public VideoStats Stats { get; set; }
+
         /// <summary>
         /// Metadata
         /// </summary>
-        public VideoMetadata metadata { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "metadata")]
+        public VideoMetadata Metadata { get; set; }
 
         /// <summary>
         /// Video status
         /// </summary>
+        [PublicAPI]
         public VideoStatusEnum VideoStatus
         {
-            get { return ModelHelpers.GetEnumValue<VideoStatusEnum>(status, _statusMappings); }
-            set { status = ModelHelpers.GetEnumString(value, _statusMappings); }
+            get => ModelHelpers.GetEnumValue<VideoStatusEnum>(Status, StatusMappings);
+            set => Status = ModelHelpers.GetEnumString(value, StatusMappings);
         }
 
         /// <summary>
         /// Mobile video link
         /// </summary>
-        public string MobileVideoLink
-        {
-            get { return GetFileQualityUrl(FileQualityEnum.Mobile, false); }
-        }
+        [PublicAPI]
+        public string MobileVideoLink => GetFileQualityUrl(FileQualityEnum.Mobile, false);
 
         /// <summary>
         /// Mobile video secure link
         /// </summary>
-        public string MobileVideoSecureLink
-        {
-            get { return GetFileQualityUrl(FileQualityEnum.Mobile, true); }
-        }
+        [PublicAPI]
+        public string MobileVideoSecureLink => GetFileQualityUrl(FileQualityEnum.Mobile, true);
 
         /// <summary>
         /// Standard video link
         /// </summary>
-        public string StandardVideoLink
-        {
-            get { return GetFileQualityUrl(FileQualityEnum.Standard, false); }
-        }
+        [PublicAPI]
+        public string StandardVideoLink => GetFileQualityUrl(FileQualityEnum.Standard, false);
 
         /// <summary>
         /// Standard video secure link
         /// </summary>
-        public string StandardVideoSecureLink
-        {
-            get { return GetFileQualityUrl(FileQualityEnum.Standard, true); }
-        }
+        [PublicAPI]
+        public string StandardVideoSecureLink => GetFileQualityUrl(FileQualityEnum.Standard, true);
 
         /// <summary>
         /// High definition video link
         /// </summary>
-        public string HighDefinitionVideoLink
-        {
-            get { return GetFileQualityUrl(FileQualityEnum.HighDefinition, false); }
-        }
+        [PublicAPI]
+        public string HighDefinitionVideoLink => GetFileQualityUrl(FileQualityEnum.HighDefinition, false);
 
         /// <summary>
         /// High definition video secure link
         /// </summary>
-        public string HighDefinitionVideoSecureLink
-        {
-            get { return GetFileQualityUrl(FileQualityEnum.HighDefinition, true); }
-        }
+        [PublicAPI]
+        public string HighDefinitionVideoSecureLink => GetFileQualityUrl(FileQualityEnum.HighDefinition, true);
 
         /// <summary>
         /// Streaming video link
         /// </summary>
-        public string StreamingVideoLink
-        {
-            get { return GetFileQualityUrl(FileQualityEnum.Streaming, false); }
-        }
+        [PublicAPI]
+        public string StreamingVideoLink => GetFileQualityUrl(FileQualityEnum.Streaming, false);
 
         /// <summary>
         /// Streaming video secure link
         /// </summary>
-        public string StreamingVideoSecureLink
-        {
-            get { return GetFileQualityUrl(FileQualityEnum.Streaming, true); }
-        }
+        [PublicAPI]
+        public string StreamingVideoSecureLink => GetFileQualityUrl(FileQualityEnum.Streaming, true);
 
         private string GetFileQualityUrl(FileQualityEnum quality, bool secureLink)
         {
-            if (files == null || files.Count == 0)
+            if (Files == null || Files.Count == 0)
             {
                 return null;
             }
-            File match = files.FirstOrDefault(f => f.FileQuality == quality);
+
+            var match = Files.FirstOrDefault(f => f.FileQuality == quality);
             if (match == null)
             {
                 return null;
             }
-            return secureLink ? match.link_secure : match.link;
+
+            return secureLink ? match.LinkSecure : match.Link;
         }
     }
 }

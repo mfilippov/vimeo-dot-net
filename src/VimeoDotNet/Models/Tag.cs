@@ -1,20 +1,25 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
     /// Tag
     /// </summary>
-    [Serializable]
     public class Tag
     {
         /// <summary>
         /// Name
         /// </summary>
-        public string name { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
         /// <summary>
         /// Canonical
         /// </summary>
-        public string canonical { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "canonical")]
+        public string Canonical { get; set; }
     }
 }

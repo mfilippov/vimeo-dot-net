@@ -27,13 +27,15 @@ namespace VimeoDotNet.Net
         }
 
         /// <inheritdoc />
-        public IApiRequest AuthorizedRequest(string accessToken, HttpMethod method, string endpoint, IDictionary<string, string> urlSubstitutions = null, IParameterProvider additionalParameters = null)
+        public IApiRequest AuthorizedRequest(string accessToken, HttpMethod method, string endpoint,
+            IDictionary<string, string> urlSubstitutions = null, IParameterProvider additionalParameters = null)
         {
             // Verify the provided parameters at least have a chance of succeeding, otherwise, exit early via exception...
             if (string.IsNullOrWhiteSpace(accessToken))
             {
                 throw new InvalidOperationException("Please authenticate via OAuth to obtain an access token.");
             }
+
             VerifyParameters(additionalParameters);
 
             // Generate a basic request...
@@ -51,21 +53,20 @@ namespace VimeoDotNet.Net
                     request.UrlSegments.Add(item);
                 }
             }
-            
+
             // Add query or body parameters if present...
-            if (additionalParameters != null)
+            if (additionalParameters == null)
+                return request;
+            if (method == HttpMethod.Get)
             {
-                if (method == HttpMethod.Get)
+                foreach (var parameter in additionalParameters.GetParameterValues())
                 {
-                    foreach (var parameter in additionalParameters.GetParameterValues())
-                    {
-                        request.Query.Add(parameter);
-                    }
+                    request.Query.Add(parameter);
                 }
-                else
-                {
-                    request.Body = new FormUrlEncodedContent(additionalParameters.GetParameterValues());
-                }
+            }
+            else
+            {
+                request.Body = new FormUrlEncodedContent(additionalParameters.GetParameterValues());
             }
 
             return request;

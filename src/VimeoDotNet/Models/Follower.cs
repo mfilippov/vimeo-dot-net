@@ -1,4 +1,6 @@
 ﻿using System;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
@@ -11,10 +13,15 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Added time
         /// </summary>
-        public DateTime? added_time { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "added_time")]
+        public DateTime? AddedTime { get; set; }
+
         /// <summary>
         /// URI
         /// </summary>
-        public string uri { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "uri")]
+        public string Uri { get; set; }
     }
 }

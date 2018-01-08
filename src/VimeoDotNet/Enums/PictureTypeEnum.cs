@@ -9,10 +9,12 @@
         /// Unknown
         /// </summary>
         Unknown,
+
         /// <summary>
         /// Thumbnail
         /// </summary>
         Thumbnail,
+
         /// <summary>
         /// Portrait
         /// </summary>

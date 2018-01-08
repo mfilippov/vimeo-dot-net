@@ -7,6 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VimeoDotNet", "src\VimeoDot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VimeoDotNet.Tests", "src\VimeoDotNet.Tests\VimeoDotNet.Tests.csproj", "{52A87768-AEB5-4FD5-85EB-3941787816F1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{73AA1237-F8FC-4333-A445-D8AA79BE30E2}"
+ProjectSection(SolutionItems) = preProject
+	LICENSE = LICENSE
+	README.md = README.md
+	VimeoDotNet.nuspec = VimeoDotNet.nuspec
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

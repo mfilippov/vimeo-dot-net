@@ -14,25 +14,17 @@ namespace VimeoDotNet
 {
     public partial class VimeoClient
     {
-        /// <summary>
-        /// Complete upload file asynchronously
-        /// </summary>
-        /// <param name="uploadRequest">UploadRequest</param>
-        /// <returns></returns>
-        public async Task CompleteFileUploadAsync(IUploadRequest uploadRequest)
+        /// <inheritdoc />
+        public async Task<UploadTicket> GetUploadTicketAsync()
         {
-            ThrowIfUnauthorized();
-
             try
             {
-                var request = GenerateCompleteUploadRequest(uploadRequest.Ticket);
-                var response = await request.ExecuteRequestAsync();
-                CheckStatusCodeError(uploadRequest, response, "Error marking file upload as complete.");
+                var request = GenerateUploadTicketRequest();
+                var response = await request.ExecuteRequestAsync<UploadTicket>();
+                UpdateRateLimit(response);
+                CheckStatusCodeError(null, response, "Error generating upload ticket.");
 
-                if (response.Headers.Location != null)
-                {
-                    uploadRequest.ClipUri = response.Headers.Location.ToString();
-                }
+                return response.Content;
             }
             catch (Exception ex)
             {
@@ -40,8 +32,151 @@ namespace VimeoDotNet
                 {
                     throw;
                 }
-                throw new VimeoUploadException("Error marking file upload as complete.", uploadRequest, ex);
+
+                throw new VimeoUploadException("Error generating upload ticket.", null, ex);
             }
+        }
+
+        /// <inheritdoc />
+        public async Task<UploadTicket> GetReplaceVideoUploadTicketAsync(long videoId)
+        {
+            try
+            {
+                var request = GenerateReplaceVideoUploadTicketRequest(videoId);
+                var response = await request.ExecuteRequestAsync<UploadTicket>();
+                UpdateRateLimit(response);
+                CheckStatusCodeError(null, response, "Error generating upload ticket to replace video.");
+
+                return response.Content;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+
+                throw new VimeoUploadException("Error generating upload ticket to replace video.", null, ex);
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent,
+            int chunkSize = DefaultUploadChunkSize,
+            long? replaceVideoId = null)
+        {
+            var uploadRequest = await StartUploadFileAsync(fileContent, chunkSize, replaceVideoId);
+
+            while (!uploadRequest.IsVerifiedComplete)
+            {
+                var uploadStatus = await ContinueUploadFileAsync(uploadRequest);
+
+                if (uploadStatus.Status == UploadStatusEnum.InProgress)
+                    continue;
+                // We presumably wrote all the bytes in the file, so verify with Vimeo that it
+                // is completed
+                uploadStatus = await VerifyUploadFileAsync(uploadRequest);
+                if (uploadStatus.Status == UploadStatusEnum.Completed)
+                {
+                    // If completed, mark file as complete
+                    await CompleteFileUploadAsync(uploadRequest);
+                    uploadRequest.IsVerifiedComplete = true;
+                }
+                else if (uploadStatus.BytesWritten == uploadRequest.FileLength)
+                {
+                    // Supposedly all bytes are written, but Vimeo doesn't think so, so just
+                    // bail out
+                    throw new VimeoUploadException(
+                        $"Vimeo failed to mark file as completed, Bytes Written: {uploadStatus.BytesWritten:N0}, Expected: {uploadRequest.FileLength:N0}.",
+                        uploadRequest);
+                }
+            }
+
+            return uploadRequest;
+        }
+
+        /// <inheritdoc />
+        public async Task<Video> UploadPullLinkAsync(string link)
+        {
+            try
+            {
+                var param = new ParameterDictionary {{"type", "pull"}, {"link", link}};
+
+                var request = _apiRequestFactory.AuthorizedRequest(
+                    AccessToken,
+                    HttpMethod.Post,
+                    Endpoints.UploadTicket,
+                    null,
+                    param
+                );
+
+                return await ExecuteApiRequest<Video>(request);
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+
+                throw new VimeoUploadException("Error generating upload ticket.", null, ex);
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<Picture> UploadThumbnailAsync(long clipId, IBinaryContent fileContent)
+        {
+            try
+            {
+                var pic = await UploadPictureAsync(fileContent, clipId);
+                await SetThumbnailActiveAsync(pic.Uri);
+                return pic;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+
+                throw new VimeoUploadException("Error generating upload ticket.", null, ex);
+            }
+        }
+
+        /// <summary>
+        /// Start upload file asynchronously
+        /// </summary>
+        /// <param name="fileContent">FileContent</param>
+        /// <param name="chunkSize">ChunkSize</param>
+        /// <param name="replaceVideoId">ReplaceVideoId</param>
+        /// <returns></returns>
+        private async Task<IUploadRequest> StartUploadFileAsync(IBinaryContent fileContent,
+            int chunkSize = DefaultUploadChunkSize,
+            long? replaceVideoId = null)
+        {
+            if (!fileContent.Data.CanRead)
+            {
+                throw new ArgumentException("fileContent should be readable");
+            }
+
+            if (fileContent.Data.CanSeek && fileContent.Data.Position > 0)
+            {
+                fileContent.Data.Position = 0;
+            }
+
+            var ticket = replaceVideoId.HasValue
+                ? await GetReplaceVideoUploadTicketAsync(replaceVideoId.Value)
+                : await GetUploadTicketAsync();
+
+            var uploadRequest = new UploadRequest
+            {
+                Ticket = ticket,
+                File = fileContent,
+                ChunkSize = chunkSize
+            };
+
+            //VerifyUploadResponse uploadStatus = await ContinueUploadFileAsync(uploadRequest);
+            return uploadRequest;
         }
 
         /// <summary>
@@ -49,9 +184,9 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="uploadRequest">UploadRequest</param>
         /// <returns>Verification upload response</returns>
-        public async Task<VerifyUploadResponse> ContinueUploadFileAsync(IUploadRequest uploadRequest)
+        private async Task<VerifyUploadResponse> ContinueUploadFileAsync(IUploadRequest uploadRequest)
         {
-            if (uploadRequest.AllBytesWritten)
+            if (uploadRequest.FileLength == uploadRequest.BytesWritten)
             {
                 // Already done, there's nothing to do.
                 return new VerifyUploadResponse
@@ -77,9 +212,12 @@ namespace VimeoDotNet
                 // Success, update total written
                 uploadRequest.BytesWritten += uploadRequest.ChunkSize;
                 uploadRequest.BytesWritten = Math.Min(uploadRequest.BytesWritten, uploadRequest.FileLength);
+
                 return new VerifyUploadResponse
                 {
-                    Status = UploadStatusEnum.InProgress,
+                    Status = uploadRequest.FileLength == uploadRequest.BytesWritten
+                        ? UploadStatusEnum.Completed
+                        : UploadStatusEnum.InProgress,
                     BytesWritten = uploadRequest.BytesWritten
                 };
             }
@@ -89,196 +227,8 @@ namespace VimeoDotNet
                 {
                     throw;
                 }
+
                 throw new VimeoUploadException("Error uploading file chunk", uploadRequest, ex);
-            }
-        }
-
-        /// <summary>
-        /// Create new upload ticket asynchronously
-        /// </summary>
-        /// <returns>Upload ticket</returns>
-        public async Task<UploadTicket> GetUploadTicketAsync()
-        {
-            try
-            {
-                var request = GenerateUploadTicketRequest();
-                var response = await request.ExecuteRequestAsync<UploadTicket>();
-                UpdateRateLimit(response);
-                CheckStatusCodeError(null, response, "Error generating upload ticket.");
-
-                return response.Content;
-            }
-            catch (Exception ex)
-            {
-                if (ex is VimeoApiException)
-                {
-                    throw;
-                }
-                throw new VimeoUploadException("Error generating upload ticket.", null, ex);
-            }
-        }
-
-        /// <summary>
-        /// Create new upload ticket for replace video asynchronously
-        /// </summary>
-        /// <param name="videoId">VideoId</param>
-        /// <returns>Upload ticket</returns>
-        public async Task<UploadTicket> GetReplaceVideoUploadTicketAsync(long videoId)
-        {
-            try
-            {
-                var request = GenerateReplaceVideoUploadTicketRequest(videoId);
-                var response = await request.ExecuteRequestAsync<UploadTicket>();
-                UpdateRateLimit(response);
-                CheckStatusCodeError(null, response, "Error generating upload ticket to replace video.");
-
-                return response.Content;
-            }
-            catch (Exception ex)
-            {
-                if (ex is VimeoApiException)
-                {
-                    throw;
-                }
-                throw new VimeoUploadException("Error generating upload ticket to replace video.", null, ex);
-            }
-        }
-
-        /// <summary>
-        /// Start upload file asynchronously
-        /// </summary>
-        /// <param name="fileContent">FileContent</param>
-        /// <param name="chunkSize">ChunkSize</param>
-        /// <param name="replaceVideoId">ReplaceVideoId</param>
-        /// <returns></returns>
-        public async Task<IUploadRequest> StartUploadFileAsync(IBinaryContent fileContent,
-            int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE,
-            long? replaceVideoId = null)
-        {
-            if (!fileContent.Data.CanRead)
-            {
-                throw new ArgumentException("fileContent should be readable");
-            }
-            if (fileContent.Data.CanSeek && fileContent.Data.Position > 0)
-            {
-                fileContent.Data.Position = 0;
-            }
-
-            UploadTicket ticket = replaceVideoId.HasValue 
-                ? await GetReplaceVideoUploadTicketAsync(replaceVideoId.Value)
-                : await GetUploadTicketAsync();
-
-            var uploadRequest = new UploadRequest
-            {
-                Ticket = ticket,
-                File = fileContent,
-                ChunkSize = chunkSize
-            };
-
-            VerifyUploadResponse uploadStatus = await ContinueUploadFileAsync(uploadRequest);
-            
-            return uploadRequest;
-        }
-
-        /// <summary>
-        /// Upload file part asynchronously
-        /// </summary>
-        /// <param name="fileContent">FileContent</param>
-        /// <param name="chunkSize">ChunkSize</param>
-        /// <param name="replaceVideoId">ReplaceVideoId</param>
-        /// <returns>Upload request</returns>
-        public async Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent,
-            int chunkSize = DEFAULT_UPLOAD_CHUNK_SIZE,
-            long? replaceVideoId = null)
-        {
-            IUploadRequest uploadRequest = await StartUploadFileAsync(fileContent, chunkSize, replaceVideoId);
-
-            VerifyUploadResponse uploadStatus = null;
-            while (!uploadRequest.IsVerifiedComplete)
-            {
-                uploadStatus = await ContinueUploadFileAsync(uploadRequest);                
-
-                if (uploadRequest.AllBytesWritten)
-                {
-                    // We presumably wrote all the bytes in the file, so verify with Vimeo that it
-                    // is completed
-                    uploadStatus = await VerifyUploadFileAsync(uploadRequest);
-                    if (uploadStatus.Status == UploadStatusEnum.Completed)
-                    {
-                        // If completed, mark file as complete
-                        await CompleteFileUploadAsync(uploadRequest);
-                        uploadRequest.IsVerifiedComplete = true;
-                    }
-                    else if (uploadStatus.BytesWritten == uploadRequest.FileLength)
-                    {
-                        // Supposedly all bytes are written, but Vimeo doesn't think so, so just
-                        // bail out
-                        throw new VimeoUploadException(
-                            string.Format(
-                                "Vimeo failed to mark file as completed, Bytes Written: {0:N0}, Expected: {1:N0}.",
-                                uploadStatus.BytesWritten),
-                            uploadRequest);
-                    }
-                }
-            }
-
-            return uploadRequest;
-        }
-
-        /// <summary>
-        /// Create new upload ticket asynchronously
-        /// </summary>
-        /// <returns>Upload ticket</returns>
-        public async Task<Video> UploadPullLinkAsync(string link)
-        {
-            try
-            {
-                var param = new ParameterDictionary();
-                param.Add("type", "pull");
-                param.Add("link", link);
-
-                var request = ApiRequestFactory.AuthorizedRequest(
-                    AccessToken,
-                    HttpMethod.Post,
-                    Endpoints.UploadTicket,
-                    null,
-                    param
-                );
-
-                return await ExecuteApiRequest<Video>(request);
-            }
-            catch (Exception ex)
-            {
-                if (ex is VimeoApiException)
-                {
-                    throw;
-                }
-                throw new VimeoUploadException("Error generating upload ticket.", null, ex);
-            }
-        }
-
-        /// <summary>
-        /// Upload and set thumbnail active
-        /// </summary>
-        /// <param name="clipId"></param>
-        /// <param name="fileContent"></param>
-        /// <returns></returns>
-        /// <exception cref="VimeoUploadException"></exception>
-        public async Task<Picture> UploadThumbnailAsync(long clipId, IBinaryContent fileContent)
-        {
-            try
-            {
-                var pic = await UploadPictureAsync(fileContent, clipId);
-                await SetThumbnailActiveAsync(pic.uri);
-                return pic;
-            }
-            catch (Exception ex)
-            {
-                if (ex is VimeoApiException)
-                {
-                    throw;
-                }
-                throw new VimeoUploadException("Error generating upload ticket.", null, ex);
             }
         }
 
@@ -287,7 +237,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="uploadRequest">UploadRequest</param>
         /// <returns>Verification reponse</returns>
-        public async Task<VerifyUploadResponse> VerifyUploadFileAsync(IUploadRequest uploadRequest)
+        private async Task<VerifyUploadResponse> VerifyUploadFileAsync(IUploadRequest uploadRequest)
         {
             try
             {
@@ -295,7 +245,7 @@ namespace VimeoDotNet
                     await GenerateFileStreamRequest(uploadRequest.File, uploadRequest.Ticket, verifyOnly: true);
                 var response = await request.ExecuteRequestAsync();
                 var verify = new VerifyUploadResponse();
-                CheckStatusCodeError(uploadRequest, response, "Error verifying file upload.", (HttpStatusCode)308);
+                CheckStatusCodeError(uploadRequest, response, "Error verifying file upload.", (HttpStatusCode) 308);
 
                 // ReSharper disable once ConvertIfStatementToSwitchStatement
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -303,25 +253,25 @@ namespace VimeoDotNet
                     verify.BytesWritten = uploadRequest.FileLength;
                     verify.Status = UploadStatusEnum.Completed;
                 }
-                else if (response.StatusCode == (HttpStatusCode)308)
+                else if (response.StatusCode == (HttpStatusCode) 308)
                 {
                     verify.Status = UploadStatusEnum.InProgress;
-                    if (!response.Headers.Contains("Range")) 
+                    if (!response.Headers.Contains("Range"))
                         return verify;
                     var match = RangeRegex.Match(response.Headers.GetValues("Range").First());
                     // ReSharper disable once InvertIf
-                        if (match.Success
+                    if (match.Success
                         && long.TryParse(match.Groups["start"].Value, out var startIndex)
                         && long.TryParse(match.Groups["end"].Value, out var endIndex))
+                    {
+                        verify.BytesWritten = endIndex - startIndex;
+                        uploadRequest.BytesWritten = verify.BytesWritten;
+                        if (verify.BytesWritten == uploadRequest.FileLength)
                         {
-                            verify.BytesWritten = endIndex - startIndex;
-                            uploadRequest.BytesWritten = verify.BytesWritten;
-                            if (verify.BytesWritten == uploadRequest.FileLength)
-                            {
-                                verify.Status = UploadStatusEnum.Completed;
-                            }
+                            verify.Status = UploadStatusEnum.Completed;
                         }
                     }
+                }
                 else
                 {
                     verify.Status = UploadStatusEnum.NotFound;
@@ -335,37 +285,70 @@ namespace VimeoDotNet
                 {
                     throw;
                 }
+
                 throw new VimeoUploadException("Error verifying file upload.", uploadRequest, ex);
+            }
+        }
+
+        /// <summary>
+        /// Complete upload file asynchronously
+        /// </summary>
+        /// <param name="uploadRequest">UploadRequest</param>
+        /// <returns></returns>
+        private async Task CompleteFileUploadAsync(IUploadRequest uploadRequest)
+        {
+            ThrowIfUnauthorized();
+
+            try
+            {
+                var request = GenerateCompleteUploadRequest(uploadRequest.Ticket);
+                var response = await request.ExecuteRequestAsync();
+                CheckStatusCodeError(uploadRequest, response, "Error marking file upload as complete.");
+
+                if (response.Headers.Location != null)
+                {
+                    uploadRequest.ClipUri = response.Headers.Location.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+
+                throw new VimeoUploadException("Error marking file upload as complete.", uploadRequest, ex);
             }
         }
 
         private IApiRequest GenerateCompleteUploadRequest(UploadTicket ticket)
         {
-            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = HttpMethod.Delete;
-            request.Path = ticket.complete_uri;
+            request.Path = ticket.CompleteUri;
             return request;
         }
 
         private async Task<IApiRequest> GenerateFileStreamRequest(IBinaryContent fileContent, UploadTicket ticket,
             long written = 0, int? chunkSize = null, bool verifyOnly = false)
         {
-            if (ticket == null || string.IsNullOrWhiteSpace(ticket.ticket_id))
+            if (string.IsNullOrWhiteSpace(ticket?.TicketId))
             {
                 throw new ArgumentException("Invalid upload ticket.");
             }
-            if (fileContent.Data.Length > ticket.user.upload_quota.space.free)
+
+            if (fileContent.Data.Length > ticket.User.UploadQuota.Space.Free)
             {
                 throw new InvalidOperationException(
                     "User does not have enough free space to upload this video. Remaining space: " +
-                    ticket.quota.free_space + ".");
+                    ticket.Quota.FreeSpace + ".");
             }
 
-            var request = ApiRequestFactory.GetApiRequest();
+            var request = _apiRequestFactory.GetApiRequest();
             request.Method = HttpMethod.Put;
             request.ExcludeAuthorizationHeader = true;
-            request.Path = ticket.upload_link_secure;
-            
+            request.Path = ticket.UploadLinkSecure;
+
             if (verifyOnly)
             {
                 var body = new ByteArrayContent(new byte[0]);
@@ -398,7 +381,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            IApiRequest request = ApiRequestFactory.GetApiRequest(AccessToken);
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = HttpMethod.Post;
             request.Path = Endpoints.UploadTicket;
             request.Query.Add("type", type);
@@ -409,7 +392,7 @@ namespace VimeoDotNet
         {
             ThrowIfUnauthorized();
 
-            var request = ApiRequestFactory.GetApiRequest(AccessToken);
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
             request.Method = HttpMethod.Put;
             request.Path = Endpoints.VideoReplaceFile;
             request.UrlSegments.Add("clipId", clipId.ToString());

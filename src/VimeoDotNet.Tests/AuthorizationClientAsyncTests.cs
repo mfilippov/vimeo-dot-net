@@ -23,8 +23,8 @@ namespace VimeoDotNet.Tests
             var client = new AuthorizationClient(_vimeoSettings.ClientId, _vimeoSettings.ClientSecret);
 
             var token = await client.GetUnauthenticatedTokenAsync();
-            token.access_token.ShouldNotBeNull();
-            token.user.ShouldBeNull();
+            token.AccessToken.ShouldNotBeNull();
+            token.User.ShouldBeNull();
         }
 
         [Fact]

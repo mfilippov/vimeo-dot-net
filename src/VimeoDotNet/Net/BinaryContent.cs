@@ -20,9 +20,7 @@ namespace VimeoDotNet.Net
         private readonly bool _shouldDisposeStream = true;
         private bool _disposed;
 
-        [NonSerialized]
-        private Stream _data;
-
+        [NonSerialized] private Stream _data;
 
         #endregion
 
@@ -30,6 +28,7 @@ namespace VimeoDotNet.Net
 
         /// <inheritdoc />
         public string OriginalFileName { get; set; }
+
         /// <inheritdoc />
         public string ContentType { get; set; }
 
@@ -39,7 +38,7 @@ namespace VimeoDotNet.Net
         {
             get
             {
-                if(_disposed)
+                if (_disposed)
                     throw new ObjectDisposedException("BinaryContent");
                 return _data;
             }
@@ -66,12 +65,13 @@ namespace VimeoDotNet.Net
         /// </summary>
         /// <param name="data">Content</param>
         /// <param name="contentType">Content type</param>
-        public BinaryContent([NotNull]Stream data, string contentType)
+        public BinaryContent([NotNull] Stream data, string contentType)
         {
             ContentType = contentType;
             _data = data;
             _shouldDisposeStream = false;
         }
+
         /// <summary>
         /// Binary content
         /// </summary>
@@ -111,6 +111,7 @@ namespace VimeoDotNet.Net
                 _data.Dispose();
                 _data = null;
             }
+
             _disposed = true;
         }
 
@@ -126,12 +127,14 @@ namespace VimeoDotNet.Net
             {
                 throw new InvalidOperationException("Content should be a readable Stream");
             }
+
             if (Data.Position == startIndex) return;
             if (!Data.CanSeek)
             {
                 throw new InvalidOperationException("Content cannot be advanced to the specified start index: " +
                                                     startIndex);
             }
+
             Data.Position = startIndex;
         }
 
@@ -145,10 +148,12 @@ namespace VimeoDotNet.Net
                     Data.Seek(startIndex, SeekOrigin.Begin);
                 while (totalRead < length)
                 {
-                    var read = await Data.ReadAsync(buffer, 0, length - totalRead > buffer.Length ? buffer.Length: (int)(length - totalRead));
+                    var read = await Data.ReadAsync(buffer, 0,
+                        length - totalRead > buffer.Length ? buffer.Length : (int) (length - totalRead));
                     totalRead += read;
                     await ms.WriteAsync(buffer, 0, read);
                 }
+
                 return ms.ToArray();
             }
         }

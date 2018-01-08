@@ -12,41 +12,33 @@ namespace VimeoDotNet.Helpers
             {
                 return null;
             }
+
             var pieces = uri.Split(new[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
-            long userId = 0;
             var idString = pieces[pieces.Length - 1];
             if (idString.Contains(":"))
             {
                 idString = idString.Split(':')[0];
             }
-            if (long.TryParse(idString, out userId))
+
+            if (long.TryParse(idString, out var userId))
             {
                 return userId;
             }
+
             return null;
         }
 
         public static T GetEnumValue<T>(string value, IDictionary<string, string> mappings = null) where T : struct
         {
-            T enumVal;
-            if (!Enum.TryParse(FindKeyMapping(value, mappings), true, out enumVal))
-            {
-                if (!Enum.TryParse("Unknown", true, out enumVal))
-                {
-                    return default(T);
-                }
-            }
-            return enumVal;
+            if (Enum.TryParse(FindKeyMapping(value, mappings), true, out T enumVal))
+                return enumVal;
+            return !Enum.TryParse("Unknown", true, out enumVal) ? default(T) : enumVal;
         }
 
         public static string GetEnumString(Enum value, IDictionary<string, string> mappings = null)
         {
-            string sVal = FindValueMapping(value.ToString(), mappings);
-            if (string.Compare(sVal, "Unknown", true) == 0)
-            {
-                return null;
-            }
-            return sVal;
+            var sVal = FindValueMapping(value.ToString(), mappings);
+            return string.Compare(sVal, "Unknown", StringComparison.OrdinalIgnoreCase) == 0 ? null : sVal;
         }
 
         private static string FindKeyMapping(string key, IDictionary<string, string> mappings)
@@ -55,16 +47,12 @@ namespace VimeoDotNet.Helpers
             {
                 return key;
             }
-            string found = mappings.Keys.FirstOrDefault(k => string.Compare(k, key, true) == 0);
-            if (found == null)
-            {
-                if (!mappings.ContainsKey(key))
-                {
-                    return key;
-                }
-                return mappings[key];
-            }
-            return mappings[found];
+
+            var found = mappings.Keys.FirstOrDefault(k =>
+                string.Compare(k, key, StringComparison.OrdinalIgnoreCase) == 0);
+            if (found != null)
+                return mappings[found];
+            return !mappings.ContainsKey(key) ? key : mappings[key];
         }
 
         private static string FindValueMapping(string value, IDictionary<string, string> mappings)
@@ -73,12 +61,10 @@ namespace VimeoDotNet.Helpers
             {
                 return value;
             }
-            string found = mappings.Keys.FirstOrDefault(k => string.Compare(mappings[k], value, true) == 0);
-            if (found == null)
-            {
-                return value;
-            }
-            return found;
+
+            var found = mappings.Keys
+                .FirstOrDefault(k => string.Compare(mappings[k], value, StringComparison.OrdinalIgnoreCase) == 0);
+            return found ?? value;
         }
     }
 }

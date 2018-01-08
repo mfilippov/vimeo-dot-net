@@ -9,18 +9,22 @@
         /// Unknown
         /// </summary>
         Unknown,
+
         /// <summary>
         /// Mobile
         /// </summary>
         Mobile,
+
         /// <summary>
         /// Standart
         /// </summary>
         Standard,
+
         /// <summary>
         /// HD
         /// </summary>
         HighDefinition,
+
         /// <summary>
         /// Streaming
         /// </summary>

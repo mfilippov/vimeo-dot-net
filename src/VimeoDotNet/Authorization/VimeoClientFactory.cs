@@ -1,17 +1,19 @@
-﻿using VimeoDotNet.Net;
+﻿using JetBrains.Annotations;
+using VimeoDotNet.Net;
 
 namespace VimeoDotNet.Authorization
 {
-    /// <summary>
-    /// Vimeo client factory
-    /// </summary>
+    /// <inheritdoc />
+    [PublicAPI]
     public class VimeoClientFactory : IVimeoClientFactory
     {
         #region Fields
+
         /// <summary>
         /// Api request factory
         /// </summary>
         protected IApiRequestFactory ApiRequestFactory;
+
         /// <summary>
         /// Auth client factory
         /// </summary>
@@ -45,22 +47,13 @@ namespace VimeoDotNet.Authorization
 
         #region Public Functions
 
-        /// <summary>
-        /// Return client based on ClientId and SecretId
-        /// </summary>
-        /// <param name="clientId">ClientId</param>
-        /// <param name="clientSecret">SecretId</param>
-        /// <returns>VimeoClient</returns>
+        /// <inheritdoc />
         public IVimeoClient GetVimeoClient(string clientId, string clientSecret)
         {
             return new VimeoClient(AuthClientFactory, ApiRequestFactory, clientId, clientSecret);
         }
 
-        /// <summary>
-        /// Return client by access token
-        /// </summary>
-        /// <param name="accessToken"></param>
-        /// <returns>VimeoClient</returns>
+        /// <inheritdoc />
         public IVimeoClient GetVimeoClient(string accessToken)
         {
             return new VimeoClient(AuthClientFactory, ApiRequestFactory, accessToken);

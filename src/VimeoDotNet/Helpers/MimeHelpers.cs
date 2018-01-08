@@ -5,9 +5,9 @@ namespace VimeoDotNet.Helpers
 {
     internal static class MimeHelpers
     {
-        private const string DEFAULT_CONTENT_TYPE = "application/octet-stream";
+        private const string DefaultContentType = "application/octet-stream";
 
-        private static readonly IDictionary<string, string> _mimeMappings = new Dictionary<string, string>
+        private static readonly IDictionary<string, string> MimeMappings = new Dictionary<string, string>
         {
             {".flv", "video/x-flv"},
             {".mp4", "video/mp4"},
@@ -31,18 +31,16 @@ namespace VimeoDotNet.Helpers
         {
             if (string.IsNullOrEmpty(videoFileName))
             {
-                return DEFAULT_CONTENT_TYPE;
+                return DefaultContentType;
             }
+
             if (!videoFileName.StartsWith("."))
             {
                 videoFileName = Path.GetExtension(videoFileName);
             }
-            string normalized = videoFileName.Trim().ToLower();
-            if (!_mimeMappings.ContainsKey(normalized))
-            {
-                return DEFAULT_CONTENT_TYPE;
-            }
-            return _mimeMappings[normalized];
+
+            var normalized = videoFileName.Trim().ToLower();
+            return !MimeMappings.ContainsKey(normalized) ? DefaultContentType : MimeMappings[normalized];
         }
     }
 }

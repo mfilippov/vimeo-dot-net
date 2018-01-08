@@ -1,40 +1,72 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
-    ///
+    /// Text track
     /// </summary>
-    [Serializable]
     public class TextTrack
     {
         /// <summary>
         /// URI
         /// </summary>
-        public string uri { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "uri")]
+        public string Uri { get; set; }
+
         /// <summary>
         /// Active
         /// </summary>
-        public bool active { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "active")]
+        public bool Active { get; set; }
+
         /// <summary>
         /// Type
         /// </summary>
-        public string type { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "type")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public TextTrackType? Type { get; set; }
+
         /// <summary>
         /// Language
         /// </summary>
-        public string language { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "language")]
+        public string Language { get; set; }
+
         /// <summary>
         /// Link
         /// </summary>
-        public string link { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "link")]
+        public string Link { get; set; }
+
         /// <summary>
         /// Hls link
         /// </summary>
-        public string hls_link { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "hls_link")]
+        public string HlsLink { get; set; }
+
         /// <summary>
         /// Name
         /// </summary>
-        public string name { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+    }
+
+    [PublicAPI]
+    public enum TextTrackType
+    {
+        Captions,
+        Chapters,
+        Descriptions,
+        Metadata,
+        SubTitles
     }
 }

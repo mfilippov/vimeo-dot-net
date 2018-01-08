@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
@@ -7,28 +8,41 @@ namespace VimeoDotNet.Models
     /// Paginated
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    [Serializable]
     public class Paginated<T> where T : class
     {
         /// <summary>
         /// Content
         /// </summary>
-        public List<T> data { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "data")]
+        public List<T> Data { get; set; }
+
         /// <summary>
         /// Total
         /// </summary>
-        public int total { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "total")]
+        public int Total { get; set; }
+
         /// <summary>
         /// Page
         /// </summary>
-        public int page { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "page")]
+        public int Page { get; set; }
+
         /// <summary>
         /// Per page
         /// </summary>
-        public int per_page { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "per_page")]
+        public int PerPage { get; set; }
+
         /// <summary>
         /// Paging
         /// </summary>
-        public Paging paging { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "paging")]
+        public Paging Paging { get; set; }
     }
 }

@@ -1,16 +1,18 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
-    ///
+    /// Video interactions
     /// </summary>
-    [Serializable]
     public class VideoInteractions
     {
         /// <summary>
         /// Watch later
         /// </summary>
-        public WatchLater watchlater { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "watchlater")]
+        public WatchLater WatchLater { get; set; }
     }
 }

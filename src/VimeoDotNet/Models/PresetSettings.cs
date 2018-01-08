@@ -1,80 +1,130 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
     /// Preset settings
     /// </summary>
-    [Serializable]
     public class PresetSettings
     {
         /// <summary>
         /// Buttons
         /// </summary>
-        public PresetButtons buttons { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "buttons")]
+        public PresetButtons Buttons { get; set; }
+
         /// <summary>
         /// Logos
         /// </summary>
-        public PresetLogos logos { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "logos")]
+        public PresetLogos Logos { get; set; }
+
         /// <summary>
         /// Outro
         /// </summary>
-        public string outro { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "outro")]
+        public string Outro { get; set; }
+
         /// <summary>
         /// Portrait
         /// </summary>
-        public string portrait { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "portrait")]
+        public string Portrait { get; set; }
+
         /// <summary>
         /// Title
         /// </summary>
-        public string title { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "title")]
+        public string Title { get; set; }
+
         /// <summary>
         /// Byline
         /// </summary>
-        public string byline { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "byline")]
+        public string Byline { get; set; }
+
         /// <summary>
         /// Badge
         /// </summary>
-        public bool badge { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "badge")]
+        public bool Badge { get; set; }
+
         /// <summary>
         /// Byline badge
         /// </summary>
-        public bool byline_badge { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "byline_badge")]
+        public bool BylineBadge { get; set; }
+
         /// <summary>
         /// Playbar
         /// </summary>
-        public bool playbar { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "playbar")]
+        public bool PlayBar { get; set; }
+
         /// <summary>
         /// Volume
         /// </summary>
-        public bool volume { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "volume")]
+        public bool Volume { get; set; }
+
         /// <summary>
         /// Fullscreen button
         /// </summary>
-        public bool fullscreen_button { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "fullscreen_button")]
+        public bool FullscreenButton { get; set; }
+
         /// <summary>
         /// Scaling button
         /// </summary>
-        public bool scaling_button { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "scaling_button")]
+        public bool ScalingButton { get; set; }
+
         /// <summary>
         /// Autoplay
         /// </summary>
-        public bool autoplay { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "autoplay")]
+        public bool AutoPlay { get; set; }
+
         /// <summary>
         /// Autopause
         /// </summary>
-        public bool autopause { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "autopause")]
+        public bool AutoPause { get; set; }
+
         /// <summary>
         /// Loop
         /// </summary>
-        public bool loop { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "loop")]
+        public bool Loop { get; set; }
+
         /// <summary>
         /// Color
         /// </summary>
-        public string color { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "color")]
+        public string Color { get; set; }
+
         /// <summary>
         /// Link
         /// </summary>
-        public bool link { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "link")]
+        public bool Link { get; set; }
     }
 }

@@ -1,131 +1,155 @@
 ﻿using System.Collections.Generic;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using VimeoDotNet.Enums;
 
 namespace VimeoDotNet.Parameters
 {
-	/// <summary>
-	/// Edit album privacy option
-	/// </summary>
-	public enum EditAlbumPrivacyOption
-	{
-		/// <summary>
-		/// Anybody
-		/// </summary>
-		Anybody,
-		/// <summary>
-		/// Password
-		/// </summary>
-		Password
-	}
+    /// <summary>
+    /// Edit album privacy option
+    /// </summary>
+    public enum EditAlbumPrivacyOption
+    {
+        /// <summary>
+        /// Anybody
+        /// </summary>
+        Anybody,
 
-	/// <summary>
-	/// Edit album sort option
-	/// </summary>
-	public enum EditAlbumSortOption
-	{
-		/// <summary>
-		/// Arranged
-		/// </summary>
-		Arranged,
-		/// <summary>
-		/// Newest
-		/// </summary>
-		Newest,
-		/// <summary>
-		/// Oldest
-		/// </summary>
-		Oldest,
-		/// <summary>
-		/// Plays
-		/// </summary>
-		Plays,
-		/// <summary>
-		/// Comments
-		/// </summary>
-		Comments,
-		/// <summary>
-		/// Likes
-		/// </summary>
-		Likes,
-		/// <summary>
-		/// Added first
-		/// </summary>
-		[ParameterValue("added_first")]
-		AddedFirst,
-		/// <summary>
-		/// Added last
-		/// </summary>
-		[ParameterValue("added_last")]
-		AddedLast,
-		/// <summary>
-		/// Alphbetical
-		/// </summary>
-		Alphbetical
-	}
+        /// <summary>
+        /// Password
+        /// </summary>
+        Password
+    }
 
-	/// <summary>
-	/// Edit album parameters
-	/// </summary>
-	public class EditAlbumParameters : IParameterProvider
-	{
-		/// <summary>
-		/// Name
-		/// </summary>
-		public string Name { get; set; }
+    /// <summary>
+    /// Edit album sort option
+    /// </summary>
+    [PublicAPI]
+    public enum EditAlbumSortOption
+    {
+        /// <summary>
+        /// Arranged
+        /// </summary>
+        Arranged,
 
-		/// <summary>
-		/// Description
-		/// </summary>
-		public string Description { get; set; }
+        /// <summary>
+        /// Newest
+        /// </summary>
+        Newest,
 
-		/// <summary>
-		/// Privacy
-		/// </summary>
-		public EditAlbumPrivacyOption? Privacy { get; set; }
+        /// <summary>
+        /// Oldest
+        /// </summary>
+        Oldest,
 
-		/// <summary>
-		/// Password
-		/// </summary>
-		public string Password { get; set; }
+        /// <summary>
+        /// Plays
+        /// </summary>
+        Plays,
 
-		/// <summary>
-		/// Sort
-		/// </summary>
-		public EditAlbumSortOption? Sort { get; set; }
+        /// <summary>
+        /// Comments
+        /// </summary>
+        Comments,
 
-	    /// <summary>
-	    /// Performs validation and returns a description of the first error encountered.
-	    /// </summary>
-	    /// <returns>Description of first error, or null if none found.</returns>
-	    public string ValidationError()
-		{
-			if (Privacy.HasValue && Privacy.Value == EditAlbumPrivacyOption.Password && Password == null)
-			{
-				return "Password is required if Privacy value is set to Password.";
-			}
+        /// <summary>
+        /// Likes
+        /// </summary>
+        Likes,
 
-			return null;
-		}
+        /// <summary>
+        /// Added first
+        /// </summary>
+        [ParameterValue("added_first")] AddedFirst,
 
-	    /// <summary>
-	    /// Provides universal interface to retrieve parameter values.
-	    /// </summary>
-	    /// <returns>Returns all parameters as name/value pairs.</returns>
-	    public IDictionary<string, string> GetParameterValues()
-		{
-			Dictionary<string, string> parameterValues = new Dictionary<string, string>();
+        /// <summary>
+        /// Added last
+        /// </summary>
+        [ParameterValue("added_last")] AddedLast,
 
-			if (Privacy.HasValue) { parameterValues.Add("privacy", Privacy.Value.GetParameterValue()); }
-			if (Sort.HasValue) { parameterValues.Add("sort", Sort.Value.GetParameterValue()); }
+        /// <summary>
+        /// Alphbetical
+        /// </summary>
+        Alphbetical
+    }
 
-			if (Name != null) { parameterValues.Add("name", Name); }
-			if (Description != null) { parameterValues.Add("description", Description); }
-			if (Password != null) { parameterValues.Add("password", Password); }
+    /// <inheritdoc />
+    public class EditAlbumParameters : IParameterProvider
+    {
+        /// <summary>
+        /// Name
+        /// </summary>
+        [PublicAPI]
+        public string Name { get; set; }
 
-			if (parameterValues.Keys.Count > 0) { return parameterValues; }
+        /// <summary>
+        /// Description
+        /// </summary>
+        [PublicAPI]
+        public string Description { get; set; }
 
-			return null;
+        /// <summary>
+        /// Privacy
+        /// </summary>
+        [PublicAPI]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public EditAlbumPrivacyOption? Privacy { get; set; }
 
-		}
-	}
+        /// <summary>
+        /// Password
+        /// </summary>
+        [PublicAPI]
+        public string Password { get; set; }
+
+        /// <summary>
+        /// Sort
+        /// </summary>
+        [PublicAPI]
+        public EditAlbumSortOption? Sort { get; set; }
+
+        /// <inheritdoc />
+        public string ValidationError()
+        {
+            if (Privacy.HasValue && Privacy.Value == EditAlbumPrivacyOption.Password && Password == null)
+            {
+                return "Password is required if Privacy value is set to Password.";
+            }
+
+            return null;
+        }
+
+        /// <inheritdoc />
+        public IDictionary<string, string> GetParameterValues()
+        {
+            var parameterValues = new Dictionary<string, string>();
+
+            if (Privacy.HasValue)
+            {
+                parameterValues.Add("privacy", Privacy.Value.GetParameterValue());
+            }
+
+            if (Sort.HasValue)
+            {
+                parameterValues.Add("sort", Sort.Value.GetParameterValue());
+            }
+
+            if (Name != null)
+            {
+                parameterValues.Add("name", Name);
+            }
+
+            if (Description != null)
+            {
+                parameterValues.Add("description", Description);
+            }
+
+            if (Password != null)
+            {
+                parameterValues.Add("password", Password);
+            }
+
+            return parameterValues.Keys.Count > 0 ? parameterValues : null;
+        }
+    }
 }

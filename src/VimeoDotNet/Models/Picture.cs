@@ -1,31 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 
-namespace VimeoDotNet.Models {
+namespace VimeoDotNet.Models
+{
     /// <summary>
     /// Picture
     /// </summary>
-    [Serializable]
-    public class Picture {
+    public class Picture
+    {
         /// <summary>
         /// Active
         /// </summary>
-        public bool active { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "active")]
+        public bool Active { get; set; }
+
         /// <summary>
         /// URI
         /// </summary>
-        public string uri { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "uri")]
+        public string Uri { get; set; }
+
         /// <summary>
         /// Sizes
         /// </summary>
-        public List<Size> sizes { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "sizes")]
+        public List<Size> Sizes { get; set; }
+
         ///
-        /// link
+        /// Link
         ///
-        public string link { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "link")]
+        public string Link { get; set; }
+
         ///
-        /// resource_key
+        /// Resource_key
         ///
-        public string resource_key { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "resource_key")]
+        public string ResourceKey { get; set; }
     }
 }

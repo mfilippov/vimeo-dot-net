@@ -1,65 +1,103 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
     /// Upload ticket
     /// </summary>
-    [Serializable]
     public class UploadTicket
     {
         /// <summary>
         /// Ticket id
         /// </summary>
-        public string ticket_id { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "ticket_id")]
+        public string TicketId { get; set; }
+
         /// <summary>
         /// URI
         /// </summary>
-        public string uri { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "uri")]
+        public string Uri { get; set; }
+
         /// <summary>
         /// Complete URI
         /// </summary>
-        public string complete_uri { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "complete_uri")]
+        public string CompleteUri { get; set; }
+
         /// <summary>
         /// Upload URI
         /// </summary>
-        public string upload_uri { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "upload_uri")]
+        public string UploadUri { get; set; }
+
         /// <summary>
         /// Upload URI secure
         /// </summary>
-        public string upload_uri_secure { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "upload_uri_secure")]
+        public string UploadUriSecure { get; set; }
+
         /// <summary>
         /// Upload link
         /// </summary>
-        public string upload_link { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "upload_link")]
+        public string UploadLink { get; set; }
+
         /// <summary>
         /// Upload link secure
         /// </summary>
-        public string upload_link_secure { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "upload_link_secure")]
+        public string UploadLinkSecure { get; set; }
+
         /// <summary>
         /// Type
         /// </summary>
-        public string type { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
         /// <summary>
         /// User
         /// </summary>
-        public User user { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "user")]
+        public User User { get; set; }
+
         /// <summary>
         /// Video
         /// </summary>
-        public Video video { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "video")]
+        public Video Video { get; set; }
+
         /// <summary>
         /// Upload status
         /// </summary>
-        public UploadStatus upload { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "upload")]
+        public UploadStatus Upload { get; set; }
+
         /// <summary>
         /// Transcode
         /// </summary>
-        public List<Transcode> transcode { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "transcode")]
+        public List<Transcode> Transcode { get; set; }
+
         /// <summary>
         /// Quota
         /// </summary>
-        public UploadTicketQuota quota { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "quota")]
+        public UploadTicketQuota Quota { get; set; }
     }
 }

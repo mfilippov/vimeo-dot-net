@@ -1,20 +1,25 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
     /// User quota
     /// </summary>
-    [Serializable]
     public class UserQuota
     {
         /// <summary>
         /// HD
         /// </summary>
-        public bool hd { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "hd")]
+        public bool Hd { get; set; }
+
         /// <summary>
         /// SD
         /// </summary>
-        public bool sd { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "sd")]
+        public bool Sd { get; set; }
     }
 }

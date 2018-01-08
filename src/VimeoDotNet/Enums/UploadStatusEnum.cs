@@ -9,10 +9,12 @@
         /// NotFound
         /// </summary>
         NotFound,
+
         /// <summary>
         /// InProgress
         /// </summary>
         InProgress,
+
         /// <summary>
         /// Completed
         /// </summary>

@@ -9,10 +9,12 @@
         /// Unknown
         /// </summary>
         Unknown,
+
         /// <summary>
         /// Available
         /// </summary>
         Available,
+
         /// <summary>
         /// UploadError
         /// </summary>

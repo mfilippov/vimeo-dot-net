@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp1.1;net452</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.0;net452</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
@@ -14,8 +14,8 @@
     <ProjectReference Include="..\VimeoDotNet\VimeoDotNet.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\test.mp4"/>
-    <EmbeddedResource Include="Resources\test.png"/>
-    <EmbeddedResource Include="Resources\test.vtt"/>
+    <EmbeddedResource Include="Resources\test.mp4" />
+    <EmbeddedResource Include="Resources\test.png" />
+    <EmbeddedResource Include="Resources\test.vtt" />
   </ItemGroup>
 </Project>

@@ -1,16 +1,19 @@
-﻿using System;
+﻿
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
-    ///
+    /// Album statistics
     /// </summary>
-    [Serializable]
     public class AlbumStats
     {
         /// <summary>
         /// Videos
         /// </summary>
-        public int videos { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "plays")]
+        public int Plays { get; set; }
     }
 }

@@ -1,40 +1,61 @@
 ﻿using System;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
 {
     /// <summary>
     /// Upload ticket quota
     /// </summary>
-    [Serializable]
     public class UploadTicketQuota
     {
         /// <summary>
         /// SD
         /// </summary>
-        public bool sd { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "sd")]
+        public bool Sd { get; set; }
+
         /// <summary>
         /// HD
         /// </summary>
-        public bool hd { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "hd")]
+        public bool Hd { get; set; }
+
         /// <summary>
         /// Total space
         /// </summary>
-        public long total_space { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "total_space")]
+        public long TotalSpace { get; set; }
+
         /// <summary>
         /// Space used
         /// </summary>
-        public long space_used { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "space_used")]
+        public long SpaceUsed { get; set; }
+
         /// <summary>
         /// Free space
         /// </summary>
-        public long free_space { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "free_space")]
+        public long FreeSpace { get; set; }
+
         /// <summary>
         /// Max file size
         /// </summary>
-        public long max_file_size { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "max_file_size")]
+        public long MaxFileSize { get; set; }
+
         /// <summary>
         /// Resets
         /// </summary>
-        public DateTime resets { get; set; }
+        [PublicAPI]
+        [JsonProperty(PropertyName = "resets")]
+        public DateTime Resets { get; set; }
     }
 }
