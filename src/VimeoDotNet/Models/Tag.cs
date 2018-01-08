@@ -9,6 +9,21 @@ namespace VimeoDotNet.Models
     public class Tag
     {
         /// <summary>
+        /// Id
+        /// </summary>
+        [PublicAPI]
+        [JsonProperty(PropertyName = "tag")]
+        public string Id { get; set; }
+
+
+        /// <summary>
+        /// URI
+        /// </summary>
+        [PublicAPI]
+        [JsonProperty(PropertyName = "uri")]
+        public string Uri { get; set; }
+
+        /// <summary>
         /// Name
         /// </summary>
         [PublicAPI]
@@ -21,5 +36,12 @@ namespace VimeoDotNet.Models
         [PublicAPI]
         [JsonProperty(PropertyName = "canonical")]
         public string Canonical { get; set; }
+
+        /// <summary>
+        /// Metadata
+        /// </summary>
+        [PublicAPI]
+        [JsonProperty(PropertyName = "metadata")]
+        public TagMetadata Metadata { get; set; }
     }
 }
