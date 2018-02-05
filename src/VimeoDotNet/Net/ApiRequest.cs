@@ -56,7 +56,7 @@ namespace VimeoDotNet.Net
                 {
                     Protocol = parsed.Scheme;
                     Host = parsed.Host;
-                    Path = parsed.PathAndQuery;
+                    _path = parsed.PathAndQuery;
                     Port = parsed.Port;
                 }
                 else
