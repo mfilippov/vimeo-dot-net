@@ -9,6 +9,7 @@ namespace VimeoDotNet.Tests
     public class BaseTest
     {
         protected readonly VimeoApiTestSettings VimeoSettings;
+        protected readonly IVimeoClient AuthenticatedClient;
 
         protected const string TestFilePath = @"VimeoDotNet.Tests.Resources.test.mp4";
         // http://download.wavetlan.com/SVV/Media/HTTP/http-mp4.htm
@@ -22,6 +23,7 @@ namespace VimeoDotNet.Tests
             // Load the settings from a file that is not under version control for security
             // The settings loader will create this file in the bin/ folder if it doesn't exist
             VimeoSettings = SettingsLoader.LoadSettings();
+            AuthenticatedClient = CreateAuthenticatedClient();
         }
 
         protected async Task<VimeoClient> CreateUnauthenticatedClient()
