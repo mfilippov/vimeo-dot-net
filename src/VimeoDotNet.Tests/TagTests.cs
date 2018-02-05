@@ -60,7 +60,7 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
-        public async Task ShouldCorrectlyGetVideobyTag()
+        public async Task ShouldCorrectlyGetVideoByTag()
         {
             var client = CreateAuthenticatedClient();
             var result = await client.GetVideoByTag("test", 1, 10, GetVideoByTagSort.Name,

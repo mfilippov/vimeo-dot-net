@@ -52,7 +52,7 @@ namespace VimeoDotNet.Net
             get => _path;
             set
             {
-                if (Uri.TryCreate(value, UriKind.Absolute, out var parsed))
+                if (Uri.TryCreate(value, UriKind.Absolute, out var parsed) && parsed.Scheme != "file")
                 {
                     Protocol = parsed.Scheme;
                     Host = parsed.Host;
