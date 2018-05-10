@@ -20,7 +20,7 @@ namespace VimeoDotNet
             try
             {
                 var request = GenerateUploadTicketRequest();
-                var response = await request.ExecuteRequestAsync<UploadTicket>();
+                var response = await request.ExecuteRequestAsync<UploadTicket>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(null, response, "Error generating upload ticket.");
 
@@ -43,7 +43,7 @@ namespace VimeoDotNet
             try
             {
                 var request = GenerateReplaceVideoUploadTicketRequest(videoId);
-                var response = await request.ExecuteRequestAsync<UploadTicket>();
+                var response = await request.ExecuteRequestAsync<UploadTicket>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(null, response, "Error generating upload ticket to replace video.");
 
@@ -65,21 +65,21 @@ namespace VimeoDotNet
             int chunkSize = DefaultUploadChunkSize,
             long? replaceVideoId = null)
         {
-            var uploadRequest = await StartUploadFileAsync(fileContent, chunkSize, replaceVideoId);
+            var uploadRequest = await StartUploadFileAsync(fileContent, chunkSize, replaceVideoId).ConfigureAwait(false);
 
             while (!uploadRequest.IsVerifiedComplete)
             {
-                var uploadStatus = await ContinueUploadFileAsync(uploadRequest);
+                var uploadStatus = await ContinueUploadFileAsync(uploadRequest).ConfigureAwait(false);
 
                 if (uploadStatus.Status == UploadStatusEnum.InProgress)
                     continue;
                 // We presumably wrote all the bytes in the file, so verify with Vimeo that it
                 // is completed
-                uploadStatus = await VerifyUploadFileAsync(uploadRequest);
+                uploadStatus = await VerifyUploadFileAsync(uploadRequest).ConfigureAwait(false);
                 if (uploadStatus.Status == UploadStatusEnum.Completed)
                 {
                     // If completed, mark file as complete
-                    await CompleteFileUploadAsync(uploadRequest);
+                    await CompleteFileUploadAsync(uploadRequest).ConfigureAwait(false);
                     uploadRequest.IsVerifiedComplete = true;
                 }
                 else if (uploadStatus.BytesWritten == uploadRequest.FileLength)
@@ -110,7 +110,7 @@ namespace VimeoDotNet
                     param
                 );
 
-                return await ExecuteApiRequest<Video>(request);
+                return await ExecuteApiRequest<Video>(request).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -128,8 +128,8 @@ namespace VimeoDotNet
         {
             try
             {
-                var pic = await UploadPictureAsync(fileContent, clipId);
-                await SetThumbnailActiveAsync(pic.Uri);
+                var pic = await UploadPictureAsync(fileContent, clipId).ConfigureAwait(false);
+                await SetThumbnailActiveAsync(pic.Uri).ConfigureAwait(false);
                 return pic;
             }
             catch (Exception ex)
@@ -165,8 +165,8 @@ namespace VimeoDotNet
             }
 
             var ticket = replaceVideoId.HasValue
-                ? await GetReplaceVideoUploadTicketAsync(replaceVideoId.Value)
-                : await GetUploadTicketAsync();
+                ? await GetReplaceVideoUploadTicketAsync(replaceVideoId.Value).ConfigureAwait(false)
+                : await GetUploadTicketAsync().ConfigureAwait(false);
 
             var uploadRequest = new UploadRequest
             {
@@ -175,7 +175,6 @@ namespace VimeoDotNet
                 ChunkSize = chunkSize
             };
 
-            //VerifyUploadResponse uploadStatus = await ContinueUploadFileAsync(uploadRequest);
             return uploadRequest;
         }
 
@@ -199,14 +198,14 @@ namespace VimeoDotNet
             try
             {
                 var request = await GenerateFileStreamRequest(uploadRequest.File, uploadRequest.Ticket,
-                    chunkSize: uploadRequest.ChunkSize, written: uploadRequest.BytesWritten);
-                var response = await request.ExecuteRequestAsync();
+                    chunkSize: uploadRequest.ChunkSize, written: uploadRequest.BytesWritten).ConfigureAwait(false);
+                var response = await request.ExecuteRequestAsync().ConfigureAwait(false);
                 CheckStatusCodeError(uploadRequest, response, "Error uploading file chunk.", HttpStatusCode.BadRequest);
 
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     // something went wrong, figure out where we need to start over
-                    return await VerifyUploadFileAsync(uploadRequest);
+                    return await VerifyUploadFileAsync(uploadRequest).ConfigureAwait(false);
                 }
 
                 // Success, update total written
@@ -242,8 +241,9 @@ namespace VimeoDotNet
             try
             {
                 var request =
-                    await GenerateFileStreamRequest(uploadRequest.File, uploadRequest.Ticket, verifyOnly: true);
-                var response = await request.ExecuteRequestAsync();
+                    await GenerateFileStreamRequest(uploadRequest.File, uploadRequest.Ticket, verifyOnly: true)
+                        .ConfigureAwait(false);
+                var response = await request.ExecuteRequestAsync().ConfigureAwait(false);
                 var verify = new VerifyUploadResponse();
                 CheckStatusCodeError(uploadRequest, response, "Error verifying file upload.", (HttpStatusCode) 308);
 
@@ -302,7 +302,7 @@ namespace VimeoDotNet
             try
             {
                 var request = GenerateCompleteUploadRequest(uploadRequest.Ticket);
-                var response = await request.ExecuteRequestAsync();
+                var response = await request.ExecuteRequestAsync().ConfigureAwait(false);
                 CheckStatusCodeError(uploadRequest, response, "Error marking file upload as complete.");
 
                 if (response.Headers.Location != null)
@@ -362,7 +362,7 @@ namespace VimeoDotNet
                 {
                     var startIndex = fileContent.Data.CanSeek ? fileContent.Data.Position : written;
                     var endIndex = Math.Min(startIndex + chunkSize.Value, fileContent.Data.Length);
-                    var byteArray = await fileContent.ReadAsync(startIndex, endIndex);
+                    var byteArray = await fileContent.ReadAsync(startIndex, endIndex).ConfigureAwait(false);
                     var body = new ByteArrayContent(byteArray, 0, byteArray.Length);
                     body.Headers.Add("Content-Range", $"bytes {startIndex}-{endIndex}/*");
                     body.Headers.ContentLength = endIndex - startIndex;
@@ -370,7 +370,7 @@ namespace VimeoDotNet
                 }
                 else
                 {
-                    request.Body = new ByteArrayContent(await fileContent.ReadAllAsync());
+                    request.Body = new ByteArrayContent(await fileContent.ReadAllAsync().ConfigureAwait(false));
                 }
             }
 

@@ -19,7 +19,7 @@ namespace VimeoDotNet
             try
             {
                 var request = GenerateVideosRequest(clipId: clipId, fields: fields);
-                var response = await request.ExecuteRequestAsync<Video>();
+                var response = await request.ExecuteRequestAsync<Video>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving account video.", HttpStatusCode.NotFound);
 
@@ -44,7 +44,7 @@ namespace VimeoDotNet
             {
                 var request = GenerateVideosRequest(userId, page: page, perPage: perPage, query: query,
                     fields: fields);
-                var response = await request.ExecuteRequestAsync<Paginated<Video>>();
+                var response = await request.ExecuteRequestAsync<Paginated<Video>>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving user videos.", HttpStatusCode.NotFound);
 
@@ -77,7 +77,7 @@ namespace VimeoDotNet
             try
             {
                 var request = GenerateVideoDeleteRequest(clipId);
-                var response = await request.ExecuteRequestAsync();
+                var response = await request.ExecuteRequestAsync().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error deleting video.");
             }
@@ -100,7 +100,7 @@ namespace VimeoDotNet
             {
                 var request = GenerateAlbumVideosRequest(albumId, page: page, perPage: perPage, sort: sort,
                     direction: direction, fields: fields);
-                var response = await request.ExecuteRequestAsync<Paginated<Video>>();
+                var response = await request.ExecuteRequestAsync<Paginated<Video>>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving account album videos.", HttpStatusCode.NotFound);
 
@@ -133,7 +133,7 @@ namespace VimeoDotNet
             try
             {
                 var request = GenerateVideoPatchRequest(clipId, metaData);
-                var response = await request.ExecuteRequestAsync();
+                var response = await request.ExecuteRequestAsync().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error updating user video metadata.");
             }
@@ -154,7 +154,7 @@ namespace VimeoDotNet
             try
             {
                 var request = GenerateVideoAllowedDomainPatchRequest(clipId, domain);
-                var response = await request.ExecuteRequestAsync();
+                var response = await request.ExecuteRequestAsync().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error updating user video allowed domain.");
             }
@@ -384,7 +384,7 @@ namespace VimeoDotNet
                 request.UrlSegments.Add("clipId", clipId.ToString());
                 request.UrlSegments.Add("pictureId", clipId.ToString());
 
-                var response = await request.ExecuteRequestAsync<Picture>();
+                var response = await request.ExecuteRequestAsync<Picture>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving video picture.", HttpStatusCode.NotFound);
 
@@ -412,7 +412,7 @@ namespace VimeoDotNet
                 request.Path = Endpoints.Pictures;
                 request.UrlSegments.Add("clipId", clipId.ToString());
 
-                var response = await request.ExecuteRequestAsync<Paginated<Picture>>();
+                var response = await request.ExecuteRequestAsync<Paginated<Picture>>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving video picture.", HttpStatusCode.NotFound);
 
@@ -455,9 +455,9 @@ namespace VimeoDotNet
                 request.Path = Endpoints.Pictures;
                 request.UrlSegments.Add("clipId", clipId.ToString());
 
-                request.Body = new ByteArrayContent(await fileContent.ReadAllAsync());
+                request.Body = new ByteArrayContent(await fileContent.ReadAllAsync().ConfigureAwait(false));
 
-                var response = await request.ExecuteRequestAsync<Picture>();
+                var response = await request.ExecuteRequestAsync<Picture>().ConfigureAwait(false);
 
                 CheckStatusCodeError(null, response, "Error generating upload ticket to replace video.");
 
@@ -490,7 +490,7 @@ namespace VimeoDotNet
                 request.Path = link;
                 request.Query.Add("active", "true");
 
-                var response = await request.ExecuteRequestAsync();
+                var response = await request.ExecuteRequestAsync().ConfigureAwait(false);
 
                 CheckStatusCodeError(null, response, "Error Setting thumbnail image active.");
             }

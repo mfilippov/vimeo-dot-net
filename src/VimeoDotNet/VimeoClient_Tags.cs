@@ -24,7 +24,7 @@ namespace VimeoDotNet
                 request.UrlSegments.Add("clipId", clipId.ToString());
                 request.UrlSegments.Add("tagId", tag);
 
-                var response = await request.ExecuteRequestAsync<Tag>();
+                var response = await request.ExecuteRequestAsync<Tag>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Cannot create tag");
 
@@ -54,7 +54,7 @@ namespace VimeoDotNet
                 request.UrlSegments.Add("clipId", clipId.ToString());
                 request.UrlSegments.Add("tagId", tag);
 
-                var response = await request.ExecuteRequestAsync();
+                var response = await request.ExecuteRequestAsync().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Cannot delete tag");
             }
@@ -90,7 +90,7 @@ namespace VimeoDotNet
                     request.Query["per_page"] = perPage.ToString();
                 }
 
-                var response = await request.ExecuteRequestAsync<Paginated<Tag>>();
+                var response = await request.ExecuteRequestAsync<Paginated<Tag>>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Cannot get tags");
                 return response.Content;
@@ -118,7 +118,7 @@ namespace VimeoDotNet
                 request.Path = Endpoints.Tag;
                 request.UrlSegments.Add("tagId", tag);
 
-                var response = await request.ExecuteRequestAsync<Tag>();
+                var response = await request.ExecuteRequestAsync<Tag>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Cannot get tag");
 
@@ -178,7 +178,7 @@ namespace VimeoDotNet
                     request.Query.Add("direction", direction.Value.GetStringValue());
                 }
 
-                var response = await request.ExecuteRequestAsync<Paginated<Video>>();
+                var response = await request.ExecuteRequestAsync<Paginated<Video>>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving videos by tag", HttpStatusCode.NotFound);
 

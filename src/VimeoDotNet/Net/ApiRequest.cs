@@ -147,8 +147,8 @@ namespace VimeoDotNet.Net
         /// <inheritdoc />
         public async Task<IApiResponse> ExecuteRequestAsync()
         {
-            var response = await Client.SendAsync(PrepareRequest());
-            var text = await response.Content.ReadAsStringAsync();
+            var response = await Client.SendAsync(PrepareRequest()).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return new ApiResponse(response.StatusCode, response.Headers, text);
         }
 
@@ -156,8 +156,8 @@ namespace VimeoDotNet.Net
         public async Task<IApiResponse<T>> ExecuteRequestAsync<T>() where T : new()
         {
             var request = PrepareRequest();
-            var response = await Client.SendAsync(request);
-            var text = await response.Content.ReadAsStringAsync();
+            var response = await Client.SendAsync(request).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return new ApiResponse<T>(response.StatusCode, response.Headers, text,
                 JsonConvert.DeserializeObject<T>(text, DateFormatSettings));
         }

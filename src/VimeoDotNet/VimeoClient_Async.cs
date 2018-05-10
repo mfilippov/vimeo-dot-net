@@ -135,7 +135,7 @@ namespace VimeoDotNet
         public async Task<AccessTokenResponse> GetAccessTokenAsync(string authorizationCode, string redirectUrl)
         {
             PrepAuthorizationClient();
-            return await OAuth2Client.GetAccessTokenAsync(authorizationCode, redirectUrl);
+            return await OAuth2Client.GetAccessTokenAsync(authorizationCode, redirectUrl).ConfigureAwait(false);
         }
 
         private void PrepAuthorizationClient()
@@ -159,7 +159,7 @@ namespace VimeoDotNet
                 Endpoints.GetCurrentUserEndpoint(Endpoints.User)
             );
 
-            return await ExecuteApiRequest<User>(request);
+            return await ExecuteApiRequest<User>(request).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -173,7 +173,7 @@ namespace VimeoDotNet
                 parameters
             );
 
-            return await ExecuteApiRequest<User>(request);
+            return await ExecuteApiRequest<User>(request).ConfigureAwait(false);
         }
 
 
@@ -190,7 +190,7 @@ namespace VimeoDotNet
                 }
             );
 
-            return await ExecuteApiRequest<User>(request);
+            return await ExecuteApiRequest<User>(request).ConfigureAwait(false);
         }
 
         #endregion
@@ -206,7 +206,8 @@ namespace VimeoDotNet
         /// <returns></returns>
         private async Task<T> ExecuteApiRequest<T>(IApiRequest request) where T : new()
         {
-            return await ExecuteApiRequest(request, statusCode => default(T), HttpStatusCode.NotFound);
+            return await ExecuteApiRequest(request, statusCode => default(T), HttpStatusCode.NotFound)
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -232,7 +233,7 @@ namespace VimeoDotNet
         {
             try
             {
-                var response = await request.ExecuteRequestAsync<T>();
+                var response = await request.ExecuteRequestAsync<T>().ConfigureAwait(false);
                 UpdateRateLimit(response);
 
                 // if request was successful, return immediately...
@@ -270,7 +271,7 @@ namespace VimeoDotNet
         {
             try
             {
-                var response = await request.ExecuteRequestAsync();
+                var response = await request.ExecuteRequestAsync().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 // if request was successful, return immediately...
                 if (IsSuccessStatusCode(response.StatusCode))

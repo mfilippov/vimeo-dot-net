@@ -75,7 +75,7 @@ namespace VimeoDotNet.Authorization
             try
             {
                 var request = BuildAccessTokenRequest(authorizationCode, redirectUri);
-                var result = await request.ExecuteRequestAsync<AccessTokenResponse>();
+                var result = await request.ExecuteRequestAsync<AccessTokenResponse>().ConfigureAwait(false);
                 CheckStatusCodeError(result, "Error getting access token.");
                 return result.Content;
             }
@@ -100,7 +100,7 @@ namespace VimeoDotNet.Authorization
         public async Task<bool> VerifyAccessTokenAsync(string accessToken)
         {
             var request = GenerateVerifyRequest(accessToken);
-            var result = await request.ExecuteRequestAsync();
+            var result = await request.ExecuteRequestAsync().ConfigureAwait(false);
             return result.StatusCode == HttpStatusCode.OK;
         }
 
@@ -108,7 +108,7 @@ namespace VimeoDotNet.Authorization
         public async Task<AccessTokenResponse> GetUnauthenticatedTokenAsync()
         {
             var request = BuildUnauthenticatedTokenRequest();
-            var result = await request.ExecuteRequestAsync<AccessTokenResponse>();
+            var result = await request.ExecuteRequestAsync<AccessTokenResponse>().ConfigureAwait(false);
             return result.Content;
         }
 

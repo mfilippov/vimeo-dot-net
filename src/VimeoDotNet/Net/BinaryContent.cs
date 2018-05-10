@@ -91,14 +91,14 @@ namespace VimeoDotNet.Net
         public async Task<byte[]> ReadAllAsync()
         {
             VerifyCanRead(0);
-            return await ReadDataStream(0, Data.Length);
+            return await ReadDataStream(0, Data.Length).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<byte[]> ReadAsync(long startIndex, long endIndex)
         {
             VerifyCanRead(startIndex);
-            return await ReadDataStream(startIndex, endIndex - startIndex);
+            return await ReadDataStream(startIndex, endIndex - startIndex).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -149,9 +149,10 @@ namespace VimeoDotNet.Net
                 while (totalRead < length)
                 {
                     var read = await Data.ReadAsync(buffer, 0,
-                        length - totalRead > buffer.Length ? buffer.Length : (int) (length - totalRead));
+                        length - totalRead > buffer.Length ? buffer.Length : (int) (length - totalRead))
+                        .ConfigureAwait(false);
                     totalRead += read;
-                    await ms.WriteAsync(buffer, 0, read);
+                    await ms.WriteAsync(buffer, 0, read).ConfigureAwait(false);
                 }
 
                 return ms.ToArray();

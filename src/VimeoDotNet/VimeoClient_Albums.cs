@@ -23,7 +23,7 @@ namespace VimeoDotNet
                 }
             );
 
-            return await ExecuteApiRequest<Album>(request);
+            return await ExecuteApiRequest<Album>(request).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -40,7 +40,7 @@ namespace VimeoDotNet
                 parameters
             );
 
-            return await ExecuteApiRequest<Paginated<Album>>(request);
+            return await ExecuteApiRequest<Paginated<Album>>(request).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -57,7 +57,7 @@ namespace VimeoDotNet
                 parameters
             );
 
-            return await ExecuteApiRequest<Album>(request);
+            return await ExecuteApiRequest<Album>(request).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -75,7 +75,7 @@ namespace VimeoDotNet
                 parameters
             );
 
-            return await ExecuteApiRequest<Album>(request);
+            return await ExecuteApiRequest<Album>(request).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -92,7 +92,7 @@ namespace VimeoDotNet
                 }
             );
 
-            return await ExecuteApiRequest(request);
+            return await ExecuteApiRequest(request).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -110,7 +110,7 @@ namespace VimeoDotNet
                 }
             );
 
-            return await ExecuteApiRequest(request);
+            return await ExecuteApiRequest(request).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -127,7 +127,7 @@ namespace VimeoDotNet
                 }
             );
 
-            return await ExecuteApiRequest(request);
+            return await ExecuteApiRequest(request).ConfigureAwait(false);
         }
     }
 }
