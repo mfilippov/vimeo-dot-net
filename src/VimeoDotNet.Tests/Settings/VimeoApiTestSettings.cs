@@ -12,6 +12,7 @@
         public long AlbumId { get; set; }
         public long VideoId { get; set; }
         public long TextTrackId { get; set; }
+        public long EmbedPresetId { get; set; }
 
         public long PublicUserId { get; set; }
     }

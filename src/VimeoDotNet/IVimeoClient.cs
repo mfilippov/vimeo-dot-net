@@ -354,5 +354,28 @@ namespace VimeoDotNet
             int? perPage = null, GetVideoByTagSort? sort = null, GetVideoByTagDirection? direction = null, string[] fields = null);
 
         #endregion
+
+        #region EmbedPresets
+
+        /// <summary>
+        /// Get embed preset by user ID and preset ID asynchronously
+        /// </summary>
+        /// <param name="userId">User ID</param>
+        /// <param name="presetId">Preset ID</param>
+        /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter</param>
+        /// <returns>Embed preset</returns>
+        Task<EmbedPresets> GetEmbedPresetAsync(UserId userId, long presetId, string[] fields = null);
+
+        /// <summary>
+        /// Get embed presets by user ID and page parameters asynchronously
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="page">The page number to show</param>
+        /// <param name="perPage">Number of items to show on each page. Max 50</param>
+        /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter</param>
+        /// <returns>Paginated embed presets</returns>
+        Task<Paginated<EmbedPresets>> GetEmbedPresetsAsync(UserId userId, int? page = null, int? perPage = null, string[] fields = null);
+
+        #endregion
     }
 }
