@@ -114,6 +114,20 @@ namespace VimeoDotNet
         Task UpdateVideoMetadataAsync(long clipId, VideoUpdateMetadata metaData);
 
         /// <summary>
+        /// Assign an embed preset to a video asynchronously
+        /// </summary>
+        /// <param name="clipId">Clip ID</param>
+        /// <param name="presetId">Preset ID</param>
+        Task AssignEmbedPresetToVideoAsync(long clipId, long presetId);
+
+        /// <summary>
+        /// Unassign an embed preset from a video asynchronously
+        /// </summary>
+        /// <param name="clipId">Clip ID</param>
+        /// <param name="presetId">Preset ID</param>
+        Task UnassignEmbedPresetFromVideoAsync(long clipId, long presetId);
+
+        /// <summary>
         /// Delete video asynchronously
         /// </summary>
         /// <param name="clipId">CliepId</param>

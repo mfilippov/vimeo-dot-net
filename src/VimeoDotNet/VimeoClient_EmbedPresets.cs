@@ -23,13 +23,12 @@ namespace VimeoDotNet
 
                 return response.StatusCode == HttpStatusCode.NotFound ? null : response.Content;
             }
+            catch (VimeoApiException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
-                if (ex is VimeoApiException)
-                {
-                    throw;
-                }
-
                 throw new VimeoApiException("Error retrieving user embed preset.", ex);
             }
         }
@@ -46,13 +45,12 @@ namespace VimeoDotNet
 
                 return response.StatusCode == HttpStatusCode.NotFound ? null : response.Content;
             }
+            catch (VimeoApiException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
-                if (ex is VimeoApiException)
-                {
-                    throw;
-                }
-
                 throw new VimeoApiException("Error retrieving user embed presets.", ex);
             }
         }
