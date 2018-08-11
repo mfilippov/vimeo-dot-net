@@ -25,5 +25,32 @@ namespace VimeoDotNet.Models
         {
             return IsMe ? "me" : Id.ToString();
         }
+
+        private bool Equals(UserId other)
+        {
+            return Id == other.Id;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == this.GetType() && Equals((UserId) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
+        public static bool operator ==(UserId left, UserId right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(UserId left, UserId right)
+        {
+            return !Equals(left, right);
+        }
     }
 }
