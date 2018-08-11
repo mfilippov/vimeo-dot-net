@@ -14,6 +14,9 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyRetrieveMyEmbedPresetById()
         {
+            if (VimeoSettings.EmbedPresetId == 0)
+                return;
+
             var client = CreateAuthenticatedClient();
             var preset = await client.GetEmbedPresetAsync(UserId.Me, VimeoSettings.EmbedPresetId);
             preset.ShouldNotBeNull();
@@ -23,6 +26,9 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyRetrieveUserEmbedPresetById()
         {
+            if (VimeoSettings.EmbedPresetId == 0)
+                return;
+
             var client = CreateAuthenticatedClient();
             var preset = await client.GetEmbedPresetAsync(VimeoSettings.UserId, VimeoSettings.EmbedPresetId);
             preset.ShouldNotBeNull();
@@ -32,6 +38,9 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyRetrieveMyEmbedPresets()
         {
+            if (VimeoSettings.EmbedPresetId == 0)
+                return;
+
             var client = CreateAuthenticatedClient();
             var presets = await client.GetEmbedPresetsAsync(UserId.Me);
             presets.ShouldNotBeNull();
@@ -41,6 +50,9 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyRetrieveUserEmbedPresets()
         {
+            if (VimeoSettings.EmbedPresetId == 0)
+                return;
+
             var client = CreateAuthenticatedClient();
             var presets = await client.GetEmbedPresetsAsync(VimeoSettings.UserId);
             presets.ShouldNotBeNull();
@@ -50,6 +62,9 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyGetEmbedPresetWithFields()
         {
+            if (VimeoSettings.EmbedPresetId == 0)
+                return;
+
             var client = CreateAuthenticatedClient();
             var preset = await client.GetEmbedPresetAsync(UserId.Me, VimeoSettings.EmbedPresetId, new[] { "uri", "name" });
             preset.ShouldNotBeNull();
@@ -61,6 +76,9 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyGetEmbedPresetsWithFields()
         {
+            if (VimeoSettings.EmbedPresetId == 0)
+                return;
+
             var client = CreateAuthenticatedClient();
             var presets = await client.GetEmbedPresetsAsync(UserId.Me, fields: new[] { "uri", "name" });
             presets.ShouldNotBeNull();
@@ -74,6 +92,9 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyRetrieveSecondPage()
         {
+            if (VimeoSettings.EmbedPresetId == 0)
+                return;
+
             var client = CreateAuthenticatedClient();
 
             for (var i = 0; i < 5; i++)

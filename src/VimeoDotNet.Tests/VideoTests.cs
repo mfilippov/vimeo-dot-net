@@ -186,6 +186,9 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyAssignEmbedPresetToVideo()
         {
+            if (VimeoSettings.EmbedPresetId == 0)
+                return;
+
             var client = CreateAuthenticatedClient();
             await client.AssignEmbedPresetToVideoAsync(VimeoSettings.VideoId, VimeoSettings.EmbedPresetId);
             var video = await client.GetVideoAsync(VimeoSettings.VideoId, new[] { "embed_presets" });
@@ -197,6 +200,9 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyUnassignEmbedPresetFromVideo()
         {
+            if (VimeoSettings.EmbedPresetId == 0)
+                return;
+
             var client = CreateAuthenticatedClient();
             var video = await client.GetVideoAsync(VimeoSettings.VideoId, new[] { "embed_presets" });
             var oldPresetId = video?.EmbedPresets?.Id;
