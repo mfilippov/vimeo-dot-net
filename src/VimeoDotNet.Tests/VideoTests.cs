@@ -182,5 +182,41 @@ namespace VimeoDotNet.Tests
             var pictureById = await client.GetPictureAsync(VimeoSettings.VideoId, pictureId);
             pictureById.ShouldNotBeNull();
         }
+
+        [Fact]
+        public async Task ShouldCorrectlyAssignEmbedPresetToVideo()
+        {
+            if (VimeoSettings.EmbedPresetId == 0)
+                return;
+
+            var client = CreateAuthenticatedClient();
+            await client.AssignEmbedPresetToVideoAsync(VimeoSettings.VideoId, VimeoSettings.EmbedPresetId);
+            var video = await client.GetVideoAsync(VimeoSettings.VideoId, new[] { "embed_presets" });
+            video.ShouldNotBeNull();
+            video.EmbedPresets.ShouldNotBeNull();
+            video.EmbedPresets.Id.ShouldBe(VimeoSettings.EmbedPresetId);
+        }
+
+        [Fact]
+        public async Task ShouldCorrectlyUnassignEmbedPresetFromVideo()
+        {
+            if (VimeoSettings.EmbedPresetId == 0)
+                return;
+
+            var client = CreateAuthenticatedClient();
+            var video = await client.GetVideoAsync(VimeoSettings.VideoId, new[] { "embed_presets" });
+            var oldPresetId = video?.EmbedPresets?.Id;
+            await client.UnassignEmbedPresetFromVideoAsync(VimeoSettings.VideoId, VimeoSettings.EmbedPresetId);
+            video = await client.GetVideoAsync(VimeoSettings.VideoId, new[] { "embed_presets" });
+            video.ShouldNotBeNull();
+            if (oldPresetId == VimeoSettings.EmbedPresetId)
+            {
+                video.EmbedPresets.ShouldBeNull();
+            }
+            else
+            {
+                video.EmbedPresets?.Id.ShouldBe(oldPresetId);
+            }
+        }
     }
 }

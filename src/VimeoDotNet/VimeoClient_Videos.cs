@@ -504,5 +504,67 @@ namespace VimeoDotNet
                 throw new VimeoUploadException("Error Setting thumbnail image active.", null, ex);
             }
         }
+
+        public async Task AssignEmbedPresetToVideoAsync(long clipId, long presetId)
+        {
+            try
+            {
+                var request = GenerateVideoPresetRequest(clipId, presetId, assign: true);
+                var response = await request.ExecuteRequestAsync().ConfigureAwait(false);
+                UpdateRateLimit(response);
+                CheckStatusCodeError(response, "Error assigning embed preset to video.");
+            }
+            catch (VimeoApiException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new VimeoApiException("Error assigning embed preset to video.", ex);
+            }
+        }
+
+        public async Task UnassignEmbedPresetFromVideoAsync(long clipId, long presetId)
+        {
+            try
+            {
+                var request = GenerateVideoPresetRequest(clipId, presetId, assign: false);
+                var response = await request.ExecuteRequestAsync().ConfigureAwait(false);
+                UpdateRateLimit(response);
+
+                var presetNotFound = response.StatusCode == HttpStatusCode.NotFound && response.Text.Contains("preset");
+                if (presetNotFound)
+                {
+                    // Ignore if preset not found
+                    CheckStatusCodeError(response, "Error unassigning embed preset from video.", HttpStatusCode.NotFound);
+                }
+                else
+                {
+                    CheckStatusCodeError(response, "Error unassigning embed preset from video.");
+                }
+            }
+            catch (VimeoApiException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new VimeoApiException("Error unassigning embed preset from video.", ex);
+            }
+        }
+
+        private IApiRequest GenerateVideoPresetRequest(long clipId, long presetId, bool assign)
+        {
+            ThrowIfUnauthorized();
+
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
+            request.Method = assign ? HttpMethod.Put : HttpMethod.Delete;
+            request.Path = Endpoints.VideoPreset;
+
+            request.UrlSegments.Add("clipId", clipId.ToString());
+            request.UrlSegments.Add("presetId", presetId.ToString());
+
+            return request;
+        }
     }
 }
