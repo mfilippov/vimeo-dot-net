@@ -148,15 +148,14 @@ namespace VimeoDotNet
             }
         }
 
-        /// <inheritdoc />
-        public async Task UpdateVideoAllowedDomainAsync(long clipId, string domain)
+        public async Task AllowEmbedVideoOnDomainAsync(long clipId, string domain)
         {
             try
             {
-                var request = GenerateVideoAllowedDomainPatchRequest(clipId, domain);
+                var request = GenerateVideoAllowedDomainRequest(clipId, domain, allow: true);
                 var response = await request.ExecuteRequestAsync().ConfigureAwait(false);
                 UpdateRateLimit(response);
-                CheckStatusCodeError(response, "Error updating user video allowed domain.");
+                CheckStatusCodeError(response, "Error allowing domain for embedding video.");
             }
             catch (Exception ex)
             {
@@ -165,8 +164,55 @@ namespace VimeoDotNet
                     throw;
                 }
 
-                throw new VimeoApiException("Error updating user video metadata.", ex);
+                throw new VimeoApiException("Error allowing domain for embedding video.", ex);
             }
+        }
+
+        public async Task DisallowEmbedVideoOnDomainAsync(long clipId, string domain)
+        {
+            try
+            {
+                var request = GenerateVideoAllowedDomainRequest(clipId, domain, allow: false);
+                var response = await request.ExecuteRequestAsync().ConfigureAwait(false);
+                UpdateRateLimit(response);
+                CheckStatusCodeError(response, "Error disallowing domain for embedding video.");
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+
+                throw new VimeoApiException("Error disallowing domain for embedding video.", ex);
+            }
+        }
+
+        public async Task<Paginated<DomainForEmbedding>> GetAllowedDomainsForEmbeddingVideoAsync(long clipId)
+        {
+            try
+            {
+                var request = GenerateVideoAllowedDomainsRequest(clipId);
+                var response = await request.ExecuteRequestAsync<Paginated<DomainForEmbedding>>().ConfigureAwait(false);
+                UpdateRateLimit(response);
+                CheckStatusCodeError(response, "Error retrieving allowed domains for embedding video.");
+                return response.Content;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+
+                throw new VimeoApiException("Error retrieving allowed domain for embedding video.", ex);
+            }
+        }
+
+        /// <inheritdoc />
+        public Task UpdateVideoAllowedDomainAsync(long clipId, string domain)
+        {
+            return AllowEmbedVideoOnDomainAsync(clipId, domain);
         }
 
         private IApiRequest GenerateVideosRequest(UserId userId = null, long? clipId = null, int? page = null,
@@ -358,16 +404,29 @@ namespace VimeoDotNet
             return request;
         }
 
-        private IApiRequest GenerateVideoAllowedDomainPatchRequest(long clipId, string domain)
+        private IApiRequest GenerateVideoAllowedDomainRequest(long clipId, string domain, bool allow)
         {
             ThrowIfUnauthorized();
 
             var request = _apiRequestFactory.GetApiRequest(AccessToken);
-            request.Method = HttpMethod.Put;
+            request.Method = allow ? HttpMethod.Put : HttpMethod.Delete;
             request.Path = Endpoints.VideoAllowedDomain;
 
             request.UrlSegments.Add("clipId", clipId.ToString());
             request.UrlSegments.Add("domain", domain);
+
+            return request;
+        }
+
+        private IApiRequest GenerateVideoAllowedDomainsRequest(long clipId)
+        {
+            ThrowIfUnauthorized();
+
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
+            request.Method = HttpMethod.Get;
+            request.Path = Endpoints.VideoAllowedDomains;
+
+            request.UrlSegments.Add("clipId", clipId.ToString());
 
             return request;
         }

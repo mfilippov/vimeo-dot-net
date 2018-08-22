@@ -12,6 +12,11 @@ namespace VimeoDotNet.Models
     /// </summary>
     public class User
     {
+        private static readonly IDictionary<string, string> AccountTypeMappings = new Dictionary<string, string>
+        {
+            {"pro_unlimited", "ProUnlimited"}
+        };
+
         /// <summary>
         /// Id
         /// </summary>
@@ -114,7 +119,7 @@ namespace VimeoDotNet.Models
         [PublicAPI]
         public AccountTypeEnum AccountType
         {
-            get => ModelHelpers.GetEnumValue<AccountTypeEnum>(Account);
+            get => ModelHelpers.GetEnumValue<AccountTypeEnum>(Account, AccountTypeMappings);
             set => Account = ModelHelpers.GetEnumString(value);
         }
     }
