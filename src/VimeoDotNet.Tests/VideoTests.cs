@@ -147,9 +147,10 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
-        public async Task ShouldCorrectlyUpdateVideoMetadataAndAllowedDomain()
+        public async Task ShouldCorrectlyUpdateVideoEmbedPrivacy()
         {
             var client = CreateAuthenticatedClient();
+
             var video = await client.GetVideoAsync(VimeoSettings.VideoId);
             video.Privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Public);
             await client.UpdateVideoMetadataAsync(VimeoSettings.VideoId, new VideoUpdateMetadata
@@ -158,9 +159,6 @@ namespace VimeoDotNet.Tests
             });
             video = await client.GetVideoAsync(VimeoSettings.VideoId);
             video.Privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Private);
-
-            await Should.ThrowAsync<VimeoApiException>(async () =>
-                await client.UpdateVideoAllowedDomainAsync(VimeoSettings.VideoId, "example.com"));
 
             await client.UpdateVideoMetadataAsync(VimeoSettings.VideoId, new VideoUpdateMetadata
             {
@@ -171,7 +169,44 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
-        public async Task ShouldCorrectlyGetPuctureFromVideo()
+        public async Task ShouldCorrectlyWorkWithDomainsForEmbedding()
+        {
+            var client = CreateAuthenticatedClient();
+
+            var account = await client.GetAccountInformationAsync();
+            if (account.AccountType == AccountTypeEnum.Basic || account.AccountType == AccountTypeEnum.Unknown)
+            {
+                // Skip test if account type does not support domains whitelist
+                return;
+            }
+
+            await client.UpdateVideoMetadataAsync(VimeoSettings.VideoId, new VideoUpdateMetadata
+            {
+                EmbedPrivacy = VideoEmbedPrivacyEnum.Whitelist
+            });
+            var video = await client.GetVideoAsync(VimeoSettings.VideoId);
+            video.Privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Whitelist);
+
+            await client.AllowEmbedVideoOnDomainAsync(VimeoSettings.VideoId, "example.com");
+            var domains = await client.GetAllowedDomainsForEmbeddingVideoAsync(VimeoSettings.VideoId);
+            domains.Data.ShouldNotBeNull();
+            domains.Data.Count.ShouldBe(1);
+            domains.Data[0].ShouldNotBeNull();
+            domains.Data[0].Domain.ShouldBe("example.com");
+
+            await client.DisallowEmbedVideoOnDomainAsync(VimeoSettings.VideoId, "example.com");
+            domains = await client.GetAllowedDomainsForEmbeddingVideoAsync(VimeoSettings.VideoId);
+            domains.Data.ShouldNotBeNull();
+            domains.Data.Count.ShouldBe(0);
+
+            await client.UpdateVideoMetadataAsync(VimeoSettings.VideoId, new VideoUpdateMetadata
+            {
+                EmbedPrivacy = VideoEmbedPrivacyEnum.Public
+            });
+        }
+
+        [Fact]
+        public async Task ShouldCorrectlyGetPictureFromVideo()
         {
             var client = CreateAuthenticatedClient();
             var pictures = await client.GetPicturesAsync(VimeoSettings.VideoId);

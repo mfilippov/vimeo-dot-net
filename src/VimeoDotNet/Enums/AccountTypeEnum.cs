@@ -18,6 +18,11 @@
         /// <summary>
         /// Pro account
         /// </summary>
-        Pro
+        Pro,
+
+        /// <summary>
+        /// Pro Unlimited account
+        /// </summary>
+        ProUnlimited
     }
 }

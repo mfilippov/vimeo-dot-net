@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using VimeoDotNet.Enums;
 using VimeoDotNet.Exceptions;
 using VimeoDotNet.Models;
 using VimeoDotNet.Net;
@@ -84,12 +85,57 @@ namespace VimeoDotNet
             string sort = null, string direction = null, string[] fields = null);
 
         /// <summary>
+        /// Allows a video to be embedded on specified domain asynchronously.
+        /// </summary>
+        /// <param name="clipId">ClipId</param>
+        /// <param name="domain">Domain</param>
+        /// <remarks>
+        /// The call is valid only when video embed privacy is set to
+        /// <see cref="VideoEmbedPrivacyEnum.Whitelist"/>.
+        /// Use <see cref="UpdateVideoMetadataAsync(long, VideoUpdateMetadata)"/> and
+        /// <see cref="VideoUpdateMetadata.EmbedPrivacy"/> property to change this setting.
+        /// </remarks>
+        /// <seealso cref="DisallowEmbedVideoOnDomainAsync(long, string)"/>
+        /// <seealso cref="GetAllowedDomainsForEmbeddingVideoAsync(long)"/>
+        Task AllowEmbedVideoOnDomainAsync(long clipId, string domain);
+
+        /// <summary>
+        /// Disallows a video to be embedded on specified domain asynchronously.
+        /// </summary>
+        /// <param name="clipId">ClipId</param>
+        /// <param name="domain">Domain</param>
+        /// <remarks>
+        /// The call is valid only when video embed privacy is set to
+        /// <see cref="VideoEmbedPrivacyEnum.Whitelist"/>.
+        /// Use <see cref="UpdateVideoMetadataAsync(long, VideoUpdateMetadata)"/> and
+        /// <see cref="VideoUpdateMetadata.EmbedPrivacy"/> property to change this setting.
+        /// </remarks>
+        /// <seealso cref="AllowEmbedVideoOnDomainAsync(long, string)"/>
+        /// <seealso cref="GetAllowedDomainsForEmbeddingVideoAsync(long)"/>
+        Task DisallowEmbedVideoOnDomainAsync(long clipId, string domain);
+
+        /// <summary>
+        /// Get all domains on which a video can be embedded.
+        /// </summary>
+        /// <param name="clipId">ClipId</param>
+        /// <returns></returns>
+        /// <remarks>
+        /// The call is valid only when video embed privacy is set to
+        /// <see cref="VideoEmbedPrivacyEnum.Whitelist"/>.
+        /// Use <see cref="UpdateVideoMetadataAsync(long, VideoUpdateMetadata)"/> and
+        /// <see cref="VideoUpdateMetadata.EmbedPrivacy"/> property to change this setting.
+        /// </remarks>
+        /// <seealso cref="AllowEmbedVideoOnDomainAsync(long, string)"/>
+        /// <seealso cref="DisallowEmbedVideoOnDomainAsync(long, string)"/>
+        Task<Paginated<DomainForEmbedding>> GetAllowedDomainsForEmbeddingVideoAsync(long clipId);
+
+        /// <summary>
         /// Update allowed domain for clip asynchronously
         /// </summary>
         /// <param name="clipId">ClipId</param>
         /// <param name="domain">Domain</param>
+        [Obsolete("Use AllowEmbedVideoOnDomainAsync instead.")]
         Task UpdateVideoAllowedDomainAsync(long clipId, string domain);
-
 
         /// <summary>
         /// Get all thumbnails on a video
