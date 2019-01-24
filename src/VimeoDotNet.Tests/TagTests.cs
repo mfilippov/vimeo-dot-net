@@ -58,6 +58,7 @@ namespace VimeoDotNet.Tests
             result.Id.ShouldBe("test-tag1");
         }
 
+        [Fact]
         public async Task ShouldCorrectlyGetVideoByTag()
         {
             var client = await CreateUnauthenticatedClient();

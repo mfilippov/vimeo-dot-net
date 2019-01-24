@@ -12,6 +12,7 @@ ProjectSection(SolutionItems) = preProject
 	LICENSE = LICENSE
 	README.md = README.md
 	VimeoDotNet.nuspec = VimeoDotNet.nuspec
+	VimeoDotNet.snk = VimeoDotNet.snk
 EndProjectSection
 EndProject
 Global
