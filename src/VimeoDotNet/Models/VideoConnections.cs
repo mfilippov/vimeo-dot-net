@@ -30,11 +30,11 @@ namespace VimeoDotNet.Models
         public VideoConnectionsEntry Likes { get; set; }
 
         /// <summary>
-        /// Presets
+        /// Pictures
         /// </summary>
         [PublicAPI]
-        [JsonProperty(PropertyName = "puctires")]
-        public VideoConnectionsEntry Puctires { get; set; }
+        [JsonProperty(PropertyName = "pictures")]
+        public VideoConnectionsEntry Pictures { get; set; }
 
         /// <summary>
         /// Text tracks
