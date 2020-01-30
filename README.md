@@ -48,17 +48,36 @@ REFERENCE
 HOW TO AUTHENTICATE
 -------------------
 Video uploads and other secure operations to a user account require you to authenticate as your app and also authenticate the user you are managing.  This will require setting up an app in your Vimeo account via developer.vimeo.com, requesting upload permission, and waiting for permission approval.  Once you have your app set up and approved for uploads, you are ready to perform authentication.  Here is a simplified example of authenticating your app and then authenticating your user, giving you access to all of the features this library offers:
-```
+```C#
 var clientId = "your_client_id_here";
 var clientSecret = "your_client_secret_here";
-var redirectionUrl = "https://your_website_here.com/wherever-you-send-users-after-grant"; // this URL needs to be added to your callback url list on your app settings page in developer.vimeo.com
-var stateInformation = "1337"; //you can put state information here that gets sent to your callback url in the ?state= parameter
+// this URL needs to be added to your callback url list on your app settings page in developer.vimeo.com
+var redirectionUrl = "https://your_website_here.com/wherever-you-send-users-after-grant";
+//you can put state information here that gets sent to your callback url in the ?state= parameter
+var stateInformation = "1337";
 var client = new VimeoDotNet.VimeoClient(clientId, clientSecret);
-var url = client.GetOauthUrl(redirectionUrl, new List<string>() { "public", "private", "purchased", "create", "edit", "delete", "interact", "upload", "promo_codes", "video_files" }, stateInformation);
-Console.WriteLine(url); // The user will use this URL to log in and allow access to your app.  the web page will redirect to your redirection URL with the access code in the query parameters.  If you are also the user, you can just pull the code out of the URL yourself and use it right here.
+var url = client.GetOauthUrl(redirectionUrl, new List<string>() 
+  {
+    "public",
+    "private", 
+    "purchased", 
+    "create", 
+    "edit", 
+    "delete", 
+    "interact", 
+    "upload", 
+    "promo_codes",
+    "video_files"
+    }, stateInformation);
+// The user will use this URL to log in and allow access to your app.
+// The web page will redirect to your redirection URL with the access code in the query parameters.
+// If you are also the user, you can just pull the code out of the URL yourself and use it right here.
+Console.WriteLine(url);
 Console.WriteLine("Give me your access code...");
 var accessCode = Console.ReadLine();
 var token = await client.GetAccessTokenAsync(accessCode, redirectionUrl);
-var userAuthenticatedClient = new VimeoDotNet.VimeoClient(token.AccessToken); //we need a new client now, if it is a one off job you can just
-            //you are now ready to upload or whatever using the userAuthenticatedClient
+//we need a new client now, if it is a one off job you can just
+//you are now ready to upload or whatever using the userAuthenticatedClient
+var userAuthenticatedClient = new VimeoDotNet.VimeoClient(token.AccessToken);
+            
 ```
