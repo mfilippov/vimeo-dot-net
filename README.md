@@ -51,9 +51,11 @@ Video uploads and other secure operations to a user account require you to authe
 ```C#
 var clientId = "your_client_id_here";
 var clientSecret = "your_client_secret_here";
-// this URL needs to be added to your callback url list on your app settings page in developer.vimeo.com
+// This URL needs to be added to your 
+// callback url list on your app settings page in developer.vimeo.com.
 var redirectionUrl = "https://your_website_here.com/wherever-you-send-users-after-grant";
-//you can put state information here that gets sent to your callback url in the ?state= parameter
+// You can put state information here that gets sent
+// to your callback url in the ?state= parameter
 var stateInformation = "1337";
 var client = new VimeoDotNet.VimeoClient(clientId, clientSecret);
 var url = client.GetOauthUrl(redirectionUrl, new List<string>() 
@@ -71,7 +73,8 @@ var url = client.GetOauthUrl(redirectionUrl, new List<string>()
     }, stateInformation);
 // The user will use this URL to log in and allow access to your app.
 // The web page will redirect to your redirection URL with the access code in the query parameters.
-// If you are also the user, you can just pull the code out of the URL yourself and use it right here.
+// If you are also the user, 
+// you can just pull the code out of the URL yourself and use it right here.
 Console.WriteLine(url);
 Console.WriteLine("Give me your access code...");
 var accessCode = Console.ReadLine();
