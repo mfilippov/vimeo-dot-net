@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading.Tasks;
 using Shouldly;
 using VimeoDotNet.Net;
@@ -19,6 +19,17 @@ namespace VimeoDotNet.Tests
             ticket.UploadLink.ShouldNotBeEmpty();
             ticket.UploadLinkSecure.ShouldNotBeEmpty();
             ticket.Uri.ShouldNotBeEmpty();
+            ticket.User.Id.ShouldBe(VimeoSettings.UserId);
+        }
+
+        [Fact]
+        public async Task ShouldCorrectlyGenerateNewTusResumableUploadTicket()
+        {
+            var client = CreateAuthenticatedClient();
+            VimeoDotNet.Models.TusResumableUploadTicket ticket = await client.GetTusResumableUploadTicketAsync(1000);
+            ticket.ShouldNotBeNull();
+            ticket.Upload.UploadLink.ShouldNotBeEmpty();
+            ticket.Id.ShouldNotBeNull();
             ticket.User.Id.ShouldBe(VimeoSettings.UserId);
         }
 
