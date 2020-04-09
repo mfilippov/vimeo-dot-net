@@ -1,4 +1,4 @@
-﻿// ReSharper disable InconsistentNaming
+// ReSharper disable InconsistentNaming
 using JetBrains.Annotations;
 
 namespace VimeoDotNet.Constants
@@ -13,5 +13,7 @@ namespace VimeoDotNet.Constants
         public const string v3_0 = "version=3.0";
         [PublicAPI]
         public const string v3_2 = "version=3.2";
+        [PublicAPI]
+        public const string v3_4 = "version=3.4";
     }
 }
