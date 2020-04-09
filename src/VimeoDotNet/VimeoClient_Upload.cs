@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -21,6 +22,28 @@ namespace VimeoDotNet
             {
                 var request = GenerateUploadTicketRequest();
                 var response = await request.ExecuteRequestAsync<UploadTicket>().ConfigureAwait(false);
+                UpdateRateLimit(response);
+                CheckStatusCodeError(null, response, "Error generating upload ticket.");
+
+                return response.Content;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+
+                throw new VimeoUploadException("Error generating upload ticket.", null, ex);
+            }
+        }
+
+        public async Task<TusResumableUploadTicket> GetTusResumableUploadTicketAsync(int size, string name = null)
+        {
+            try
+            {
+                var request = GenerateTusResumableUploadTicketRequest(size, name);
+                var response = await request.ExecuteRequestAsync<TusResumableUploadTicket>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(null, response, "Error generating upload ticket.");
 
@@ -374,6 +397,31 @@ namespace VimeoDotNet
                 }
             }
 
+            return request;
+        }
+
+        private IApiRequest GenerateTusResumableUploadTicketRequest(int size, string name = null)
+        {
+            ThrowIfUnauthorized();
+
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
+            request.ApiVersion = ApiVersions.v3_4;
+            request.Method = HttpMethod.Post;
+            request.Path = Endpoints.UploadTicket;
+
+
+            var parameters = new Dictionary<string, string>
+            {
+                ["upload.approach"] = "tus",
+                ["upload.size"] = size.ToString()
+            };
+
+            if(name != null)
+            {
+                parameters["name"] = name;
+            }
+
+            request.Body = new FormUrlEncodedContent(parameters);
             return request;
         }
 
