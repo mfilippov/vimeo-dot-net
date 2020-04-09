@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VimeoDotNet.Enums;
@@ -234,6 +234,12 @@ namespace VimeoDotNet
         /// </summary>
         /// <returns>Upload ticket</returns>
         Task<UploadTicket> GetUploadTicketAsync();
+
+        /// <summary>
+        /// Create new resumable upload ticket asynchronously
+        /// </summary>
+        /// <returns>Upload ticket</returns>
+        Task<TusResumableUploadTicket> GetTusResumableUploadTicketAsync(int size, string name = null);
 
         /// <summary>
         /// Create new upload ticket for replace video asynchronously
