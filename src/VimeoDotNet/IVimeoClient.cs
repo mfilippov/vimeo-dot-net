@@ -239,7 +239,7 @@ namespace VimeoDotNet
         /// Create new resumable upload ticket asynchronously
         /// </summary>
         /// <returns>Upload ticket</returns>
-        Task<TusResumableUploadTicket> GetTusResumableUploadTicketAsync(int size, string name = null);
+        Task<TusResumableUploadTicket> GetTusResumableUploadTicketAsync(long size, string name = null);
 
         /// <summary>
         /// Create new upload ticket for replace video asynchronously
