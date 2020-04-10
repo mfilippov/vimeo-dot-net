@@ -38,7 +38,7 @@ namespace VimeoDotNet
             }
         }
 
-        public async Task<TusResumableUploadTicket> GetTusResumableUploadTicketAsync(int size, string name = null)
+        public async Task<TusResumableUploadTicket> GetTusResumableUploadTicketAsync(long size, string name = null)
         {
             try
             {
@@ -400,7 +400,7 @@ namespace VimeoDotNet
             return request;
         }
 
-        private IApiRequest GenerateTusResumableUploadTicketRequest(int size, string name = null)
+        private IApiRequest GenerateTusResumableUploadTicketRequest(long size, string name = null)
         {
             ThrowIfUnauthorized();
 
