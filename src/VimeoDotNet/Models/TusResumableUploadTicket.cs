@@ -43,11 +43,11 @@ namespace VimeoDotNet.Models
         public string UploadLink { get; set; }
 
         /// <summary>
-        /// Video Size
+        /// Video Size in bytes
         /// </summary>
         [PublicAPI]
         [JsonProperty(PropertyName = "size")]
-        public int Size { get; set; }
+        public long Size { get; set; }
 
     }
 }
