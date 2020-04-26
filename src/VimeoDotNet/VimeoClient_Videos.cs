@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -494,7 +496,7 @@ namespace VimeoDotNet
         /// <param name="fileContent">fileContent</param>
         /// <param name="clipId">Clip Id</param>
         /// <returns>upload pic </returns>
-        private async Task<Picture> UploadPictureAsync(IBinaryContent fileContent, long clipId)
+        private async Task<string> UploadPictureAsync(IBinaryContent fileContent, long clipId)
         {
             try
             {
@@ -508,19 +510,40 @@ namespace VimeoDotNet
                     fileContent.Data.Position = 0;
                 }
 
-                ThrowIfUnauthorized();
+                // Get the URI of the thumbnail
                 var request = _apiRequestFactory.GetApiRequest(AccessToken);
-                request.Method = HttpMethod.Post;
-                request.Path = Endpoints.Pictures;
+                request.Method = HttpMethod.Get;
+                request.Path = Endpoints.Video;
                 request.UrlSegments.Add("clipId", clipId.ToString());
 
-                request.Body = new ByteArrayContent(await fileContent.ReadAllAsync().ConfigureAwait(false));
 
-                var response = await request.ExecuteRequestAsync<Picture>().ConfigureAwait(false);
+                var response = await request.ExecuteRequestAsync<Video>().ConfigureAwait(false);
+                CheckStatusCodeError(null, response, "Error getting video settings.");
 
-                CheckStatusCodeError(null, response, "Error generating upload ticket to replace video.");
+                // Get the upload link for the thumbnail
+                var postRequest = _apiRequestFactory.AuthorizedRequest(
+                                     AccessToken,
+                                     HttpMethod.Post,
+                                     response.Content.Metadata.Connections.Pictures.Uri,
+                                     null
+                                    );
+                
+                var postResponse = await postRequest.ExecuteRequestAsync().ConfigureAwait(false);
+                CheckStatusCodeError(null, postResponse, "Error posting thumbnail placeholder.");
+                JObject.Parse(postResponse.Text).TryGetValue("link", out var link);
+                JObject.Parse(postResponse.Text).TryGetValue("uri", out var uri);
 
-                return response.Content;
+                // Upload the thumbnail image file
+                var putRequest = new NonApiRequest
+                {
+                    Path = link.ToString(),
+                    Method = HttpMethod.Put,
+                    Body = new ByteArrayContent(await fileContent.ReadAllAsync().ConfigureAwait(false))
+                };
+                var putResponse = await putRequest.ExecuteRequestAsync().ConfigureAwait(false);
+                CheckStatusCodeError(null, putResponse, "Error putting thumbnail data.");
+
+                return uri.ToString();
             }
             catch (Exception ex)
             {
@@ -547,7 +570,11 @@ namespace VimeoDotNet
                 var request = _apiRequestFactory.GetApiRequest(AccessToken);
                 request.Method = new HttpMethod("PATCH");
                 request.Path = link;
-                request.Query.Add("active", "true");
+                var parameters = new Dictionary<string, string>
+                {
+                    {"active" ,"true"}
+                };
+                request.Body = new FormUrlEncodedContent(parameters);
 
                 var response = await request.ExecuteRequestAsync().ConfigureAwait(false);
 
