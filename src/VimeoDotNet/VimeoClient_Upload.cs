@@ -128,9 +128,9 @@ namespace VimeoDotNet
         {
             try
             {
-                var pic = await UploadPictureAsync(fileContent, clipId).ConfigureAwait(false);
-                await SetThumbnailActiveAsync(pic.Uri).ConfigureAwait(false);
-                return pic;
+                var picUri = await UploadPictureAsync(fileContent, clipId).ConfigureAwait(false);
+                await SetThumbnailActiveAsync(picUri).ConfigureAwait(false);
+                return new Picture { Uri = picUri};
             }
             catch (Exception ex)
             {
