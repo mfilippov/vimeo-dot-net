@@ -10,6 +10,36 @@ namespace VimeoDotNet
     public partial class VimeoClient
     {
         /// <inheritdoc />
+        public async Task<Channel> CreateChannelAsync(EditChannelParameters parameters = null)
+        {
+            var request = _apiRequestFactory.AuthorizedRequest(
+                AccessToken,
+                HttpMethod.Post,
+                Endpoints.Channels,
+                null,
+                parameters
+            );
+
+            return await ExecuteApiRequest<Channel>(request).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> DeleteChannelAsync(long channelId)
+        {
+            var request = _apiRequestFactory.AuthorizedRequest(
+                AccessToken,
+                HttpMethod.Delete,
+                Endpoints.Channel,
+                new Dictionary<string, string>
+                {
+                    {"channelId", channelId.ToString()}
+                }
+            );
+
+            return await ExecuteApiRequest(request).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
         public async Task<bool> AddToChannelAsync(long channelId, long clipId)
         {
             var request = _apiRequestFactory.AuthorizedRequest(
@@ -26,18 +56,30 @@ namespace VimeoDotNet
             return await ExecuteApiRequest(request).ConfigureAwait(false);
         }
 
-
         /// <inheritdoc />
-        public async Task<Paginated<Channel>> GetChannelsAsync(UserId userId, GetChannelsParameters parameters = null)
+        public async Task<Channel> GetChannelAsync(long channelId)
         {
             var request = _apiRequestFactory.AuthorizedRequest(
                 AccessToken,
                 HttpMethod.Get,
-                Endpoints.UserChannels,
+                Endpoints.Channel,
                 new Dictionary<string, string>
                 {
-                    {"userId", userId.ToString()}
-                },
+                    {"channelId", channelId.ToString()},
+                }
+            );
+
+            return await ExecuteApiRequest<Channel>(request).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<Paginated<Channel>> GetChannelsAsync(GetChannelsParameters parameters = null)
+        {
+            var request = _apiRequestFactory.AuthorizedRequest(
+                AccessToken,
+                HttpMethod.Get,
+                Endpoints.Channels,
+                null,
                 parameters
             );
 

@@ -443,5 +443,45 @@ namespace VimeoDotNet
         Task<Paginated<EmbedPresets>> GetEmbedPresetsAsync(UserId userId, int? page = null, int? perPage = null, string[] fields = null);
 
         #endregion
+
+        #region Channels
+
+        /// <summary>
+        /// This method returns a single channel.
+        /// </summary>
+        /// <param name="channelId">The ID of the channel</param>
+        /// <returns></returns>
+        Task<Channel> GetChannelAsync(long channelId);
+        
+        /// <summary>
+        /// This method returns all available channels.
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        Task<Paginated<Channel>> GetChannelsAsync(GetChannelsParameters parameters = null);
+        
+        /// <summary>
+        /// This method creates a new channel
+        /// </summary>
+        /// <param name="parameters">Channel creation parameters</param>
+        /// <returns>Channel</returns>
+        Task<Channel> CreateChannelAsync(EditChannelParameters parameters = null);
+
+        /// <summary>
+        /// This method deletes the specified channel
+        /// </summary>
+        /// <param name="channelId">The ID of the channel.</param>
+        /// <returns>Deletion result</returns>
+        Task<bool> DeleteChannelAsync(long channelId);
+
+        /// <summary>
+        /// Add video to channel.
+        /// </summary>
+        /// <param name="channelId">Channel Id</param>
+        /// <param name="clipId">Clip Id</param>
+        /// <returns></returns>
+        Task<bool> AddToChannelAsync(long channelId, long clipId);
+
+        #endregion
     }
 }
