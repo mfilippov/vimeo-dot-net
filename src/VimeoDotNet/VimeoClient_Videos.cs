@@ -443,7 +443,7 @@ namespace VimeoDotNet
                 request.Method = HttpMethod.Get;
                 request.Path = Endpoints.Picture;
                 request.UrlSegments.Add("clipId", clipId.ToString());
-                request.UrlSegments.Add("pictureId", clipId.ToString());
+                request.UrlSegments.Add("pictureId", pictureId.ToString());
 
                 var response = await request.ExecuteRequestAsync<Picture>().ConfigureAwait(false);
                 UpdateRateLimit(response);

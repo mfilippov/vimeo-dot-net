@@ -12,7 +12,7 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyReadPartOfFile()
         {
-            using (var file = new BinaryContent(GetFileFromEmbeddedResources(TestFilePath), "video/mp4"))
+            using (var file = new BinaryContent(TestHelper.GetFileFromEmbeddedResources(TestHelper.TestFilePath), "video/mp4"))
             {
                 (await file.ReadAsync(17, 20)).Length.ShouldBe(3);
                 (await file.ReadAsync(17000, 17020)).Length.ShouldBe(20);
@@ -22,7 +22,7 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyDoubleRead()
         {
-            using (var file = new BinaryContent(GetFileFromEmbeddedResources(TestFilePath), "video/mp4"))
+            using (var file = new BinaryContent(TestHelper.GetFileFromEmbeddedResources(TestHelper.TestFilePath), "video/mp4"))
             {
                 (await file.ReadAllAsync()).Length.ShouldBe(5510872);
                 (await file.ReadAllAsync()).Length.ShouldBe(5510872);
@@ -32,7 +32,7 @@ namespace VimeoDotNet.Tests
         [Fact]
         public void ShouldFireExceptionWhenDisposedStreamAccess()
         {
-            var file = new BinaryContent(GetFileFromEmbeddedResources(TestFilePath), "video/mp4");
+            var file = new BinaryContent(TestHelper.GetFileFromEmbeddedResources(TestHelper.TestFilePath), "video/mp4");
             file.Dispose();
             Should.Throw<ObjectDisposedException>(() => file.Dispose());
             Should.Throw<ObjectDisposedException>(() => file.Data.Length.ShouldBe(0));

@@ -45,7 +45,7 @@ namespace VimeoDotNet.Models
 
         [PublicAPI]
         [JsonProperty(PropertyName = "header")]
-        public string Header { get; set; }
+        public Picture Header { get; set; }
 
         [PublicAPI]
         [JsonProperty(PropertyName = "privacy")]
