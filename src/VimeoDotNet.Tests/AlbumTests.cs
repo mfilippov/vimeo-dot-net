@@ -11,32 +11,35 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task GetAlbumsShouldCorrectlyWorkForMe()
         {
-            var client = CreateAuthenticatedClient();
-            var albums = await client.GetAlbumsAsync(UserId.Me);
-            albums.Total.ShouldBe(1);
-            albums.PerPage.ShouldBe(25);
-            albums.Data.Count.ShouldBe(1);
-            albums.Paging.Next.ShouldBeNull();
-            albums.Paging.Previous.ShouldBeNull();
-            albums.Paging.First.ShouldBe("/me/albums?page=1");
-            albums.Paging.Last.ShouldBe("/me/albums?page=1");
+            await AuthenticatedClient.WithTestAlbum(async albumId =>
+            {
+                var client = CreateAuthenticatedClient();
+                var albums = await client.GetAlbumsAsync(UserId.Me);
+                albums.Total.ShouldBe(1);
+                albums.PerPage.ShouldBe(25);
+                albums.Data.Count.ShouldBe(1);
+                albums.Paging.Next.ShouldBeNull();
+                albums.Paging.Previous.ShouldBeNull();
+                albums.Paging.First.ShouldBe("/me/albums?page=1");
+                albums.Paging.Last.ShouldBe("/me/albums?page=1");
+            });
         }
 
         [Fact]
         public async Task GetAlbumsShouldCorrectlyWorkForUserId()
         {
             var client = CreateAuthenticatedClient();
-            var albums = await client.GetAlbumsAsync(VimeoSettings.UserId);
+            var albums = await client.GetAlbumsAsync(VimeoSettings.PublicUserId);
             albums.Total.ShouldBe(1);
             albums.PerPage.ShouldBe(25);
             albums.Data.Count.ShouldBe(1);
             albums.Paging.Next.ShouldBeNull();
             albums.Paging.Previous.ShouldBeNull();
-            albums.Paging.First.ShouldBe($"/users/{VimeoSettings.UserId}/albums?page=1");
-            albums.Paging.Last.ShouldBe($"/users/{VimeoSettings.UserId}/albums?page=1");
+            albums.Paging.First.ShouldBe($"/users/{VimeoSettings.PublicUserId}/albums?page=1");
+            albums.Paging.Last.ShouldBe($"/users/{VimeoSettings.PublicUserId}/albums?page=1");
             var album = albums.Data[0];
-            album.Name.ShouldBe("Test album");
-            album.Description.ShouldBe("Test description");
+            album.Name.ShouldBe("UnitTestAlbum");
+            album.Description.ShouldBe("Simple album for testing purpose");
         }
 
         [Fact]
@@ -91,14 +94,12 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task AlbumManagementShouldWorkCorrectlyForUserId()
         {
-            var client = CreateAuthenticatedClient();
-
             // create a new album...
             const string originalName = "Unit Test Album";
             const string originalDesc =
                 "This album was created via an automated test, and should be deleted momentarily...";
 
-            var newAlbum = await client.CreateAlbumAsync(VimeoSettings.PublicUserId, new EditAlbumParameters
+            var newAlbum = await AuthenticatedClient.CreateAlbumAsync(VimeoSettings.PublicUserId, new EditAlbumParameters
             {
                 Name = originalName,
                 Description = originalDesc,
@@ -113,7 +114,7 @@ namespace VimeoDotNet.Tests
             newAlbum.Description.ShouldBe(originalDesc);
 
             // retrieve albums for the current user...there should be at least one now...
-            var albums = await client.GetAlbumsAsync(VimeoSettings.PublicUserId);
+            var albums = await AuthenticatedClient.GetAlbumsAsync(UserId.Me);
 
             albums.Total.ShouldBeGreaterThan(0);
 
@@ -121,7 +122,7 @@ namespace VimeoDotNet.Tests
             const string updatedName = "Unit Test Album (Updated)";
             var albumId = newAlbum.GetAlbumId();
             albumId.ShouldNotBeNull();
-            var updatedAlbum = await client.UpdateAlbumAsync(VimeoSettings.PublicUserId, albumId.Value,
+            var updatedAlbum = await AuthenticatedClient.UpdateAlbumAsync(UserId.Me, albumId.Value,
                 new EditAlbumParameters
                 {
                     Name = updatedName,
@@ -133,7 +134,7 @@ namespace VimeoDotNet.Tests
             // delete the album...
             albumId = updatedAlbum.GetAlbumId();
             albumId.ShouldNotBeNull();
-            var isDeleted = await client.DeleteAlbumAsync(VimeoSettings.PublicUserId, albumId.Value);
+            var isDeleted = await AuthenticatedClient.DeleteAlbumAsync(UserId.Me, albumId.Value);
 
             isDeleted.ShouldBeTrue();
         }

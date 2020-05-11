@@ -36,26 +36,28 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyGenerateReplaceUploadTicket()
         {
-            var client = CreateAuthenticatedClient();
-            var ticket = await client.GetReplaceVideoUploadTicketAsync(VimeoSettings.VideoId);
-            ticket.ShouldNotBeNull();
-            ticket.CompleteUri.ShouldNotBeEmpty();
-            ticket.TicketId.ShouldNotBeEmpty();
-            ticket.UploadLink.ShouldNotBeEmpty();
-            ticket.UploadLinkSecure.ShouldNotBeEmpty();
-            ticket.Uri.ShouldNotBeEmpty();
-            ticket.User.Id.ShouldBe(VimeoSettings.UserId);
+            await AuthenticatedClient.WithTempVideo(async clipId =>
+            {
+                var ticket = await AuthenticatedClient.GetReplaceVideoUploadTicketAsync(clipId);
+                ticket.ShouldNotBeNull();
+                ticket.CompleteUri.ShouldNotBeEmpty();
+                ticket.TicketId.ShouldNotBeEmpty();
+                ticket.UploadLink.ShouldNotBeEmpty();
+                ticket.UploadLinkSecure.ShouldNotBeEmpty();
+                ticket.Uri.ShouldNotBeEmpty();
+                ticket.User.Id.ShouldBe(VimeoSettings.UserId);
+            });
         }
 
         [Fact]
-        public async Task ShouldCorretlyUploadFileByPath()
+        public async Task ShouldCorrectlyUploadFileByPath()
         {
             long length;
             IUploadRequest completedRequest;
             var tempFilePath = Path.GetTempFileName() + ".mp4";
             using (var fs = new FileStream(tempFilePath, FileMode.CreateNew))
             {
-                GetFileFromEmbeddedResources(TestFilePath).CopyTo(fs);
+                TestHelper.GetFileFromEmbeddedResources(TestHelper.TestFilePath).CopyTo(fs);
             }
 
             using (var file = new BinaryContent(tempFilePath))
@@ -86,7 +88,7 @@ namespace VimeoDotNet.Tests
             long length;
             IUploadRequest completedRequest;
 
-            using (var file = new BinaryContent(GetFileFromEmbeddedResources(TestFilePath), "video/mp4"))
+            using (var file = new BinaryContent(TestHelper.GetFileFromEmbeddedResources(TestHelper.TestFilePath), "video/mp4"))
             {
                 length = file.Data.Length;
                 var client = CreateAuthenticatedClient();
@@ -108,7 +110,7 @@ namespace VimeoDotNet.Tests
         {
             long length;
             IUploadRequest completedRequest;
-            var stream = GetFileFromEmbeddedResources(TestFilePath);
+            var stream = TestHelper.GetFileFromEmbeddedResources(TestHelper.TestFilePath);
             var buffer = new byte[stream.Length];
             await stream.ReadAsync(buffer, 0, (int) stream.Length);
             using (var file = new BinaryContent(buffer, "video/mp4"))
@@ -141,14 +143,17 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
-        public async Task ShouldCorretlyUploadThumbnail()
+        public async Task ShouldCorrectlyUploadThumbnail()
         {
-            var client = CreateAuthenticatedClient();
-            using (var file = new BinaryContent(GetFileFromEmbeddedResources(TextThumbnailFilePath), "image/png"))
+            await AuthenticatedClient.WithTempVideo(async clipId =>
             {
-                var picture = await client.UploadThumbnailAsync(VimeoSettings.VideoId, file);
-                picture.ShouldNotBeNull();
-            }
+                using (var file = new BinaryContent(TestHelper.GetFileFromEmbeddedResources(TestHelper.TestFilePath), "image/png"))
+                {
+                    var picture = await AuthenticatedClient.UploadThumbnailAsync(clipId, file);
+                    picture.ShouldNotBeNull();
+                }    
+            });
+            
         }
     }
 }
