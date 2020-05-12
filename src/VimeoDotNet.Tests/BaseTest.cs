@@ -11,7 +11,6 @@ namespace VimeoDotNet.Tests
         protected readonly VimeoApiTestSettings VimeoSettings;
         protected readonly IVimeoClient AuthenticatedClient;
 
-        protected const string TestFilePath = @"VimeoDotNet.Tests.Resources.test.mp4";
         // http://download.wavetlan.com/SVV/Media/HTTP/http-mp4.htm
 
         protected const string TestTextTrackFilePath = @"VimeoDotNet.Tests.Resources.test.vtt";
@@ -36,12 +35,6 @@ namespace VimeoDotNet.Tests
         protected IVimeoClient CreateAuthenticatedClient()
         {
             return new VimeoClient(VimeoSettings.AccessToken);
-        }
-
-        protected static Stream GetFileFromEmbeddedResources(string relativePath)
-        {
-            var assembly = typeof(BaseTest).GetTypeInfo().Assembly;
-            return assembly.GetManifestResourceStream(relativePath);
         }
     }
 }

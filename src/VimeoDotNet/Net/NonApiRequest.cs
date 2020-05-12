@@ -11,15 +11,15 @@ using VimeoDotNet.Constants;
 namespace VimeoDotNet.Net
 {
     /// <inheritdoc />
-    public class ApiRequest : IApiRequest
+    public class NonApiRequest : IApiRequest
     {
 #if NET45
-        static ApiRequest()
+        static NonApiRequest()
         {
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
         }
 #endif
-        
+
         #region Private Fields
 
         private readonly Dictionary<string, string> _queryString = new Dictionary<string, string>();
@@ -121,30 +121,14 @@ namespace VimeoDotNet.Net
         /// <summary>
         /// Create new request
         /// </summary>
-        public ApiRequest()
+        public NonApiRequest()
         {
             Protocol = Request.DefaultProtocol;
-            Host = Request.DefaultHostName;
             Port = Request.DefaultHttpsPort;
             Method = Request.DefaultMethod;
             ResponseType = ResponseTypes.Wildcard;
             ApiVersion = ApiVersions.v3_2;
             ExcludeAuthorizationHeader = false;
-        }
-
-        /// <inheritdoc />
-        public ApiRequest(string clientId, string clientSecret)
-            : this()
-        {
-            ClientId = clientId;
-            ClientSecret = clientSecret;
-        }
-
-        /// <inheritdoc />
-        public ApiRequest(string accessToken)
-            : this()
-        {
-            AccessToken = accessToken;
         }
 
         #endregion
@@ -181,10 +165,6 @@ namespace VimeoDotNet.Net
         {
             SetDefaults();
             var request = new HttpRequestMessage(Method, BuildUrl());
-            if (!ExcludeAuthorizationHeader)
-            {
-                SetAuth(request);
-            }
             SetHeaders(request);
             request.Content = Body;
             return request;

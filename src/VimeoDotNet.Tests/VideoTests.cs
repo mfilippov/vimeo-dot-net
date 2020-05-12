@@ -3,7 +3,6 @@ using Shouldly;
 using VimeoDotNet.Enums;
 using VimeoDotNet.Exceptions;
 using VimeoDotNet.Models;
-using VimeoDotNet.Net;
 using Xunit;
 
 namespace VimeoDotNet.Tests
@@ -11,60 +10,45 @@ namespace VimeoDotNet.Tests
     public class VideoTests : BaseTest
     {
         [Fact]
-        public async Task ShouldCorrectlyDeleteVideo()
-        {
-            using (var file = new BinaryContent(GetFileFromEmbeddedResources(TestFilePath), "video/mp4"))
-            {
-                var length = file.Data.Length;
-                var client = CreateAuthenticatedClient();
-                var completedRequest = await client.UploadEntireFileAsync(file);
-                completedRequest.ShouldNotBeNull();
-                completedRequest.IsVerifiedComplete.ShouldBeTrue();
-                completedRequest.BytesWritten.ShouldBe(length);
-                completedRequest.ClipUri.ShouldNotBeNull();
-                completedRequest.ClipId.HasValue.ShouldBeTrue();
-                completedRequest.ClipId.ShouldNotBeNull();
-                await client.DeleteVideoAsync(completedRequest.ClipId.Value);
-                (await client.GetVideoAsync(completedRequest.ClipId.Value)).ShouldBeNull();
-            }
-        }
-
-        [Fact]
         public async Task ShouldCorrectlyRetrievesVideosById()
         {
-            var client = CreateAuthenticatedClient();
-            var video = await client.GetVideoAsync(VimeoSettings.VideoId);
-            video.ShouldNotBeNull();
-            video.Id.ShouldBe(VimeoSettings.VideoId);
+            await AuthenticatedClient.WithTempVideo(async clipId =>
+            {
+                var video = await AuthenticatedClient.GetVideoAsync(clipId);
+                video.ShouldNotBeNull();
+                video.Id.ShouldBe(clipId);
+            });
         }
 
         [Fact]
         public async Task ShouldCorrectlyRetrievesVideosByUserId()
         {
-            var client = CreateAuthenticatedClient();
-            var videos = await client.GetVideosAsync(VimeoSettings.UserId);
-            videos.ShouldNotBeNull();
-            videos.Data.Count.ShouldBeGreaterThan(0);
+            await AuthenticatedClient.WithTempVideo(async clipId =>
+            {
+                var videos = await AuthenticatedClient.GetVideosAsync(VimeoSettings.UserId);
+                videos.ShouldNotBeNull();
+                videos.Data.Count.ShouldBeGreaterThan(0);
+            });
         }
 
         [Fact]
         public async Task ShouldCorrectlyRetrievesVideosByMe()
         {
-            var client = CreateAuthenticatedClient();
-            var videos = await client.GetVideosAsync(UserId.Me);
-            videos.ShouldNotBeNull();
+            await AuthenticatedClient.WithTempVideo(async clipId =>
+            {
+                var videos = await AuthenticatedClient.GetVideosAsync(UserId.Me);
+                videos.ShouldNotBeNull();
+            });
         }
 
         [Fact]
-        public async Task ShouldCorrectlyRetriveSecondPage()
+        public async Task ShouldCorrectlyRetrieveSecondPage()
         {
-            var client = CreateAuthenticatedClient();
-
             for (var i = 0; i < 5; i++)
             {
                 try
                 {
-                    var videos = await client.GetVideosAsync(VimeoSettings.UserId, 2, 1);
+                    var videos = await AuthenticatedClient.GetVideosAsync(VimeoSettings.UserId, 2, 1);
                     videos.ShouldNotBeNull();
                     return;
                 }
@@ -83,57 +67,76 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyGetVideoWithFields()
         {
-            var client = CreateAuthenticatedClient();
-            var video = await client.GetVideoAsync(VimeoSettings.VideoId, new[] {"uri", "name"});
-            video.ShouldNotBeNull();
-            video.Uri.ShouldNotBeNull();
-            video.Name.ShouldNotBeNull();
-            video.Pictures.ShouldBeNull();
+            await AuthenticatedClient.WithTempVideo(async clipId =>
+            {
+                var video = await AuthenticatedClient.GetVideoAsync(clipId, new[] {"uri", "name"});
+                video.ShouldNotBeNull();
+                video.Uri.ShouldNotBeNull();
+                video.Name.ShouldNotBeNull();
+                video.Pictures.ShouldBeNull();
+            });
         }
 
         [Fact]
         public async Task ShouldCorrectlyGetUserAlbumVideosByUserId()
         {
-            var client = CreateAuthenticatedClient();
-            var videos = await client.GetAlbumVideosAsync(VimeoSettings.UserId, VimeoSettings.AlbumId);
-            videos.ShouldNotBeNull();
-            videos.Data.Count.ShouldBeGreaterThan(0);
+            await AuthenticatedClient.WithTempVideo(async clipId =>
+            {
+                await AuthenticatedClient.WithTestAlbum(async albumId =>
+                {
+                    await AuthenticatedClient.AddToAlbumAsync(UserId.Me, albumId, clipId);
+                    var videos = await AuthenticatedClient.GetAlbumVideosAsync(VimeoSettings.UserId, albumId);
+                    videos.ShouldNotBeNull();
+                    videos.Data.Count.ShouldBeGreaterThan(0);
+                });
+            });
         }
 
         [Fact]
         public async Task ShouldCorrectlyGetUserAlbumVideosByMe()
         {
-            var client = CreateAuthenticatedClient();
-            var videos = await client.GetAlbumVideosAsync(UserId.Me, VimeoSettings.AlbumId);
-            videos.ShouldNotBeNull();
-            videos.Data.Count.ShouldBeGreaterThan(0);
+            await AuthenticatedClient.WithTempVideo(async clipId =>
+            {
+                await AuthenticatedClient.WithTestAlbum(async albumId =>
+                {
+                    await AuthenticatedClient.AddToAlbumAsync(UserId.Me, albumId, clipId);
+                    var videos = await AuthenticatedClient.GetAlbumVideosAsync(UserId.Me, albumId);
+                    videos.ShouldNotBeNull();
+                    videos.Data.Count.ShouldBeGreaterThan(0);
+                });
+            });
         }
 
         [Fact]
         public async Task ShouldCorrectlyGetAccountAlbumVideosWithFields()
         {
-            var client = CreateAuthenticatedClient();
-            var videos =
-                await client.GetAlbumVideosAsync(VimeoSettings.AlbumId, 1, null, fields: new[] {"uri", "name"});
-            videos.ShouldNotBeNull();
-            videos.Data.Count.ShouldBeGreaterThan(0);
-            var video = videos.Data[0];
-            video.ShouldNotBeNull();
-            video.Uri.ShouldNotBeNull();
-            video.Name.ShouldNotBeNull();
-            video.Pictures.ShouldBeNull();
+            await AuthenticatedClient.WithTempVideo(async clipId =>
+            {
+                await AuthenticatedClient.WithTestAlbum(async albumId =>
+                {
+                    await AuthenticatedClient.AddToAlbumAsync(UserId.Me, albumId, clipId);
+                    var videos =
+                        await AuthenticatedClient.GetAlbumVideosAsync(albumId, 1, null, fields: new[] {"uri", "name"});
+                    videos.ShouldNotBeNull();
+                    videos.Data.Count.ShouldBeGreaterThan(0);
+                    var video = videos.Data[0];
+                    video.ShouldNotBeNull();
+                    video.Uri.ShouldNotBeNull();
+                    video.Name.ShouldNotBeNull();
+                    video.Pictures.ShouldBeNull();
+                });
+            });
         }
 
         [Fact]
         public async Task ShouldCorrectlyGetVideoThumbnails()
         {
-            var client = CreateAuthenticatedClient();
-            var pictures = await client.GetPicturesAsync(VimeoSettings.VideoId);
+            var pictures = await AuthenticatedClient.GetPicturesAsync(VimeoSettings.PublicVideoId);
             pictures.ShouldNotBeNull();
             pictures.Data.Count.ShouldBeGreaterThan(0);
             var uriParts = pictures.Data[0].Uri.Split('/');
             var pictureId = long.Parse(uriParts[uriParts.Length - 1]);
-            var picture = await client.GetPictureAsync(VimeoSettings.VideoId, pictureId);
+            var picture = await AuthenticatedClient.GetPictureAsync(VimeoSettings.PublicVideoId, pictureId);
             picture.ShouldNotBeNull();
         }
 
@@ -141,7 +144,7 @@ namespace VimeoDotNet.Tests
         public async Task ShouldCorrectlyGetAccountVideoWithUnauthenticatedToken()
         {
             var client = await CreateUnauthenticatedClient();
-            var video = await client.GetVideoAsync(VimeoSettings.VideoId);
+            var video = await client.GetVideoAsync(VimeoSettings.PublicVideoId);
             video.ShouldNotBeNull();
             video.Pictures.Uri.ShouldNotBeNull();
         }
@@ -149,87 +152,91 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyUpdateVideoEmbedPrivacy()
         {
-            var client = CreateAuthenticatedClient();
-
-            var video = await client.GetVideoAsync(VimeoSettings.VideoId);
-            video.Privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Public);
-            await client.UpdateVideoMetadataAsync(VimeoSettings.VideoId, new VideoUpdateMetadata
+            await AuthenticatedClient.WithTempVideo(async clipId =>
             {
-                EmbedPrivacy = VideoEmbedPrivacyEnum.Private
-            });
-            video = await client.GetVideoAsync(VimeoSettings.VideoId);
-            video.Privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Private);
+                var video = await AuthenticatedClient.GetVideoAsync(clipId);
+                video.Privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Public);
+                await AuthenticatedClient.UpdateVideoMetadataAsync(clipId, new VideoUpdateMetadata
+                {
+                    EmbedPrivacy = VideoEmbedPrivacyEnum.Private
+                });
+                video = await AuthenticatedClient.GetVideoAsync(clipId);
+                video.Privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Private);
 
-            await client.UpdateVideoMetadataAsync(VimeoSettings.VideoId, new VideoUpdateMetadata
-            {
-                EmbedPrivacy = VideoEmbedPrivacyEnum.Public
+                await AuthenticatedClient.UpdateVideoMetadataAsync(clipId, new VideoUpdateMetadata
+                {
+                    EmbedPrivacy = VideoEmbedPrivacyEnum.Public
+                });
+                video = await AuthenticatedClient.GetVideoAsync(clipId);
+                video.Privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Public);
             });
-            video = await client.GetVideoAsync(VimeoSettings.VideoId);
-            video.Privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Public);
         }
 
         [Fact]
         public async Task ShouldCorrectlyWorkWithDomainsForEmbedding()
         {
-            var client = CreateAuthenticatedClient();
-
-            var account = await client.GetAccountInformationAsync();
-            if (account.AccountType == AccountTypeEnum.Basic || account.AccountType == AccountTypeEnum.Unknown)
+            await AuthenticatedClient.WithTempVideo(async clipId =>
             {
-                // Skip test if account type does not support domains whitelist
-                return;
-            }
+                var account = await AuthenticatedClient.GetAccountInformationAsync();
+                if (account.AccountType == AccountTypeEnum.Basic || account.AccountType == AccountTypeEnum.Unknown)
+                {
+                    // Skip test if account type does not support domains whitelist
+                    return;
+                }
 
-            await client.UpdateVideoMetadataAsync(VimeoSettings.VideoId, new VideoUpdateMetadata
-            {
-                EmbedPrivacy = VideoEmbedPrivacyEnum.Whitelist
-            });
-            var video = await client.GetVideoAsync(VimeoSettings.VideoId);
-            video.Privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Whitelist);
+                await AuthenticatedClient.UpdateVideoMetadataAsync(clipId, new VideoUpdateMetadata
+                {
+                    EmbedPrivacy = VideoEmbedPrivacyEnum.Whitelist
+                });
+                var video = await AuthenticatedClient.GetVideoAsync(clipId);
+                video.Privacy.EmbedPrivacy.ShouldBe(VideoEmbedPrivacyEnum.Whitelist);
 
-            await client.AllowEmbedVideoOnDomainAsync(VimeoSettings.VideoId, "example.com");
-            var domains = await client.GetAllowedDomainsForEmbeddingVideoAsync(VimeoSettings.VideoId);
-            domains.Data.ShouldNotBeNull();
-            domains.Data.Count.ShouldBe(1);
-            domains.Data[0].ShouldNotBeNull();
-            domains.Data[0].Domain.ShouldBe("example.com");
+                await AuthenticatedClient.AllowEmbedVideoOnDomainAsync(clipId, "example.com");
+                var domains = await AuthenticatedClient.GetAllowedDomainsForEmbeddingVideoAsync(clipId);
+                domains.Data.ShouldNotBeNull();
+                domains.Data.Count.ShouldBe(1);
+                domains.Data[0].ShouldNotBeNull();
+                domains.Data[0].Domain.ShouldBe("example.com");
 
-            await client.DisallowEmbedVideoOnDomainAsync(VimeoSettings.VideoId, "example.com");
-            domains = await client.GetAllowedDomainsForEmbeddingVideoAsync(VimeoSettings.VideoId);
-            domains.Data.ShouldNotBeNull();
-            domains.Data.Count.ShouldBe(0);
+                await AuthenticatedClient.DisallowEmbedVideoOnDomainAsync(clipId, "example.com");
+                domains = await AuthenticatedClient.GetAllowedDomainsForEmbeddingVideoAsync(clipId);
+                domains.Data.ShouldNotBeNull();
+                domains.Data.Count.ShouldBe(0);
 
-            await client.UpdateVideoMetadataAsync(VimeoSettings.VideoId, new VideoUpdateMetadata
-            {
-                EmbedPrivacy = VideoEmbedPrivacyEnum.Public
+                await AuthenticatedClient.UpdateVideoMetadataAsync(clipId, new VideoUpdateMetadata
+                {
+                    EmbedPrivacy = VideoEmbedPrivacyEnum.Public
+                });
             });
         }
 
         [Fact]
         public async Task ShouldCorrectlyGetPictureFromVideo()
         {
-            var client = CreateAuthenticatedClient();
-            var pictures = await client.GetPicturesAsync(VimeoSettings.VideoId);
+            var pictures = await AuthenticatedClient.GetPicturesAsync(VimeoSettings.PublicVideoId);
             pictures.Data.Count.ShouldBeGreaterThan(0);
             var picture = pictures.Data[0];
             var parts = picture.Uri.Split('/');
             var pictureId = long.Parse(parts[parts.Length - 1]);
-            var pictureById = await client.GetPictureAsync(VimeoSettings.VideoId, pictureId);
+            var pictureById = await AuthenticatedClient.GetPictureAsync(VimeoSettings.PublicVideoId, pictureId);
             pictureById.ShouldNotBeNull();
         }
 
         [Fact]
         public async Task ShouldCorrectlyAssignEmbedPresetToVideo()
         {
-            if (VimeoSettings.EmbedPresetId == 0)
+            if (VimeoSettings.EmbedPresetId == 0) {
                 return;
+            }
 
-            var client = CreateAuthenticatedClient();
-            await client.AssignEmbedPresetToVideoAsync(VimeoSettings.VideoId, VimeoSettings.EmbedPresetId);
-            var video = await client.GetVideoAsync(VimeoSettings.VideoId, new[] { "embed_presets" });
-            video.ShouldNotBeNull();
-            video.EmbedPresets.ShouldNotBeNull();
-            video.EmbedPresets.Id.ShouldBe(VimeoSettings.EmbedPresetId);
+            await AuthenticatedClient.WithTempVideo(async clipId =>
+            {
+                await AuthenticatedClient.AssignEmbedPresetToVideoAsync(clipId, VimeoSettings.EmbedPresetId);
+                var video = await AuthenticatedClient.GetVideoAsync(clipId, new[] {"embed_presets"});
+                video.ShouldNotBeNull();
+                video.EmbedPresets.ShouldNotBeNull();
+                video.EmbedPresets.Id.ShouldBe(VimeoSettings.EmbedPresetId);
+            });
         }
 
         [Fact]
@@ -237,21 +244,22 @@ namespace VimeoDotNet.Tests
         {
             if (VimeoSettings.EmbedPresetId == 0)
                 return;
-
-            var client = CreateAuthenticatedClient();
-            var video = await client.GetVideoAsync(VimeoSettings.VideoId, new[] { "embed_presets" });
-            var oldPresetId = video?.EmbedPresets?.Id;
-            await client.UnassignEmbedPresetFromVideoAsync(VimeoSettings.VideoId, VimeoSettings.EmbedPresetId);
-            video = await client.GetVideoAsync(VimeoSettings.VideoId, new[] { "embed_presets" });
-            video.ShouldNotBeNull();
-            if (oldPresetId == VimeoSettings.EmbedPresetId)
+            await AuthenticatedClient.WithTempVideo(async clipId =>
             {
-                video.EmbedPresets.ShouldBeNull();
-            }
-            else
-            {
-                video.EmbedPresets?.Id.ShouldBe(oldPresetId);
-            }
+                var video = await AuthenticatedClient.GetVideoAsync(clipId, new[] {"embed_presets"});
+                var oldPresetId = video?.EmbedPresets?.Id;
+                await AuthenticatedClient.UnassignEmbedPresetFromVideoAsync(clipId, VimeoSettings.EmbedPresetId);
+                video = await AuthenticatedClient.GetVideoAsync(clipId, new[] {"embed_presets"});
+                video.ShouldNotBeNull();
+                if (oldPresetId == VimeoSettings.EmbedPresetId)
+                {
+                    video.EmbedPresets.ShouldBeNull();
+                }
+                else
+                {
+                    video.EmbedPresets?.Id.ShouldBe(oldPresetId);
+                }
+            });
         }
     }
 }

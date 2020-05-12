@@ -4,72 +4,47 @@ using Xunit;
 
 namespace VimeoDotNet.Tests
 {
-    public class TagTests : BaseTest, IAsyncLifetime
+    public class TagTests : BaseTest
     {
-        public async Task InitializeAsync()
+        [Fact]
+        public async Task TagInteractionTest()
         {
-            var client = CreateAuthenticatedClient();
-            await CleanupTags(client, VimeoSettings.VideoId);
-            var video = await client.GetVideoAsync(VimeoSettings.VideoId);
-            video.Tags.Count.ShouldBe(0);
-        }
-
-        public async Task DisposeAsync()
-        {
-            await CleanupTags(AuthenticatedClient, VimeoSettings.VideoId);
-            var video = await AuthenticatedClient.GetVideoAsync(VimeoSettings.VideoId);
-            video.Tags.Count.ShouldBe(0);
-        }
-
-        private static async Task CleanupTags(IVimeoClient client, long clipId)
-        {
-            var tags = await client.GetVideoTags(clipId);
-            foreach (var tag in tags.Data)
+            await AuthenticatedClient.WithTempVideo(async clipId =>
             {
-                await client.DeleteVideoTagAsync(clipId, tag.Id);
-            }
-        }
-        
-        [Fact]
-        public async Task ShouldCorrectlyAddTagVideoTag()
-        {
-            var tag = await AuthenticatedClient.AddVideoTagAsync(VimeoSettings.VideoId, "test-tag1");
+                var tag = await AuthenticatedClient.AddVideoTagAsync(clipId, "test-tag1");
 
-            tag.ShouldNotBeNull();
-            tag.Id.ShouldBe("test-tag1");
-            tag.Name.ShouldBe("test-tag1");
-            tag.Canonical.ShouldBe("test-tag1");
-            tag.Uri.ShouldNotBeEmpty();
-            tag.Metadata.ShouldNotBeNull();
-            tag.Metadata.Connections.ShouldNotBeNull();
-            tag.Metadata.Connections.Videos.Uri.ShouldNotBeEmpty();
-            tag.Metadata.Connections.Videos.Options.ShouldNotBeEmpty();
-            tag.Metadata.Connections.Videos.Total.ShouldBeGreaterThan(0);
+                tag.ShouldNotBeNull();
+                tag.Id.ShouldBe("test-tag1");
+                tag.Name.ShouldBe("test-tag1");
+                tag.Canonical.ShouldBe("test-tag1");
+                tag.Uri.ShouldNotBeEmpty();
+                tag.Metadata.ShouldNotBeNull();
+                tag.Metadata.Connections.ShouldNotBeNull();
+                tag.Metadata.Connections.Videos.Uri.ShouldNotBeEmpty();
+                tag.Metadata.Connections.Videos.Options.ShouldNotBeEmpty();
+                tag.Metadata.Connections.Videos.Total.ShouldBeGreaterThan(0);
+
+                var video = await AuthenticatedClient.GetVideoAsync(clipId);
+                video.Tags.Count.ShouldBe(1);
+
+                var tagResult = await AuthenticatedClient.GetVideoTagAsync("test-tag1");
+                tagResult.Id.ShouldBe("test-tag1");
+                
+                var videoResult = await AuthenticatedClient.GetVideoByTag("test", 1, 10, GetVideoByTagSort.Name,
+                    GetVideoByTagDirection.Asc, new[] {"uri", "name"});
             
-            var video = await AuthenticatedClient.GetVideoAsync(VimeoSettings.VideoId);
-            video.Tags.Count.ShouldBe(1);
-        }
-
-        [Fact]
-        public async Task ShouldCorrectlyGetVideoTag()
-        {
-            await AuthenticatedClient.AddVideoTagAsync(VimeoSettings.VideoId, "test-tag1");
-            var result = await AuthenticatedClient.GetVideoTagAsync("test-tag1");
-            result.Id.ShouldBe("test-tag1");
-        }
-
-        [Fact]
-        public async Task ShouldCorrectlyGetVideoByTag()
-        {
-            var client = await CreateUnauthenticatedClient();
-            var result = await client.GetVideoByTag("test", 1, 10, GetVideoByTagSort.Name,
-                GetVideoByTagDirection.Asc, new[] {"uri", "name"});
-            
-            result.Page.ShouldBe(1);
-            result.PerPage.ShouldBe(10);
-            result.Data.Count.ShouldBeGreaterThan(0);
-            result.Data[0].Name.ShouldNotBeEmpty();
-            result.Data[0].Uri.ShouldNotBeEmpty();
+                videoResult.Page.ShouldBe(1);
+                videoResult.PerPage.ShouldBe(10);
+                videoResult.Data.Count.ShouldBeGreaterThan(0);
+                videoResult.Data[0].Name.ShouldNotBeEmpty();
+                videoResult.Data[0].Uri.ShouldNotBeEmpty();
+                
+                var tags = await AuthenticatedClient.GetVideoTags(clipId);
+                foreach (var t in tags.Data)
+                {
+                    await AuthenticatedClient.DeleteVideoTagAsync(clipId, t.Id);
+                }
+            });
         }
     }
 }
