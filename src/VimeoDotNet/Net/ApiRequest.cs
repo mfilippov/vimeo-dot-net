@@ -13,6 +13,13 @@ namespace VimeoDotNet.Net
     /// <inheritdoc />
     public class ApiRequest : IApiRequest
     {
+#if NET45
+        static ApiRequest()
+        {
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+        }
+#endif
+        
         #region Private Fields
 
         private readonly Dictionary<string, string> _queryString = new Dictionary<string, string>();
