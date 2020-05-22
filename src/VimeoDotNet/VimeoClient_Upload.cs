@@ -86,6 +86,7 @@ namespace VimeoDotNet
         /// <inheritdoc />
         public async Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent,
             int chunkSize = DefaultUploadChunkSize,
+            Action<double> statusCallback = null,
             long? replaceVideoId = null)
         {
             var uploadRequest = await StartUploadFileAsync(fileContent, chunkSize, replaceVideoId).ConfigureAwait(false);
@@ -93,6 +94,8 @@ namespace VimeoDotNet
             while (!uploadRequest.IsVerifiedComplete)
             {
                 var uploadStatus = await ContinueUploadFileAsync(uploadRequest).ConfigureAwait(false);
+
+                statusCallback?.Invoke(Math.Round(((double)uploadStatus.BytesWritten / uploadRequest.FileLength) * 100));
 
                 if (uploadStatus.Status == UploadStatusEnum.InProgress)
                     continue;
