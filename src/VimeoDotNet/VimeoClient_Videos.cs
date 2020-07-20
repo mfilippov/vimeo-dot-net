@@ -556,6 +556,40 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Set a Video Thumbnail by a time code
+        /// </summary>
+        /// <param name="timeOffset">Time offset for the thumbnail in seconds</param>
+        /// <param name="clipId">Clip Id</param>
+        public async Task SetThumbnailAsync(long timeOffset, long clipId)
+        {
+            try
+            {
+                // Get the URI of the thumbnail
+                var request = _apiRequestFactory.GetApiRequest(AccessToken);
+                request.Method = HttpMethod.Post;
+                request.Path = Endpoints.Pictures;
+                request.UrlSegments.Add("clipId", clipId.ToString());
+                var parameters = new Dictionary<string, string>();
+                parameters.Add("active", "true");
+                parameters.Add("time", timeOffset.ToString());
+
+                request.Body = new FormUrlEncodedContent(parameters);
+
+                var response = await request.ExecuteRequestAsync<Video>().ConfigureAwait(false);
+                CheckStatusCodeError(null, response, "Error setting thumbnail.");
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+
+                throw new VimeoUploadException("Error setting thumbnail.", null, ex);
+            }
+        }
+
 
         /// <summary>
         /// set thumbnail picture asynchronously
@@ -651,6 +685,36 @@ namespace VimeoDotNet
             request.UrlSegments.Add("presetId", presetId.ToString());
 
             return request;
+        }
+
+        /// <summary>
+        /// Moves a video to a folder
+        /// </summary>
+        /// <param name="projectId">Folder Id (called project in Vimeo)</param>
+        /// <param name="clipId">Clip Id</param>
+        public async Task MoveVideoToFolder(long projectId, long clipId)
+        {
+            try
+            {
+                // Get the URI of the thumbnail
+                var request = _apiRequestFactory.GetApiRequest(AccessToken);
+                request.Method = HttpMethod.Put;
+                request.Path = Endpoints.MeProjectVideo;
+                request.UrlSegments.Add("clipId", clipId.ToString());
+                request.UrlSegments.Add("projectId", projectId.ToString());
+
+                var response = await request.ExecuteRequestAsync<Video>().ConfigureAwait(false);
+                CheckStatusCodeError(null, response, "Error moving  video to folder.");
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+
+                throw new VimeoUploadException("Error moving  video to folder.", null, ex);
+            }
         }
     }
 }

@@ -8,8 +8,8 @@ using Xunit;
 [assembly: AssemblyCopyright("Copyright © 2014-2016, Stephen Commisso, Mikhael Filippov")]
 [assembly: AssemblyDescription("Test library for VimeoDotNet")]
 
-[assembly: AssemblyVersion("2.0.0")]
-[assembly: AssemblyFileVersion("2.0.0")]
+[assembly: AssemblyVersion("2.2020.0522")]
+[assembly: AssemblyFileVersion("2.2020.0522")]
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
 
 

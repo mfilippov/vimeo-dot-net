@@ -6,8 +6,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("VimeoDotNet")]
 [assembly: AssemblyProduct("VimeoDotNet")]
 [assembly: AssemblyCopyright("Copyright © 2014-2016, Stephen Commisso, Mikhael Filippov")]
-[assembly: AssemblyVersion("2.0.0")]
-[assembly: AssemblyFileVersion("2.0.0")]
+[assembly: AssemblyVersion("2.2020.0522")]
+[assembly: AssemblyFileVersion("2.2020.0522")]
 [assembly: InternalsVisibleTo("VimeoDotNet.Tests, PublicKey=" +
                               "0024000004800000140100000602000000240000525341310008000001000100ddd2531e85827f" +
                               "17bf4ac507266283e789bdfdbc7b1746e737eecec94366a2b529d4a51410bef7042b31e9904d49" +

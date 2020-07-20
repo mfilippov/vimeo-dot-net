@@ -92,6 +92,8 @@
 
         public const string Tag = "/tags/{tagId}";
 
+        public const string MeProjectVideo = "/me/projects/{projectId}/videos/{clipId}";
+
         public static string GetCurrentUserEndpoint(string endpoint)
         {
             return endpoint.Replace("users/{userId}", "me");

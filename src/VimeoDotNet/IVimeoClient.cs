@@ -179,6 +179,20 @@ namespace VimeoDotNet
         /// <param name="clipId">CliepId</param>
         Task DeleteVideoAsync(long clipId);
 
+        /// <summary>
+        /// Set a Video Thumbnail by a time code
+        /// </summary>
+        /// <param name="timeOffset">Time offset for the thumbnail in seconds</param>
+        /// <param name="clipId">Clip Id</param>
+        Task SetThumbnailAsync(long timeOffset, long clipId);
+
+        /// <summary>
+        /// Moves a video to a folder
+        /// </summary>
+        /// <param name="projectId">Folder Id (called project in Vimeo)</param>
+        /// <param name="clipId">Clip Id</param>
+        Task MoveVideoToFolder(long projectId, long clipId);
+
         #endregion
 
         #region Text tracks
@@ -256,7 +270,9 @@ namespace VimeoDotNet
         /// <param name="replaceVideoId">ReplaceVideoId</param>
         /// <returns>Upload request</returns>
         Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent,
-            int chunkSize = VimeoClient.DefaultUploadChunkSize, long? replaceVideoId = null);
+            int chunkSize = VimeoClient.DefaultUploadChunkSize,
+            long? replaceVideoId = null,
+            Action<double> statusCallback = null);
 
         /// <summary>
         /// Create new upload ticket asynchronously
