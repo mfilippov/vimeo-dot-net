@@ -499,5 +499,30 @@ namespace VimeoDotNet
         Task<bool> AddToChannelAsync(long channelId, long clipId);
 
         #endregion
+
+        #region Folders
+
+        /// <summary>
+        /// Create a folder
+        /// </summary>
+        /// <param name="userId">User ID</param>
+        /// <param name="name">Name</param>
+        /// <returns>Tag</returns>
+        Task<Folder> CreateVideoFolder(UserId userId, string name);
+
+        /// <summary>
+        /// Get all folders by UserId and query and page parameters asynchronously
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="perPage">Number of items to show on each page. Max 50</param>
+        /// <param name="query">Search query</param>
+        /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter</param>
+        /// <param name="page">The page number to show</param>
+        /// <returns>Paginated videos</returns>
+        Task<Paginated<Folder>> GetUserFolders(UserId userId, int? page = null, int? perPage = null, string query = null, string[] fields = null);
+
+
+
+        #endregion
     }
 }
