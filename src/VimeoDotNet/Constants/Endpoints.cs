@@ -84,6 +84,7 @@
         public const string VideoAllowedDomain = "/videos/{clipId}/privacy/domains/{domain}";
         public const string VideoRelatedVideos = "/videos/{clipId}/related";
         public const string VideoReplaceFile = "/videos/{clipId}/files";
+        public const string VideoVersions = "/videos/{clipId}/versions?fields=upload";
 
         public const string TextTracks = "/videos/{clipId}/texttracks/";
         public const string TextTrack = "/videos/{clipId}/texttracks/{trackId}";
