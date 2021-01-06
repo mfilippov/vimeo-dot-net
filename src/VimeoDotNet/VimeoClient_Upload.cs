@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using VimeoDotNet.Constants;
 using VimeoDotNet.Enums;
 using VimeoDotNet.Exceptions;
@@ -43,6 +47,28 @@ namespace VimeoDotNet
             try
             {
                 var request = GenerateTusResumableUploadTicketRequest(size, name);
+                var response = await request.ExecuteRequestAsync<TusResumableUploadTicket>().ConfigureAwait(false);
+                UpdateRateLimit(response);
+                CheckStatusCodeError(null, response, "Error generating upload ticket.");
+
+                return response.Content;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+
+                throw new VimeoUploadException("Error generating upload ticket.", null, ex);
+            }
+        }
+
+        public async Task<TusResumableUploadTicket> GetTusReplaceResumableUploadTicketAsync(long size, long clipId, string name = null)
+        {
+            try
+            {
+                var request = GenerateTusReplaceResumableUploadTicketRequest(size, clipId, name);
                 var response = await request.ExecuteRequestAsync<TusResumableUploadTicket>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(null, response, "Error generating upload ticket.");
@@ -425,6 +451,28 @@ namespace VimeoDotNet
             }
 
             request.Body = new FormUrlEncodedContent(parameters);
+            return request;
+        }
+
+        private IApiRequest GenerateTusReplaceResumableUploadTicketRequest(long size, long clipId, string name = null)
+        {
+            ThrowIfUnauthorized();
+
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
+            request.ApiVersion = ApiVersions.v3_4;
+            request.Method = HttpMethod.Post;
+            request.Path = Endpoints.VideoVersions;
+            request.UrlSegments.Add("clipId", clipId.ToString());
+
+            if (string.IsNullOrEmpty(name))
+            {
+                name = DateTime.Now.ToString("yyyyMMdd-HH-mm-ss");
+            }
+
+            // Create the json string
+            string json = "{\"file_name\":\"" + name + "\",\"upload\":{\"status\":\"in_progress\",\"size\":\"" + size + "\",\"approach\":\"tus\"}}";
+            
+            request.Body = new StringContent(json, Encoding.UTF8, "application/json");
             return request;
         }
 

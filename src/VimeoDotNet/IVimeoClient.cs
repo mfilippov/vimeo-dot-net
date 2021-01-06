@@ -256,6 +256,13 @@ namespace VimeoDotNet
         Task<TusResumableUploadTicket> GetTusResumableUploadTicketAsync(long size, string name = null);
 
         /// <summary>
+        /// Create new resumable replace upload ticket asynchronously
+        /// </summary>
+        /// <returns>Upload ticket</returns>
+        Task<TusResumableUploadTicket> GetTusReplaceResumableUploadTicketAsync(long size, long clipId, string name = null);
+        
+
+        /// <summary>
         /// Create new upload ticket for replace video asynchronously
         /// </summary>
         /// <param name="videoId">VideoId</param>
