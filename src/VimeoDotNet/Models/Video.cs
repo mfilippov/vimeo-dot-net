@@ -73,6 +73,13 @@ namespace VimeoDotNet.Models
         public string Status { get; set; }
 
         /// <summary>
+        /// Type
+        /// </summary>
+        [PublicAPI]
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        /// <summary>
         /// Embed presets
         /// </summary>
         [PublicAPI]
@@ -162,6 +169,13 @@ namespace VimeoDotNet.Models
         [PublicAPI]
         [JsonProperty(PropertyName = "metadata")]
         public VideoMetadata Metadata { get; set; }
+
+        /// <summary>
+        /// Embed
+        /// </summary>
+        [PublicAPI]
+        [JsonProperty(PropertyName = "embed")]
+        public Embed Embed { get; set; }
 
         /// <summary>
         /// Video status
