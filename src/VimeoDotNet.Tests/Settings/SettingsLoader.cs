@@ -21,16 +21,16 @@ namespace VimeoDotNet.Tests.Settings
                     var parts = line.Trim(' ', '\n', '\r').Split(new [] {'='}, 2);
                     switch (parts[0])
                     {
-                        case "ClientId":
+                        case "VIMEO_CLIENT_ID":
                             fromEnv.ClientId = parts[1].Trim(' ', '\n', '\r');
                             break;
-                        case "ClientSecret":
+                        case "VIMEO_CLIENT_SECRET":
                             fromEnv.ClientSecret = parts[1].Trim(' ', '\n', '\r');
                             break;
-                        case "AccessToken":
+                        case "VIMEO_ACCESS_TOKEN":
                             fromEnv.AccessToken = parts[1].Trim(' ', '\n', '\r');
                             break;
-                        case "EmbedPresetId":
+                        case "VIMEO_EMBED_PRESET_ID":
                             fromEnv.EmbedPresetId = long.Parse(parts[1].Trim(' ', '\n', '\r'));
                             break;
                         default:
@@ -44,12 +44,12 @@ namespace VimeoDotNet.Tests.Settings
 
         private static VimeoApiTestSettings GetSettingsFromEnvVars()
         {
-            long.TryParse(Environment.GetEnvironmentVariable("EmbedPresetId"), out var embedPresetId);
+            long.TryParse(Environment.GetEnvironmentVariable("VIMEO_EMBED_PRESET_ID"), out var embedPresetId);
             return new VimeoApiTestSettings
             {
-                ClientId = Environment.GetEnvironmentVariable("ClientId"),
-                ClientSecret = Environment.GetEnvironmentVariable("ClientSecret"),
-                AccessToken = Environment.GetEnvironmentVariable("AccessToken"),
+                ClientId = Environment.GetEnvironmentVariable("VIMEO_CLIENT_ID"),
+                ClientSecret = Environment.GetEnvironmentVariable("VIMEO_CLIENT_SECRET"),
+                AccessToken = Environment.GetEnvironmentVariable("VIMEO_ACCESS_TOKEN"),
                 EmbedPresetId = embedPresetId
             };
         }

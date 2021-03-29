@@ -1,0 +1,57 @@
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      VIMEO_CLIENT_ID: ${{ secrets.VIMEO_CLIENT_ID }}
+      VIMEO_CLIENT_SECRET: ${{ secrets.VIMEO_CLIENT_SECRET }}
+      VIMEO_ACCESS_TOKEN: ${{ secrets.VIMEO_ACCESS_TOKEN }}
+      VIMEO_EMBED_PRESET_ID: ${{ secrets.VIMEO_EMBED_PRESET_ID }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Pack
+        run: dotnet pack --verbosity normal --no-restore --include-symbols --include-source -p:PackageVersion=2.0.0-preview.${{ github.run_id }} src/VimeoDotNet/VimeoDotNet.csproj
+      - name: Test
+        run: dotnet test --no-build --verbosity normal  -l html --results-directory:"TestResults"
+      - name: Upload test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: TestResults
+          path: ./TestResults/*
+        if: ${{ always() }}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: nupkg
+          path: ./src/VimeoDotNet/bin/Release/*.nupkg
+  prerelease:
+    needs: build
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_USER: mfilippov
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_FEED: https://nuget.pkg.github.com/mfilippov
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: nupkg
+      - name: Push to GitHub Feed
+        run: |
+          for f in ./nupkg/*.nupkg
+          do
+            curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
+          done

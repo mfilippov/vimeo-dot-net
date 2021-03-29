@@ -11,8 +11,7 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyGenerateNewUploadTicket()
         {
-            var client = CreateAuthenticatedClient();
-            var ticket = await client.GetUploadTicketAsync();
+            var ticket = await AuthenticatedClient.GetUploadTicketAsync();
             ticket.ShouldNotBeNull();
             ticket.CompleteUri.ShouldNotBeEmpty();
             ticket.TicketId.ShouldNotBeEmpty();
@@ -25,12 +24,12 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyGenerateNewTusResumableUploadTicket()
         {
-            var client = CreateAuthenticatedClient();
-            VimeoDotNet.Models.TusResumableUploadTicket ticket = await client.GetTusResumableUploadTicketAsync(1000);
+            var ticket = await AuthenticatedClient.GetTusResumableUploadTicketAsync(1000);
             ticket.ShouldNotBeNull();
             ticket.Upload.UploadLink.ShouldNotBeEmpty();
             ticket.Id.ShouldNotBeNull();
             ticket.User.Id.ShouldBe(VimeoSettings.UserId);
+            await AuthenticatedClient.DeleteVideoAsync(ticket.Id.Value);
         }
 
         [Fact]
@@ -57,17 +56,16 @@ namespace VimeoDotNet.Tests
             var tempFilePath = Path.GetTempFileName() + ".mp4";
             using (var fs = new FileStream(tempFilePath, FileMode.CreateNew))
             {
-                TestHelper.GetFileFromEmbeddedResources(TestHelper.TestFilePath).CopyTo(fs);
+                await TestHelper.GetFileFromEmbeddedResources(TestHelper.TestFilePath).CopyToAsync(fs);
             }
 
             using (var file = new BinaryContent(tempFilePath))
             {
                 file.ContentType.ShouldBe("video/mp4");
                 length = file.Data.Length;
-                var client = CreateAuthenticatedClient();
-                completedRequest = await client.UploadEntireFileAsync(file);
+                completedRequest = await AuthenticatedClient.UploadEntireFileAsync(file);
                 completedRequest.ClipId.ShouldNotBeNull();
-                await client.DeleteVideoAsync(completedRequest.ClipId.Value);
+                await AuthenticatedClient.DeleteVideoAsync(completedRequest.ClipId.Value);
             }
 
             completedRequest.ShouldNotBeNull();
@@ -83,7 +81,7 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
-        public async Task ShouldCorretlyUploadFileByStream()
+        public async Task ShouldCorrectlyUploadFileByStream()
         {
             long length;
             IUploadRequest completedRequest;
@@ -106,7 +104,7 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
-        public async Task ShouldCorretlyUploadFileByByteArray()
+        public async Task ShouldCorrectlyUploadFileByByteArray()
         {
             long length;
             IUploadRequest completedRequest;
@@ -131,7 +129,7 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
-        public async Task ShouldCorretlyUploadFileByPullLink()
+        public async Task ShouldCorrectlyUploadFileByPullLink()
         {
             var client = CreateAuthenticatedClient();
             var video = await client.UploadPullLinkAsync("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");

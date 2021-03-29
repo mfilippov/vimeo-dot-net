@@ -1,11 +1,20 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Shouldly;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace VimeoDotNet.Tests
 {
     public class TagTests : BaseTest
     {
+        private readonly ITestOutputHelper _testOutput;
+
+        public TagTests(ITestOutputHelper testOutput)
+        {
+            _testOutput = testOutput;
+        }
+
         [Fact]
         public async Task TagInteractionTest()
         {
@@ -25,8 +34,14 @@ namespace VimeoDotNet.Tests
                 tag.Metadata.Connections.Videos.Total.ShouldBeGreaterThan(0);
 
                 var video = await AuthenticatedClient.GetVideoAsync(clipId);
+                
+                while (video.Status == "uploading")
+                {
+                    _testOutput.WriteLine("Video is uploading...");
+                    Thread.Sleep(5000);
+                    video = await AuthenticatedClient.GetVideoAsync(clipId);
+                }
                 video.Tags.Count.ShouldBe(1);
-
                 var tagResult = await AuthenticatedClient.GetVideoTagAsync("test-tag1");
                 tagResult.Id.ShouldBe("test-tag1");
                 
@@ -38,7 +53,7 @@ namespace VimeoDotNet.Tests
                 videoResult.Data.Count.ShouldBeGreaterThan(0);
                 videoResult.Data[0].Name.ShouldNotBeEmpty();
                 videoResult.Data[0].Uri.ShouldNotBeEmpty();
-                
+
                 var tags = await AuthenticatedClient.GetVideoTags(clipId);
                 foreach (var t in tags.Data)
                 {

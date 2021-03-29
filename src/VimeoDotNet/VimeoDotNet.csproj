@@ -4,6 +4,13 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\VimeoDotNet.snk</AssemblyOriginatorKeyFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <Configuration>Release</Configuration>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DocumentationFile>bin\Release\VimeoDotNet.xml</DocumentationFile>
@@ -12,8 +19,8 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2018.3.0" />
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net45" Version="1.0.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
 </Project>
