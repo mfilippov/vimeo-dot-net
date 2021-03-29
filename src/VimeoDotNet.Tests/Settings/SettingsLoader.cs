@@ -44,12 +44,12 @@ namespace VimeoDotNet.Tests.Settings
 
         private static VimeoApiTestSettings GetSettingsFromEnvVars()
         {
-            long.TryParse(Environment.GetEnvironmentVariable("EmbedPresetId"), out var embedPresetId);
+            long.TryParse(Environment.GetEnvironmentVariable("VIMEO_EMBED_PRESET_ID"), out var embedPresetId);
             return new VimeoApiTestSettings
             {
-                ClientId = Environment.GetEnvironmentVariable("ClientId"),
-                ClientSecret = Environment.GetEnvironmentVariable("ClientSecret"),
-                AccessToken = Environment.GetEnvironmentVariable("AccessToken"),
+                ClientId = Environment.GetEnvironmentVariable("VIMEO_CLIENT_ID"),
+                ClientSecret = Environment.GetEnvironmentVariable("VIMEO_CLIENT_SECRET"),
+                AccessToken = Environment.GetEnvironmentVariable("VIMEO_ACCESS_TOKEN"),
                 EmbedPresetId = embedPresetId
             };
         }
