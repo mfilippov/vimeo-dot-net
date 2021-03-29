@@ -6,6 +6,11 @@ on:
 jobs:
   verify:
     runs-on: windows-latest
+    env:
+      - VIMEO_CLIENT_ID: ${{ secrets.VIMEO_CLIENT_ID }}
+      - VIMEO_CLIENT_SECRET: ${{ secrets.VIMEO_CLIENT_SECRET }}
+      - VIMEO_ACCESS_TOKEN: ${{ secrets.v }}
+      - VIMEO_EMBED_PRESET_ID: ${{ secrets.VIMEO_EMBED_PRESET_ID }}
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
@@ -17,9 +22,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      env:
-        - VIMEO_CLIENT_ID: ${{ secrets.VIMEO_CLIENT_ID }}
-        - VIMEO_CLIENT_SECRET: ${{ secrets.VIMEO_CLIENT_SECRET }}
-        - VIMEO_ACCESS_TOKEN: ${{ secrets.v }}
-        - VIMEO_EMBED_PRESET_ID: ${{ secrets.VIMEO_EMBED_PRESET_ID }}
       run: dotnet test --no-build --verbosity normal
