@@ -24,8 +24,13 @@ jobs:
     - name: Pack
       run: dotnet pack --verbosity normal --no-restore --include-symbols --include-source -p:PackageVersion=2.0.0-preview.${{ github.run_id }} src/VimeoDotNet/VimeoDotNet.csproj
     - name: Test
-      run: dotnet test --no-build --verbosity normal
-    - name: Upload Artifact
+      run: dotnet test --no-build --verbosity normal  -l html --results-directory:"TestResults"
+    - name: Upload test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: TestResults
+        path: ./TestResults/*
+    - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
         name: nupkg
