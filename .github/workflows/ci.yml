@@ -21,5 +21,12 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
+    - name: Pack
+      run: dotnet pack --verbosity normal --no-restore --include-symbols --include-source -p:PackageVersion=$GITHUB_RUN_ID src/VimeoDotNet/VimeoDotNet.csproj
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: nupkg
+        path: ./src/VimeoDotNet/bin/Release/*.nupkg
