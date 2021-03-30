@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [ master ]
 jobs:
-  verify:
+  build:
     runs-on: windows-latest
     env:
       VIMEO_CLIENT_ID: ${{ secrets.VIMEO_CLIENT_ID }}
@@ -36,3 +36,18 @@ jobs:
       with:
         name: nupkg
         path: ./src/VimeoDotNet/bin/Release/*.nupkg
+  prerelease:
+    needs: build
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+      uses: actions/download-artifacts@v1
+      with:
+        name: nupkg
+      - name: Push to GitHub Feed
+        run: |
+          for f in ./nupkg/*.nupkg
+          do
+            curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
+          done
