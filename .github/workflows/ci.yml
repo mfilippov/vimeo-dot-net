@@ -11,6 +11,7 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 jobs:
   build:
+    if: github.event_name != 'release'
     runs-on: windows-latest
     env:
       VIMEO_CLIENT_ID: ${{ secrets.VIMEO_CLIENT_ID }}
@@ -44,7 +45,7 @@ jobs:
           path: ./src/VimeoDotNet/bin/Release/*.nupkg
   prerelease:
     needs: build
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' && github.event_name != 'release'
     runs-on: ubuntu-latest
     env:
       GITHUB_USER: mfilippov
