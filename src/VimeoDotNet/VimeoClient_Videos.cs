@@ -719,16 +719,18 @@ namespace VimeoDotNet
         }
 
         /// <inheritdoc />
-        public async Task<Paginated<Video>> GetAllVideosFromFolderAsync(UserId userId, long projectId, int? page = null,
-            int? perPage = null, string sort = null, string direction = null, string[] fields = null)
+        public async Task<Paginated<Video>> GetAllVideosFromFolderAsync(long projectId, UserId userId,
+            long? clipId = null, int? page = null,
+            int? perPage = null, string query = null,string direction = null, string[] fields = null)
         {
             try
             {
-                var request = GenerateVideosFolderRequest(projectId, userId, page: page, perPage: perPage, sort: sort,
+                var request = GenerateVideosFolderRequest(projectId, userId, clipId: clipId, query: query, page: page,
+                    perPage: perPage,
                     direction: direction, fields: fields);
                 var response = await request.ExecuteRequestAsync<Paginated<Video>>().ConfigureAwait(false);
                 UpdateRateLimit(response);
-                CheckStatusCodeError(response, "Error retrieving account album videos.", HttpStatusCode.NotFound);
+                CheckStatusCodeError(response, "Error retrieving account folder videos.", HttpStatusCode.NotFound);
 
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
@@ -749,7 +751,7 @@ namespace VimeoDotNet
                     throw;
                 }
 
-                throw new VimeoApiException("Error retrieving account album videos.", ex);
+                throw new VimeoApiException("Error retrieving account folder videos.", ex);
             }
         }
 
