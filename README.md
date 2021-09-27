@@ -36,7 +36,7 @@ API COVERAGE
 | Get a list of videos uploaded by a user. | :heavy_check_mark: | `GetVideosAsync()` |
 | Begin the video upload process. | :heavy_check_mark: | `GetUploadTicketAsync()` |
 | Check if a user owns a clip. | :heavy_check_mark: | `GetUserVideo()` |
-| Get a lost of videos uploaded into the folder by user | :heavy_check_mark: | `GetAllVideosFromFolderAsync()` |
+| Get a all videos uploaded into the folder by user | :heavy_check_mark: | `GetAllVideosFromFolderAsync()` |
 
 
 
