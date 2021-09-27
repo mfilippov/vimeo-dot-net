@@ -95,6 +95,8 @@
         public const string Tag = "/tags/{tagId}";
 
         public const string MeProjectVideo = "/me/projects/{projectId}/videos/{clipId}";
+        public const string ProjectVideo = "/users/{userId}/projects/{projectId}/videos/{clipId}";
+        public const string ProjectVideos = "/users/{userId}/projects/{projectId}/videos";
 
         public static string GetCurrentUserEndpoint(string endpoint)
         {
