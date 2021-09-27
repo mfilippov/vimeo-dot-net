@@ -522,12 +522,12 @@ namespace VimeoDotNet
 
                 // Get the upload link for the thumbnail
                 var postRequest = _apiRequestFactory.AuthorizedRequest(
-                                     AccessToken,
-                                     HttpMethod.Post,
-                                     response.Content.Metadata.Connections.Pictures.Uri,
-                                     null
-                                    );
-                
+                    AccessToken,
+                    HttpMethod.Post,
+                    response.Content.Metadata.Connections.Pictures.Uri,
+                    null
+                );
+
                 var postResponse = await postRequest.ExecuteRequestAsync().ConfigureAwait(false);
                 CheckStatusCodeError(null, postResponse, "Error posting thumbnail placeholder.");
                 JObject.Parse(postResponse.Text).TryGetValue("link", out var link);
@@ -606,7 +606,7 @@ namespace VimeoDotNet
                 request.Path = link;
                 var parameters = new Dictionary<string, string>
                 {
-                    {"active" ,"true"}
+                    {"active", "true"}
                 };
                 request.Body = new FormUrlEncodedContent(parameters);
 
@@ -656,7 +656,8 @@ namespace VimeoDotNet
                 if (presetNotFound)
                 {
                     // Ignore if preset not found
-                    CheckStatusCodeError(response, "Error unassigning embed preset from video.", HttpStatusCode.NotFound);
+                    CheckStatusCodeError(response, "Error unassigning embed preset from video.",
+                        HttpStatusCode.NotFound);
                 }
                 else
                 {
@@ -715,6 +716,114 @@ namespace VimeoDotNet
 
                 throw new VimeoUploadException("Error moving  video to folder.", null, ex);
             }
+        }
+
+        /// <inheritdoc />
+        public async Task<Paginated<Video>> GetAllVideosFromFolderAsync(UserId userId, long projectId, int? page = null,
+            int? perPage = null, string sort = null, string direction = null, string[] fields = null)
+        {
+            try
+            {
+                var request = GenerateVideosFolderRequest(projectId, userId, page: page, perPage: perPage, sort: sort,
+                    direction: direction, fields: fields);
+                var response = await request.ExecuteRequestAsync<Paginated<Video>>().ConfigureAwait(false);
+                UpdateRateLimit(response);
+                CheckStatusCodeError(response, "Error retrieving account album videos.", HttpStatusCode.NotFound);
+
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return new Paginated<Video>
+                    {
+                        Data = new List<Video>(),
+                        Page = 0,
+                        Total = 0
+                    };
+                }
+
+                return response.Content;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+
+                throw new VimeoApiException("Error retrieving account album videos.", ex);
+            }
+        }
+
+        private IApiRequest GenerateVideosFolderRequest(long projectId, UserId userId, long? clipId = null,
+            int? page = null,
+            int? perPage = null, string sort = null, string direction = null, string query = null,
+            string[] fields = null)
+        {
+            ThrowIfUnauthorized();
+
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
+            string endpoint;
+
+            if (userId == UserId.Me)
+            {
+                endpoint = clipId.HasValue
+                    ? Endpoints.GetCurrentUserEndpoint(Endpoints.ProjectVideo)
+                    : Endpoints.GetCurrentUserEndpoint(Endpoints.ProjectVideos);
+            }
+            else
+            {
+                endpoint = clipId.HasValue ? Endpoints.ProjectVideo : Endpoints.ProjectVideos;
+            }
+
+
+            request.Method = HttpMethod.Get;
+            request.Path = endpoint;
+
+            if (userId != null && userId != UserId.Me)
+            {
+                request.UrlSegments.Add("userId", userId.ToString());
+            }
+
+            if (clipId.HasValue)
+            {
+                request.UrlSegments.Add("clipId", clipId.ToString());
+            }
+
+            request.UrlSegments.Add("projectId", projectId.ToString());
+
+            if (fields != null)
+            {
+                foreach (var field in fields)
+                {
+                    request.Fields.Add(field);
+                }
+            }
+
+            if (page.HasValue)
+            {
+                request.Query.Add("page", page.ToString());
+            }
+
+            if (perPage.HasValue)
+            {
+                request.Query.Add("per_page", perPage.ToString());
+            }
+
+            if (!string.IsNullOrEmpty(sort))
+            {
+                request.Query.Add("sort", sort);
+            }
+
+            if (!string.IsNullOrEmpty(direction))
+            {
+                request.Query.Add("direction", direction);
+            }
+
+            if (!string.IsNullOrEmpty(query))
+            {
+                request.Query.Add("query", query);
+            }
+
+            return request;
         }
     }
 }
