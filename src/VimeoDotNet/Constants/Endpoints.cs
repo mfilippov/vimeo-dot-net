@@ -98,6 +98,8 @@
         public const string ProjectVideo = "/users/{userId}/projects/{projectId}/videos/{clipId}";
         public const string ProjectVideos = "/users/{userId}/projects/{projectId}/videos";
 
+        public const string Thumbnail = "/videos/{clipId}/pictures/{pictureId}";
+
         public static string GetCurrentUserEndpoint(string endpoint)
         {
             return endpoint.Replace("users/{userId}", "me");
