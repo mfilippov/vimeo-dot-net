@@ -827,5 +827,39 @@ namespace VimeoDotNet
 
             return request;
         }
+
+        public async Task DeleteThumbnailVideoAsync(long clipId, long pictureId)
+        {
+            try
+            {
+                var request = GenerateThumbnailDeleteRequest(clipId, pictureId);
+                var response = await request.ExecuteRequestAsync().ConfigureAwait(false);
+                UpdateRateLimit(response);
+                CheckStatusCodeError(response, "Error deleting thumbnail.");
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+
+                throw new VimeoApiException("Error deleting user video thumbnail metadata.", ex);
+            }
+        }
+
+        private IApiRequest GenerateThumbnailDeleteRequest(long clipId, long pictureId)
+        {
+            ThrowIfUnauthorized();
+
+            var request = _apiRequestFactory.GetApiRequest(AccessToken);
+            request.Method = HttpMethod.Delete;
+            request.Path = Endpoints.Thumbnail;
+
+            request.UrlSegments.Add("clipId", clipId.ToString());
+            request.UrlSegments.Add("pictureId", pictureId.ToString());
+
+            return request;
+        }
     }
 }
