@@ -55,7 +55,7 @@ namespace VimeoDotNet.Models
         /// The upload URL for the picture. This field appears when you create the picture resource for the first time.
         /// </summary>
         [PublicAPI]
-        [JsonProperty(PropertyName = "link")]
+        [JsonProperty(PropertyName = "base_link")]
         public string Link { get; set; }
 
         ///
