@@ -2,23 +2,14 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("VimeoDotNet")]
-[assembly: AssemblyCompany("VimeoDotNet")]
-[assembly: AssemblyProduct("VimeoDotNet")]
-[assembly: AssemblyCopyright("Copyright © 2014-2016, Stephen Commisso, Mikhael Filippov")]
+[assembly: AssemblyTitle("VimeoAspDotNet")]
+[assembly: AssemblyCompany("Ghanshyam Digital LLP")]
+[assembly: AssemblyProduct("VimeoAspDotNet")]
+[assembly: AssemblyCopyright("Copyright © 2020-2021, Khatri Karan")]
 [assembly: AssemblyVersion("2.2020.0522")]
 [assembly: AssemblyFileVersion("2.2020.0522")]
-[assembly: InternalsVisibleTo("VimeoDotNet.Tests, PublicKey=" +
-                              "0024000004800000140100000602000000240000525341310008000001000100ddd2531e85827f" +
-                              "17bf4ac507266283e789bdfdbc7b1746e737eecec94366a2b529d4a51410bef7042b31e9904d49" +
-                              "ab6758f8c79ed9a9f974d966fa52a2a5e68e4d0766d1a45a78133306a30070b75fcfff7e034a7d" +
-                              "4d4dd433546cd4ab553ef26446a1a2813a5bfd9f45ec16ce9daf913c5a1cf2d369097cb0310fd8" +
-                              "5f92b8151681750f8b854a17649f808ebda47f607852595b4e2bb56cd938460a8c3185d2194b6f" +
-                              "f2231308fe8c906a684e50a620a0e85aebe567946c558db2d98e5f21d5290fa36bcba0f88892c9" +
-                              "5ab8971b128cbb5d7a875d69a103fe038a11342d574531314ebce42953df404f4eef07f3a40e5c" +
-                              "4004f178c5574d4d9fb4f1d8b9f880")]
 
-[assembly: AssemblyDescription("Core library for accessing the Vimeo REST API")]
+[assembly: AssemblyDescription(".NET wrapper around Vimeo's REST API v3.0.\n\n\t\t\tFeatures:\n\t\t\t- Get user information\n\t\t\t- Edit user information\n\t\t\t- Get a list of a user's Albums\n\t\t\t- Create an Album\n\t\t\t- Get info on an Album\n\t\t\t- Edit an Album\n\t\t\t- Delete an Album\n\t\t\t- Get the list of videos in an Album\n\t\t\t- Check if an Album contains a video\n\t\t\t- Add a video to an Album\n\t\t\t- Remove a video from an Album\n\t\t\t- Get a list of videos uploaded by a user\n\t\t\t- Begin the video upload process\n\t\t\t- Check if a user owns a clip\n\t\t\t- Get a all videos uploaded into the folder by user\n\t\t\t- Delete a thumbnail")]
 
 [assembly: ComVisible(false)]
 

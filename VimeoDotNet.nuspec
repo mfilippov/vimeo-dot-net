@@ -1,22 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
-        <id>VimeoDotNet</id>
+        <id>VimeoAspDotNet</id>
 	<version>$version$</version>
-        <title>Vimeo-Dot-Net</title>
-        <authors>Stephen Commisso, Mikhail Filippov</authors>
-        <licenseUrl>https://github.com/mfilippov/vimeo-dot-net/blob/master/LICENSE</licenseUrl>
-        <projectUrl>https://github.com/mfilippov/vimeo-dot-net</projectUrl>
+        <title>Vimeo-Asp-Dot-Net</title>
+        <authors>Khatri Karan</authors>
+        <owners>Ghanshyam Digital LLP</owners>
+        <licenseUrl>https://github.com/karan12990/vimeo-dot-net/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/karan12990/vimeo-dot-net</projectUrl>
+        <iconUrl>https://f.vimeocdn.com/images_v6/favicon.ico?0a66507841c766997416ac5359a149d3cc1a387b</iconUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
-        <description>.NET wrapper around Vimeo's REST API v3.0.
+        <description>
+			.NET wrapper around Vimeo's REST API v3.0.
 
-            Features:
-            - Account information retrieval
-            - Video retrieval
-            - Resumable video file upload</description>
+			Features:
+			- Get user information
+			- Edit user information
+			- Get a list of a user's Albums
+			- Create an Album
+			- Get info on an Album
+			- Edit an Album
+			- Delete an Album
+			- Get the list of videos in an Album
+			- Check if an Album contains a video
+			- Add a video to an Album
+			- Remove a video from an Album
+			- Get a list of videos uploaded by a user
+			- Begin the video upload process
+			- Check if a user owns a clip
+			- Get a all videos uploaded into the folder by user
+			- Delete a thumbnail
+			
+		</description>
             <summary />
-            <releaseNotes>Add search support for GetUserVideos method</releaseNotes>
-            <copyright>Copyright © 2015-2016, Stephen Commisso, Mikhail Filippov</copyright>
+            <releaseNotes>Allow user to fetch video from folder , allow user to delete thumbnail, fixed thumbnail get issue</releaseNotes>
+            <copyright>Copyright © 2020-2021, Khatri Karan</copyright>
             <language>en-US</language>
             <tags>vimeo, async</tags>
             <dependencies>
@@ -27,10 +45,8 @@
         </metadata>
         <files>
             <file src="src\VimeoDotNet\bin\Release\net45\VimeoDotNet.dll" target="lib\net45" />
-            <file src="src\VimeoDotNet\bin\Release\net45\VimeoDotNet.pdb" target="lib\net45" />
             <file src="src\VimeoDotNet\bin\Release\net45\VimeoDotNet.xml" target="lib\net45" />
             <file src="src\VimeoDotNet\bin\Release\netstandard1.3\VimeoDotNet.dll" target="lib\netstandard1.3" />
-            <file src="src\VimeoDotNet\bin\Release\netstandard1.3\VimeoDotNet.pdb" target="lib\netstandard1.3" />
             <file src="src\VimeoDotNet\bin\Release\netstandard1.3\VimeoDotNet.xml" target="lib\netstandard1.3" />
       </files>
   </package>

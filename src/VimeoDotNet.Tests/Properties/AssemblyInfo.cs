@@ -2,10 +2,10 @@
 using System.Runtime.InteropServices;
 using Xunit;
 
-[assembly: AssemblyTitle("VimeoDotNet.Tests")]
-[assembly: AssemblyCompany("VimeoDotNet")]
-[assembly: AssemblyProduct("VimeoDotNet")]
-[assembly: AssemblyCopyright("Copyright © 2014-2016, Stephen Commisso, Mikhael Filippov")]
+[assembly: AssemblyTitle("VimeoAspDotNet.Tests")]
+[assembly: AssemblyCompany("Ghanshyam Digital LLP")]
+[assembly: AssemblyProduct("VimeoAspDotNet")]
+[assembly: AssemblyCopyright("Copyright © 2020-2021, Khatri Karan")]
 [assembly: AssemblyDescription("Test library for VimeoDotNet")]
 
 [assembly: AssemblyVersion("2.2020.0522")]

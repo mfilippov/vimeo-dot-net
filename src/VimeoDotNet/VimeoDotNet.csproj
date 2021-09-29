@@ -6,7 +6,37 @@
     <AssemblyOriginatorKeyFile>..\..\VimeoDotNet.snk</AssemblyOriginatorKeyFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <DebugType>embedded</DebugType>
+    <DebugType>none</DebugType>
+    <PackageIconUrl>https://f.vimeocdn.com/images_v6/favicon.ico?0a66507841c766997416ac5359a149d3cc1a387b</PackageIconUrl>
+    <Authors>Khatri Karan</Authors>
+    <PackageId>VimeoAspDotNet</PackageId>
+    <PackageProjectUrl>https://github.com/karan12990/vimeo-dot-net</PackageProjectUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>Vimeo-Asp-Dot-Net</Title>
+    <Description>.NET wrapper around Vimeo's REST API v3.0.
+
+Features:
+- Get user information
+- Edit user information
+- Get a list of a user's Albums
+- Create an Album
+- Get info on an Album
+- Edit an Album
+- Delete an Album
+- Get the list of videos in an Album
+- Check if an Album contains a video
+- Add a video to an Album
+- Remove a video from an Album
+- Get a list of videos uploaded by a user
+- Begin the video upload process
+- Check if a user owns a clip
+- Get a all videos uploaded into the folder by user
+- Delete a thumbnail</Description>
+    <Copyright>Copyright © 2020-2021, Khatri Karan</Copyright>
+    <PackageLicenseUrl>https://github.com/karan12990/vimeo-dot-net/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/karan12990/vimeo-dot-net</RepositoryUrl>
+    <PackageTags>vimeo</PackageTags>
+    <PackageReleaseNotes>Allow user to fetch video from folder , allow user to delete thumbnail, fixed thumbnail get issue</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
@@ -14,13 +44,18 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DocumentationFile>bin\Release\VimeoDotNet.xml</DocumentationFile>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net45'">
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
 </Project>
