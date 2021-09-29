@@ -1,5 +1,8 @@
-vimeo-dot-net
+vimeo-aspdot-net
 =============
+
+## Fork of https://github.com/mfilippov/vimeo-dot-net.git 
+
 
 A .NET 4.5/.NET Standard 1.3 wrapper for Vimeo API v3.0. Provides asynchronous API operations.
 
@@ -9,13 +12,9 @@ A .NET 4.5/.NET Standard 1.3 wrapper for Vimeo API v3.0. Provides asynchronous A
 
 COMPLETED
 ---------
-- Account Authentication (OAuth2)
-- Account information retrieval
-- Account video and video list retrieval
-- User information retrieval
-- User video and video list retrieval
-- Chunked video upload with retry capability
-- Video metadata update
+- Fixed to fetch thumbnail property
+- Allow to fetch all videos from folder
+- Allow to delete thumbnail
 
 API COVERAGE
 ----
