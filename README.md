@@ -1,9 +1,6 @@
 vimeo-dot-net
 =============
 
-## Fork of https://github.com/mfilippov/vimeo-dot-net.git 
-
-
 A .NET 4.5/.NET Standard 1.3 wrapper for Vimeo API v3.0. Provides asynchronous API operations.
 
 [NuGet URL](https://www.nuget.org/packages/VimeoDotNet/)
