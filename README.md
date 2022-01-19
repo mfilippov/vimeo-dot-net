@@ -1,4 +1,4 @@
-vimeo-aspdot-net
+vimeo-dot-net
 =============
 
 ## Fork of https://github.com/mfilippov/vimeo-dot-net.git 
