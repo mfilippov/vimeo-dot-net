@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using VimeoDotNet.Enums;
@@ -31,14 +32,14 @@ namespace VimeoDotNet.Tests
             result.GetChannelId().ShouldNotBeNull();
             // ReSharper disable once PossibleInvalidOperationException
             var channelId = result.GetChannelId().Value;
-            
+
             result.Name.ShouldBe(name);
             result.Link.ShouldBe($"https://vimeo.com/channels/{link.ToLowerInvariant()}");
             result.Description.ShouldBe(description);
             result.Privacy.View.ShouldBe(ChannelPrivacyOption.Moderators.GetParameterValue());
 
             var channel = await client.GetChannelAsync(channelId);
-            
+
             channel.GetChannelId().ShouldBe(channelId);
             channel.Name.ShouldBe(name);
             channel.Link.ShouldBe($"https://vimeo.com/channels/{link.ToLowerInvariant()}");
@@ -58,6 +59,23 @@ namespace VimeoDotNet.Tests
             channels.Data.Count.ShouldBe(25);
             channels.Paging.Next.ShouldNotBeNull();
             channels.Paging.Previous.ShouldBeNull();
+        }
+
+        [Fact]
+        public async Task TestUserIdChannelsList()
+        {
+            var client = CreateAuthenticatedClient();
+            var channelParameters = new EditChannelParameters()
+            {
+                Name = "test-user-channel",
+                Privacy = ChannelPrivacyOption.Moderators
+            };
+            var channel = await client.CreateChannelAsync(channelParameters);
+            channel.GetChannelId().ShouldNotBeNull();
+            var userChannels = await client.GetUserChannelsAsync();
+            var userChannel = userChannels.Data.Where(x => x.Name == channelParameters.Name).FirstOrDefault(); // test only with 1 channel
+            userChannel.ShouldNotBeNull();
+            await client.DeleteChannelAsync(channel.GetChannelId().Value);
         }
     }
 }
