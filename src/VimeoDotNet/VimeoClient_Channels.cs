@@ -85,5 +85,19 @@ namespace VimeoDotNet
 
             return await ExecuteApiRequest<Paginated<Channel>>(request).ConfigureAwait(false);
         }
+
+        /// <inheritdoc />
+        public async Task<Paginated<Channel>> GetUserChannelsAsync(GetChannelsParameters parameters = null)
+        {
+            var request = _apiRequestFactory.AuthorizedRequest(
+                AccessToken,
+                HttpMethod.Get,
+                Endpoints.MeChannels,
+                null,
+                parameters
+            );
+
+            return await ExecuteApiRequest<Paginated<Channel>>(request).ConfigureAwait(false);
+        }
     }
 }
