@@ -260,7 +260,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <returns>Upload ticket</returns>
         Task<TusResumableUploadTicket> GetTusReplaceResumableUploadTicketAsync(long size, long clipId, string name = null);
-        
+
 
         /// <summary>
         /// Create new upload ticket for replace video asynchronously
@@ -439,7 +439,7 @@ namespace VimeoDotNet
         /// <param name="direction">The direction that the results are sorted.</param>
         /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter</param>
         /// <returns>Paginated videos</returns>
-        Task<Paginated<Video>> GetVideoByTag(string tag,  int? page = null,
+        Task<Paginated<Video>> GetVideoByTag(string tag, int? page = null,
             int? perPage = null, GetVideoByTagSort? sort = null, GetVideoByTagDirection? direction = null, string[] fields = null);
 
         #endregion
@@ -475,14 +475,14 @@ namespace VimeoDotNet
         /// <param name="channelId">The ID of the channel</param>
         /// <returns></returns>
         Task<Channel> GetChannelAsync(long channelId);
-        
+
         /// <summary>
         /// This method returns all available channels.
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
         Task<Paginated<Channel>> GetChannelsAsync(GetChannelsParameters parameters = null);
-        
+
         /// <summary>
         /// This method creates a new channel
         /// </summary>
@@ -504,6 +504,13 @@ namespace VimeoDotNet
         /// <param name="clipId">Clip Id</param>
         /// <returns></returns>
         Task<bool> AddToChannelAsync(long channelId, long clipId);
+
+        /// <summary>
+        /// This method returns all the channels to which the user subscribes
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        Task<Paginated<Channel>> GetUserChannelsAsync(GetChannelsParameters parameters = null);
 
         #endregion
 
