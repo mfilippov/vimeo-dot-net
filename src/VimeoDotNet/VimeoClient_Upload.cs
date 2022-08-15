@@ -148,11 +148,19 @@ namespace VimeoDotNet
         }
 
         /// <inheritdoc />
-        public async Task<Video> UploadPullLinkAsync(string link)
+        public async Task<Video> UploadPullLinkAsync(string link, VideoUpdateMetadata metaData = null)
         {
             try
             {
-                var param = new ParameterDictionary {{"type", "pull"}, {"link", link}};
+                var param = new ParameterDictionary {{"upload.approach", "pull"}, {"upload.link", link}};
+
+                if (metaData != null)
+                {
+                    foreach (var parameter in metaData.GetParameterValues())
+                    {
+                        param.Add(parameter.Key, parameter.Value);
+                    }
+                }
 
                 var request = _apiRequestFactory.AuthorizedRequest(
                     AccessToken,
@@ -161,6 +169,8 @@ namespace VimeoDotNet
                     null,
                     param
                 );
+
+                request.ApiVersion = ApiVersions.v3_4;
 
                 return await ExecuteApiRequest<Video>(request).ConfigureAwait(false);
             }

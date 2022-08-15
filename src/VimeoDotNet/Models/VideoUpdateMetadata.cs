@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using System.Collections.Generic;
 using VimeoDotNet.Enums;
 
 namespace VimeoDotNet.Models
@@ -64,5 +65,59 @@ namespace VimeoDotNet.Models
         /// </summary>
         [PublicAPI]
         public bool? AllowDownloadVideo { get; set; }
+
+        /// <inheritdoc />
+        [PublicAPI]
+        public IDictionary<string, string> GetParameterValues()
+        {
+            var parameters = new Dictionary<string, string>();
+
+            if (Name != null)
+            {
+                parameters["name"] = Name.Trim();
+            }
+
+            if (Description != null)
+            {
+                parameters["description"] = Description.Trim();
+            }
+
+            if (Privacy != null)
+            {
+                parameters["privacy.view"] = Privacy.ToString().ToLower();
+            }
+
+            if (Privacy == VideoPrivacyEnum.Password)
+            {
+                parameters["password"] = Password;
+            }
+
+            if (EmbedPrivacy != null)
+            {
+                parameters["privacy.embed"] = EmbedPrivacy.ToString().ToLower();
+            }
+
+            if (Comments != null)
+            {
+                parameters["privacy.comments"] = Comments.ToString().ToLower();
+            }
+
+            if (ReviewLinkEnabled.HasValue)
+            {
+                parameters["review_link"] = ReviewLinkEnabled.Value ? "true" : "false";
+            }
+
+            if (AllowDownloadVideo.HasValue)
+            {
+                parameters["privacy.download"] = AllowDownloadVideo.Value ? "true" : "false";
+            }
+
+            if (AllowAddToAlbumChannelGroup.HasValue)
+            {
+                parameters["privacy.add"] = AllowAddToAlbumChannelGroup.Value ? "true" : "false";
+            }
+
+            return parameters;
+        }
     }
 }
