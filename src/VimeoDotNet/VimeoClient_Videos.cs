@@ -355,51 +355,7 @@ namespace VimeoDotNet
             request.Path = Endpoints.Video;
 
             request.UrlSegments.Add("clipId", clipId.ToString());
-            var parameters = new Dictionary<string, string>();
-            if (metaData.Name != null)
-            {
-                parameters["name"] = metaData.Name.Trim();
-            }
-
-            if (metaData.Description != null)
-            {
-                parameters["description"] = metaData.Description.Trim();
-            }
-
-            if (metaData.Privacy != null)
-            {
-                parameters["privacy.view"] = metaData.Privacy.ToString().ToLower();
-            }
-
-            if (metaData.Privacy == VideoPrivacyEnum.Password)
-            {
-                parameters["password"] = metaData.Password;
-            }
-
-            if (metaData.EmbedPrivacy != null)
-            {
-                parameters["privacy.embed"] = metaData.EmbedPrivacy.ToString().ToLower();
-            }
-
-            if (metaData.Comments != null)
-            {
-                parameters["privacy.comments"] = metaData.Comments.ToString().ToLower();
-            }
-
-            if (metaData.ReviewLinkEnabled.HasValue)
-            {
-                parameters["review_link"] = metaData.ReviewLinkEnabled.Value ? "true" : "false";
-            }
-
-            if (metaData.AllowDownloadVideo.HasValue)
-            {
-                parameters["privacy.download"] = metaData.AllowDownloadVideo.Value ? "true" : "false";
-            }
-
-            if (metaData.AllowAddToAlbumChannelGroup.HasValue)
-            {
-                parameters["privacy.add"] = metaData.AllowAddToAlbumChannelGroup.Value ? "true" : "false";
-            }
+            var parameters = metaData.GetParameterValues();
 
             request.Body = new FormUrlEncodedContent(parameters);
 
