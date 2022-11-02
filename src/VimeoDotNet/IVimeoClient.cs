@@ -521,8 +521,9 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="userId">User ID</param>
         /// <param name="name">Name</param>
+        /// <param name="parentFolderUri">Parent Folder URI</param>
         /// <returns>Tag</returns>
-        Task<Folder> CreateVideoFolder(UserId userId, string name);
+        Task<Folder> CreateVideoFolder(UserId userId, string name, string parentFolderUri = null);
 
         /// <summary>
         /// Get all folders by UserId and query and page parameters asynchronously
