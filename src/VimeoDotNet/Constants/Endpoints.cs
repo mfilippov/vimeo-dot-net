@@ -52,7 +52,7 @@
         public const string UserGroupMemberships = "/users/{userId}/groups";
         public const string UserGroupMembership = "/users/{userId}/groups/{groupId}";
         public const string UserFeed = "/users/{userId}/feed";
-        public const string UserFolders = "/users/{userId}/projects";
+        public const string UserFolders = "/users/{userId}/folders";
         public const string UserFollowers = "/users/{userId}/followers";
         public const string UserFollowing = "/users/{userId}/following";
         public const string UserFollow = "/users/{userId}/following/{followingUserId}";
