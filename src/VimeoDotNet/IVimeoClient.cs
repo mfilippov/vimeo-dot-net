@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using VimeoDotNet.Enums;
 using VimeoDotNet.Exceptions;
 using VimeoDotNet.Models;
@@ -516,14 +517,37 @@ namespace VimeoDotNet
         /// Get all folders by UserId and query and page parameters asynchronously
         /// </summary>
         /// <param name="userId">UserId</param>
-        /// <param name="perPage">Number of items to show on each page. Max 50</param>
+        /// <param name="perPage">Number of items to show on each page.</param>
         /// <param name="query">Search query</param>
         /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter</param>
         /// <param name="page">The page number to show</param>
-        /// <returns>Paginated videos</returns>
+        /// <returns>Paginated Folders</returns>
         Task<Paginated<Folder>> GetUserFolders(UserId userId, int? page = null, int? perPage = null, string query = null, string[] fields = null);
 
+        /// <summary>
+        /// Get all root Items (videos, folders) by UserId and query and page parameters asynchronously
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="perPage">Number of items to show on each page.</param>
+        /// <param name="query">Search query</param>
+        /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter</param>
+        /// <param name="page">The page number to show</param>
+        /// <returns>Paginated Items</returns>
+        Task<Paginated<Item>> GetUserRootItems(UserId userId, int? page = null, int? perPage = null, string query = null, string[] fields = null);
 
+
+        /// <summary>
+        /// Get all root Items (videos, folders) by UserId and query and page parameters asynchronously
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="folderId"></param>
+        /// <param name="perPage">Number of items to show on each page.</param>
+        /// <param name="query">Search query</param>
+        /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter</param>
+        /// <param name="page">The page number to show</param>
+        /// <returns>Paginated Items</returns>
+        Task<Paginated<Item>> GetFolderItems(UserId userId, long folderId, int? page = null, int? perPage = null, string query = null,
+            string[] fields = null);
 
         #endregion
     }

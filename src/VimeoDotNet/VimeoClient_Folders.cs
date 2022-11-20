@@ -21,22 +21,7 @@ namespace VimeoDotNet
                 var request = _apiRequestFactory.GetApiRequest(AccessToken);
                 request.Method = HttpMethod.Post;
 
-                string endpoint;
-                if (userId == UserId.Me)
-                {
-                    endpoint = Endpoints.GetCurrentUserEndpoint(Endpoints.UserFolders);
-                }
-                else
-                {
-                    endpoint = Endpoints.UserFolders;
-                }
-
-                if (userId != null && userId != UserId.Me)
-                {
-                    request.UrlSegments.Add("userId", userId.ToString());
-                }
-
-                request.Path = endpoint;
+                SetEndPoint(userId, request);
 
                 var parameters = new Dictionary<string, string>
                 {
@@ -63,7 +48,7 @@ namespace VimeoDotNet
                 throw new VimeoUploadException("Error creating folder.", null, ex);
             }
         }
-        
+
         public async Task<Paginated<Folder>> GetUserFolders(UserId userId, int? page, int? perPage, string query = null, string[] fields = null)
         {
             try
@@ -75,12 +60,7 @@ namespace VimeoDotNet
 
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
-                    return new Paginated<Folder>
-                    {
-                        Data = new List<Folder>(),
-                        Page = 0,
-                        Total = 0
-                    };
+                    return new Paginated<Folder> { Data = new List<Folder>() };
                 }
 
                 return response.Content;
@@ -95,21 +75,58 @@ namespace VimeoDotNet
                 throw new VimeoApiException("Error retrieving user folders.", ex);
             }
         }
+        public async Task<Paginated<Item>> GetUserRootItems(UserId userId, int? page, int? perPage, string query = null, string[] fields = null)
+        {
+            try
+            {
+                var request = GenerateFoldersRequest(userId, page: page, perPage: perPage, query: query, fields: fields);
+                request.Path += "/root";
+                IApiResponse<Paginated<Item>> response = await request.ExecuteRequestAsync<Paginated<Item>>().ConfigureAwait(false);
+                UpdateRateLimit(response);
 
-        private IApiRequest GenerateFoldersRequest(UserId userId = null, int? page = null, int? perPage = null, string query = null, string[] fields = null)
+                return response.Content;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+
+                throw new VimeoApiException("Error retrieving user root items.", ex);
+            }
+        }
+
+        public async Task<Paginated<Item>> GetFolderItems(UserId userId, long folderId, int? page = null, int? perPage = null, string query = null, string[] fields = null)
+        {
+            try
+            {
+                var request = GenerateFoldersRequest(userId, page: page, perPage: perPage, query: query, fields: fields, Endpoints.ProjectItems);
+                request.UrlSegments.Add("projectId", folderId.ToString());
+                IApiResponse<Paginated<Item>> response = await request.ExecuteRequestAsync<Paginated<Item>>().ConfigureAwait(false);
+                UpdateRateLimit(response);
+
+                return response.Content;
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+
+                throw new VimeoApiException("Error retrieving user root items.", ex);
+            }
+        }
+
+        private IApiRequest GenerateFoldersRequest(UserId userId = null, int? page = null, int? perPage = null, string query = null, string[] fields = null, string url = Endpoints.UserFolders)
         {
             ThrowIfUnauthorized();
 
             var request = _apiRequestFactory.GetApiRequest(AccessToken);
-            string endpoint = Endpoints.GetCurrentUserEndpoint(Endpoints.UserFolders);
-
             request.Method = HttpMethod.Get;
-            request.Path = endpoint;
 
-            if (userId != null && userId != UserId.Me)
-            {
-                request.UrlSegments.Add("userId", userId.ToString());
-            }
+            SetEndPoint(userId, request, url);
 
             if (fields != null)
             {
@@ -136,7 +153,21 @@ namespace VimeoDotNet
 
             return request;
         }
+
+        private static void SetEndPoint(UserId userId, IApiRequest request, string url = Endpoints.UserFolders)
+        {
+            string endpoint;
+            if (userId == null || userId == UserId.Me)
+            {
+                endpoint = Endpoints.GetCurrentUserEndpoint(url);
+            }
+            else
+            {
+                endpoint = url;
+                request.UrlSegments.Add("userId", userId.ToString());
+            }
+
+            request.Path = endpoint;
+        }
     }
-
-
 }

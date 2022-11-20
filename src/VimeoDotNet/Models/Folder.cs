@@ -1,13 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
+using VimeoDotNet.Helpers;
 
 namespace VimeoDotNet.Models
 {
+    [DebuggerDisplay("{Id} {Name}")]
     public class Folder
     {
+        [PublicAPI]
+        [JsonProperty(PropertyName = "id")]
+        public long? Id => ModelHelpers.ParseModelUriId(Uri);
         /// <summary>
         /// User
         /// </summary>
@@ -58,7 +62,7 @@ namespace VimeoDotNet.Models
         public string Uri { get; set; }
 
         /// <summary>
-        /// URI
+        /// Link
         /// </summary>
         [PublicAPI]
         [JsonProperty(PropertyName = "link")]
