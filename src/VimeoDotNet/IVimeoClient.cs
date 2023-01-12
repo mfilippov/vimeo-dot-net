@@ -282,10 +282,10 @@ namespace VimeoDotNet
             Action<double> statusCallback = null);
 
         /// <summary>
-        /// Create new upload ticket asynchronously
+        /// Upload using pull approach asynchronously
         /// </summary>
-        /// <returns>Upload ticket</returns>
-        Task<Video> UploadPullLinkAsync(string link, VideoUpdateMetadata metaData = null);
+        /// <returns>Video or video version when replacing an existing video</returns>
+        Task<Video> UploadPullLinkAsync(string link, VideoUpdateMetadata metaData = null, long? replaceVideoId = null);
 
         /// <summary>
         /// Upload and set thumbnail active
