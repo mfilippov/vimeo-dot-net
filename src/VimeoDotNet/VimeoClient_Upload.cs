@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -148,13 +149,18 @@ namespace VimeoDotNet
         }
 
         /// <inheritdoc />
-        public async Task<Video> UploadPullLinkAsync(string link, VideoUpdateMetadata metaData = null)
+        public async Task<Video> UploadPullLinkAsync(string link, VideoUpdateMetadata metaData = null, long? replaceVideoId = null)
         {
             try
             {
                 var param = new ParameterDictionary {{"upload.approach", "pull"}, {"upload.link", link}};
 
-                if (metaData != null)
+                if (replaceVideoId.HasValue)
+                {
+                    param.Add("file_name", Path.GetFileName(link));
+                    param.Add("upload.status", "in_progress");
+                }
+                else if (metaData != null)
                 {
                     foreach (var parameter in metaData.GetParameterValues())
                     {
@@ -165,8 +171,11 @@ namespace VimeoDotNet
                 var request = _apiRequestFactory.AuthorizedRequest(
                     AccessToken,
                     HttpMethod.Post,
-                    Endpoints.UploadTicket,
-                    null,
+                    replaceVideoId.HasValue ? Endpoints.VideoVersions : Endpoints.UploadTicket,
+                    new Dictionary<string, string>
+                    {
+                        { "clipId", replaceVideoId.ToString() }
+                    },
                     param
                 );
 
