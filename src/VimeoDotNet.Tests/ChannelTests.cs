@@ -13,12 +13,10 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ChannelInteractionTest()
         {
+            MockHttpRequest("/channels", "POST", "privacy=moderators&name=test-channel&description=This+channel+created+from+Vimeo+client+tests.&link=1sMDqioosEKP4P95k36dAQ", GetJson("Channel.create-channel.json"));
             const string description = "This channel created from Vimeo client tests.";
             const string name = "test-channel";
-            var link = Convert.ToBase64String(Guid.NewGuid().ToByteArray())
-                .Replace("=", "")
-                .Replace("+", "")
-                .Replace("/", "");
+            var link = "1sMDqioosEKP4P95k36dAQ";
 
             var client = CreateAuthenticatedClient();
             var result = await client.CreateChannelAsync(new EditChannelParameters
@@ -38,6 +36,7 @@ namespace VimeoDotNet.Tests
             result.Description.ShouldBe(description);
             result.Privacy.View.ShouldBe(ChannelPrivacyOption.Moderators.GetParameterValue());
 
+            MockHttpRequest("/channels/1837771", "GET", string.Empty, GetJson("Channel.channel-1837771.json"));
             var channel = await client.GetChannelAsync(channelId);
 
             channel.GetChannelId().ShouldBe(channelId);
@@ -46,12 +45,14 @@ namespace VimeoDotNet.Tests
             channel.Description.ShouldBe(description);
             channel.Privacy.View.ShouldBe(ChannelPrivacyOption.Moderators.GetParameterValue());
 
+            MockHttpRequest("/channels/1837771", "DELETE", string.Empty, string.Empty);
             await client.DeleteChannelAsync(channelId);
         }
 
         [Fact]
         public async Task ShouldCorrectlyGetChannelList()
         {
+            MockHttpRequest("/channels", "GET", string.Empty, GetJson("Channel.channels.json"));
             var client = CreateAuthenticatedClient();
             var channels = await client.GetChannelsAsync();
             channels.Total.ShouldBeGreaterThan(1);
@@ -64,6 +65,7 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task TestUserIdChannelsList()
         {
+            MockHttpRequest("/channels", "POST", "privacy=moderators&name=test-user-channel", GetJson("Channel.channel-1837772.json"));
             var client = CreateAuthenticatedClient();
             var channelParameters = new EditChannelParameters()
             {
@@ -71,11 +73,12 @@ namespace VimeoDotNet.Tests
                 Privacy = ChannelPrivacyOption.Moderators
             };
             var channel = await client.CreateChannelAsync(channelParameters);
-            channel.GetChannelId().ShouldNotBeNull();
+            var channelId = channel.GetChannelId();
+            channelId.ShouldNotBeNull();
+            MockHttpRequest("/me/channels", "GET", string.Empty, GetJson("Channel.user-channels.json"));
             var userChannels = await client.GetUserChannelsAsync();
-            var userChannel = userChannels.Data.Where(x => x.Name == channelParameters.Name).FirstOrDefault(); // test only with 1 channel
+            var userChannel = userChannels.Data.FirstOrDefault(x => x.Name == channelParameters.Name); // test only with 1 channel
             userChannel.ShouldNotBeNull();
-            await client.DeleteChannelAsync(channel.GetChannelId().Value);
         }
     }
 }
