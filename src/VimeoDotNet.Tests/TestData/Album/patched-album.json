@@ -1,0 +1,372 @@
+﻿{
+  "uri": "/users/2433258/albums/10303859",
+  "name": "Unit Test Album (Updated)",
+  "description": "This album was created via an automated test, and should be deleted momentarily...",
+  "link": "https://vimeo.com/showcase/10303859",
+  "duration": 0,
+  "created_time": "2023-04-02T10:18:27+00:00",
+  "modified_time": "2023-04-02T10:25:05+00:00",
+  "user": {
+    "uri": "/users/2433258",
+    "name": "Jonh Wayne",
+    "link": "https://vimeo.com/mfilippov",
+    "capabilities": {
+      "hasLiveSubscription": false,
+      "hasEnterpriseLihp": false,
+      "hasSvvTimecodedComments": false,
+      "hasSimplifiedEnterpriseAccount": false
+    },
+    "location": "England",
+    "gender": "m",
+    "bio": "Test bio",
+    "short_bio": null,
+    "created_time": "2009-10-09T22:05:11+00:00",
+    "pictures": {
+      "uri": "/users/2433258/pictures/50048656",
+      "active": true,
+      "type": "custom",
+      "base_link": "https://i.vimeocdn.com/portrait/50048656?subrect=5%2C0%2C340%2C335&r=cover",
+      "sizes": [
+        {
+          "width": 30,
+          "height": 30,
+          "link": "https://i.vimeocdn.com/portrait/50048656_30x30?subrect=5%2C0%2C340%2C335&r=cover"
+        },
+        {
+          "width": 72,
+          "height": 72,
+          "link": "https://i.vimeocdn.com/portrait/50048656_72x72?subrect=5%2C0%2C340%2C335&r=cover"
+        },
+        {
+          "width": 75,
+          "height": 75,
+          "link": "https://i.vimeocdn.com/portrait/50048656_75x75?subrect=5%2C0%2C340%2C335&r=cover"
+        },
+        {
+          "width": 100,
+          "height": 100,
+          "link": "https://i.vimeocdn.com/portrait/50048656_100x100?subrect=5%2C0%2C340%2C335&r=cover"
+        },
+        {
+          "width": 144,
+          "height": 144,
+          "link": "https://i.vimeocdn.com/portrait/50048656_144x144?subrect=5%2C0%2C340%2C335&r=cover"
+        },
+        {
+          "width": 216,
+          "height": 216,
+          "link": "https://i.vimeocdn.com/portrait/50048656_216x216?subrect=5%2C0%2C340%2C335&r=cover"
+        },
+        {
+          "width": 288,
+          "height": 288,
+          "link": "https://i.vimeocdn.com/portrait/50048656_288x288?subrect=5%2C0%2C340%2C335&r=cover"
+        },
+        {
+          "width": 300,
+          "height": 300,
+          "link": "https://i.vimeocdn.com/portrait/50048656_300x300?subrect=5%2C0%2C340%2C335&r=cover"
+        },
+        {
+          "width": 360,
+          "height": 360,
+          "link": "https://i.vimeocdn.com/portrait/50048656_360x360?subrect=5%2C0%2C340%2C335&r=cover"
+        }
+      ],
+      "resource_key": "e77170ae5d1222a9f45eceecaa725eecd54f87b4",
+      "default_picture": false
+    },
+    "websites": [],
+    "metadata": {
+      "connections": {
+        "activities": {
+          "uri": "/users/2433258/activities",
+          "options": [
+            "GET"
+          ]
+        },
+        "albums": {
+          "uri": "/users/2433258/albums",
+          "options": [
+            "GET"
+          ],
+          "total": 1
+        },
+        "appearances": {
+          "uri": "/users/2433258/appearances",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "categories": {
+          "uri": "/users/2433258/categories",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "channels": {
+          "uri": "/users/2433258/channels",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "feed": {
+          "uri": "/users/2433258/feed",
+          "options": [
+            "GET"
+          ]
+        },
+        "followers": {
+          "uri": "/users/2433258/followers",
+          "options": [
+            "GET"
+          ],
+          "total": 1
+        },
+        "following": {
+          "uri": "/users/2433258/following",
+          "options": [
+            "GET"
+          ],
+          "total": 9
+        },
+        "groups": {
+          "uri": "/users/2433258/groups",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "likes": {
+          "uri": "/users/2433258/likes",
+          "options": [
+            "GET"
+          ],
+          "total": 2
+        },
+        "membership": {
+          "uri": "/users/2433258/membership/",
+          "options": [
+            "PATCH"
+          ]
+        },
+        "moderated_channels": {
+          "uri": "/users/2433258/channels?filter=moderated",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "portfolios": {
+          "uri": "/users/2433258/portfolios",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "videos": {
+          "uri": "/users/2433258/videos",
+          "options": [
+            "GET"
+          ],
+          "total": 2
+        },
+        "watchlater": {
+          "uri": "/users/2433258/watchlater",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "shared": {
+          "uri": "/users/2433258/shared/videos",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "pictures": {
+          "uri": "/users/2433258/pictures",
+          "options": [
+            "GET",
+            "POST"
+          ],
+          "total": 2
+        },
+        "watched_videos": {
+          "uri": "/me/watched/videos",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "folders_root": {
+          "uri": "/users/2433258/folders/root",
+          "options": [
+            "GET"
+          ]
+        },
+        "teams": {
+          "uri": "/users/2433258/teams",
+          "options": [
+            "GET"
+          ],
+          "total": 1
+        },
+        "block": {
+          "uri": "/me/block",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        }
+      }
+    },
+    "location_details": {
+      "formatted_address": "England",
+      "latitude": null,
+      "longitude": null,
+      "city": null,
+      "state": null,
+      "neighborhood": null,
+      "sub_locality": null,
+      "state_iso_code": null,
+      "country": null,
+      "country_iso_code": null
+    },
+    "skills": [],
+    "available_for_hire": false,
+    "can_work_remotely": false,
+    "preferences": {
+      "videos": {
+        "rating": [
+          "unrated"
+        ],
+        "privacy": "anybody"
+      },
+      "webinar_registrant_lower_watermark_banner_dismissed": []
+    },
+    "content_filter": [
+      "language",
+      "drugs",
+      "violence",
+      "nudity",
+      "safe",
+      "unrated"
+    ],
+    "upload_quota": {
+      "space": {
+        "free": 524288000,
+        "max": 524288000,
+        "used": 0,
+        "showing": "periodic",
+        "unit": "video_size"
+      },
+      "periodic": {
+        "period": "week",
+        "unit": "video_size",
+        "free": 524288000,
+        "max": 524288000,
+        "used": 0,
+        "reset_date": "2023-04-06T00:00:00-04:00"
+      },
+      "lifetime": {
+        "unit": "video_size",
+        "free": 5363198248,
+        "max": 5368709120,
+        "used": 5510872
+      },
+      "quota": {
+        "hd": true,
+        "sd": true
+      }
+    },
+    "resource_key": "30149738db924d637d8323984c7c0b6ed331a880",
+    "account": "basic"
+  },
+  "privacy": {
+    "view": "anybody"
+  },
+  "pictures": null,
+  "sort": "newest",
+  "layout": "grid",
+  "theme": "standard",
+  "brand_color": null,
+  "custom_logo": null,
+  "review_mode": false,
+  "web_custom_logo": false,
+  "web_brand_color": false,
+  "allow_downloads": false,
+  "allow_continuous_play": true,
+  "allow_share": true,
+  "hide_nav": false,
+  "metadata": {
+    "connections": {
+      "videos": {
+        "uri": "/albums/10303859/videos",
+        "options": [
+          "GET"
+        ],
+        "total": 0
+      },
+      "available_videos": {
+        "uri": "/users/2433258/albums/10303859/available_videos",
+        "options": [
+          "GET"
+        ],
+        "total": 2
+      }
+    },
+    "interactions": {
+      "add_custom_thumbnails": {
+        "uri": "/users/2433258/albums/10303859/custom_thumbnails",
+        "options": [
+          "GET",
+          "POST"
+        ]
+      },
+      "add_logos": {
+        "uri": "/users/2433258/albums/10303859/logos",
+        "options": [
+          "GET",
+          "POST"
+        ]
+      },
+      "add_videos": {
+        "uri": "/users/2433258/albums/10303859/videos",
+        "options": [
+          "GET",
+          "PUT"
+        ]
+      }
+    }
+  },
+  "use_custom_domain": false,
+  "domain": null,
+  "domain_certificate_state": null,
+  "url": null,
+  "hide_vimeo_logo": null,
+  "embed_custom_logo": null,
+  "embed_brand_color": null,
+  "autoplay": false,
+  "loop": false,
+  "roku_provider_name": null,
+  "roku_language": null,
+  "roku_genres": [
+    ""
+  ],
+  "share_link": "https://vimeo.com/showcase/10303859",
+  "hide_upcoming": false,
+  "seo_title": null,
+  "seo_description": null,
+  "seo_allow_indexed": false,
+  "seo_keywords": [],
+  "hide_from_vimeo": false,
+  "embed": {
+    "html": null
+  },
+  "resource_key": "08a7d0b061ed188888e116ae105c7aea0aa999dc"
+}

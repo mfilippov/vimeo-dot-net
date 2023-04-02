@@ -49,7 +49,7 @@ namespace VimeoDotNet
             var request = _apiRequestFactory.AuthorizedRequest(
                 AccessToken,
                 HttpMethod.Post,
-                Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbums),
+                 userId.IsMe ? Endpoints.MeAlbums : Endpoints.UserAlbums,
                 new Dictionary<string, string>
                 {
                     {"userId", userId.ToString()}
@@ -66,7 +66,7 @@ namespace VimeoDotNet
             var request = _apiRequestFactory.AuthorizedRequest(
                 AccessToken,
                 new HttpMethod("PATCH"),
-                Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbum),
+                userId.IsMe ? Endpoints.MeAlbum : Endpoints.UserAlbum,
                 new Dictionary<string, string>
                 {
                     {"userId", userId.ToString()},
@@ -84,7 +84,7 @@ namespace VimeoDotNet
             var request = _apiRequestFactory.AuthorizedRequest(
                 AccessToken,
                 HttpMethod.Delete,
-                Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbum),
+                userId.IsMe ? Endpoints.MeAlbum : Endpoints.UserAlbum,
                 new Dictionary<string, string>
                 {
                     {"userId", userId.ToString()},
@@ -101,7 +101,7 @@ namespace VimeoDotNet
             var request = _apiRequestFactory.AuthorizedRequest(
                 AccessToken,
                 HttpMethod.Put,
-                Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbumVideo),
+                Endpoints.UserAlbumVideo,
                 new Dictionary<string, string>
                 {
                     {"userId", userId.ToString()},
@@ -119,9 +119,10 @@ namespace VimeoDotNet
             var request = _apiRequestFactory.AuthorizedRequest(
                 AccessToken,
                 HttpMethod.Delete,
-                Endpoints.GetCurrentUserEndpoint(Endpoints.UserAlbumVideo),
+                Endpoints.UserAlbumVideo,
                 new Dictionary<string, string>
                 {
+                    {"userId", userId.ToString()},
                     {"albumId", albumId.ToString()},
                     {"clipId", clipId.ToString()}
                 }

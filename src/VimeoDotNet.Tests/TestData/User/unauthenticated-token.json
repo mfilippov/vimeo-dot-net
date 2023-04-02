@@ -1,0 +1,9 @@
+﻿{
+  "access_token": "dd96e7de3eb25f4de96517f1b6e358e4",
+  "token_type": "bearer",
+  "scope": "public",
+  "app": {
+    "name": "vimeo-dot-net",
+    "uri": "/apps/55264"
+  }
+}

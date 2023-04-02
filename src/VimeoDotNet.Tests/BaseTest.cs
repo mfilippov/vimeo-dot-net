@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -25,6 +26,15 @@ namespace VimeoDotNet.Tests
 
         private readonly ConcurrentDictionary<string, Action<HttpListenerRequest, HttpListenerResponse>> _requestMocks = new ();
 
+        protected BaseTest()
+        {
+            // Load the settings from a file that is not under version control for security
+            // The settings loader will create this file in the bin/ folder if it doesn't exist
+            VimeoSettings = SettingsLoader.LoadSettings();
+            _testHttpServer = new TestHttpServer();
+            AuthenticatedClient = CreateAuthenticatedClient();
+        }
+
         protected static string GetJson(string name)
         {
             var path = $"VimeoDotNet.Tests.TestData.{name}";
@@ -40,15 +50,19 @@ namespace VimeoDotNet.Tests
             return json;
         }
 
-        protected BaseTest()
+        private bool CheckAuth(HttpListenerRequest request)
         {
-            // Load the settings from a file that is not under version control for security
-            // The settings loader will create this file in the bin/ folder if it doesn't exist
-            VimeoSettings = SettingsLoader.LoadSettings();
-            AuthenticatedClient = CreateAuthenticatedClient();
-            _testHttpServer = new TestHttpServer();
+            var urlWithoutAuth = new HashSet<string> { "/oauth/authorize/client" };
+            if (urlWithoutAuth.Contains(request.Url?.PathAndQuery))
+            {
+                return true;
+            }
+            request.Headers["Authorization"].ShouldNotBeNull();
+            var parts = request.Headers["Authorization"].Split(new [] {' '}, 2);
+            parts.Length.ShouldBe(2);
+            return parts[1].Trim() == VimeoSettings.AccessToken;
         }
-
+        
         protected void MockHttpRequest(string urlSuffix, string method, string requestBody, string responseBody)
         {
             var route = $"{urlSuffix}:{method}";
@@ -62,15 +76,28 @@ namespace VimeoDotNet.Tests
             {
                 request.Url?.PathAndQuery.ShouldBe(urlSuffix);
                 request.HttpMethod.ShouldBe(method);
-                var rdr = new StreamReader(request.InputStream);
-                var rBody = rdr.ReadToEnd();
-                rBody.ShouldBe(requestBody);
-                response.StatusCode = 200;
-                response.ContentType = "application/json";
-                var wrt = new StreamWriter(response.OutputStream);
-                wrt.Write(responseBody);
-                wrt.Close();
-                response.Close();
+                if (!CheckAuth(request))
+                {
+                    response.StatusCode = 401;
+                    var wrt = new StreamWriter(response.OutputStream);
+                    wrt.Write("""{ "error": "Bad access token" }""");
+                    wrt.Write(responseBody);
+                    wrt.Close();
+                    response.Close();
+                }
+                else
+                {
+                    var rdr = new StreamReader(request.InputStream);
+                    var actualRequestBody = rdr.ReadToEnd();
+                    actualRequestBody.ShouldBe(requestBody);
+                    response.StatusCode = 200;
+                    response.ContentType = "application/json";
+                    var wrt = new StreamWriter(response.OutputStream);
+                    wrt.Write(responseBody);
+                    wrt.Close();
+                    response.Close();
+                }
+                
             });
             if (!added)
             {
@@ -98,6 +125,10 @@ namespace VimeoDotNet.Tests
             }
             _testHttpServer.Stop();
             _testHttpServer = null;
+            Request.MockProtocol = null;
+            Request.MockHostName = null;
+            Request.MockPort = 0;
+            _requestMocks.Clear();
         }
     }
 }

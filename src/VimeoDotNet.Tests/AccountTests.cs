@@ -10,7 +10,7 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyGetAccountInformation()
         {
-            MockHttpRequest("/me", "GET",string.Empty, GetJson("user.json"));
+            MockHttpRequest("/me", "GET",string.Empty, GetJson("User.user.json"));
             var client = CreateAuthenticatedClient();
             var account = await client.GetAccountInformationAsync();
             account.ShouldNotBeNull();
@@ -19,7 +19,7 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyGetUserInformation()
         {
-            MockHttpRequest($"/users/{VimeoSettings.UserId}", "GET", string.Empty, GetJson("user.json"));
+            MockHttpRequest($"/users/{VimeoSettings.UserId}", "GET", string.Empty, GetJson("User.user.json"));
             var client = CreateAuthenticatedClient();
             var user = await client.GetUserInformationAsync(VimeoSettings.UserId);
             user.ShouldNotBeNull();
@@ -36,11 +36,11 @@ namespace VimeoDotNet.Tests
             const string testLocation = "England";
             
             MockHttpRequest("/me", "GET",
-                string.Empty, GetJson("user.json"));
+                string.Empty, GetJson("User.user.json"));
             MockHttpRequest("/me", "PATCH",
                 $"name={testName.Replace(" ", "+")}" +
                 $"&location={testLocation}" +
-                $"&bio={testBio.Replace(" ", "+")}", GetJson("user.json"));
+                $"&bio={testBio.Replace(" ", "+")}", GetJson("User.user.json"));
             // first, ensure we can retrieve the current user...
             var client = CreateAuthenticatedClient();
             var original = await client.GetAccountInformationAsync();

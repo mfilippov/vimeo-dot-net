@@ -7,6 +7,8 @@
             UserId = 2433258;
             PublicUserId = 115220313;
             PublicVideoId = 417178750;
+            ClientId = "b9ba3be18a6747e30b60a5108be3c567ee362535";
+            ClientSecret = "yN9Os06F8I410SZnYmkKymy3kIoaxLX3QzJZ91ZHFdr9o9on7fviI/ZCxiWeT47piuf5A+1oMn2ks9JmAuhnR5ilvqVZPhJ3qH6nIEBwjlaHXa5qEygrPPSuDya8L+QW";
             AccessToken = "5oGVeY4GQKr4l4T/wYS64Q==";
         }
 
