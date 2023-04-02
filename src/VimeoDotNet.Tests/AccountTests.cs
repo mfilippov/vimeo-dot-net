@@ -10,6 +10,7 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyGetAccountInformation()
         {
+            MockHttpRequest("/me", "GET",string.Empty, GetJson("user.json"));
             var client = CreateAuthenticatedClient();
             var account = await client.GetAccountInformationAsync();
             account.ShouldNotBeNull();
@@ -18,6 +19,7 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyGetUserInformation()
         {
+            MockHttpRequest($"/users/{VimeoSettings.UserId}", "GET", string.Empty, GetJson("user.json"));
             var client = CreateAuthenticatedClient();
             var user = await client.GetUserInformationAsync(VimeoSettings.UserId);
             user.ShouldNotBeNull();
@@ -29,16 +31,22 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyUpdateAccountInformation()
         {
+            const string testName = "Jonh Wayne";
+            const string testBio = "Test bio";
+            const string testLocation = "England";
+            
+            MockHttpRequest("/me", "GET",
+                string.Empty, GetJson("user.json"));
+            MockHttpRequest("/me", "PATCH",
+                $"name={testName.Replace(" ", "+")}" +
+                $"&location={testLocation}" +
+                $"&bio={testBio.Replace(" ", "+")}", GetJson("user.json"));
             // first, ensure we can retrieve the current user...
             var client = CreateAuthenticatedClient();
             var original = await client.GetAccountInformationAsync();
             original.ShouldNotBeNull();
 
             // next, update the user record with some new values...
-            const string testName = "Jonh Wayne";
-            const string testBio = "Test bio";
-            const string testLocation = "England";
-
             var updated = await client.UpdateAccountInformationAsync(new EditUserParameters
             {
                 Name = testName,

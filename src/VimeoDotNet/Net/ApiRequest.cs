@@ -123,9 +123,9 @@ namespace VimeoDotNet.Net
         /// </summary>
         public ApiRequest()
         {
-            Protocol = Request.DefaultProtocol;
-            Host = Request.DefaultHostName;
-            Port = Request.DefaultHttpsPort;
+            Protocol = Request.MockProtocol != null ? Request.MockProtocol : Request.DefaultProtocol;
+            Host = Request.MockHostName != null ? Request.MockHostName : Request.DefaultHostName;
+            Port = Request.MockPort > 0 ? Request.MockPort : GetDefaultPort(Request.DefaultProtocol);
             Method = Request.DefaultMethod;
             ResponseType = ResponseTypes.Wildcard;
             ApiVersion = ApiVersions.v3_2;
@@ -253,7 +253,7 @@ namespace VimeoDotNet.Net
         }
 
         /// <summary>
-        /// Retrun base URL
+        /// Return base URL
         /// </summary>
         /// <returns>Base URL</returns>
         private string GetBaseUrl()

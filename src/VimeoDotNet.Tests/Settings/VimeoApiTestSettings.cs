@@ -7,6 +7,7 @@
             UserId = 2433258;
             PublicUserId = 115220313;
             PublicVideoId = 417178750;
+            AccessToken = "5oGVeY4GQKr4l4T/wYS64Q==";
         }
 
         /// <summary>
