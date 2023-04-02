@@ -6,7 +6,7 @@ using Xunit;
 
 namespace VimeoDotNet.Tests
 {
-    public class AuthorizationClientAsyncTests
+    public class AuthorizationClientAsyncTests: BaseTest
     {
         private readonly VimeoApiTestSettings _vimeoSettings;
 
@@ -20,6 +20,10 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyGetUnauthenticatedToken()
         {
+            MockHttpRequest("/oauth/authorize/client", 
+                "POST",
+                "grant_type=client_credentials",
+                GetJson("User.unauthenticated-token.json"));
             var client = new AuthorizationClient(_vimeoSettings.ClientId, _vimeoSettings.ClientSecret);
 
             var token = await client.GetUnauthenticatedTokenAsync();
@@ -30,6 +34,10 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task VerifyAuthenticatedAccess()
         {
+            MockHttpRequest("/oauth/verify", 
+                "GET",
+                string.Empty,
+                GetJson("User.oauth-verify.json"));
             var client = new AuthorizationClient(_vimeoSettings.ClientId, _vimeoSettings.ClientSecret);
 
             var b = await client.VerifyAccessTokenAsync(_vimeoSettings.AccessToken);
