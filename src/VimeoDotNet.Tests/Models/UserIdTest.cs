@@ -10,6 +10,7 @@ namespace VimeoDotNet.Tests.Models
         public void UserIdWithSameIdShouldBeEquals()
         {
             UserId.Me.ShouldBe(UserId.Me);
+            UserId.Me.IsMe.ShouldBeTrue();
         }
     }
 }
