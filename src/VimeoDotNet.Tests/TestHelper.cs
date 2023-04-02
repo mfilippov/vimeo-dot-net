@@ -11,7 +11,7 @@ namespace VimeoDotNet.Tests
 {
     public static class TestHelper
     {
-        public const string TestFilePath = @"VimeoDotNet.Tests.Resources.test.mp4";
+        public const string TestFilePath = @"VimeoDotNet.Tests.TestData.File.test.mp4";
 
         public static Stream GetFileFromEmbeddedResources(string relativePath)
         {

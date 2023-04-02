@@ -19,7 +19,7 @@
     <ProjectReference Include="..\VimeoDotNet\VimeoDotNet.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="testData\**\*.json" />
-    <EmbeddedResource Include="TestData\**\*.json" />
+    <None Remove="testData\**\*" />
+    <EmbeddedResource Include="TestData\**\*" />
   </ItemGroup>
 </Project>

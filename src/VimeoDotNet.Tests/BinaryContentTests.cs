@@ -12,21 +12,17 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyReadPartOfFile()
         {
-            using (var file = new BinaryContent(TestHelper.GetFileFromEmbeddedResources(TestHelper.TestFilePath), "video/mp4"))
-            {
-                (await file.ReadAsync(17, 20)).Length.ShouldBe(3);
-                (await file.ReadAsync(17000, 17020)).Length.ShouldBe(20);
-            }
+            using var file = new BinaryContent(TestHelper.GetFileFromEmbeddedResources(TestHelper.TestFilePath), "video/mp4");
+            (await file.ReadAsync(17, 20)).Length.ShouldBe(3);
+            (await file.ReadAsync(17000, 17020)).Length.ShouldBe(20);
         }
 
         [Fact]
         public async Task ShouldCorrectlyDoubleRead()
         {
-            using (var file = new BinaryContent(TestHelper.GetFileFromEmbeddedResources(TestHelper.TestFilePath), "video/mp4"))
-            {
-                (await file.ReadAllAsync()).Length.ShouldBe(5510872);
-                (await file.ReadAllAsync()).Length.ShouldBe(5510872);
-            }
+            using var file = new BinaryContent(TestHelper.GetFileFromEmbeddedResources(TestHelper.TestFilePath), "video/mp4");
+            (await file.ReadAllAsync()).Length.ShouldBe(5510872);
+            (await file.ReadAllAsync()).Length.ShouldBe(5510872);
         }
 
         [Fact]
@@ -42,11 +38,11 @@ namespace VimeoDotNet.Tests
         [Fact]
         public void ShouldFireExceptionWhenInvalidStreams()
         {
-            var nonReadablefile = new BinaryContent(new NonReadableStream(), "video/mp4");
-            var nonSeekablefile = new BinaryContent(new NonSeekableStream(), "video/mp4");
-            Should.ThrowAsync<InvalidOperationException>(async () => await nonReadablefile.ReadAllAsync(),
+            var nonReadableFile = new BinaryContent(new NonReadableStream(), "video/mp4");
+            var nonSeekableFile = new BinaryContent(new NonSeekableStream(), "video/mp4");
+            Should.ThrowAsync<InvalidOperationException>(async () => await nonReadableFile.ReadAllAsync(),
                 "Content should be a readable Stream");
-            Should.ThrowAsync<InvalidOperationException>(async () => await nonSeekablefile.ReadAsync(10, 20),
+            Should.ThrowAsync<InvalidOperationException>(async () => await nonSeekableFile.ReadAsync(10, 20),
                 "Content cannot be advanced to the specified start index: 10");
         }
 
