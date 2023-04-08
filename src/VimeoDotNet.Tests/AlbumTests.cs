@@ -11,8 +11,11 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task GetAlbumsShouldCorrectlyWorkForMe()
         {
-            MockHttpRequest("/me/albums", "GET",string.Empty, 200,
-                GetJson("Album.albums.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/me/albums",
+                ResponseJsonFile = "Album.albums.json"
+            });
             var client = CreateAuthenticatedClient();
             var albums = await client.GetAlbumsAsync(UserId.Me);
             albums.Total.ShouldBe(1);
@@ -28,8 +31,11 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task GetAlbumsShouldCorrectlyWorkForUserId()
         {
-            MockHttpRequest("/users/115220313/albums", "GET",string.Empty, 200,
-                GetJson("Album.albums-115220313.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/users/115220313/albums",
+                ResponseJsonFile = "Album.albums-115220313.json"
+            });
             var client = CreateAuthenticatedClient();
             var albums = await client.GetAlbumsAsync(VimeoSettings.PublicUserId);
             albums.Total.ShouldBe(1);
@@ -52,12 +58,18 @@ namespace VimeoDotNet.Tests
             const string originalDesc =
                 "This album was created via an automated test, and should be deleted momentarily...";
             const string password = "test";
-            MockHttpRequest("/me/albums", "POST",
-                "privacy=password" +
-                "&sort=newest" +
-                $"&name={originalName.Replace(" ", "+")}" +
-                $"&description={originalDesc.Replace(" ", "+").Replace(",", "%2C")}" +
-                $"&password={password}", 200, GetJson("Album.create-album.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/me/albums",
+                Method = RequestSettings.HttpMethod.POST,
+                RequestTextBody = "privacy=password" +
+                              "&sort=newest" +
+                              $"&name={originalName.Replace(" ", "+")}" +
+                              $"&description={originalDesc.Replace(" ", "+")
+                                  .Replace(",", "%2C")}" +
+                              $"&password={password}",
+                ResponseJsonFile = "Album.create-album.json"
+            });
             var client = CreateAuthenticatedClient();
 
             var newAlbum = await client.CreateAlbumAsync(UserId.Me, new EditAlbumParameters
@@ -74,8 +86,11 @@ namespace VimeoDotNet.Tests
 
             newAlbum.Description.ShouldBe(originalDesc);
 
-            MockHttpRequest("/me/albums", "GET", string.Empty, 200,
-                GetJson("Album.albums.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/me/albums",
+                ResponseJsonFile = "Album.albums.json"
+            });
 
             // retrieve albums for the current user...there should be at least one now...
             var albums = await client.GetAlbumsAsync(UserId.Me);
@@ -84,10 +99,13 @@ namespace VimeoDotNet.Tests
 
             // update the album...
             const string updatedName = "Unit Test Album (Updated)";
-            MockHttpRequest("/me/albums/10303859", "PATCH", 
-                "privacy=anybody&name=Unit+Test+Album+%28Updated%29",
-                200,
-                GetJson("Album.patched-album.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/me/albums/10303859",
+                Method = RequestSettings.HttpMethod.PATCH,
+                RequestTextBody = "privacy=anybody&name=Unit+Test+Album+%28Updated%29",
+                ResponseJsonFile = "Album.patched-album.json"
+            });
             var albumId = newAlbum.GetAlbumId();
             albumId.ShouldNotBeNull();
             var updatedAlbum = await client.UpdateAlbumAsync(UserId.Me, albumId.Value, new EditAlbumParameters
@@ -99,8 +117,11 @@ namespace VimeoDotNet.Tests
             updatedAlbum.Name.ShouldBe(updatedName);
 
             // delete the album...
-            MockHttpRequest("/me/albums/10303859", "DELETE", string.Empty,
-                200,string.Empty);
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/me/albums/10303859",
+                Method = RequestSettings.HttpMethod.DELETE
+            });
             albumId = updatedAlbum.GetAlbumId();
             albumId.ShouldNotBeNull();
             var isDeleted = await client.DeleteAlbumAsync(UserId.Me, albumId.Value);
@@ -116,12 +137,18 @@ namespace VimeoDotNet.Tests
             const string originalDesc =
                 "This album was created via an automated test, and should be deleted momentarily...";
             const string password = "test";
-            MockHttpRequest("/users/2433258/albums", "POST",
-                "privacy=password" +
-                "&sort=newest" +
-                $"&name={originalName.Replace(" ", "+")}" +
-                $"&description={originalDesc.Replace(" ", "+").Replace(",", "%2C")}" +
-                $"&password={password}", 200, GetJson("Album.create-album.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/users/2433258/albums",
+                Method = RequestSettings.HttpMethod.POST,
+                RequestTextBody = "privacy=password" +
+                              "&sort=newest" +
+                              $"&name={originalName.Replace(" ", "+")}" +
+                              $"&description={originalDesc.Replace(" ", "+")
+                                  .Replace(",", "%2C")}" +
+                              $"&password={password}",
+                ResponseJsonFile = "Album.create-album.json"
+            });
 
             var newAlbum = await AuthenticatedClient.CreateAlbumAsync(VimeoSettings.UserId, new EditAlbumParameters
             {
@@ -138,18 +165,24 @@ namespace VimeoDotNet.Tests
             newAlbum.Description.ShouldBe(originalDesc);
 
             // retrieve albums for the user...there should be at least one now...
-            MockHttpRequest("/users/2433258/albums", "GET", string.Empty, 200,
-                GetJson("Album.albums.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/users/2433258/albums",
+                ResponseJsonFile = "Album.albums.json"
+            });
             var albums = await AuthenticatedClient.GetAlbumsAsync(VimeoSettings.UserId);
 
             albums.Total.ShouldBeGreaterThan(0);
 
             // update the album...
             const string updatedName = "Unit Test Album (Updated)";
-            MockHttpRequest("/users/2433258/albums/10303859", "PATCH", 
-                "privacy=anybody&name=Unit+Test+Album+%28Updated%29",
-                200,
-                GetJson("Album.patched-album.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/users/2433258/albums/10303859", 
+                Method = RequestSettings.HttpMethod.PATCH,
+                RequestTextBody = "privacy=anybody&name=Unit+Test+Album+%28Updated%29",
+                ResponseJsonFile = "Album.patched-album.json"
+            });
             var albumId = newAlbum.GetAlbumId();
             albumId.ShouldNotBeNull();
             var updatedAlbum = await AuthenticatedClient.UpdateAlbumAsync(VimeoSettings.UserId, albumId.Value,
@@ -162,8 +195,11 @@ namespace VimeoDotNet.Tests
             updatedAlbum.Name.ShouldBe(updatedName);
 
             // delete the album...
-            MockHttpRequest("/users/2433258/albums/10303859", "DELETE", string.Empty, 200,
-                string.Empty);
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/users/2433258/albums/10303859",
+                Method = RequestSettings.HttpMethod.DELETE
+            });
             albumId = updatedAlbum.GetAlbumId();
             albumId.ShouldNotBeNull();
             var isDeleted = await AuthenticatedClient.DeleteAlbumAsync(VimeoSettings.UserId, albumId.Value);
@@ -174,10 +210,13 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task GetAlbumsShouldCorrectlyWorkWithParameters()
         {
-            MockHttpRequest("/me/albums?per_page=50", "GET", string.Empty, 200,
-                GetJson("Album.album-with-params.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/me/albums?per_page=50",
+                ResponseJsonFile = "Album.album-with-params.json"
+            });
             var client = CreateAuthenticatedClient();
-            var albums = await client.GetAlbumsAsync(UserId.Me, new GetAlbumsParameters {PerPage = 50});
+            var albums = await client.GetAlbumsAsync(UserId.Me, new GetAlbumsParameters { PerPage = 50 });
             albums.ShouldNotBeNull();
             albums.PerPage.ShouldBe(50);
         }

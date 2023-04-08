@@ -10,8 +10,11 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyGetAccountInformation()
         {
-            MockHttpRequest("/me", "GET",string.Empty, 
-                200, GetJson("User.user.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/me",
+                ResponseJsonFile = "User.user.json"
+            });
             var client = CreateAuthenticatedClient();
             var account = await client.GetAccountInformationAsync();
             account.ShouldNotBeNull();
@@ -20,8 +23,11 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyGetUserInformation()
         {
-            MockHttpRequest($"/users/{VimeoSettings.UserId}", "GET", string.Empty,
-                200, GetJson("User.user.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = $"/users/{VimeoSettings.UserId}", 
+                ResponseJsonFile = "User.user.json"
+            });
             var client = CreateAuthenticatedClient();
             var user = await client.GetUserInformationAsync(VimeoSettings.UserId);
             user.ShouldNotBeNull();
@@ -37,12 +43,19 @@ namespace VimeoDotNet.Tests
             const string testBio = "Test bio";
             const string testLocation = "England";
             
-            MockHttpRequest("/me", "GET",
-                string.Empty, 200, GetJson("User.user.json"));
-            MockHttpRequest("/me", "PATCH",
-                $"name={testName.Replace(" ", "+")}" +
-                $"&location={testLocation}" +
-                $"&bio={testBio.Replace(" ", "+")}", 200, GetJson("User.user.json"));
+            MockHttpRequest(new RequestSettings{
+                UrlSuffix = "/me",
+                ResponseJsonFile = "User.user.json"
+            });
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/me",
+                Method = RequestSettings.HttpMethod.PATCH,
+                RequestTextBody = $"name={testName.Replace(" ", "+")}" +
+                              $"&location={testLocation}" +
+                              $"&bio={testBio.Replace(" ", "+")}",
+                ResponseJsonFile = "User.user.json"
+            });
             // first, ensure we can retrieve the current user...
             var client = CreateAuthenticatedClient();
             var original = await client.GetAccountInformationAsync();

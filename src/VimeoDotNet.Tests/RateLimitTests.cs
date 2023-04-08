@@ -11,8 +11,11 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyUpdateRateLimitPerRequest()
         {
-            MockHttpRequest("/me/albums", "GET",string.Empty, 200,
-                GetJson("Album.albums.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/me/albums",
+                ResponseJsonFile = "Album.albums.json"
+            });
             var client = CreateAuthenticatedClient();
 
             client.RateLimit.ShouldBe(0);

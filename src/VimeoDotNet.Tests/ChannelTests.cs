@@ -12,10 +12,14 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ChannelInteractionTest()
         {
-            MockHttpRequest("/channels", "POST", 
-                "privacy=moderators&name=test-channel&description=This+channel+" +
-                "created+from+Vimeo+client+tests.&link=1sMDqioosEKP4P95k36dAQ", 200,
-                GetJson("Channel.create-channel.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/channels",
+                Method = RequestSettings.HttpMethod.POST,
+                RequestTextBody = "privacy=moderators&name=test-channel&description=This+channel+" +
+                                  "created+from+Vimeo+client+tests.&link=1sMDqioosEKP4P95k36dAQ",
+                ResponseJsonFile = "Channel.create-channel.json"
+            });
             const string description = "This channel created from Vimeo client tests.";
             const string name = "test-channel";
             var link = "1sMDqioosEKP4P95k36dAQ";
@@ -38,8 +42,11 @@ namespace VimeoDotNet.Tests
             result.Description.ShouldBe(description);
             result.Privacy.View.ShouldBe(ChannelPrivacyOption.Moderators.GetParameterValue());
 
-            MockHttpRequest("/channels/1837771", "GET", string.Empty, 200,
-                GetJson("Channel.channel-1837771.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/channels/1837771",
+                ResponseJsonFile = "Channel.channel-1837771.json"
+            });
             var channel = await client.GetChannelAsync(channelId);
 
             channel.GetChannelId().ShouldBe(channelId);
@@ -48,16 +55,22 @@ namespace VimeoDotNet.Tests
             channel.Description.ShouldBe(description);
             channel.Privacy.View.ShouldBe(ChannelPrivacyOption.Moderators.GetParameterValue());
 
-            MockHttpRequest("/channels/1837771", "DELETE", string.Empty, 200,
-                string.Empty);
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/channels/1837771",
+                Method = RequestSettings.HttpMethod.DELETE
+            });
             await client.DeleteChannelAsync(channelId);
         }
 
         [Fact]
         public async Task ShouldCorrectlyGetChannelList()
         {
-            MockHttpRequest("/channels", "GET", string.Empty, 200,
-                GetJson("Channel.channels.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/channels",
+                ResponseJsonFile = "Channel.channels.json"
+            });
             var client = CreateAuthenticatedClient();
             var channels = await client.GetChannelsAsync();
             channels.Total.ShouldBeGreaterThan(1);
@@ -70,9 +83,13 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task TestUserIdChannelsList()
         {
-            MockHttpRequest("/channels", "POST", 
-                "privacy=moderators&name=test-user-channel", 200,
-                GetJson("Channel.channel-1837772.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/channels",
+                Method = RequestSettings.HttpMethod.POST,
+                RequestTextBody = "privacy=moderators&name=test-user-channel",
+                ResponseJsonFile = "Channel.channel-1837772.json"
+            });
             var client = CreateAuthenticatedClient();
             var channelParameters = new EditChannelParameters()
             {
@@ -82,10 +99,14 @@ namespace VimeoDotNet.Tests
             var channel = await client.CreateChannelAsync(channelParameters);
             var channelId = channel.GetChannelId();
             channelId.ShouldNotBeNull();
-            MockHttpRequest("/me/channels", "GET", string.Empty, 200,
-                GetJson("Channel.user-channels.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/me/channels",
+                ResponseJsonFile = "Channel.user-channels.json"
+            });
             var userChannels = await client.GetUserChannelsAsync();
-            var userChannel = userChannels.Data.FirstOrDefault(x => x.Name == channelParameters.Name); // test only with 1 channel
+            var userChannel =
+                userChannels.Data.FirstOrDefault(x => x.Name == channelParameters.Name); // test only with 1 channel
             userChannel.ShouldNotBeNull();
         }
     }

@@ -20,11 +20,14 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyGetUnauthenticatedToken()
         {
-            MockHttpRequest("/oauth/authorize/client", 
-                "POST",
-                "grant_type=client_credentials",
-                200,
-                GetJson("User.unauthenticated-token.json"));
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/oauth/authorize/client",
+                Method = RequestSettings.HttpMethod.POST,
+                RequestTextBody = "grant_type=client_credentials",
+                ResponseJsonFile = "User.unauthenticated-token.json",
+                AuthBypass = true
+            });
             var client = new AuthorizationClient(_vimeoSettings.ClientId, _vimeoSettings.ClientSecret);
 
             var token = await client.GetUnauthenticatedTokenAsync();
@@ -35,11 +38,10 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task VerifyAuthenticatedAccess()
         {
-            MockHttpRequest("/oauth/verify", 
-                "GET",
-                string.Empty,
-                200,
-                GetJson("User.oauth-verify.json"));
+            MockHttpRequest( new RequestSettings{ 
+                UrlSuffix = "/oauth/verify",
+                ResponseJsonFile = "User.oauth-verify.json"
+            });
             var client = new AuthorizationClient(_vimeoSettings.ClientId, _vimeoSettings.ClientSecret);
 
             var b = await client.VerifyAccessTokenAsync(_vimeoSettings.AccessToken);

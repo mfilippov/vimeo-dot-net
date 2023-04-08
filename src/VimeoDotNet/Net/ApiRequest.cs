@@ -61,10 +61,10 @@ namespace VimeoDotNet.Net
             {
                 if (Uri.TryCreate(value, UriKind.Absolute, out var parsed) && parsed.Scheme != "file")
                 {
-                    Protocol = parsed.Scheme;
-                    Host = parsed.Host;
+                    Protocol = Request.MockProtocol == null ? parsed.Scheme : Request.MockProtocol;
+                    Host = Request.MockHostName == null ? parsed.Host : Request.MockHostName;
                     _path = parsed.PathAndQuery;
-                    Port = parsed.Port;
+                    Port = Request.MockPort == 0 ? parsed.Port : Request.MockPort;
                 }
                 else
                 {

@@ -1,13 +1,25 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Net;
+using System.Reflection;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Shouldly;
 using VimeoDotNet.Authorization;
 using VimeoDotNet.Constants;
 using VimeoDotNet.Tests.Settings;
+
+#if NETSTANDARD2_0 || NETSTANDARD2_1 || NETCOREAPP2_0 || NETCOREAPP2_1 || NETCOREAPP2_2 || NETCOREAPP3_0 || NETCOREAPP3_1 || NET45 || NET451 || NET452 || NET6 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
+namespace System.Runtime.CompilerServices
+{
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    internal static class IsExternalInit { }
+}
+#endif
 
 namespace VimeoDotNet.Tests
 {
@@ -18,9 +30,10 @@ namespace VimeoDotNet.Tests
 
         // http://download.wavetlan.com/SVV/Media/HTTP/http-mp4.htm
 
-        protected const string TestTextTrackFilePath = @"VimeoDotNet.Tests.Resources.test.vtt";
+        protected const string TestTextTrackFilePath = @"VimeoDotNet.Tests.TestData.File.test.vtt";
 
         protected const string TextThumbnailFilePath = @"VimeoDotNet.Tests.Resources.test.png";
+        protected const string TestVideoFilePath = @"VimeoDotNet.Tests.TestData.File.test.mp4";
 
         private TestHttpServer _testHttpServer;
 
@@ -35,7 +48,13 @@ namespace VimeoDotNet.Tests
             AuthenticatedClient = CreateAuthenticatedClient();
         }
 
-        protected static string GetJson(string name)
+        protected static Stream GetFileFromEmbeddedResources(string relativePath)
+        {
+            var assembly = typeof(BaseTest).GetTypeInfo().Assembly;
+            return assembly.GetManifestResourceStream(relativePath);
+        }
+
+        private static string GetJson(string name)
         {
             var path = $"VimeoDotNet.Tests.TestData.{name}";
             using var resourceStream = typeof(BaseTest).Assembly.GetManifestResourceStream(path);
@@ -52,20 +71,35 @@ namespace VimeoDotNet.Tests
 
         private bool CheckAuth(HttpListenerRequest request)
         {
-            var urlWithoutAuth = new HashSet<string> { "/oauth/authorize/client" };
-            if (urlWithoutAuth.Contains(request.Url?.PathAndQuery))
-            {
-                return true;
-            }
             request.Headers["Authorization"].ShouldNotBeNull();
             var parts = request.Headers["Authorization"].Split(new [] {' '}, 2);
             parts.Length.ShouldBe(2);
             return parts[1].Trim() == VimeoSettings.AccessToken;
         }
-        
-        protected void MockHttpRequest(string urlSuffix, string method, string requestBody, int statusCode, string responseBody)
+
+        public class RequestSettings
         {
-            var route = $"{urlSuffix}:{method}";
+            public enum HttpMethod
+            {
+                DELETE,
+                GET,
+                PATCH,
+                POST,
+                PUT,
+            }
+            public string UrlSuffix { get; init; }
+            public HttpMethod Method { get; init; } = HttpMethod.GET;
+            public string RequestTextBody { get; init; } = string.Empty;
+            public string RequestBinaryFile { get; init; } = null;
+            public int StatusCode { get; init; } = 200;
+            [CanBeNull] public string ResponseJsonFile { get; init; }
+
+            public bool AuthBypass { get; init; } = false;
+        }
+
+        protected void MockHttpRequest(RequestSettings settings)
+        {
+            var route = $"{settings.UrlSuffix}:{settings.Method}";
             if (_requestMocks.Count == 0)
             {
                 Request.MockProtocol = "http";
@@ -74,29 +108,39 @@ namespace VimeoDotNet.Tests
             }
             var added = _requestMocks.TryAdd(route, (request, response) =>
             {
-                request.Url?.PathAndQuery.ShouldBe(urlSuffix);
-                request.HttpMethod.ShouldBe(method);
+                request.Url?.PathAndQuery.ShouldBe(settings.UrlSuffix);
+                request.HttpMethod.ShouldBe(settings.Method.ToString());
                 response.Headers.Add("x-ratelimit-limit", "1000");
                 response.Headers.Add("x-ratelimit-remaining", "998");
                 response.Headers.Add("x-ratelimit-reset", "2023-04-08T09:21:35+00:00");
-                if (!CheckAuth(request))
+                if (!settings.AuthBypass && !CheckAuth(request))
                 {
                     response.StatusCode = 401;
                     var wrt = new StreamWriter(response.OutputStream);
                     wrt.Write("""{ "error": "Bad access token" }""");
-                    wrt.Write(responseBody);
+                    wrt.Write(settings.ResponseJsonFile != null ? GetJson(settings.ResponseJsonFile) : string.Empty);
                     wrt.Close();
                     response.Close();
                 }
                 else
                 {
-                    var rdr = new StreamReader(request.InputStream);
-                    var actualRequestBody = rdr.ReadToEnd();
-                    actualRequestBody.ShouldBe(requestBody);
-                    response.StatusCode = statusCode;
+                    if (settings.RequestBinaryFile == null)
+                    {
+                        var rdr = new StreamReader(request.InputStream);
+                        var actualRequestBody = rdr.ReadToEnd();
+                        actualRequestBody.ShouldBe(settings.RequestTextBody);
+                    }
+                    else
+                    {
+                        var hasher = SHA256.Create();
+                        var expectedHash = hasher.ComputeHash(GetFileFromEmbeddedResources(settings.RequestBinaryFile));
+                        var actualHash = hasher.ComputeHash(request.InputStream);
+                        actualHash.ShouldBe(expectedHash);
+                    }
+                    response.StatusCode = settings.StatusCode;
                     response.ContentType = "application/json";
                     var wrt = new StreamWriter(response.OutputStream);
-                    wrt.Write(responseBody);
+                    wrt.Write(settings.ResponseJsonFile != null ? GetJson(settings.ResponseJsonFile) : string.Empty);
                     wrt.Close();
                     response.Close();
                 }
@@ -104,7 +148,7 @@ namespace VimeoDotNet.Tests
             });
             if (!added)
             {
-                throw new Exception($"can't register handler for url: '{urlSuffix}'");
+                throw new Exception($"can't register handler for url: '{settings.UrlSuffix}'");
             }
         }
 
