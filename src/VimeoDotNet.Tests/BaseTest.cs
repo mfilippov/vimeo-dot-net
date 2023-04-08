@@ -76,6 +76,9 @@ namespace VimeoDotNet.Tests
             {
                 request.Url?.PathAndQuery.ShouldBe(urlSuffix);
                 request.HttpMethod.ShouldBe(method);
+                response.Headers.Add("x-ratelimit-limit", "1000");
+                response.Headers.Add("x-ratelimit-remaining", "998");
+                response.Headers.Add("x-ratelimit-reset", "2023-04-08T09:21:35+00:00");
                 if (!CheckAuth(request))
                 {
                     response.StatusCode = 401;
