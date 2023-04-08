@@ -6,11 +6,13 @@ using Xunit;
 
 namespace VimeoDotNet.Tests
 {
-    public class RateLimtTests : BaseTest
+    public class RateLimitTests : BaseTest
     {
         [Fact]
-        public async Task ShouldCorrectlyUpdateReateLimitPerRequest()
+        public async Task ShouldCorrectlyUpdateRateLimitPerRequest()
         {
+            MockHttpRequest("/me/albums", "GET",string.Empty, 200,
+                GetJson("Album.albums.json"));
             var client = CreateAuthenticatedClient();
 
             client.RateLimit.ShouldBe(0);
