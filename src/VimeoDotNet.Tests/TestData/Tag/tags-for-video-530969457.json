@@ -1,0 +1,31 @@
+﻿{
+  "total": 1,
+  "page": 1,
+  "per_page": 25,
+  "paging": {
+    "next": null,
+    "previous": null,
+    "first": "/videos/530969457/tags?page=1",
+    "last": "/videos/530969457/tags?page=1"
+  },
+  "data": [
+    {
+      "uri": "/videos/530969457/tags/test-tag1",
+      "name": "test-tag1",
+      "tag": "test-tag1",
+      "canonical": "test-tag1",
+      "metadata": {
+        "connections": {
+          "videos": {
+            "uri": "/videos/530969457/tags/test-tag1/videos",
+            "options": [
+              "GET"
+            ],
+            "total": 24
+          }
+        }
+      },
+      "resource_key": "c1864fcd2428e3bf8431b7887630c68dad0c7e01"
+    }
+  ]
+}

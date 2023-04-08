@@ -1,0 +1,18 @@
+﻿{
+  "uri": "/tags/test-tag1",
+  "name": "test-tag1",
+  "tag": "test-tag1",
+  "canonical": "test-tag1",
+  "metadata": {
+    "connections": {
+      "videos": {
+        "uri": "/tags/test-tag1/videos",
+        "options": [
+          "GET"
+        ],
+        "total": 24
+      }
+    }
+  },
+  "resource_key": "c1864fcd2428e3bf8431b7887630c68dad0c7e01"
+}
