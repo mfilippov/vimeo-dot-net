@@ -63,7 +63,7 @@ namespace VimeoDotNet.Tests
             return parts[1].Trim() == VimeoSettings.AccessToken;
         }
         
-        protected void MockHttpRequest(string urlSuffix, string method, string requestBody, string responseBody)
+        protected void MockHttpRequest(string urlSuffix, string method, string requestBody, int statusCode, string responseBody)
         {
             var route = $"{urlSuffix}:{method}";
             if (_requestMocks.Count == 0)
@@ -90,7 +90,7 @@ namespace VimeoDotNet.Tests
                     var rdr = new StreamReader(request.InputStream);
                     var actualRequestBody = rdr.ReadToEnd();
                     actualRequestBody.ShouldBe(requestBody);
-                    response.StatusCode = 200;
+                    response.StatusCode = statusCode;
                     response.ContentType = "application/json";
                     var wrt = new StreamWriter(response.OutputStream);
                     wrt.Write(responseBody);

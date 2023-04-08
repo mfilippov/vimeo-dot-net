@@ -1,7 +1,4 @@
 ﻿using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using VimeoDotNet.Exceptions;
 using VimeoDotNet.Models;
@@ -14,33 +11,33 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyRetrieveMyEmbedPresetById()
         {
-            if (VimeoSettings.EmbedPresetId == 0)
-                return;
-
+            const int embedPresetId = 120476914;
+            MockHttpRequest($"/me/presets/{embedPresetId}", "GET", string.Empty, 
+                200, GetJson("Presets.get-presets-120476914.json"));
             var client = CreateAuthenticatedClient();
-            var preset = await client.GetEmbedPresetAsync(UserId.Me, VimeoSettings.EmbedPresetId);
+            var preset = await client.GetEmbedPresetAsync(UserId.Me, embedPresetId);
             preset.ShouldNotBeNull();
-            preset.Id.ShouldBe(VimeoSettings.EmbedPresetId);
+            preset.Id.ShouldBe(embedPresetId);
         }
 
         [Fact]
         public async Task ShouldCorrectlyRetrieveUserEmbedPresetById()
         {
-            if (VimeoSettings.EmbedPresetId == 0)
-                return;
-
+            const int userId = 2433258;
+            const int embedPresetId = 120476914;
+            MockHttpRequest($"/users/{userId}/presets/{embedPresetId}","GET", string.Empty,
+                200, GetJson("Presets.get-presets-120476914.json"));
             var client = CreateAuthenticatedClient();
-            var preset = await client.GetEmbedPresetAsync(VimeoSettings.UserId, VimeoSettings.EmbedPresetId);
+            var preset = await client.GetEmbedPresetAsync(userId, embedPresetId);
             preset.ShouldNotBeNull();
-            preset.Id.ShouldBe(VimeoSettings.EmbedPresetId);
+            preset.Id.ShouldBe(embedPresetId);
         }
 
         [Fact]
         public async Task ShouldCorrectlyRetrieveMyEmbedPresets()
         {
-            if (VimeoSettings.EmbedPresetId == 0)
-                return;
-
+            MockHttpRequest($"/me/presets", "GET", string.Empty,
+                200, GetJson("Presets.presets-2433258.json"));
             var client = CreateAuthenticatedClient();
             var presets = await client.GetEmbedPresetsAsync(UserId.Me);
             presets.ShouldNotBeNull();
@@ -50,11 +47,11 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyRetrieveUserEmbedPresets()
         {
-            if (VimeoSettings.EmbedPresetId == 0)
-                return;
-
+            const int userId = 2433258;
+            MockHttpRequest($"/users/{userId}/presets", "GET", string.Empty,
+                200,GetJson("Presets.presets-2433258.json"));
             var client = CreateAuthenticatedClient();
-            var presets = await client.GetEmbedPresetsAsync(VimeoSettings.UserId);
+            var presets = await client.GetEmbedPresetsAsync(userId);
             presets.ShouldNotBeNull();
             presets.Data.Count.ShouldBeGreaterThan(0);
         }
@@ -62,11 +59,12 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyGetEmbedPresetWithFields()
         {
-            if (VimeoSettings.EmbedPresetId == 0)
-                return;
-
+            const int embedPresetId = 120476914;
+            MockHttpRequest($"""/me/presets/{embedPresetId}?fields=uri,name""", 
+                "GET", string.Empty,
+                200, GetJson("Presets.get-presets-120476914-with-fields.json"));
             var client = CreateAuthenticatedClient();
-            var preset = await client.GetEmbedPresetAsync(UserId.Me, VimeoSettings.EmbedPresetId, new[] { "uri", "name" });
+            var preset = await client.GetEmbedPresetAsync(UserId.Me, embedPresetId, new[] { "uri", "name" });
             preset.ShouldNotBeNull();
             preset.Uri.ShouldNotBeNull();
             preset.Name.ShouldNotBeNull();
@@ -76,9 +74,8 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyGetEmbedPresetsWithFields()
         {
-            if (VimeoSettings.EmbedPresetId == 0)
-                return;
-
+            MockHttpRequest($"/me/presets?fields=uri,name", "GET", string.Empty, 200,
+                GetJson("Presets.presets-2433258-with-fields.json"));
             var client = CreateAuthenticatedClient();
             var presets = await client.GetEmbedPresetsAsync(UserId.Me, fields: new[] { "uri", "name" });
             presets.ShouldNotBeNull();
@@ -92,9 +89,8 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyRetrieveSecondPage()
         {
-            if (VimeoSettings.EmbedPresetId == 0)
-                return;
-
+            MockHttpRequest($"/me/presets?page=2&per_page=1", "GET", string.Empty, 400,
+                GetJson("Presets.get-presets-invalid-page.json"));
             var client = CreateAuthenticatedClient();
 
             for (var i = 0; i < 5; i++)

@@ -1,0 +1,17 @@
+﻿{
+  "total": 1,
+  "page": 1,
+  "per_page": 25,
+  "paging": {
+    "next": null,
+    "previous": null,
+    "first": "/me/presets?fields=uri%2Cname&page=1",
+    "last": "/me/presets?fields=uri%2Cname&page=1"
+  },
+  "data": [
+    {
+      "uri": "/users/2433258/presets/120476914",
+      "name": "Test preset"
+    }
+  ]
+}

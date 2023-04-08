@@ -23,6 +23,7 @@ namespace VimeoDotNet.Tests
             MockHttpRequest("/oauth/authorize/client", 
                 "POST",
                 "grant_type=client_credentials",
+                200,
                 GetJson("User.unauthenticated-token.json"));
             var client = new AuthorizationClient(_vimeoSettings.ClientId, _vimeoSettings.ClientSecret);
 
@@ -37,6 +38,7 @@ namespace VimeoDotNet.Tests
             MockHttpRequest("/oauth/verify", 
                 "GET",
                 string.Empty,
+                200,
                 GetJson("User.oauth-verify.json"));
             var client = new AuthorizationClient(_vimeoSettings.ClientId, _vimeoSettings.ClientSecret);
 
