@@ -1,0 +1,13 @@
+﻿{
+  "uri": "/videos/530969457/texttracks/84654997",
+  "active": false,
+  "type": "metadata",
+  "language": "fr",
+  "display_language": "French",
+  "id": 84654997,
+  "link": "https://captions.cloud.vimeo.com/captions/84654997.vtt?expires=1680984258&sig=69f5307d8c049b5788d842a3f393339e61e26f62&download=NewTrackName.vtt",
+  "link_expires_time": 1680984258,
+  "hls_link": "https://captions.cloud.vimeo.com/captions/84654997.vtt?expires=1680984258&sig=69f5307d8c049b5788d842a3f393339e61e26f62&download=NewTrackName.vtt&hls=1",
+  "hls_link_expires_time": 1680984258,
+  "name": "NewTrackName"
+}
