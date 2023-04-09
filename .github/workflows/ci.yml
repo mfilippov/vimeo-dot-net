@@ -23,13 +23,13 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 7.0.x
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore
       - name: Pack
-        run: dotnet pack --verbosity normal --no-restore --include-symbols --include-source -p:PackageVersion=2.1.0-preview.${{ github.run_id }} src/VimeoDotNet/VimeoDotNet.csproj
+        run: dotnet pack --verbosity normal --no-restore --include-symbols --include-source -p:PackageVersion=3.0.0-preview.${{ github.run_id }} src/VimeoDotNet/VimeoDotNet.csproj
       - name: Test
         run: dotnet test --no-build --verbosity normal  -l html --results-directory:"TestResults"
       - name: Upload test results
@@ -76,7 +76,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 7.0.x
       - name: Restore dependencies
         run: dotnet restore
       - name: Create Release NuGet package
