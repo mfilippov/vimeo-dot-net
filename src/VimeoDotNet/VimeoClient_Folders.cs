@@ -13,7 +13,7 @@ namespace VimeoDotNet
 {
     public partial class VimeoClient
     {
-        public async Task<Folder> CreateVideoFolder(UserId userId, string name, string parentFolderUri = null)
+        public async Task<Folder> CreateFolder(UserId userId, string name, string parentFolderUri = null)
         {
             try
             {
@@ -48,6 +48,30 @@ namespace VimeoDotNet
                 throw new VimeoUploadException("Error creating folder.", null, ex);
             }
         }
+        
+        public async Task DeleteFolder(UserId userId, long folderId)
+        {
+            try
+            {
+                var request = _apiRequestFactory.GetApiRequest(AccessToken);
+                request.Method = HttpMethod.Delete;
+
+                SetEndPoint(userId, request, Endpoints.UserFolder);
+                request.UrlSegments.Add("folderId", folderId.ToString());
+
+                var response = await request.ExecuteRequestAsync<Folder>().ConfigureAwait(false);
+                CheckStatusCodeError(null, response, "Error deleting folder.");
+            }
+            catch (Exception ex)
+            {
+                if (ex is VimeoApiException)
+                {
+                    throw;
+                }
+
+                throw new VimeoUploadException("Error deleting folder.", null, ex);
+            }
+        }
 
         public async Task<Paginated<Folder>> GetUserFolders(UserId userId, int? page, int? perPage, string query = null, string[] fields = null)
         {
@@ -73,27 +97,6 @@ namespace VimeoDotNet
                 }
 
                 throw new VimeoApiException("Error retrieving user folders.", ex);
-            }
-        }
-        public async Task<Paginated<Item>> GetUserRootItems(UserId userId, int? page, int? perPage, string query = null, string[] fields = null)
-        {
-            try
-            {
-                var request = GenerateFoldersRequest(userId, page: page, perPage: perPage, query: query, fields: fields);
-                request.Path += "/root";
-                IApiResponse<Paginated<Item>> response = await request.ExecuteRequestAsync<Paginated<Item>>().ConfigureAwait(false);
-                UpdateRateLimit(response);
-
-                return response.Content;
-            }
-            catch (Exception ex)
-            {
-                if (ex is VimeoApiException)
-                {
-                    throw;
-                }
-
-                throw new VimeoApiException("Error retrieving user root items.", ex);
             }
         }
 

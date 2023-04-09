@@ -511,7 +511,14 @@ namespace VimeoDotNet
         /// <param name="name">Name</param>
         /// <param name="parentFolderUri">Parent Folder URI</param>
         /// <returns>Tag</returns>
-        Task<Folder> CreateVideoFolder(UserId userId, string name, string parentFolderUri = null);
+        Task<Folder> CreateFolder(UserId userId, string name, string parentFolderUri = null);
+
+        /// <summary>
+        /// Delete a folder
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <param name="folderId"></param>
+        Task DeleteFolder(UserId userId, long folderId);
 
         /// <summary>
         /// Get all folders by UserId and query and page parameters asynchronously
@@ -523,18 +530,6 @@ namespace VimeoDotNet
         /// <param name="page">The page number to show</param>
         /// <returns>Paginated Folders</returns>
         Task<Paginated<Folder>> GetUserFolders(UserId userId, int? page = null, int? perPage = null, string query = null, string[] fields = null);
-
-        /// <summary>
-        /// Get all root Items (videos, folders) by UserId and query and page parameters asynchronously
-        /// </summary>
-        /// <param name="userId">UserId</param>
-        /// <param name="perPage">Number of items to show on each page.</param>
-        /// <param name="query">Search query</param>
-        /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter</param>
-        /// <param name="page">The page number to show</param>
-        /// <returns>Paginated Items</returns>
-        Task<Paginated<Item>> GetUserRootItems(UserId userId, int? page = null, int? perPage = null, string query = null, string[] fields = null);
-
 
         /// <summary>
         /// Get all root Items (videos, folders) by UserId and query and page parameters asynchronously
