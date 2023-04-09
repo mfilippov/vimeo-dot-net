@@ -43,6 +43,8 @@
         public const string UserChannels = "/users/{userId}/channels";
         public const string MeChannels = "/me/channels";
         public const string MeAlbum = "/me/albums/{albumId}";
+        public const string MeAlbumVideo = "/me/albums/{albumId}/videos/{clipId}";
+        public const string MeAlbumVideos = "/me/albums/{albumId}/videos";
         public const string UserAlbum = "/users/{userId}/albums/{albumId}";
         public const string UserAlbumVideos = "/users/{userId}/albums/{albumId}/videos";
         public const string UserAlbumVideo = "/users/{userId}/albums/{albumId}/videos/{clipId}";

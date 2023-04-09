@@ -1,0 +1,17 @@
+﻿{
+  "total": 1,
+  "page": 1,
+  "per_page": 25,
+  "paging": {
+    "next": null,
+    "previous": null,
+    "first": "/me/albums/10303877/videos?fields=uri%2Cname&page=1",
+    "last": "/me/albums/10303877/videos?fields=uri%2Cname&page=1"
+  },
+  "data": [
+    {
+      "uri": "/videos/530969457",
+      "name": "Untitled"
+    }
+  ]
+}

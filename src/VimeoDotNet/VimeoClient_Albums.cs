@@ -101,7 +101,7 @@ namespace VimeoDotNet
             var request = _apiRequestFactory.AuthorizedRequest(
                 AccessToken,
                 HttpMethod.Put,
-                Endpoints.UserAlbumVideo,
+                userId == UserId.Me ? Endpoints.MeAlbumVideo : Endpoints.UserAlbumVideo,
                 new Dictionary<string, string>
                 {
                     {"userId", userId.ToString()},
