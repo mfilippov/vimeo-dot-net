@@ -488,6 +488,10 @@ namespace VimeoDotNet
                 CheckStatusCodeError(null, postResponse, "Error posting thumbnail placeholder.");
                 JObject.Parse(postResponse.Text).TryGetValue("link", out var link);
                 JObject.Parse(postResponse.Text).TryGetValue("uri", out var uri);
+                if (link == null || uri == null)
+                {
+                    throw new VimeoApiException("Error getting thumbnail link or uri.");
+                }
 
                 // Upload the thumbnail image file
                 var putRequest = new NonApiRequest

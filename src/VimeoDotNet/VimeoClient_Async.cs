@@ -19,7 +19,7 @@ namespace VimeoDotNet
     {
         #region Constants
 
-        internal const int DefaultUploadChunkSize = 1048576; // 1MB
+        internal const long DefaultUploadChunkSize = 134217728; // 128MB
 
         /// <summary>
         /// Range regex

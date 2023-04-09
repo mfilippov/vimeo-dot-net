@@ -247,27 +247,14 @@ namespace VimeoDotNet
         /// Create new upload ticket asynchronously
         /// </summary>
         /// <returns>Upload ticket</returns>
-        Task<UploadTicket> GetUploadTicketAsync();
-
-        /// <summary>
-        /// Create new resumable upload ticket asynchronously
-        /// </summary>
-        /// <returns>Upload ticket</returns>
-        Task<TusResumableUploadTicket> GetTusResumableUploadTicketAsync(long size, string name = null);
-
-        /// <summary>
-        /// Create new resumable replace upload ticket asynchronously
-        /// </summary>
-        /// <returns>Upload ticket</returns>
-        Task<TusResumableUploadTicket> GetTusReplaceResumableUploadTicketAsync(long size, long clipId, string name = null);
-
+        Task<UploadTicket> GetUploadTicketAsync(long size);
 
         /// <summary>
         /// Create new upload ticket for replace video asynchronously
         /// </summary>
         /// <param name="videoId">VideoId</param>
         /// <returns>Upload ticket</returns>
-        Task<UploadTicket> GetReplaceVideoUploadTicketAsync(long videoId);
+        Task<UploadTicket> GetReplaceVideoUploadTicketAsync(long videoId, string fileName, long size);
 
         /// <summary>
         /// Upload file part asynchronously
@@ -277,7 +264,7 @@ namespace VimeoDotNet
         /// <param name="replaceVideoId">ReplaceVideoId</param>
         /// <returns>Upload request</returns>
         Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent,
-            int chunkSize = VimeoClient.DefaultUploadChunkSize,
+            long chunkSize = VimeoClient.DefaultUploadChunkSize,
             long? replaceVideoId = null,
             Action<double> statusCallback = null);
 

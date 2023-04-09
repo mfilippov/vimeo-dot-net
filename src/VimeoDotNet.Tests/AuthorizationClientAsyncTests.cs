@@ -23,7 +23,7 @@ namespace VimeoDotNet.Tests
             MockHttpRequest(new RequestSettings
             {
                 UrlSuffix = "/oauth/authorize/client",
-                Method = RequestSettings.HttpMethod.POST,
+                Method = RequestSettings.HttpMethod.Post,
                 RequestTextBody = "grant_type=client_credentials",
                 ResponseJsonFile = "User.unauthenticated-token.json",
                 AuthBypass = true
@@ -38,7 +38,11 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task VerifyAuthenticatedAccess()
         {
-            MockHttpRequest( new RequestSettings{ 
+            MockHttpRequest(new RequestSettings{ 
+                UrlSuffix = "/oauth/verify",
+                ResponseJsonFile = "User.oauth-verify.json"
+            });
+            MockHttpRequest(new RequestSettings{ 
                 UrlSuffix = "/oauth/verify",
                 ResponseJsonFile = "User.oauth-verify.json"
             });

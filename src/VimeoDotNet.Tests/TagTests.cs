@@ -13,7 +13,7 @@ namespace VimeoDotNet.Tests
             MockHttpRequest(new RequestSettings
             {
                 UrlSuffix = $"/videos/{clipId}/tags/test-tag1",
-                Method = RequestSettings.HttpMethod.PUT,
+                Method = RequestSettings.HttpMethod.Put,
                 ResponseJsonFile = "Tag.put-tag-530969457.json"
             });
             var tag = await AuthenticatedClient.AddVideoTagAsync(clipId, "test-tag1");
@@ -71,7 +71,7 @@ namespace VimeoDotNet.Tests
                 MockHttpRequest(new RequestSettings
                 {
                     UrlSuffix = $"/videos/{clipId}/tags/{t.Id}",
-                    Method = RequestSettings.HttpMethod.DELETE
+                    Method = RequestSettings.HttpMethod.Delete
                 });
                 await AuthenticatedClient.DeleteVideoTagAsync(clipId, t.Id);
             }

@@ -68,7 +68,7 @@ namespace VimeoDotNet.Net
         public BinaryContent([NotNull] Stream data, string contentType)
         {
             ContentType = contentType;
-            _data = data;
+            _data = data ?? throw new ArgumentNullException(nameof(data));
             _shouldDisposeStream = false;
         }
 

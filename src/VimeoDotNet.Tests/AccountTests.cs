@@ -50,10 +50,19 @@ namespace VimeoDotNet.Tests
             MockHttpRequest(new RequestSettings
             {
                 UrlSuffix = "/me",
-                Method = RequestSettings.HttpMethod.PATCH,
+                Method = RequestSettings.HttpMethod.Patch,
                 RequestTextBody = $"name={testName.Replace(" ", "+")}" +
                               $"&location={testLocation}" +
                               $"&bio={testBio.Replace(" ", "+")}",
+                ResponseJsonFile = "User.user.json"
+            });
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/me",
+                Method = RequestSettings.HttpMethod.Patch,
+                RequestTextBody = $"name={testName.Replace(" ", "+")}" +
+                                  $"&location={testLocation}" +
+                                  $"&bio={testBio.Replace(" ", "+")}",
                 ResponseJsonFile = "User.user.json"
             });
             // first, ensure we can retrieve the current user...

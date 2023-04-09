@@ -15,7 +15,7 @@ namespace VimeoDotNet.Tests
             MockHttpRequest(new RequestSettings
             {
                 UrlSuffix = "/channels",
-                Method = RequestSettings.HttpMethod.POST,
+                Method = RequestSettings.HttpMethod.Post,
                 RequestTextBody = "privacy=moderators&name=test-channel&description=This+channel+" +
                                   "created+from+Vimeo+client+tests.&link=1sMDqioosEKP4P95k36dAQ",
                 ResponseJsonFile = "Channel.create-channel.json"
@@ -58,7 +58,7 @@ namespace VimeoDotNet.Tests
             MockHttpRequest(new RequestSettings
             {
                 UrlSuffix = "/channels/1837771",
-                Method = RequestSettings.HttpMethod.DELETE
+                Method = RequestSettings.HttpMethod.Delete
             });
             await client.DeleteChannelAsync(channelId);
         }
@@ -86,7 +86,7 @@ namespace VimeoDotNet.Tests
             MockHttpRequest(new RequestSettings
             {
                 UrlSuffix = "/channels",
-                Method = RequestSettings.HttpMethod.POST,
+                Method = RequestSettings.HttpMethod.Post,
                 RequestTextBody = "privacy=moderators&name=test-user-channel",
                 ResponseJsonFile = "Channel.channel-1837772.json"
             });

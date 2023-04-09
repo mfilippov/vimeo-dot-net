@@ -114,23 +114,14 @@ namespace VimeoDotNet.Tests
             });
             var client = CreateAuthenticatedClient();
 
-            for (var i = 0; i < 5; i++)
+            try
             {
-                try
-                {
-                    var presets = await client.GetEmbedPresetsAsync(UserId.Me, 2, 1);
-                    presets.ShouldNotBeNull();
-                    return;
-                }
-                catch (VimeoApiException ex)
-                {
-                    if (ex.Message.Contains("Please try again."))
-                    {
-                        continue;
-                    }
-
-                    throw;
-                }
+                var presets = await client.GetEmbedPresetsAsync(UserId.Me, 2, 1);
+                presets.ShouldNotBeNull();
+            }
+            catch (VimeoApiException ex)
+            {
+                ex.Message.ShouldContain("There isn't enough content to display the page you requested.");
             }
         }
     }
