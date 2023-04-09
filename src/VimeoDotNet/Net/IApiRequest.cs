@@ -73,6 +73,8 @@ namespace VimeoDotNet.Net
         ///
         /// </summary>
         IDictionary<string, string> UrlSegments { get; }
+        
+        bool IsAddTusHeader { get; set; }
 
         /// <summary>
         /// Execute request asynchronously

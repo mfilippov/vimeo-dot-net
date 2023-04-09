@@ -85,6 +85,8 @@ namespace VimeoDotNet.Net
         /// <inheritdoc />
         public IDictionary<string, string> UrlSegments => _urlSegments;
 
+        public bool IsAddTusHeader { get; set; }
+
         /// <inheritdoc />
         public byte[] BinaryContent { get; set; }
 
@@ -128,7 +130,7 @@ namespace VimeoDotNet.Net
             Port = Request.MockPort > 0 ? Request.MockPort : GetDefaultPort(Request.DefaultProtocol);
             Method = Request.DefaultMethod;
             ResponseType = ResponseTypes.Wildcard;
-            ApiVersion = ApiVersions.v3_2;
+            ApiVersion = ApiVersions.v3_4;
             ExcludeAuthorizationHeader = false;
         }
 
@@ -198,6 +200,10 @@ namespace VimeoDotNet.Net
         {
             request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse(BuildAcceptsHeader()));
             request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
+            if (IsAddTusHeader)
+            {
+                request.Headers.Add("Tus-Resumable", "1.0.0");
+            }
         }
 
         /// <summary>
@@ -225,7 +231,7 @@ namespace VimeoDotNet.Net
             Protocol = string.IsNullOrWhiteSpace(Protocol) ? Request.DefaultProtocol : Protocol;
             Host = string.IsNullOrWhiteSpace(Host) ? Request.DefaultHostName : Host;
             ResponseType = string.IsNullOrWhiteSpace(ResponseType) ? ResponseTypes.Wildcard : ResponseType;
-            ApiVersion = string.IsNullOrWhiteSpace(ApiVersion) ? ApiVersions.v3_2 : ApiVersion;
+            ApiVersion = string.IsNullOrWhiteSpace(ApiVersion) ? ApiVersions.v3_4 : ApiVersion;
 
             Protocol = Protocol.ToLower();
             Host = Host.ToLower();

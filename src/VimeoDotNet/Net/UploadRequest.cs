@@ -18,7 +18,7 @@ namespace VimeoDotNet.Net
         public UploadTicket Ticket { get; set; }
 
         /// <inheritdoc />
-        public int ChunkSize { get; set; }
+        public long ChunkSize { get; set; }
 
         /// <inheritdoc />
         public long BytesWritten { get; set; }

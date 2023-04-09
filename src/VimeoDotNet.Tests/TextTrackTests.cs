@@ -22,13 +22,13 @@ namespace VimeoDotNet.Tests
             {
                 UrlSuffix = "/videos/530969457/texttracks/",
                 RequestTextBody = "active=false&name=UploadTest.vtt&language=en&type=captions",
-                Method = RequestSettings.HttpMethod.POST,
+                Method = RequestSettings.HttpMethod.Post,
                 ResponseJsonFile = "TextTrack.new-text-track.json"
             });
             MockHttpRequest(new RequestSettings
             {
                 UrlSuffix = "/captions/84654997?expires=1680975493&sig=8e259a1376e90c4112beb66e7f28b37aa8491f7c",
-                Method = RequestSettings.HttpMethod.PUT,
+                Method = RequestSettings.HttpMethod.Put,
                 RequestBinaryFile = TestTextTrackFilePath,
                 AuthBypass = true,
             });
@@ -79,7 +79,7 @@ namespace VimeoDotNet.Tests
             MockHttpRequest(new RequestSettings
             {
                 UrlSuffix = "/videos/530969457/texttracks/84654997",
-                Method = RequestSettings.HttpMethod.PATCH,
+                Method = RequestSettings.HttpMethod.Patch,
                 RequestTextBody = "active=false&name=NewTrackName&language=fr&type=metadata",
                 ResponseJsonFile = "TextTrack.patch-text-track-84654997.json"
             });
@@ -105,7 +105,7 @@ namespace VimeoDotNet.Tests
             MockHttpRequest(new RequestSettings
             {
                 UrlSuffix = "/videos/530969457/texttracks/84654997",
-                Method = RequestSettings.HttpMethod.DELETE
+                Method = RequestSettings.HttpMethod.Delete
             });
             await client.DeleteTextTrackAsync(clipId, trackId);
         }

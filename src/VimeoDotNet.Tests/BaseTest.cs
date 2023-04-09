@@ -32,12 +32,13 @@ namespace VimeoDotNet.Tests
 
         protected const string TestTextTrackFilePath = @"VimeoDotNet.Tests.TestData.File.test.vtt";
 
-        protected const string TextThumbnailFilePath = @"VimeoDotNet.Tests.Resources.test.png";
+        protected const string TextThumbnailFilePath = @"VimeoDotNet.Tests.TestData.File.test.png";
         protected const string TestVideoFilePath = @"VimeoDotNet.Tests.TestData.File.test.mp4";
 
         private TestHttpServer _testHttpServer;
 
-        private readonly ConcurrentDictionary<string, Action<HttpListenerRequest, HttpListenerResponse>> _requestMocks = new ();
+        private readonly ConcurrentDictionary<string, Queue<Action<HttpListenerRequest, HttpListenerResponse>>>
+            _requestMocks = new();
 
         protected BaseTest()
         {
@@ -62,6 +63,7 @@ namespace VimeoDotNet.Tests
             {
                 throw new Exception($"can't find resource stream: '{path}'");
             }
+
             var rdr = new StreamReader(resourceStream);
             var json = rdr.ReadToEnd();
             rdr.Close();
@@ -72,7 +74,7 @@ namespace VimeoDotNet.Tests
         private bool CheckAuth(HttpListenerRequest request)
         {
             request.Headers["Authorization"].ShouldNotBeNull();
-            var parts = request.Headers["Authorization"].Split(new [] {' '}, 2);
+            var parts = request.Headers["Authorization"].Split(new[] { ' ' }, 2);
             parts.Length.ShouldBe(2);
             return parts[1].Trim() == VimeoSettings.AccessToken;
         }
@@ -81,35 +83,48 @@ namespace VimeoDotNet.Tests
         {
             public enum HttpMethod
             {
-                DELETE,
-                GET,
-                PATCH,
-                POST,
-                PUT,
+                Delete,
+                Head,
+                Get,
+                Patch,
+                Post,
+                Put,
             }
-            public string UrlSuffix { get; init; }
-            public HttpMethod Method { get; init; } = HttpMethod.GET;
-            public string RequestTextBody { get; init; } = string.Empty;
-            public string RequestBinaryFile { get; init; } = null;
-            public int StatusCode { get; init; } = 200;
-            [CanBeNull] public string ResponseJsonFile { get; init; }
 
-            public bool AuthBypass { get; init; } = false;
+            public bool AuthBypass { get; init; }
+            public string UrlSuffix { get; init; }
+            public HttpMethod Method { get; init; } = HttpMethod.Get;
+            public string RequestTextBody { get; init; } = string.Empty;
+            [CanBeNull] public string RequestBinaryFile { get; init; }
+            [CanBeNull] public byte[] RequestBinaryBody { get; init; }
+            [CanBeNull] public string ResponseJsonFile { get; init; }
+            public Dictionary<string, string> RequestHeaders { get; init; } = new();
+            public int StatusCode { get; init; } = 200;
+            public Dictionary<string, string> CustomResponseHeaders { get; init; } = new();
         }
 
         protected void MockHttpRequest(RequestSettings settings)
         {
-            var route = $"{settings.UrlSuffix}:{settings.Method}";
+            var route = $"{settings.UrlSuffix}:{settings.Method.ToString().ToUpperInvariant()}";
             if (_requestMocks.Count == 0)
             {
                 Request.MockProtocol = "http";
                 Request.MockHostName = "localhost";
                 Request.MockPort = _testHttpServer.Start(_requestMocks);
             }
-            var added = _requestMocks.TryAdd(route, (request, response) =>
+
+            if (!_requestMocks.ContainsKey(route))
+            {
+                _requestMocks.TryAdd(route, new Queue<Action<HttpListenerRequest, HttpListenerResponse>>())
+                    .ShouldBeTrue();
+            }
+
+            var queue = _requestMocks[route];
+
+            queue.Enqueue((request, response) =>
             {
                 request.Url?.PathAndQuery.ShouldBe(settings.UrlSuffix);
-                request.HttpMethod.ShouldBe(settings.Method.ToString());
+                request.HttpMethod.ShouldBe(settings.Method.ToString().ToUpperInvariant());
                 response.Headers.Add("x-ratelimit-limit", "1000");
                 response.Headers.Add("x-ratelimit-remaining", "998");
                 response.Headers.Add("x-ratelimit-reset", "2023-04-08T09:21:35+00:00");
@@ -124,32 +139,44 @@ namespace VimeoDotNet.Tests
                 }
                 else
                 {
-                    if (settings.RequestBinaryFile == null)
+                    foreach (var key in settings.RequestHeaders.Keys)
                     {
-                        var rdr = new StreamReader(request.InputStream);
-                        var actualRequestBody = rdr.ReadToEnd();
-                        actualRequestBody.ShouldBe(settings.RequestTextBody);
+                        request.Headers[key].ShouldBe(settings.RequestHeaders[key]);
                     }
-                    else
+
+                    if (settings.RequestBinaryFile != null)
                     {
                         var hasher = SHA256.Create();
                         var expectedHash = hasher.ComputeHash(GetFileFromEmbeddedResources(settings.RequestBinaryFile));
                         var actualHash = hasher.ComputeHash(request.InputStream);
                         actualHash.ShouldBe(expectedHash);
                     }
+                    else if (settings.RequestBinaryBody != null)
+                    {
+                        var hasher = SHA256.Create();
+                        var expectedHash = hasher.ComputeHash(new MemoryStream(settings.RequestBinaryBody));
+                        var actualHash = hasher.ComputeHash(request.InputStream);
+                        actualHash.ShouldBe(expectedHash);
+                    }
+                    else
+                    {
+                        var rdr = new StreamReader(request.InputStream);
+                        var actualRequestBody = rdr.ReadToEnd();
+                        actualRequestBody.ShouldBe(settings.RequestTextBody);
+                    }
+
                     response.StatusCode = settings.StatusCode;
                     response.ContentType = "application/json";
+                    foreach (var key in settings.CustomResponseHeaders.Keys)
+                    {
+                        response.Headers.Add(key, settings.CustomResponseHeaders[key]);
+                    }
                     var wrt = new StreamWriter(response.OutputStream);
                     wrt.Write(settings.ResponseJsonFile != null ? GetJson(settings.ResponseJsonFile) : string.Empty);
                     wrt.Close();
                     response.Close();
                 }
-                
             });
-            if (!added)
-            {
-                throw new Exception($"can't register handler for url: '{settings.UrlSuffix}'");
-            }
         }
 
         protected async Task<VimeoClient> CreateUnauthenticatedClient()
@@ -170,6 +197,7 @@ namespace VimeoDotNet.Tests
             {
                 return;
             }
+
             _testHttpServer.Stop();
             _testHttpServer = null;
             Request.MockProtocol = null;

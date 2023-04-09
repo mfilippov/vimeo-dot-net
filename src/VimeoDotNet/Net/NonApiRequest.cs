@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -16,16 +17,16 @@ namespace VimeoDotNet.Net
 #if NET45
         static NonApiRequest()
         {
-            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
         }
 #endif
 
         #region Private Fields
 
-        private readonly Dictionary<string, string> _queryString = new Dictionary<string, string>();
-        private readonly Dictionary<string, string> _urlSegments = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _queryString = new();
+        private readonly Dictionary<string, string> _urlSegments = new();
 
-        private static readonly JsonSerializerSettings DateFormatSettings = new JsonSerializerSettings
+        private static readonly JsonSerializerSettings DateFormatSettings = new()
         {
             DateFormatString = "yyyy-MM-ddTHH:mm:sszzz",
             DateTimeZoneHandling = DateTimeZoneHandling.Utc
@@ -80,10 +81,12 @@ namespace VimeoDotNet.Net
         public IDictionary<string, string> Query => _queryString;
 
         /// <inheritdoc />
-        public List<string> Fields { get; } = new List<string>();
+        public List<string> Fields { get; } = new();
 
         /// <inheritdoc />
         public IDictionary<string, string> UrlSegments => _urlSegments;
+
+        public bool IsAddTusHeader { get; set; }
 
         /// <inheritdoc />
         public byte[] BinaryContent { get; set; }
@@ -98,7 +101,7 @@ namespace VimeoDotNet.Net
         /// <summary>
         /// Rest client
         /// </summary>
-        private static readonly HttpClient Client = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false });
+        private static readonly HttpClient Client = new(new HttpClientHandler { AllowAutoRedirect = false });
 
         /// <summary>
         /// Client Id
@@ -128,7 +131,7 @@ namespace VimeoDotNet.Net
             Port = Request.MockPort > 0 ? Request.MockPort : GetDefaultPort(Request.DefaultProtocol);
             Method = Request.DefaultMethod;
             ResponseType = ResponseTypes.Wildcard;
-            ApiVersion = ApiVersions.v3_2;
+            ApiVersion = ApiVersions.v3_4;
             ExcludeAuthorizationHeader = false;
         }
 
@@ -179,23 +182,10 @@ namespace VimeoDotNet.Net
         {
             request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse(BuildAcceptsHeader()));
             request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
-        }
-
-        /// <summary>
-        /// Set authentication
-        /// </summary>
-        private void SetAuth(HttpRequestMessage request)
-        {
-            if (!string.IsNullOrWhiteSpace(AccessToken))
+            if (IsAddTusHeader)
             {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+                request.Headers.Add("Tus-Resumable", "1.0.0");
             }
-            if (string.IsNullOrWhiteSpace(ClientId) || string.IsNullOrWhiteSpace(ClientSecret))
-                return;
-            var token = $"{ClientId}:{ClientSecret}";
-            var tokenBytes = Encoding.ASCII.GetBytes(token);
-            var encoded = Convert.ToBase64String(tokenBytes);
-            request.Headers.Authorization = new AuthenticationHeaderValue("Basic", encoded);
         }
 
         /// <summary>
@@ -206,7 +196,7 @@ namespace VimeoDotNet.Net
             Protocol = string.IsNullOrWhiteSpace(Protocol) ? Request.DefaultProtocol : Protocol;
             Host = string.IsNullOrWhiteSpace(Host) ? Request.DefaultHostName : Host;
             ResponseType = string.IsNullOrWhiteSpace(ResponseType) ? ResponseTypes.Wildcard : ResponseType;
-            ApiVersion = string.IsNullOrWhiteSpace(ApiVersion) ? ApiVersions.v3_2 : ApiVersion;
+            ApiVersion = string.IsNullOrWhiteSpace(ApiVersion) ? ApiVersions.v3_4 : ApiVersion;
 
             Protocol = Protocol.ToLower();
             Host = Host.ToLower();

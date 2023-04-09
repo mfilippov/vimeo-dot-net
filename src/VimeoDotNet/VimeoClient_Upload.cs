@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using VimeoDotNet.Constants;
 using VimeoDotNet.Enums;
 using VimeoDotNet.Exceptions;
@@ -21,11 +18,11 @@ namespace VimeoDotNet
     public partial class VimeoClient
     {
         /// <inheritdoc />
-        public async Task<UploadTicket> GetUploadTicketAsync()
+        public async Task<UploadTicket> GetUploadTicketAsync(long size)
         {
             try
             {
-                var request = GenerateUploadTicketRequest();
+                var request = GenerateUploadTicketRequest(size);
                 var response = await request.ExecuteRequestAsync<UploadTicket>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(null, response, "Error generating upload ticket.");
@@ -43,56 +40,12 @@ namespace VimeoDotNet
             }
         }
 
-        public async Task<TusResumableUploadTicket> GetTusResumableUploadTicketAsync(long size, string name = null)
-        {
-            try
-            {
-                var request = GenerateTusResumableUploadTicketRequest(size, name);
-                var response = await request.ExecuteRequestAsync<TusResumableUploadTicket>().ConfigureAwait(false);
-                UpdateRateLimit(response);
-                CheckStatusCodeError(null, response, "Error generating upload ticket.");
-
-                return response.Content;
-            }
-            catch (Exception ex)
-            {
-                if (ex is VimeoApiException)
-                {
-                    throw;
-                }
-
-                throw new VimeoUploadException("Error generating upload ticket.", null, ex);
-            }
-        }
-
-        public async Task<TusResumableUploadTicket> GetTusReplaceResumableUploadTicketAsync(long size, long clipId, string name = null)
-        {
-            try
-            {
-                var request = GenerateTusReplaceResumableUploadTicketRequest(size, clipId, name);
-                var response = await request.ExecuteRequestAsync<TusResumableUploadTicket>().ConfigureAwait(false);
-                UpdateRateLimit(response);
-                CheckStatusCodeError(null, response, "Error generating upload ticket.");
-
-                return response.Content;
-            }
-            catch (Exception ex)
-            {
-                if (ex is VimeoApiException)
-                {
-                    throw;
-                }
-
-                throw new VimeoUploadException("Error generating upload ticket.", null, ex);
-            }
-        }
-
         /// <inheritdoc />
-        public async Task<UploadTicket> GetReplaceVideoUploadTicketAsync(long videoId)
+        public async Task<UploadTicket> GetReplaceVideoUploadTicketAsync(long videoId, string fileName, long size)
         {
             try
             {
-                var request = GenerateReplaceVideoUploadTicketRequest(videoId);
+                var request = GenerateReplaceVideoUploadTicketRequest(videoId, fileName, size);
                 var response = await request.ExecuteRequestAsync<UploadTicket>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(null, response, "Error generating upload ticket to replace video.");
@@ -112,7 +65,7 @@ namespace VimeoDotNet
 
         /// <inheritdoc />
         public async Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent,
-            int chunkSize = DefaultUploadChunkSize,
+            long chunkSize = DefaultUploadChunkSize,
             long? replaceVideoId = null,
             Action<double> statusCallback = null)
         {
@@ -131,8 +84,6 @@ namespace VimeoDotNet
                 uploadStatus = await VerifyUploadFileAsync(uploadRequest).ConfigureAwait(false);
                 if (uploadStatus.Status == UploadStatusEnum.Completed)
                 {
-                    // If completed, mark file as complete
-                    await CompleteFileUploadAsync(uploadRequest).ConfigureAwait(false);
                     uploadRequest.IsVerifiedComplete = true;
                 }
                 else if (uploadStatus.BytesWritten == uploadRequest.FileLength)
@@ -222,7 +173,7 @@ namespace VimeoDotNet
         /// <param name="replaceVideoId">ReplaceVideoId</param>
         /// <returns></returns>
         private async Task<IUploadRequest> StartUploadFileAsync(IBinaryContent fileContent,
-            int chunkSize = DefaultUploadChunkSize,
+            long chunkSize = DefaultUploadChunkSize,
             long? replaceVideoId = null)
         {
             if (!fileContent.Data.CanRead)
@@ -236,11 +187,13 @@ namespace VimeoDotNet
             }
 
             var ticket = replaceVideoId.HasValue
-                ? await GetReplaceVideoUploadTicketAsync(replaceVideoId.Value).ConfigureAwait(false)
-                : await GetUploadTicketAsync().ConfigureAwait(false);
+                ? await GetReplaceVideoUploadTicketAsync(replaceVideoId.Value,
+                    fileContent.OriginalFileName, fileContent.Data.Length).ConfigureAwait(false)
+                : await GetUploadTicketAsync(fileContent.Data.Length).ConfigureAwait(false);
 
             var uploadRequest = new UploadRequest
             {
+                ClipUri = ticket.Link,
                 Ticket = ticket,
                 File = fileContent,
                 ChunkSize = chunkSize
@@ -306,13 +259,14 @@ namespace VimeoDotNet
         /// Verify upload file part asynchronously
         /// </summary>
         /// <param name="uploadRequest">UploadRequest</param>
-        /// <returns>Verification reponse</returns>
+        /// <returns>Verification response</returns>
         private async Task<VerifyUploadResponse> VerifyUploadFileAsync(IUploadRequest uploadRequest)
         {
             try
             {
                 var request =
-                    await GenerateFileStreamRequest(uploadRequest.File, uploadRequest.Ticket, verifyOnly: true)
+                    await GenerateFileStreamRequest(uploadRequest.File, uploadRequest.Ticket,
+                            uploadRequest.ChunkSize, verifyOnly: true)
                         .ConfigureAwait(false);
                 var response = await request.ExecuteRequestAsync().ConfigureAwait(false);
                 var verify = new VerifyUploadResponse();
@@ -361,160 +315,67 @@ namespace VimeoDotNet
             }
         }
 
-        /// <summary>
-        /// Complete upload file asynchronously
-        /// </summary>
-        /// <param name="uploadRequest">UploadRequest</param>
-        /// <returns></returns>
-        private async Task CompleteFileUploadAsync(IUploadRequest uploadRequest)
-        {
-            ThrowIfUnauthorized();
-
-            try
-            {
-                var request = GenerateCompleteUploadRequest(uploadRequest.Ticket);
-                var response = await request.ExecuteRequestAsync().ConfigureAwait(false);
-                CheckStatusCodeError(uploadRequest, response, "Error marking file upload as complete.");
-
-                if (response.Headers.Location != null)
-                {
-                    uploadRequest.ClipUri = response.Headers.Location.ToString();
-                }
-            }
-            catch (Exception ex)
-            {
-                if (ex is VimeoApiException)
-                {
-                    throw;
-                }
-
-                throw new VimeoUploadException("Error marking file upload as complete.", uploadRequest, ex);
-            }
-        }
-
-        private IApiRequest GenerateCompleteUploadRequest(UploadTicket ticket)
-        {
-            var request = _apiRequestFactory.GetApiRequest(AccessToken);
-            request.Method = HttpMethod.Delete;
-            request.Path = ticket.CompleteUri;
-            return request;
-        }
-
         private async Task<IApiRequest> GenerateFileStreamRequest(IBinaryContent fileContent, UploadTicket ticket,
-            long written = 0, int? chunkSize = null, bool verifyOnly = false)
+            long chunkSize, long written = 0, bool verifyOnly = false)
         {
-            if (string.IsNullOrWhiteSpace(ticket?.TicketId))
-            {
-                throw new ArgumentException("Invalid upload ticket.");
-            }
-
             if (fileContent.Data.Length > ticket.User.UploadQuota.Space.Free)
             {
-                throw new InvalidOperationException(
-                    "User does not have enough free space to upload this video. Remaining space: " +
-                    ticket.Quota.FreeSpace + ".");
+                 throw new InvalidOperationException(
+                     "User does not have enough free space to upload this video. Remaining space: " +
+                     ticket.User.UploadQuota.Space.Free + ".");
             }
 
             var request = _apiRequestFactory.GetApiRequest();
-            request.Method = HttpMethod.Put;
-            request.ExcludeAuthorizationHeader = true;
-            request.Path = ticket.UploadLinkSecure;
-
+            request.Path = ticket.Upload.UploadLink;
             if (verifyOnly)
             {
-                var body = new ByteArrayContent(new byte[0]);
-                body.Headers.Add("Content-Range", "bytes */*");
-                body.Headers.ContentLength = 0;
-                request.Body = body;
+                request.Method = HttpMethod.Head;
+                request.IsAddTusHeader = true;
+                request.ExcludeAuthorizationHeader = true;
             }
             else
             {
-                if (chunkSize.HasValue)
-                {
-                    var startIndex = fileContent.Data.CanSeek ? fileContent.Data.Position : written;
-                    var endIndex = Math.Min(startIndex + chunkSize.Value, fileContent.Data.Length);
-                    var byteArray = await fileContent.ReadAsync(startIndex, endIndex).ConfigureAwait(false);
-                    var body = new ByteArrayContent(byteArray, 0, byteArray.Length);
-                    body.Headers.Add("Content-Range", $"bytes {startIndex}-{endIndex}/*");
-                    body.Headers.ContentLength = endIndex - startIndex;
-                    request.Body = body;
-                }
-                else
-                {
-                    request.Body = new ByteArrayContent(await fileContent.ReadAllAsync().ConfigureAwait(false));
-                }
+                request.Method = new HttpMethod("PATCH");
+                request.ExcludeAuthorizationHeader = true;
+                request.IsAddTusHeader = true;
+                var startIndex = fileContent.Data.CanSeek ? fileContent.Data.Position : written;
+                var endIndex = Math.Min(startIndex + chunkSize, fileContent.Data.Length);
+                var byteArray = await fileContent.ReadAsync(startIndex, endIndex).ConfigureAwait(false);
+                var body = new ByteArrayContent(byteArray, 0, byteArray.Length);
+                body.Headers.Add("Upload-Offset", startIndex.ToString());
+                body.Headers.Add("Content-Type", "application/offset+octet-stream");
+                body.Headers.ContentLength = endIndex - startIndex;
+                request.Body = body;
             }
 
             return request;
         }
 
-        private IApiRequest GenerateTusResumableUploadTicketRequest(long size, string name = null)
+        private IApiRequest GenerateUploadTicketRequest(long size)
         {
             ThrowIfUnauthorized();
 
             var request = _apiRequestFactory.GetApiRequest(AccessToken);
-            request.ApiVersion = ApiVersions.v3_4;
             request.Method = HttpMethod.Post;
             request.Path = Endpoints.UploadTicket;
-
-
-            var parameters = new Dictionary<string, string>
-            {
-                ["upload.approach"] = "tus",
-                ["upload.size"] = size.ToString()
-            };
-
-            if(name != null)
-            {
-                parameters["name"] = name;
-            }
-
-            request.Body = new FormUrlEncodedContent(parameters);
+            request.Body = new StringContent($$$"""{"upload": { "approach": "tus", "size": "{{{size}}}"}}""",
+                Encoding.UTF8, "application/json");
             return request;
         }
 
-        private IApiRequest GenerateTusReplaceResumableUploadTicketRequest(long size, long clipId, string name = null)
+        private IApiRequest GenerateReplaceVideoUploadTicketRequest(long clipId, string fileName, long size)
         {
             ThrowIfUnauthorized();
 
             var request = _apiRequestFactory.GetApiRequest(AccessToken);
-            request.ApiVersion = ApiVersions.v3_4;
             request.Method = HttpMethod.Post;
+            
             request.Path = Endpoints.VideoVersions;
             request.UrlSegments.Add("clipId", clipId.ToString());
-
-            if (string.IsNullOrEmpty(name))
-            {
-                name = DateTime.Now.ToString("yyyyMMdd-HH-mm-ss");
-            }
-
-            // Create the json string
-            string json = "{\"file_name\":\"" + name + "\",\"upload\":{\"status\":\"in_progress\",\"size\":\"" + size + "\",\"approach\":\"tus\"}}";
-            
-            request.Body = new StringContent(json, Encoding.UTF8, "application/json");
-            return request;
-        }
-
-        private IApiRequest GenerateUploadTicketRequest(string type = "streaming")
-        {
-            ThrowIfUnauthorized();
-
-            var request = _apiRequestFactory.GetApiRequest(AccessToken);
-            request.Method = HttpMethod.Post;
-            request.Path = Endpoints.UploadTicket;
-            request.Query.Add("type", type);
-            return request;
-        }
-
-        private IApiRequest GenerateReplaceVideoUploadTicketRequest(long clipId)
-        {
-            ThrowIfUnauthorized();
-
-            var request = _apiRequestFactory.GetApiRequest(AccessToken);
-            request.Method = HttpMethod.Put;
-            request.Path = Endpoints.VideoReplaceFile;
-            request.UrlSegments.Add("clipId", clipId.ToString());
-            request.Query.Add("type", "streaming");
+            request.Body = new StringContent($$$"""{ "file_name": "{{{fileName}}}",""" +
+                                             """ "upload": { "status": "in_progress",""" +
+                                             $$$""" "size": "{{{size}}}", "approach": "tus"}}""",
+                Encoding.UTF8, "application/json");
             return request;
         }
     }

@@ -15,7 +15,7 @@ namespace VimeoDotNet.Net
         /// <summary>
         /// Chunk size
         /// </summary>
-        int ChunkSize { get; set; }
+        long ChunkSize { get; set; }
 
         /// <summary>
         /// Clip id

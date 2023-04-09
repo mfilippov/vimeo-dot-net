@@ -61,7 +61,7 @@ namespace VimeoDotNet.Tests
             MockHttpRequest(new RequestSettings
             {
                 UrlSuffix = "/me/albums",
-                Method = RequestSettings.HttpMethod.POST,
+                Method = RequestSettings.HttpMethod.Post,
                 RequestTextBody = "privacy=password" +
                               "&sort=newest" +
                               $"&name={originalName.Replace(" ", "+")}" +
@@ -102,7 +102,7 @@ namespace VimeoDotNet.Tests
             MockHttpRequest(new RequestSettings
             {
                 UrlSuffix = "/me/albums/10303859",
-                Method = RequestSettings.HttpMethod.PATCH,
+                Method = RequestSettings.HttpMethod.Patch,
                 RequestTextBody = "privacy=anybody&name=Unit+Test+Album+%28Updated%29",
                 ResponseJsonFile = "Album.patched-album.json"
             });
@@ -120,7 +120,7 @@ namespace VimeoDotNet.Tests
             MockHttpRequest(new RequestSettings
             {
                 UrlSuffix = "/me/albums/10303859",
-                Method = RequestSettings.HttpMethod.DELETE
+                Method = RequestSettings.HttpMethod.Delete
             });
             albumId = updatedAlbum.GetAlbumId();
             albumId.ShouldNotBeNull();
@@ -140,7 +140,7 @@ namespace VimeoDotNet.Tests
             MockHttpRequest(new RequestSettings
             {
                 UrlSuffix = "/users/2433258/albums",
-                Method = RequestSettings.HttpMethod.POST,
+                Method = RequestSettings.HttpMethod.Post,
                 RequestTextBody = "privacy=password" +
                               "&sort=newest" +
                               $"&name={originalName.Replace(" ", "+")}" +
@@ -179,7 +179,7 @@ namespace VimeoDotNet.Tests
             MockHttpRequest(new RequestSettings
             {
                 UrlSuffix = "/users/2433258/albums/10303859", 
-                Method = RequestSettings.HttpMethod.PATCH,
+                Method = RequestSettings.HttpMethod.Patch,
                 RequestTextBody = "privacy=anybody&name=Unit+Test+Album+%28Updated%29",
                 ResponseJsonFile = "Album.patched-album.json"
             });
@@ -198,7 +198,7 @@ namespace VimeoDotNet.Tests
             MockHttpRequest(new RequestSettings
             {
                 UrlSuffix = "/users/2433258/albums/10303859",
-                Method = RequestSettings.HttpMethod.DELETE
+                Method = RequestSettings.HttpMethod.Delete
             });
             albumId = updatedAlbum.GetAlbumId();
             albumId.ShouldNotBeNull();
