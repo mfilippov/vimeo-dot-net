@@ -1,0 +1,13 @@
+﻿{
+  "total": 0,
+  "page": 1,
+  "per_page": 25,
+  "paging": {
+    "next": null,
+    "previous": null,
+    "first": "/videos/530969457/privacy/domains?page=1",
+    "last": "/videos/530969457/privacy/domains?page=1"
+  },
+  "data": [
+  ]
+}

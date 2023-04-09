@@ -1,0 +1,18 @@
+﻿{
+  "total": 1,
+  "page": 1,
+  "per_page": 25,
+  "paging": {
+    "next": null,
+    "previous": null,
+    "first": "/videos/530969457/privacy/domains?page=1",
+    "last": "/videos/530969457/privacy/domains?page=1"
+  },
+  "data": [
+    {
+      "domain": "example.com",
+      "allow_hd": true,
+      "uri": "https://exmaple.com"
+    }
+  ]
+}

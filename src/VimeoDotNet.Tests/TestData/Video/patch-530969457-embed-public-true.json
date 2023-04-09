@@ -10,7 +10,7 @@
   "language": null,
   "height": 360,
   "embed": {
-    "html": "<iframe src=\"https://player.vimeo.com/video/530969457?h=2961ed5f56&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=55264\" width=\"640\" height=\"360\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture\" allowfullscreen title=\"Untitled\"></iframe>",
+    "html": "<iframe src=\"https://player.vimeo.com/video/530969457?h=2961ed5f56&amp;title=0&amp;byline=0&amp;portrait=0&amp;speed=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=55264\" width=\"640\" height=\"360\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture\" allowfullscreen title=\"Untitled\"></iframe>",
     "badges": {
       "hdr": false,
       "live": {
@@ -71,7 +71,7 @@
     "speed": true
   },
   "created_time": "2021-03-30T20:34:07+00:00",
-  "modified_time": "2023-04-09T16:10:24+00:00",
+  "modified_time": "2023-04-09T17:00:02+00:00",
   "release_time": "2021-03-30T20:34:07+00:00",
   "content_rating": [
     "unrated"
@@ -680,7 +680,7 @@
     "resource_key": "30149738db924d637d8323984c7c0b6ed331a880",
     "account": "basic"
   },
-  "last_user_action_event_date": "2023-04-09T16:10:24+00:00",
+  "last_user_action_event_date": "2023-04-09T17:00:02+00:00",
   "play": {
     "status": "unavailable"
   },

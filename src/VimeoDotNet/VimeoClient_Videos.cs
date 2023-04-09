@@ -101,7 +101,7 @@ namespace VimeoDotNet
             try
             {
                 var request = GenerateAlbumVideosRequest(albumId, page: page, perPage: perPage, sort: sort,
-                    direction: direction, fields: fields);
+                    direction: direction, fields: fields, userId: userId);
                 var response = await request.ExecuteRequestAsync<Paginated<Video>>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving account album videos.", HttpStatusCode.NotFound);
@@ -281,7 +281,7 @@ namespace VimeoDotNet
             return request;
         }
 
-        private IApiRequest GenerateAlbumVideosRequest(long albumId, long? userId = null, long? clipId = null,
+        private IApiRequest GenerateAlbumVideosRequest(long albumId, UserId userId = null, long? clipId = null,
             int? page = null, int? perPage = null, string sort = null, string direction = null, string[] fields = null)
         {
             ThrowIfUnauthorized();
@@ -289,10 +289,10 @@ namespace VimeoDotNet
             var request = _apiRequestFactory.GetApiRequest(AccessToken);
             var endpoint = clipId.HasValue ? Endpoints.UserAlbumVideo : Endpoints.UserAlbumVideos;
             request.Method = HttpMethod.Get;
-            request.Path = userId.HasValue ? endpoint : Endpoints.GetCurrentUserEndpoint(endpoint);
+            request.Path = userId == UserId.Me ? Endpoints.GetCurrentUserEndpoint(endpoint) : endpoint;
 
             request.UrlSegments.Add("albumId", albumId.ToString());
-            if (userId.HasValue)
+            if (userId != null)
             {
                 request.UrlSegments.Add("userId", userId.ToString());
             }
