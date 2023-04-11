@@ -11,6 +11,7 @@ namespace VimeoDotNet.Models
     /// <summary>
     /// Video
     /// </summary>
+    // https://developer.vimeo.com/api/reference/response/video
     public class Video
     {
         private static readonly IDictionary<string, string> StatusMappings = new Dictionary<string, string>
@@ -57,6 +58,13 @@ namespace VimeoDotNet.Models
         [PublicAPI]
         [JsonProperty(PropertyName = "link")]
         public string Link { get; set; }
+
+        /// <summary>
+        /// player_embed_url
+        /// </summary>
+        [PublicAPI]
+        [JsonProperty(PropertyName = "player_embed_url")]
+        public string Player_Embed_Url { get; set; }
 
         /// <summary>
         /// Review link
