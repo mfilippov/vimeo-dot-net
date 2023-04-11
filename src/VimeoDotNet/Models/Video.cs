@@ -60,7 +60,7 @@ namespace VimeoDotNet.Models
         public string Link { get; set; }
 
         /// <summary>
-        /// player_embed_url
+        /// The video's player embed URL
         /// </summary>
         [PublicAPI]
         [JsonProperty(PropertyName = "player_embed_url")]
