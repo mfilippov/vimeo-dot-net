@@ -22,7 +22,7 @@ namespace VimeoDotNet.Tests
             });
             const string description = "This channel created from Vimeo client tests.";
             const string name = "test-channel";
-            var link = "1sMDqioosEKP4P95k36dAQ";
+            const string link = "1sMDqioosEKP4P95k36dAQ";
 
             var client = CreateAuthenticatedClient();
             var result = await client.CreateChannelAsync(new EditChannelParameters

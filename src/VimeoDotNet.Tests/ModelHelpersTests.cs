@@ -2,7 +2,7 @@
 using VimeoDotNet.Helpers;
 using Xunit;
 
-namespace VimeoDotNet.Tests.Helpers
+namespace VimeoDotNet.Tests
 {
     public class ModelHelpersTests
     {

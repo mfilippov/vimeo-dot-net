@@ -3,7 +3,7 @@ using VimeoDotNet.Enums;
 using VimeoDotNet.Parameters;
 using Xunit;
 
-namespace VimeoDotNet.Tests.Enums
+namespace VimeoDotNet.Tests
 {
     public class EnumExtensionsTests
     {

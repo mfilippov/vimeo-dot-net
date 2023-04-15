@@ -2,7 +2,7 @@ using Shouldly;
 using VimeoDotNet.Models;
 using Xunit;
 
-namespace VimeoDotNet.Tests.Models
+namespace VimeoDotNet.Tests
 {
     public class UserIdTests
     {
@@ -10,7 +10,7 @@ namespace VimeoDotNet.Tests.Models
         public void UserIdWithSameIdShouldBeEquals()
         {
             UserId.Me.ShouldBe(UserId.Me);
-            UserId.Me.IsMe.ShouldBeTrue();
+            UserId.Me?.IsMe.ShouldBeTrue();
         }
     }
 }

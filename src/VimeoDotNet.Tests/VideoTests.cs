@@ -169,6 +169,7 @@ namespace VimeoDotNet.Tests
             pictures.ShouldNotBeNull();
             pictures.Data.Count.ShouldBeGreaterThan(0);
             var uriParts = pictures.Data[0].Uri.Split('/');
+            // ReSharper disable once UseIndexFromEndExpression
             var pictureId = long.Parse(uriParts[uriParts.Length - 1]);
             var picture = await AuthenticatedClient.GetPictureAsync(clipId, pictureId);
             picture.ShouldNotBeNull();
@@ -348,6 +349,7 @@ namespace VimeoDotNet.Tests
             pictures.Data.Count.ShouldBeGreaterThan(0);
             var picture = pictures.Data[0];
             var parts = picture.Uri.Split('/');
+            // ReSharper disable once UseIndexFromEndExpression
             var pictureId = long.Parse(parts[parts.Length - 1]);
             var pictureById = await AuthenticatedClient.GetPictureAsync(clipId, pictureId);
             pictureById.ShouldNotBeNull();

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Reflection;
@@ -11,12 +10,11 @@ using JetBrains.Annotations;
 using Shouldly;
 using VimeoDotNet.Authorization;
 using VimeoDotNet.Constants;
-using VimeoDotNet.Tests.Settings;
 
 #if NETSTANDARD2_0 || NETSTANDARD2_1 || NETCOREAPP2_0 || NETCOREAPP2_1 || NETCOREAPP2_2 || NETCOREAPP3_0 || NETCOREAPP3_1 || NET45 || NET451 || NET452 || NET6 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
 namespace System.Runtime.CompilerServices
 {
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     internal static class IsExternalInit { }
 }
 #endif
@@ -25,7 +23,6 @@ namespace VimeoDotNet.Tests
 {
     public class BaseTest : IDisposable
     {
-        protected readonly VimeoApiTestSettings VimeoSettings;
         protected readonly IVimeoClient AuthenticatedClient;
 
         // http://download.wavetlan.com/SVV/Media/HTTP/http-mp4.htm
@@ -42,9 +39,6 @@ namespace VimeoDotNet.Tests
 
         protected BaseTest()
         {
-            // Load the settings from a file that is not under version control for security
-            // The settings loader will create this file in the bin/ folder if it doesn't exist
-            VimeoSettings = SettingsLoader.LoadSettings();
             _testHttpServer = new TestHttpServer();
             AuthenticatedClient = CreateAuthenticatedClient();
         }
@@ -76,7 +70,7 @@ namespace VimeoDotNet.Tests
             request.Headers["Authorization"].ShouldNotBeNull();
             var parts = request.Headers["Authorization"].Split(new[] { ' ' }, 2);
             parts.Length.ShouldBe(2);
-            return parts[1].Trim() == VimeoSettings.AccessToken;
+            return parts[1].Trim() == AccessToken;
         }
 
         public class RequestSettings
@@ -179,16 +173,22 @@ namespace VimeoDotNet.Tests
             });
         }
 
+        private const string AccessToken = "5oGVeY4GQKr4l4T/wYS64Q==";
+        private const string ClientId = "b9ba3be18a6747e30b60a5108be3c567ee362535";
+
+        private const string ClientSecret = "yN9Os06F8I410SZnYmkKymy3kIoaxLX3QzJZ91ZHFdr9o9on7fviI/ZCxiWeT47" +
+                                            "piuf5A+1oMn2ks9JmAuhnR5ilvqVZPhJ3qH6nIEBwjlaHXa5qEygrPPSuDya8L+QW";
+        
         protected async Task<VimeoClient> CreateUnauthenticatedClient()
         {
-            var authorizationClient = new AuthorizationClient(VimeoSettings.ClientId, VimeoSettings.ClientSecret);
+            var authorizationClient = new AuthorizationClient(ClientId, ClientSecret);
             var unauthenticatedToken = await authorizationClient.GetUnauthenticatedTokenAsync();
             return new VimeoClient(unauthenticatedToken.AccessToken);
         }
 
-        protected IVimeoClient CreateAuthenticatedClient()
+        protected static IVimeoClient CreateAuthenticatedClient()
         {
-            return new VimeoClient(VimeoSettings.AccessToken);
+            return new VimeoClient(AccessToken);
         }
 
         public void Dispose()

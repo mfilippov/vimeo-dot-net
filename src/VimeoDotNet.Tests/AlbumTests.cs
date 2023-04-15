@@ -31,20 +31,21 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task GetAlbumsShouldCorrectlyWorkForUserId()
         {
+            const long publicUserId = 115220313;
             MockHttpRequest(new RequestSettings
             {
                 UrlSuffix = "/users/115220313/albums",
                 ResponseJsonFile = "Album.albums-115220313.json"
             });
             var client = CreateAuthenticatedClient();
-            var albums = await client.GetAlbumsAsync(VimeoSettings.PublicUserId);
+            var albums = await client.GetAlbumsAsync(publicUserId);
             albums.Total.ShouldBe(1);
             albums.PerPage.ShouldBe(25);
             albums.Data.Count.ShouldBe(1);
             albums.Paging.Next.ShouldBeNull();
             albums.Paging.Previous.ShouldBeNull();
-            albums.Paging.First.ShouldBe($"/users/{VimeoSettings.PublicUserId}/albums?page=1");
-            albums.Paging.Last.ShouldBe($"/users/{VimeoSettings.PublicUserId}/albums?page=1");
+            albums.Paging.First.ShouldBe($"/users/{publicUserId}/albums?page=1");
+            albums.Paging.Last.ShouldBe($"/users/{publicUserId}/albums?page=1");
             var album = albums.Data[0];
             album.Name.ShouldBe("UnitTestAlbum");
             album.Description.ShouldBe("Simple album for testing purpose");
@@ -132,6 +133,7 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task AlbumManagementShouldWorkCorrectlyForUserId()
         {
+            const long userId = 2433258;
             // create a new album...
             const string originalName = "Unit Test Album";
             const string originalDesc =
@@ -150,7 +152,7 @@ namespace VimeoDotNet.Tests
                 ResponseJsonFile = "Album.create-album.json"
             });
 
-            var newAlbum = await AuthenticatedClient.CreateAlbumAsync(VimeoSettings.UserId, new EditAlbumParameters
+            var newAlbum = await AuthenticatedClient.CreateAlbumAsync(userId, new EditAlbumParameters
             {
                 Name = originalName,
                 Description = originalDesc,
@@ -170,7 +172,7 @@ namespace VimeoDotNet.Tests
                 UrlSuffix = "/users/2433258/albums",
                 ResponseJsonFile = "Album.albums.json"
             });
-            var albums = await AuthenticatedClient.GetAlbumsAsync(VimeoSettings.UserId);
+            var albums = await AuthenticatedClient.GetAlbumsAsync(userId);
 
             albums.Total.ShouldBeGreaterThan(0);
 
@@ -185,7 +187,7 @@ namespace VimeoDotNet.Tests
             });
             var albumId = newAlbum.GetAlbumId();
             albumId.ShouldNotBeNull();
-            var updatedAlbum = await AuthenticatedClient.UpdateAlbumAsync(VimeoSettings.UserId, albumId.Value,
+            var updatedAlbum = await AuthenticatedClient.UpdateAlbumAsync(userId, albumId.Value,
                 new EditAlbumParameters
                 {
                     Name = updatedName,
@@ -202,7 +204,7 @@ namespace VimeoDotNet.Tests
             });
             albumId = updatedAlbum.GetAlbumId();
             albumId.ShouldNotBeNull();
-            var isDeleted = await AuthenticatedClient.DeleteAlbumAsync(VimeoSettings.UserId, albumId.Value);
+            var isDeleted = await AuthenticatedClient.DeleteAlbumAsync(userId, albumId.Value);
 
             isDeleted.ShouldBeTrue();
         }

@@ -23,17 +23,18 @@ namespace VimeoDotNet.Tests
         [Fact]
         public async Task ShouldCorrectlyGetUserInformation()
         {
+            const int userId = 2433258;
             MockHttpRequest(new RequestSettings
             {
-                UrlSuffix = $"/users/{VimeoSettings.UserId}", 
+                UrlSuffix = $"/users/{userId}", 
                 ResponseJsonFile = "User.user.json"
             });
             var client = CreateAuthenticatedClient();
-            var user = await client.GetUserInformationAsync(VimeoSettings.UserId);
+            var user = await client.GetUserInformationAsync(userId);
             user.ShouldNotBeNull();
             user.Id.ShouldNotBeNull();
             user.Id.ShouldNotBeNull();
-            user.Id.Value.ShouldBe(VimeoSettings.UserId);
+            user.Id.Value.ShouldBe(userId);
         }
 
         [Fact]

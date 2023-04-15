@@ -140,6 +140,7 @@ namespace VimeoDotNet.Tests
             });
 
             var tempFilePath = Path.GetTempFileName() + ".mp4";
+            // ReSharper disable once UseAwaitUsing
             using (var fs = new FileStream(tempFilePath, FileMode.CreateNew))
             {
                 await GetFileFromEmbeddedResources(TestVideoFilePath).CopyToAsync(fs);
