@@ -1,0 +1,9 @@
+{
+  "name": "C# (.NET)",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:0-7.0",
+  "features": {
+    "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+      "packages": "mono-devel"
+    }
+  }
+}
