@@ -251,6 +251,29 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
+        public async Task CheckIssue188()
+        {
+            const int clipId = 828801822;
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = $"/videos/{clipId}",
+                Method = RequestSettings.HttpMethod.Patch,
+                RequestTextBody = "name=Random+name&privacy.embed=whitelist&privacy.comments=nobody&review_page=false&privacy.add=false",
+                ResponseJsonFile = "Video.patch-828801822-issue-188.json",
+
+            });
+
+            await AuthenticatedClient.UpdateVideoMetadataAsync(clipId, new VideoUpdateMetadata
+            {
+                Name = "Random name",
+                AllowAddToAlbumChannelGroup = false,
+                ReviewLinkEnabled = false,
+                Comments = VideoCommentsEnum.Nobody,
+                EmbedPrivacy = VideoEmbedPrivacyEnum.Whitelist
+            });
+        }
+
+        [Fact]
         public async Task ShouldCorrectlyWorkWithDomainsForEmbedding()
         {
             const int clipId = 530969457;

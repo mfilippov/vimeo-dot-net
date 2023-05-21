@@ -104,7 +104,7 @@ namespace VimeoDotNet.Models
 
             if (ReviewLinkEnabled.HasValue)
             {
-                parameters["review_link"] = ReviewLinkEnabled.Value ? "true" : "false";
+                parameters["review_page"] = ReviewLinkEnabled.Value ? "true" : "false";
             }
 
             if (AllowDownloadVideo.HasValue)
