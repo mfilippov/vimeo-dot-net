@@ -151,7 +151,7 @@ namespace VimeoDotNet.Tests
                 file.ContentType.ShouldBe("video/mp4");
                 length = file.Data.Length;
                 completedRequest = await AuthenticatedClient.UploadEntireFileAsync(file, chunkSize);
-                completedRequest.ClipId.ShouldNotBeNull();
+                completedRequest.ClipId.ShouldBe(815922745);
             }
 
             completedRequest.ShouldNotBeNull();
@@ -327,7 +327,7 @@ namespace VimeoDotNet.Tests
                 length = file.Data.Length;
                 var client = CreateAuthenticatedClient();
                 completedRequest = await client.UploadEntireFileAsync(file, chunkSize);
-                completedRequest.ClipId.ShouldNotBeNull();
+                completedRequest.ClipId.ShouldBe(815922745);
             }
 
             completedRequest.ShouldNotBeNull();
