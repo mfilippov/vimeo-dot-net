@@ -13,7 +13,7 @@ namespace VimeoDotNet.Helpers
                 return null;
             }
 
-            var pieces = uri.Split(new[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
+            var pieces = uri.Split(new[] {'/', '?'}, StringSplitOptions.RemoveEmptyEntries);
 
             for (int pieceIndex = pieces.Length - 1; pieceIndex >= 0; pieceIndex--)
             {
