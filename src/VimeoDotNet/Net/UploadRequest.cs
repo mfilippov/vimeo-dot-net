@@ -48,7 +48,7 @@ namespace VimeoDotNet.Net
         public long FileLength { get; private set; }
 
         /// <inheritdoc />
-        public long? ClipId => ModelHelpers.ParseModelUriId(ClipUri);
+        public long? ClipId { get; set; }
 
         #endregion
     }

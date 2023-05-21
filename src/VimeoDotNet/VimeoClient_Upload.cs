@@ -193,6 +193,7 @@ namespace VimeoDotNet
 
             var uploadRequest = new UploadRequest
             {
+                ClipId = ticket.Id,
                 ClipUri = ticket.Link,
                 Ticket = ticket,
                 File = fileContent,
