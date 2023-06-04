@@ -437,5 +437,23 @@ namespace VimeoDotNet.Tests
                 video.EmbedPresets?.Id.ShouldBe(oldPresetId);
             }
         }
+
+        [Fact]
+        public async Task Issue189()
+        {
+            const int clipId = 833078000;
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = $"/videos/{clipId}",
+                ResponseJsonFile = "Video.video-833078000.json"
+            });
+            var video = await AuthenticatedClient.GetVideoAsync(clipId);
+            video.ShouldNotBeNull();
+            video.Id.ShouldBe(clipId);
+            video.Download.ShouldNotBeNull();
+            video.Download.Count.ShouldBe(2);
+            video.Download[0].Link.ShouldBe("https://player.vimeo.com/progressive_redirect/download/833078000/container/b0bb47ca-530d-4a1e-990a-6d8736ecf1cf/3bc13991-dada0854/test%20%28240p%29.mp4?expires=1685983073&loc=external&oauth2_token_id=1724942916&signature=d4b04ea6822f5deb86fc80d0ab2518b83619d3f2e96a59d221f26b077f2c49a8");
+        }
+
     }
 }
