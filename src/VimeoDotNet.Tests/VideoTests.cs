@@ -469,5 +469,24 @@ namespace VimeoDotNet.Tests
             video.Spatial.FieldOfView.ShouldBeNull();
         }
 
+        [Fact]
+        public void ShouldCorrectlySerializeSpatialData()
+        {
+            var metadata = new VideoUpdateMetadata
+            {
+                Spatial = new SpatialUpdateMetadata
+                {
+                    Projection = SpatialProjectionEnum.Equirectangular,
+                    StereoFormat = StereoFormatEnum.LeftRight,
+                    FieldOfView = 90,
+                },
+            };
+
+            var p = metadata.GetParameterValues();
+            p.ShouldContainKeyAndValue("spatial.projection", "equirectangular");
+            p.ShouldContainKeyAndValue("spatial.stereo_format", "left-right");
+            p.ShouldContainKeyAndValue("spatial.field_of_view", "90");
+        }
+
     }
 }
