@@ -65,6 +65,10 @@ namespace VimeoDotNet.Models
         /// </summary>
         [PublicAPI]
         public bool? AllowDownloadVideo { get; set; }
+        
+        [PublicAPI]
+        [CanBeNull]
+        public SpatialUpdateMetadata Spatial { get; set; }
 
         /// <inheritdoc />
         [PublicAPI]
@@ -116,6 +120,9 @@ namespace VimeoDotNet.Models
             {
                 parameters["privacy.add"] = AllowAddToAlbumChannelGroup.Value ? "true" : "false";
             }
+
+            Spatial?.SetParameterValues(parameters, "spatial");
+
 
             return parameters;
         }
