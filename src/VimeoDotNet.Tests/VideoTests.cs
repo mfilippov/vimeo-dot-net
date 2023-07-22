@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Shouldly;
 using VimeoDotNet.Enums;
 using VimeoDotNet.Exceptions;
@@ -453,6 +454,19 @@ namespace VimeoDotNet.Tests
             video.Download.ShouldNotBeNull();
             video.Download.Count.ShouldBe(2);
             video.Download[0].Link.ShouldBe("https://player.vimeo.com/progressive_redirect/download/833078000/container/b0bb47ca-530d-4a1e-990a-6d8736ecf1cf/3bc13991-dada0854/test%20%28240p%29.mp4?expires=1685983073&loc=external&oauth2_token_id=1724942916&signature=d4b04ea6822f5deb86fc80d0ab2518b83619d3f2e96a59d221f26b077f2c49a8");
+        }
+
+        [Fact]
+        public void ShouldCorrectlyDeserializeSpatialData()
+        {
+            var json = GetJson("Video.video-208799259.json");
+            var video = JsonConvert.DeserializeObject<Video>(json);
+
+            video.Spatial.ShouldNotBeNull();
+            video.Spatial.Projection.ShouldBe(SpatialProjectionEnum.Equirectangular);
+            video.Spatial.DirectorTimeline.ShouldNotBeEmpty();
+            video.Spatial.StereoFormat.ShouldBe(StereoFormatEnum.Mono);
+            video.Spatial.FieldOfView.ShouldBeNull();
         }
 
     }

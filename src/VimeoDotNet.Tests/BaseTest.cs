@@ -49,7 +49,7 @@ namespace VimeoDotNet.Tests
             return assembly.GetManifestResourceStream(relativePath);
         }
 
-        private static string GetJson(string name)
+        protected static string GetJson(string name)
         {
             var path = $"VimeoDotNet.Tests.TestData.{name}";
             using var resourceStream = typeof(BaseTest).Assembly.GetManifestResourceStream(path);

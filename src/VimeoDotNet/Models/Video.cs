@@ -186,6 +186,14 @@ namespace VimeoDotNet.Models
         public Embed Embed { get; set; }
 
         /// <summary>
+        /// The video's 360 spatial data
+        /// </summary>
+        [PublicAPI]
+        [CanBeNull]
+        [JsonProperty(PropertyName = "spatial")]
+        public Spatial Spatial { get; set; }
+        
+        /// <summary>
         /// Video status
         /// </summary>
         [PublicAPI]
