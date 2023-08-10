@@ -319,11 +319,18 @@ namespace VimeoDotNet
         private async Task<IApiRequest> GenerateFileStreamRequest(IBinaryContent fileContent, UploadTicket ticket,
             long chunkSize, long written = 0, bool verifyOnly = false)
         {
-            if (fileContent.Data.Length > ticket.User.UploadQuota.Space.Free)
+            switch (ticket.User.UploadQuota.Space.Unit)
             {
-                 throw new InvalidOperationException(
-                     "User does not have enough free space to upload this video. Remaining space: " +
-                     ticket.User.UploadQuota.Space.Free + ".");
+                case SpaceUnit.VideoSize 
+                when fileContent.Data.Length > ticket.User.UploadQuota.Space.Free:
+                    throw new InvalidOperationException(
+                        "User does not have enough free space to upload this video. " +
+                        $"Remaining space: {ticket.User.UploadQuota.Space.Free} bytes.");
+                case SpaceUnit.VideoCount 
+                when ticket.User.UploadQuota.Space.Free == 0:
+                    throw new InvalidOperationException(
+                        "User does not have enough free quota to upload this video. " +
+                        $"Remaining video count: {ticket.User.UploadQuota.Space.Free}");
             }
 
             var request = _apiRequestFactory.GetApiRequest();

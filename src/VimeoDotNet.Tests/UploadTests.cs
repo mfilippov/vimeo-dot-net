@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Shouldly;
+using VimeoDotNet.Exceptions;
 using VimeoDotNet.Net;
 using Xunit;
 
@@ -389,6 +390,78 @@ namespace VimeoDotNet.Tests
             using var file = new BinaryContent(GetFileFromEmbeddedResources(TextThumbnailFilePath), "image/png");
             var picture = await AuthenticatedClient.UploadThumbnailAsync(clipId, file);
             picture.ShouldNotBeNull();
+        }
+
+        [Fact]
+        public async Task ShouldCorrectlyHandleQuotaFromUploadTicketByVideoSize()
+        {
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/me/videos",
+                Method = RequestSettings.HttpMethod.Post,
+                RequestTextBody = """{"upload": { "approach": "tus", "size": "5510872"}}""",
+                StatusCode = 201,
+                ResponseJsonFile = "Upload.new-upload-ticket-with-low-video-size-limit.json",
+                RequestHeaders = new Dictionary<string, string>
+                {
+                    { "Content-Type", "application/json; charset=utf-8" },
+                    { "Accept", "application/vnd.vimeo.*+json; version=3.4, application/json" }
+                }
+            });
+
+            var tempFilePath = Path.GetTempFileName() + ".mp4";
+            // ReSharper disable once UseAwaitUsing
+            using (var fs = new FileStream(tempFilePath, FileMode.CreateNew))
+            {
+                await GetFileFromEmbeddedResources(TestVideoFilePath).CopyToAsync(fs);
+            }
+
+            using (var file = new BinaryContent(tempFilePath))
+            {
+                file.ContentType.ShouldBe("video/mp4");
+                var exception = await Should.ThrowAsync<VimeoUploadException>(
+                    AuthenticatedClient.UploadEntireFileAsync(file, 1024000));
+                exception.Message.ShouldBe("Error uploading file chunk");
+                exception.InnerException.ShouldNotBeNull();
+                exception.InnerException.Message.ShouldBe(
+                    "User does not have enough free space to upload this video. Remaining space: 1000 bytes.");
+            }
+        }
+        
+        [Fact]
+        public async Task ShouldCorrectlyHandleQuotaFromUploadTicketByVideoCount()
+        {
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = "/me/videos",
+                Method = RequestSettings.HttpMethod.Post,
+                RequestTextBody = """{"upload": { "approach": "tus", "size": "5510872"}}""",
+                StatusCode = 201,
+                ResponseJsonFile = "Upload.new-upload-ticket-with-low-video-count-limit.json",
+                RequestHeaders = new Dictionary<string, string>
+                {
+                    { "Content-Type", "application/json; charset=utf-8" },
+                    { "Accept", "application/vnd.vimeo.*+json; version=3.4, application/json" }
+                }
+            });
+
+            var tempFilePath = Path.GetTempFileName() + ".mp4";
+            // ReSharper disable once UseAwaitUsing
+            using (var fs = new FileStream(tempFilePath, FileMode.CreateNew))
+            {
+                await GetFileFromEmbeddedResources(TestVideoFilePath).CopyToAsync(fs);
+            }
+
+            using (var file = new BinaryContent(tempFilePath))
+            {
+                file.ContentType.ShouldBe("video/mp4");
+                var exception = await Should.ThrowAsync<VimeoUploadException>(
+                    AuthenticatedClient.UploadEntireFileAsync(file, 1024000));
+                exception.Message.ShouldBe("Error uploading file chunk");
+                exception.InnerException.ShouldNotBeNull();
+                exception.InnerException.Message.ShouldBe(
+                    "User does not have enough free quota to upload this video. Remaining video count: 0");
+            }
         }
     }
 }

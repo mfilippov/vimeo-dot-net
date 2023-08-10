@@ -28,5 +28,12 @@ namespace VimeoDotNet.Models
         [PublicAPI]
         [JsonProperty(PropertyName = "used")]
         public long Used { get; set; }
+        
+        /// <summary>
+        /// Kind of space unit
+        /// </summary>
+        [PublicAPI]
+        [JsonProperty(PropertyName = "unit")]
+        public SpaceUnit Unit { get; set; }
     }
 }
