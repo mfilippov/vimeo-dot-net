@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
@@ -21,7 +22,7 @@ namespace VimeoDotNet.Models
         /// </summary>
         [PublicAPI]
         [JsonProperty(PropertyName = "interactions")]
-        public UserInteractions Interactions { get; set; }
+        public List<UserInteractions> Interactions { get; set; }
 
         /// <summary>
         /// Follower
