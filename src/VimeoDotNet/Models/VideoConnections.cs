@@ -41,6 +41,6 @@ namespace VimeoDotNet.Models
         /// </summary>
         [PublicAPI]
         [JsonProperty(PropertyName = "texttracks")]
-        public TextTracks Texttracks { get; set; }
+        public TextTracks TextTracks { get; set; }
     }
 }
