@@ -6,35 +6,29 @@
 // Last Modified By : Cemal
 // Last Modified On : 10-18-2024
 // ***********************************************************************
-// <copyright file="VideoInteractions.cs" company="Ozet Akademi">
+// <copyright file="TranscodeStatusEnum.cs" company="Ozet Akademi">
 //     Copyright (c) Ozet Akademi. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using JetBrains.Annotations;
-using Newtonsoft.Json;
-
-namespace VimeoDotNet.Models
+namespace VimeoDotNet.Enums
 {
     /// <summary>
-    /// Video interactions
+    /// Enum TranscodeStatusEnum
     /// </summary>
-    public class VideoInteractions
+    public enum TranscodeStatusEnum
     {
         /// <summary>
-        /// Watch later
+        /// The complete
         /// </summary>
-        /// <value>The watch later.</value>
-        [PublicAPI]
-        [JsonProperty(PropertyName = "watchlater")]
-        public WatchLater WatchLater { get; set; }
-
+        Complete,
         /// <summary>
-        /// Gets or sets the rent.
+        /// The error
         /// </summary>
-        /// <value>The rent.</value>
-        [PublicAPI]
-        [JsonProperty(PropertyName = "rent")]
-        public Rent Rent { get; set; }
+        Error,
+        /// <summary>
+        /// The in progress
+        /// </summary>
+        InProgress
     }
 }

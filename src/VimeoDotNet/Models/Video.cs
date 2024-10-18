@@ -52,6 +52,14 @@ namespace VimeoDotNet.Models
         [JsonProperty(PropertyName = "description")]
         public string Description { get; set; }
 
+        [PublicAPI]
+        [JsonProperty(PropertyName = "description_html")]
+        public string DescriptionHtml { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "description_rich")]
+        public string DescriptionRich { get; set; }
+
         /// <summary>
         /// Link
         /// </summary>
@@ -192,7 +200,7 @@ namespace VimeoDotNet.Models
         [CanBeNull]
         [JsonProperty(PropertyName = "spatial")]
         public Spatial Spatial { get; set; }
-        
+
         /// <summary>
         /// Video status
         /// </summary>
@@ -202,6 +210,8 @@ namespace VimeoDotNet.Models
             get => ModelHelpers.GetEnumValue<VideoStatusEnum>(Status, StatusMappings);
             set => Status = ModelHelpers.GetEnumString(value, StatusMappings);
         }
+
+
 
         /// <summary>
         /// Mobile video link
@@ -266,5 +276,114 @@ namespace VimeoDotNet.Models
 
             return secureLink ? match.LinkSecure : match.Link;
         }
+
+        [PublicAPI]
+        [CanBeNull]
+        [JsonProperty(PropertyName = "transcode")]
+        public Transcode Transcode { get; set; }
+
+        /// <summary>
+        /// Embed
+        /// </summary>
+        [PublicAPI]
+        [JsonProperty(PropertyName = "is_playable")]
+        public bool IsPlayable { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "is_free")]
+        public bool IsFree { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "can_move_to_project")]
+        public bool CanMoveToProject { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "has_audio")]
+        public bool HasAudio { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "has_audio_tracks")]
+        public bool HasAudioTracks { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "has_chapters")]
+        public bool HasChapters { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "has_interactive")]
+        public bool HasInteractive { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "has_viewer_home_page_settings")]
+        public bool HasViewerHomePageSettings { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "content_rating")]
+        public List<string> ContentRating { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "content_rating_class")]
+        public string ContentRatingClass { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "context")]
+        public Context Context { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "is_copyright_restricted")]
+        public bool IsCopyrightRestricted { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "language")]
+        [CanBeNull]
+        public string Language { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "has_text_tracks")]
+        public bool HasTextTracks { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "origin_variable_frame_resolution")]
+        public bool OriginVariableFrameResolution { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "last_user_action_event_date")]
+        public DateTime? LastUserActionEventDate { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "allowed_privacies")]
+        [CanBeNull]
+        public List<string> AllowedPrivacies { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "custom_url")]
+        [CanBeNull]
+        public string CustomUrl { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "license")]
+        public string License { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "manage_link")]
+        public string ManageLink { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "page")]
+        public VideoPageSettings Page { get; set; }
+
+        [PublicAPI]
+        [JsonProperty(PropertyName = "parent_folder")]
+        public Project ParentFolder { get; set; }
+
+        /// <summary>
+        /// Gets or sets the password.
+        /// </summary>
+        /// <value>The password.</value>
+        [PublicAPI]
+        [JsonProperty(PropertyName = "password")]
+        public string Password { get; set; }
+
+        //edit_session, files_size,
     }
 }

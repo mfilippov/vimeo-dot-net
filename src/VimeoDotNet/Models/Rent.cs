@@ -6,7 +6,7 @@
 // Last Modified By : Cemal
 // Last Modified On : 10-18-2024
 // ***********************************************************************
-// <copyright file="VideoInteractions.cs" company="Ozet Akademi">
+// <copyright file="Rent.cs" company="Ozet Akademi">
 //     Copyright (c) Ozet Akademi. All rights reserved.
 // </copyright>
 // <summary></summary>
@@ -17,24 +17,32 @@ using Newtonsoft.Json;
 namespace VimeoDotNet.Models
 {
     /// <summary>
-    /// Video interactions
+    /// Class Rent.
     /// </summary>
-    public class VideoInteractions
+    public class Rent
     {
         /// <summary>
-        /// Watch later
+        /// Gets or sets the stream.
         /// </summary>
-        /// <value>The watch later.</value>
+        /// <value>The stream.</value>
         [PublicAPI]
-        [JsonProperty(PropertyName = "watchlater")]
-        public WatchLater WatchLater { get; set; }
+        [JsonProperty(PropertyName = "stream")]
+        public string Stream { get; set; }
 
         /// <summary>
-        /// Gets or sets the rent.
+        /// Gets or sets the URI.
         /// </summary>
-        /// <value>The rent.</value>
+        /// <value>The URI.</value>
         [PublicAPI]
-        [JsonProperty(PropertyName = "rent")]
-        public Rent Rent { get; set; }
+        [JsonProperty(PropertyName = "uri")]
+        public string Uri { get; set; }
+
+        /// <summary>
+        /// Gets or sets the purchase time.
+        /// </summary>
+        /// <value>The purchase time.</value>
+        [PublicAPI]
+        [JsonProperty(PropertyName = "purchase_time")]
+        public string PurchaseTime { get; set; }
     }
 }
