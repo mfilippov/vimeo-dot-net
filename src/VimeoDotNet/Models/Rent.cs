@@ -1,17 +1,4 @@
-﻿// ***********************************************************************
-// Assembly         : 
-// Author           : Cemal
-// Created          : 10-18-2024
-//
-// Last Modified By : Cemal
-// Last Modified On : 10-18-2024
-// ***********************************************************************
-// <copyright file="Rent.cs" company="Ozet Akademi">
-//     Copyright (c) Ozet Akademi. All rights reserved.
-// </copyright>
-// <summary></summary>
-// ***********************************************************************
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace VimeoDotNet.Models
