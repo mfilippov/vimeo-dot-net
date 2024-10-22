@@ -70,13 +70,6 @@ namespace VimeoDotNet.Models
         public string Link { get; set; }
 
         /// <summary>
-        /// LinkSecure
-        /// </summary>
-        [PublicAPI]
-        [JsonProperty(PropertyName = "link_secure")]
-        public string LinkSecure { get; set; }
-
-        /// <summary>
         /// FileQuality
         /// </summary>
         [PublicAPI]
