@@ -17,7 +17,7 @@
         public bool AskAi { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings"/> is categories.
+        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings" /> is categories.
         /// </summary>
         /// <value><c>true</c> if categories; otherwise, <c>false</c>.</value>
         [PublicAPI]
@@ -25,7 +25,7 @@
         public bool Categories { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings"/> is collections.
+        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings" /> is collections.
         /// </summary>
         /// <value><c>true</c> if collections; otherwise, <c>false</c>.</value>
         [PublicAPI]
@@ -33,7 +33,7 @@
         public bool Collections { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings"/> is comments.
+        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings" /> is comments.
         /// </summary>
         /// <value><c>true</c> if comments; otherwise, <c>false</c>.</value>
         [PublicAPI]
@@ -49,7 +49,7 @@
         public bool CreativeCommons { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings"/> is credits.
+        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings" /> is credits.
         /// </summary>
         /// <value><c>true</c> if credits; otherwise, <c>false</c>.</value>
         [PublicAPI]
@@ -65,7 +65,7 @@
         public bool DateAdded { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings"/> is description.
+        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings" /> is description.
         /// </summary>
         /// <value><c>true</c> if description; otherwise, <c>false</c>.</value>
         [PublicAPI]
@@ -73,7 +73,7 @@
         public bool Description { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings"/> is download.
+        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings" /> is download.
         /// </summary>
         /// <value><c>true</c> if download; otherwise, <c>false</c>.</value>
         [PublicAPI]
@@ -81,7 +81,7 @@
         public bool Download { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings"/> is like.
+        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings" /> is like.
         /// </summary>
         /// <value><c>true</c> if like; otherwise, <c>false</c>.</value>
         [PublicAPI]
@@ -89,7 +89,7 @@
         public bool Like { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings"/> is owner.
+        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings" /> is owner.
         /// </summary>
         /// <value><c>true</c> if owner; otherwise, <c>false</c>.</value>
         [PublicAPI]
@@ -97,7 +97,7 @@
         public bool Owner { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings"/> is portrait.
+        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings" /> is portrait.
         /// </summary>
         /// <value><c>true</c> if portrait; otherwise, <c>false</c>.</value>
         [PublicAPI]
@@ -105,7 +105,7 @@
         public bool Portrait { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings"/> is share.
+        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings" /> is share.
         /// </summary>
         /// <value><c>true</c> if share; otherwise, <c>false</c>.</value>
         [PublicAPI]
@@ -113,7 +113,7 @@
         public bool Share { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings"/> is tags.
+        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings" /> is tags.
         /// </summary>
         /// <value><c>true</c> if tags; otherwise, <c>false</c>.</value>
         [PublicAPI]
@@ -121,7 +121,7 @@
         public bool Tags { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings"/> is uploader.
+        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings" /> is uploader.
         /// </summary>
         /// <value><c>true</c> if uploader; otherwise, <c>false</c>.</value>
         [PublicAPI]
@@ -129,7 +129,7 @@
         public bool Uploader { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings"/> is views.
+        /// Gets or sets a value indicating whether this <see cref="VideoPageSettings" /> is views.
         /// </summary>
         /// <value><c>true</c> if views; otherwise, <c>false</c>.</value>
         [PublicAPI]

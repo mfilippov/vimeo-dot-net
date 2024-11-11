@@ -12,6 +12,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Plays
         /// </summary>
+        /// <value>The plays.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "plays")]
         public int? Plays { get; set; }
@@ -19,6 +20,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Likes
         /// </summary>
+        /// <value>The likes.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "likes")]
         public int? Likes { get; set; }
@@ -26,6 +28,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Comments
         /// </summary>
+        /// <value>The comments.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "comments")]
         public int? Comments { get; set; }

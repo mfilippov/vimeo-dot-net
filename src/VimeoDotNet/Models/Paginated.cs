@@ -13,6 +13,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Content
         /// </summary>
+        /// <value>The data.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "data")]
         public List<T> Data { get; set; }
@@ -20,6 +21,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Total
         /// </summary>
+        /// <value>The total.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "total")]
         public int Total { get; set; }
@@ -27,6 +29,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Page
         /// </summary>
+        /// <value>The page.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "page")]
         public int Page { get; set; }
@@ -34,6 +37,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Per page
         /// </summary>
+        /// <value>The per page.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "per_page")]
         public int PerPage { get; set; }
@@ -41,6 +45,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Paging
         /// </summary>
+        /// <value>The paging.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "paging")]
         public Paging Paging { get; set; }

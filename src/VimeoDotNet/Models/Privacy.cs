@@ -13,6 +13,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// View
         /// </summary>
+        /// <value>The view.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "view")]
         public string View { get; set; }
@@ -20,6 +21,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Embed
         /// </summary>
+        /// <value>The embed.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "embed")]
         public string Embed { get; set; }
@@ -27,6 +29,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Download
         /// </summary>
+        /// <value><c>true</c> if download; otherwise, <c>false</c>.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "download")]
         public bool Download { get; set; }
@@ -34,6 +37,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Add
         /// </summary>
+        /// <value><c>true</c> if add; otherwise, <c>false</c>.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "add")]
         public bool Add { get; set; }
@@ -41,6 +45,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// View privacy
         /// </summary>
+        /// <value>The view privacy.</value>
         [PublicAPI]
         public VideoPrivacyEnum ViewPrivacy
         {
@@ -51,6 +56,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Embed privacy
         /// </summary>
+        /// <value>The embed privacy.</value>
         [PublicAPI]
         public VideoEmbedPrivacyEnum EmbedPrivacy
         {

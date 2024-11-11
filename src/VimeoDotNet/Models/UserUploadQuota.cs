@@ -11,6 +11,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Space
         /// </summary>
+        /// <value>The space.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "space")]
         public Space Space { get; set; }
@@ -18,6 +19,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Resets
         /// </summary>
+        /// <value>The resets.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "resets")]
         public int Resets { get; set; }
@@ -25,6 +27,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Quota
         /// </summary>
+        /// <value>The quota.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "quota")]
         public UserQuota Quota { get; set; }

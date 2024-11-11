@@ -56,30 +56,35 @@ namespace VimeoDotNet.Parameters
         /// <summary>
         /// Page
         /// </summary>
+        /// <value>The page.</value>
         [PublicAPI]
         public int? Page { get; set; }
 
         /// <summary>
         /// Per page
         /// </summary>
+        /// <value>The per page.</value>
         [PublicAPI]
         public int? PerPage { get; set; }
 
         /// <summary>
         /// Query
         /// </summary>
+        /// <value>The query.</value>
         [PublicAPI]
         public string Query { get; set; }
 
         /// <summary>
         /// filter
         /// </summary>
+        /// <value>The filter.</value>
         [PublicAPI]
         public string Filter { get; set; }
 
         /// <summary>
         /// Sort
         /// </summary>
+        /// <value>The sort.</value>
         [PublicAPI]
         [JsonConverter(typeof(StringEnumConverter))]
         public GetAlbumsSortOption? Sort { get; set; }
@@ -87,6 +92,7 @@ namespace VimeoDotNet.Parameters
         /// <summary>
         /// Direction
         /// </summary>
+        /// <value>The direction.</value>
         [PublicAPI]
         [JsonConverter(typeof(StringEnumConverter))]
         public GetAlbumsSortDirectionOption? Direction { get; set; }

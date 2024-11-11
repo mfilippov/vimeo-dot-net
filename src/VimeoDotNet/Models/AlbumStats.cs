@@ -12,6 +12,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Videos
         /// </summary>
+        /// <value>The plays.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "plays")]
         public int Plays { get; set; }

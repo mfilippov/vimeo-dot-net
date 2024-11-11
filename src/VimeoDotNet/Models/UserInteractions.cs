@@ -11,6 +11,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Follow
         /// </summary>
+        /// <value>The follow.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "follow")]
         public Follow Follow { get; set; }

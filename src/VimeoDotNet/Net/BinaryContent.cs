@@ -6,20 +6,32 @@ using VimeoDotNet.Helpers;
 
 namespace VimeoDotNet.Net
 {
-    /// <inheritdoc cref="IDisposable" />
     /// <summary>
     /// Binary content
     /// </summary>
+    /// <inheritdoc cref="IDisposable" />
     [Serializable]
     public class BinaryContent : IDisposable, IBinaryContent
     {
         #region Private Fields
 
+        /// <summary>
+        /// The buffer size
+        /// </summary>
         private const int BufferSize = 16384; //16k
 
+        /// <summary>
+        /// The should dispose stream
+        /// </summary>
         private readonly bool _shouldDisposeStream = true;
+        /// <summary>
+        /// The disposed
+        /// </summary>
         private bool _disposed;
 
+        /// <summary>
+        /// The data
+        /// </summary>
         [NonSerialized] private Stream _data;
 
         #endregion
@@ -65,6 +77,7 @@ namespace VimeoDotNet.Net
         /// </summary>
         /// <param name="data">Content</param>
         /// <param name="contentType">Content type</param>
+        /// <exception cref="System.ArgumentNullException">data</exception>
         public BinaryContent([NotNull] Stream data, string contentType)
         {
             ContentType = contentType;
@@ -119,6 +132,14 @@ namespace VimeoDotNet.Net
 
         #region Helper Functions
 
+        /// <summary>
+        /// Verifies the can read.
+        /// </summary>
+        /// <param name="startIndex">The start index.</param>
+        /// <exception cref="System.ObjectDisposedException">BinaryContent</exception>
+        /// <exception cref="System.InvalidOperationException">Content should be a readable Stream</exception>
+        /// <exception cref="System.InvalidOperationException">Content cannot be advanced to the specified start index: " +
+        ///                                                     startIndex</exception>
         private void VerifyCanRead(long startIndex)
         {
             if (_disposed)
@@ -138,6 +159,12 @@ namespace VimeoDotNet.Net
             Data.Position = startIndex;
         }
 
+        /// <summary>
+        /// Reads the data stream.
+        /// </summary>
+        /// <param name="startIndex">The start index.</param>
+        /// <param name="length">The length.</param>
+        /// <returns>System.Byte[].</returns>
         private async Task<byte[]> ReadDataStream(long startIndex, long length)
         {
             var buffer = new byte[BufferSize];

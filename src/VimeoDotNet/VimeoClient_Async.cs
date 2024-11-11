@@ -15,10 +15,18 @@ using VimeoDotNet.Parameters;
 
 namespace VimeoDotNet
 {
+    /// <summary>
+    /// Class VimeoClient.
+    /// Implements the <see cref="VimeoDotNet.IVimeoClient" />
+    /// </summary>
+    /// <seealso cref="VimeoDotNet.IVimeoClient" />
     public partial class VimeoClient : IVimeoClient
     {
         #region Constants
 
+        /// <summary>
+        /// The default upload chunk size
+        /// </summary>
         internal const long DefaultUploadChunkSize = 134217728; // 128MB
 
         /// <summary>
@@ -48,27 +56,34 @@ namespace VimeoDotNet
         /// <summary>
         /// ClientId
         /// </summary>
+        /// <value>The client identifier.</value>
         private string ClientId { get; }
 
         /// <summary>
         /// ClientSecret
         /// </summary>
+        /// <value>The client secret.</value>
         private string ClientSecret { get; }
 
         /// <summary>
         /// AccessToken
         /// </summary>
+        /// <value>The access token.</value>
         private string AccessToken { get; }
 
         /// <summary>
         /// OAuth2Client
         /// </summary>
+        /// <value>The o auth2 client.</value>
         private IAuthorizationClient OAuth2Client { get; set; }
 
         #endregion
 
         #region Constructors
 
+        /// <summary>
+        /// Prevents a default instance of the <see cref="VimeoClient"/> class from being created.
+        /// </summary>
         private VimeoClient()
         {
             _authClientFactory = new AuthorizationClientFactory();
@@ -138,6 +153,9 @@ namespace VimeoDotNet
             return await OAuth2Client.GetAccessTokenAsync(authorizationCode, redirectUrl).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Preps the authorization client.
+        /// </summary>
         private void PrepAuthorizationClient()
         {
             if (OAuth2Client == null)
@@ -202,8 +220,8 @@ namespace VimeoDotNet
         /// null for NotFound responses).
         /// </summary>
         /// <typeparam name="T">Type of the expected response data.</typeparam>
-        /// <param name="request"></param>
-        /// <returns></returns>
+        /// <param name="request">The request.</param>
+        /// <returns>T.</returns>
         private async Task<T> ExecuteApiRequest<T>(IApiRequest request) where T : new()
         {
             return await ExecuteApiRequest(request, statusCode => default(T), HttpStatusCode.NotFound)
@@ -212,22 +230,21 @@ namespace VimeoDotNet
 
         /// <summary>
         /// Utility method for performing API requests that retrieve data in a consistent manner.
-        ///
         /// The given request will be performed, and if the response is an outright success then
         /// the response data will be unwrapped and returned.
-        ///
         /// If the call is not an outright success, but the status code is among the other acceptable
         /// results (provided via validStatusCodes), the getValueForStatusCode method will be called
         /// to generate a return value. This allows the caller to return null or an empty list as
         /// desired.
-        ///
         /// If neither of the above is possible, an exception will be thrown.
         /// </summary>
         /// <typeparam name="T">Type of the expected response data.</typeparam>
-        /// <param name="request"></param>
-        /// <param name="getValueForStatusCode"></param>
-        /// <param name="validStatusCodes"></param>
-        /// <returns></returns>
+        /// <param name="request">The request.</param>
+        /// <param name="getValueForStatusCode">The get value for status code.</param>
+        /// <param name="validStatusCodes">The valid status codes.</param>
+        /// <returns>T.</returns>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoApiException"></exception>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoApiException">Error retrieving information from Vimeo API.</exception>
         private async Task<T> ExecuteApiRequest<T>(IApiRequest request, Func<HttpStatusCode, T> getValueForStatusCode,
             params HttpStatusCode[] validStatusCodes) where T : new()
         {
@@ -267,6 +284,14 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Executes the API request.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="validStatusCodes">The valid status codes.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoApiException"></exception>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoApiException">Error retrieving information from Vimeo API.</exception>
         private async Task<bool> ExecuteApiRequest(IApiRequest request, params HttpStatusCode[] validStatusCodes)
         {
             try
@@ -308,6 +333,10 @@ namespace VimeoDotNet
 
         #region Helper Functions
 
+        /// <summary>
+        /// Throws if unauthorized.
+        /// </summary>
+        /// <exception cref="System.InvalidOperationException">Please authenticate via OAuth to obtain an access token.</exception>
         private void ThrowIfUnauthorized()
         {
             if (string.IsNullOrWhiteSpace(AccessToken))
@@ -316,6 +345,14 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Checks the status code error.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="response">The response.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="validStatusCodes">The valid status codes.</param>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoUploadException"></exception>
         private static void CheckStatusCodeError(IUploadRequest request, IApiResponse response, string message,
             params HttpStatusCode[] validStatusCodes)
         {
@@ -328,6 +365,13 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Checks the status code error.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="validStatusCodes">The valid status codes.</param>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoApiException"></exception>
         private static void CheckStatusCodeError(IApiResponse response, string message,
             params HttpStatusCode[] validStatusCodes)
         {
@@ -339,6 +383,11 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Determines whether [is success status code] [the specified status code].
+        /// </summary>
+        /// <param name="statusCode">The status code.</param>
+        /// <returns><c>true</c> if [is success status code] [the specified status code]; otherwise, <c>false</c>.</returns>
         private static bool IsSuccessStatusCode(HttpStatusCode statusCode)
         {
             var code = (int) statusCode;

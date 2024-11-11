@@ -11,6 +11,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// State
         /// </summary>
+        /// <value>The state.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "state")]
         public string State { get; set; }
@@ -18,6 +19,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Progress
         /// </summary>
+        /// <value>The progress.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "progress")]
         public int Progress { get; set; }
@@ -25,6 +27,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Message
         /// </summary>
+        /// <value>The message.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "message")]
         public string Message { get; set; }

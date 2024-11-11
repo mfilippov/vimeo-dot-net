@@ -13,6 +13,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Added time
         /// </summary>
+        /// <value>The added time.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "added_time")]
         public DateTime? AddedTime { get; set; }
@@ -20,6 +21,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// URI
         /// </summary>
+        /// <value>The URI.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "uri")]
         public string Uri { get; set; }

@@ -24,34 +24,51 @@ namespace VimeoDotNet.Parameters
         User
     }
 
+    /// <summary>
+    /// Class EditChannelParameters.
+    /// Implements the <see cref="VimeoDotNet.Parameters.IParameterProvider" />
+    /// </summary>
+    /// <seealso cref="VimeoDotNet.Parameters.IParameterProvider" />
     public class EditChannelParameters : IParameterProvider
     {
         /// <summary>
         /// The name of the channel
         /// </summary>
+        /// <value>The name.</value>
         public string Name { get; set; }
 
         /// <summary>
         /// The description of the channel
         /// </summary>
+        /// <value>The description.</value>
         public string Description { get; set; }
 
         /// <summary>
         /// The link to access the channel. You can use a custom name in the URL in place of a numeric channel ID,
         /// as in /channels/{url_custom}
         /// </summary>
+        /// <value>The link.</value>
         public string Link { get; set; }
 
         /// <summary>
         /// The privacy level of the channel
         /// </summary>
+        /// <value>The privacy.</value>
         public ChannelPrivacyOption? Privacy { get; set; }
 
+        /// <summary>
+        /// Performs validation and returns a description of the first error encountered.
+        /// </summary>
+        /// <returns>Description of first error, or null if none found.</returns>
         public string ValidationError()
         {
             return string.IsNullOrEmpty(Name) || Privacy == null? "Name and Privacy is required for channel" : null;
         }
 
+        /// <summary>
+        /// Provides universal interface to retrieve parameter values.
+        /// </summary>
+        /// <returns>Returns all parameters as name/value pairs.</returns>
         public IDictionary<string, string> GetParameterValues()
         {
             var parameterValues = new Dictionary<string, string>();

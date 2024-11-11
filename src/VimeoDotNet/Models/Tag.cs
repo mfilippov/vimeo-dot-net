@@ -11,6 +11,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Id
         /// </summary>
+        /// <value>The identifier.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "tag")]
         public string Id { get; set; }
@@ -19,6 +20,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// URI
         /// </summary>
+        /// <value>The URI.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "uri")]
         public string Uri { get; set; }
@@ -26,6 +28,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Name
         /// </summary>
+        /// <value>The name.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
@@ -33,6 +36,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Canonical
         /// </summary>
+        /// <value>The canonical.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "canonical")]
         public string Canonical { get; set; }
@@ -40,6 +44,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Metadata
         /// </summary>
+        /// <value>The metadata.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "metadata")]
         public TagMetadata Metadata { get; set; }

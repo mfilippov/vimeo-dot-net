@@ -11,6 +11,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// HD
         /// </summary>
+        /// <value><c>true</c> if hd; otherwise, <c>false</c>.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "hd")]
         public bool Hd { get; set; }
@@ -18,6 +19,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// SD
         /// </summary>
+        /// <value><c>true</c> if sd; otherwise, <c>false</c>.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "sd")]
         public bool Sd { get; set; }

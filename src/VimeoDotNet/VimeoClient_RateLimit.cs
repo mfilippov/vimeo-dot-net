@@ -5,6 +5,11 @@ using VimeoDotNet.Net;
 
 namespace VimeoDotNet
 {
+    /// <summary>
+    /// Class VimeoClient.
+    /// Implements the <see cref="VimeoDotNet.IVimeoClient" />
+    /// </summary>
+    /// <seealso cref="VimeoDotNet.IVimeoClient" />
     public partial class VimeoClient
     {
         /// <inheritdoc />
@@ -16,6 +21,10 @@ namespace VimeoDotNet
         /// <inheritdoc />
         public DateTime RateLimitReset { get; private set; }
 
+        /// <summary>
+        /// Updates the rate limit.
+        /// </summary>
+        /// <param name="response">The response.</param>
         private void UpdateRateLimit(IApiResponse response)
         {
             if (response.Headers == null || !response.Headers.Contains("X-RateLimit-Limit"))

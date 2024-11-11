@@ -8,7 +8,7 @@
         /// <summary>
         /// Return client by access token
         /// </summary>
-        /// <param name="accessToken"></param>
+        /// <param name="accessToken">The access token.</param>
         /// <returns>VimeoClient</returns>
         IVimeoClient GetVimeoClient(string accessToken);
 

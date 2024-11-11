@@ -11,6 +11,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Activities
         /// </summary>
+        /// <value>The activities.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "activities")]
         public UserConnectionsEntry Activities { get; set; }
@@ -18,6 +19,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Albums
         /// </summary>
+        /// <value>The albums.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "albums")]
         public UserConnectionsEntry Albums { get; set; }
@@ -25,6 +27,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Channels
         /// </summary>
+        /// <value>The channels.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "channels")]
         public UserConnectionsEntry Channels { get; set; }
@@ -32,6 +35,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Feed
         /// </summary>
+        /// <value>The feed.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "feed")]
         public UserConnectionsEntry Feed { get; set; }
@@ -39,6 +43,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Followers
         /// </summary>
+        /// <value>The followers.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "followers")]
         public UserConnectionsEntry Followers { get; set; }
@@ -46,6 +51,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Following
         /// </summary>
+        /// <value>The following.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "following")]
         public UserConnectionsEntry Following { get; set; }
@@ -53,6 +59,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Groups
         /// </summary>
+        /// <value>The groups.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "groups")]
         public UserConnectionsEntry Groups { get; set; }
@@ -60,6 +67,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Likes
         /// </summary>
+        /// <value>The likes.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "likes")]
         public UserConnectionsEntry Likes { get; set; }
@@ -67,6 +75,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Portfolios
         /// </summary>
+        /// <value>The portfolios.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "portfolios")]
         public UserConnectionsEntry Portfolios { get; set; }
@@ -74,6 +83,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Videos
         /// </summary>
+        /// <value>The videos.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "videos")]
         public UserConnectionsEntry Videos { get; set; }
@@ -81,6 +91,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Watch later
         /// </summary>
+        /// <value>The watchlater.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "watchlater")]
         public UserConnectionsEntry Watchlater { get; set; }

@@ -23,13 +23,13 @@ namespace VimeoDotNet
         /// <param name="authorizationCode">A string token you must exchange for your access token</param>
         /// <param name="redirectUrl">This field is required, and must match one of your application’s
         /// redirect URI’s</param>
-        /// <returns></returns>
+        /// <returns>Task&lt;AccessTokenResponse&gt;.</returns>
         Task<AccessTokenResponse> GetAccessTokenAsync(string authorizationCode, string redirectUrl);
 
         /// <summary>
         /// Return authorztion URL
         /// </summary>
-        /// <param name="redirectUri"></param>
+        /// <param name="redirectUri">The redirect URI.</param>
         /// <param name="scope">Defaults to "public" and "private"; this is a space-separated list of <a href="#supported-scopes">scopes</a> you want to access</param>
         /// <param name="state">A unique value which the client will return alongside access tokens</param>
         /// <returns>Authorization URL</returns>
@@ -61,10 +61,10 @@ namespace VimeoDotNet
         /// Get videos by UserId and query and page parameters asynchronously
         /// </summary>
         /// <param name="userId">UserId</param>
+        /// <param name="page">The page number to show</param>
         /// <param name="perPage">Number of items to show on each page. Max 50</param>
         /// <param name="query">Search query</param>
         /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter</param>
-        /// <param name="page">The page number to show</param>
         /// <returns>Paginated videos</returns>
         Task<Paginated<Video>> GetVideosAsync(UserId userId, int? page = null, int? perPage = null,
             string query = null, string[] fields = null);
@@ -80,7 +80,7 @@ namespace VimeoDotNet
         /// <param name="perPage">Number of items to show on each page. Max 50.</param>
         /// <param name="sort">The default sort order of an Album's videos</param>
         /// <param name="direction">The direction that the results are sorted.</param>
-        /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter </param>
+        /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter</param>
         /// <returns>Paginated videos</returns>
         Task<Paginated<Video>> GetAlbumVideosAsync(UserId userId, long albumId, int? page = null, int? perPage = null,
             string sort = null, string direction = null, string[] fields = null);
@@ -90,14 +90,13 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="clipId">ClipId</param>
         /// <param name="domain">Domain</param>
-        /// <remarks>
-        /// The call is valid only when video embed privacy is set to
-        /// <see cref="VideoEmbedPrivacyEnum.Whitelist"/>.
-        /// Use <see cref="UpdateVideoMetadataAsync(long, VideoUpdateMetadata)"/> and
-        /// <see cref="VideoUpdateMetadata.EmbedPrivacy"/> property to change this setting.
-        /// </remarks>
-        /// <seealso cref="DisallowEmbedVideoOnDomainAsync(long, string)"/>
-        /// <seealso cref="GetAllowedDomainsForEmbeddingVideoAsync(long)"/>
+        /// <returns>Task.</returns>
+        /// <seealso cref="DisallowEmbedVideoOnDomainAsync(long, string)" />
+        /// <seealso cref="GetAllowedDomainsForEmbeddingVideoAsync(long)" />
+        /// <remarks>The call is valid only when video embed privacy is set to
+        /// <see cref="VideoEmbedPrivacyEnum.Whitelist" />.
+        /// Use <see cref="UpdateVideoMetadataAsync(long, VideoUpdateMetadata)" /> and
+        /// <see cref="VideoUpdateMetadata.EmbedPrivacy" /> property to change this setting.</remarks>
         Task AllowEmbedVideoOnDomainAsync(long clipId, string domain);
 
         /// <summary>
@@ -105,29 +104,26 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="clipId">ClipId</param>
         /// <param name="domain">Domain</param>
-        /// <remarks>
-        /// The call is valid only when video embed privacy is set to
-        /// <see cref="VideoEmbedPrivacyEnum.Whitelist"/>.
-        /// Use <see cref="UpdateVideoMetadataAsync(long, VideoUpdateMetadata)"/> and
-        /// <see cref="VideoUpdateMetadata.EmbedPrivacy"/> property to change this setting.
-        /// </remarks>
-        /// <seealso cref="AllowEmbedVideoOnDomainAsync(long, string)"/>
-        /// <seealso cref="GetAllowedDomainsForEmbeddingVideoAsync(long)"/>
+        /// <returns>Task.</returns>
+        /// <seealso cref="AllowEmbedVideoOnDomainAsync(long, string)" />
+        /// <seealso cref="GetAllowedDomainsForEmbeddingVideoAsync(long)" />
+        /// <remarks>The call is valid only when video embed privacy is set to
+        /// <see cref="VideoEmbedPrivacyEnum.Whitelist" />.
+        /// Use <see cref="UpdateVideoMetadataAsync(long, VideoUpdateMetadata)" /> and
+        /// <see cref="VideoUpdateMetadata.EmbedPrivacy" /> property to change this setting.</remarks>
         Task DisallowEmbedVideoOnDomainAsync(long clipId, string domain);
 
         /// <summary>
         /// Get all domains on which a video can be embedded.
         /// </summary>
         /// <param name="clipId">ClipId</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// The call is valid only when video embed privacy is set to
-        /// <see cref="VideoEmbedPrivacyEnum.Whitelist"/>.
-        /// Use <see cref="UpdateVideoMetadataAsync(long, VideoUpdateMetadata)"/> and
-        /// <see cref="VideoUpdateMetadata.EmbedPrivacy"/> property to change this setting.
-        /// </remarks>
-        /// <seealso cref="AllowEmbedVideoOnDomainAsync(long, string)"/>
-        /// <seealso cref="DisallowEmbedVideoOnDomainAsync(long, string)"/>
+        /// <returns>Task&lt;Paginated&lt;DomainForEmbedding&gt;&gt;.</returns>
+        /// <seealso cref="AllowEmbedVideoOnDomainAsync(long, string)" />
+        /// <seealso cref="DisallowEmbedVideoOnDomainAsync(long, string)" />
+        /// <remarks>The call is valid only when video embed privacy is set to
+        /// <see cref="VideoEmbedPrivacyEnum.Whitelist" />.
+        /// Use <see cref="UpdateVideoMetadataAsync(long, VideoUpdateMetadata)" /> and
+        /// <see cref="VideoUpdateMetadata.EmbedPrivacy" /> property to change this setting.</remarks>
         Task<Paginated<DomainForEmbedding>> GetAllowedDomainsForEmbeddingVideoAsync(long clipId);
 
         /// <summary>
@@ -135,14 +131,15 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="clipId">ClipId</param>
         /// <param name="domain">Domain</param>
+        /// <returns>Task.</returns>
         [Obsolete("Use AllowEmbedVideoOnDomainAsync instead.")]
         Task UpdateVideoAllowedDomainAsync(long clipId, string domain);
 
         /// <summary>
         /// Get all thumbnails on a video
         /// </summary>
-        /// <param name="clipId"></param>
-        /// <returns></returns>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <returns>Task&lt;Paginated&lt;Picture&gt;&gt;.</returns>
         Task<Paginated<Picture>> GetPicturesAsync(long clipId);
 
         /// <summary>
@@ -150,7 +147,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="clipId">clipdId</param>
         /// <param name="pictureId">pictureId</param>
-        /// <returns></returns>
+        /// <returns>Task&lt;Picture&gt;.</returns>
         Task<Picture> GetPictureAsync(long clipId, long pictureId);
 
         /// <summary>
@@ -158,6 +155,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="clipId">ClipId</param>
         /// <param name="metaData">New video metadata</param>
+        /// <returns>Task.</returns>
         Task UpdateVideoMetadataAsync(long clipId, VideoUpdateMetadata metaData);
 
         /// <summary>
@@ -165,6 +163,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="clipId">Clip ID</param>
         /// <param name="presetId">Preset ID</param>
+        /// <returns>Task.</returns>
         Task AssignEmbedPresetToVideoAsync(long clipId, long presetId);
 
         /// <summary>
@@ -172,12 +171,14 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="clipId">Clip ID</param>
         /// <param name="presetId">Preset ID</param>
+        /// <returns>Task.</returns>
         Task UnassignEmbedPresetFromVideoAsync(long clipId, long presetId);
 
         /// <summary>
         /// Delete video asynchronously
         /// </summary>
         /// <param name="clipId">CliepId</param>
+        /// <returns>Task.</returns>
         Task DeleteVideoAsync(long clipId);
 
         /// <summary>
@@ -185,6 +186,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="timeOffset">Time offset for the thumbnail in seconds</param>
         /// <param name="clipId">Clip Id</param>
+        /// <returns>Task.</returns>
         Task SetThumbnailAsync(long timeOffset, long clipId);
 
         /// <summary>
@@ -192,6 +194,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="projectId">Folder Id (called project in Vimeo)</param>
         /// <param name="clipId">Clip Id</param>
+        /// <returns>Task.</returns>
         Task MoveVideoToFolder(long projectId, long clipId);
 
         #endregion
@@ -203,7 +206,6 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="videoId">VideoId</param>
         /// <returns>Return text tracks</returns>
-        ///
         Task<TextTracks> GetTextTracksAsync(long videoId);
 
         /// <summary>
@@ -237,7 +239,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="videoId">VideoId</param>
         /// <param name="trackId">TrackId</param>
-        /// <returns></returns>
+        /// <returns>Task.</returns>
         Task DeleteTextTrackAsync(long videoId, long trackId);
 
         #endregion
@@ -247,6 +249,7 @@ namespace VimeoDotNet
         /// <summary>
         /// Create new upload ticket asynchronously
         /// </summary>
+        /// <param name="size">The size.</param>
         /// <returns>Upload ticket</returns>
         Task<UploadTicket> GetUploadTicketAsync(long size);
 
@@ -254,6 +257,8 @@ namespace VimeoDotNet
         /// Create new upload ticket for replace video asynchronously
         /// </summary>
         /// <param name="videoId">VideoId</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="size">The size.</param>
         /// <returns>Upload ticket</returns>
         Task<UploadTicket> GetReplaceVideoUploadTicketAsync(long videoId, string fileName, long size);
 
@@ -263,6 +268,7 @@ namespace VimeoDotNet
         /// <param name="fileContent">FileContent</param>
         /// <param name="chunkSize">ChunkSize</param>
         /// <param name="replaceVideoId">ReplaceVideoId</param>
+        /// <param name="statusCallback">The status callback.</param>
         /// <returns>Upload request</returns>
         Task<IUploadRequest> UploadEntireFileAsync(IBinaryContent fileContent,
             long chunkSize = VimeoClient.DefaultUploadChunkSize,
@@ -272,15 +278,18 @@ namespace VimeoDotNet
         /// <summary>
         /// Upload using pull approach asynchronously
         /// </summary>
+        /// <param name="link">The link.</param>
+        /// <param name="metaData">The meta data.</param>
+        /// <param name="replaceVideoId">The replace video identifier.</param>
         /// <returns>Video or video version when replacing an existing video</returns>
         Task<Video> UploadPullLinkAsync(string link, VideoUpdateMetadata metaData = null, long? replaceVideoId = null);
 
         /// <summary>
         /// Upload and set thumbnail active
         /// </summary>
-        /// <param name="clipId"></param>
-        /// <param name="fileContent"></param>
-        /// <returns></returns>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <param name="fileContent">Content of the file.</param>
+        /// <returns>Task&lt;Picture&gt;.</returns>
         /// <exception cref="VimeoUploadException"></exception>
         Task<Picture> UploadThumbnailAsync(long clipId, IBinaryContent fileContent);
 
@@ -371,16 +380,19 @@ namespace VimeoDotNet
         /// <summary>
         /// Return rate limit
         /// </summary>
+        /// <value>The rate limit.</value>
         long RateLimit { get; }
 
         /// <summary>
         /// Return remaning rate limit
         /// </summary>
+        /// <value>The rate limit remaining.</value>
         long RateLimitRemaining { get; }
 
         /// <summary>
         /// Return rate limit reset time
         /// </summary>
+        /// <value>The rate limit reset.</value>
         DateTime RateLimitReset { get; }
 
         #endregion
@@ -398,6 +410,9 @@ namespace VimeoDotNet
         /// <summary>
         /// Delete a tag from a video
         /// </summary>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <param name="tag">The tag.</param>
+        /// <returns>Task.</returns>
         Task DeleteVideoTagAsync(long clipId, string tag);
 
         /// <summary>
@@ -406,8 +421,7 @@ namespace VimeoDotNet
         /// <param name="clipId">Clip Id</param>
         /// <param name="page">Page number</param>
         /// <param name="perPage">Tags per page</param>
-        /// <returns></returns>
-        /// <returns>Paginated tags</returns>
+        /// <returns>Task&lt;Paginated&lt;Tag&gt;&gt;.</returns>
         Task<Paginated<Tag>> GetVideoTags(long clipId, int? page = null, int? perPage = null);
 
         /// <summary>
@@ -461,14 +475,14 @@ namespace VimeoDotNet
         /// This method returns a single channel.
         /// </summary>
         /// <param name="channelId">The ID of the channel</param>
-        /// <returns></returns>
+        /// <returns>Task&lt;Channel&gt;.</returns>
         Task<Channel> GetChannelAsync(long channelId);
 
         /// <summary>
         /// This method returns all available channels.
         /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;Paginated&lt;Channel&gt;&gt;.</returns>
         Task<Paginated<Channel>> GetChannelsAsync(GetChannelsParameters parameters = null);
 
         /// <summary>
@@ -490,14 +504,14 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="channelId">Channel Id</param>
         /// <param name="clipId">Clip Id</param>
-        /// <returns></returns>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> AddToChannelAsync(long channelId, long clipId);
 
         /// <summary>
         /// This method returns all the channels to which the user subscribes
         /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;Paginated&lt;Channel&gt;&gt;.</returns>
         Task<Paginated<Channel>> GetUserChannelsAsync(GetChannelsParameters parameters = null);
 
         #endregion
@@ -517,17 +531,18 @@ namespace VimeoDotNet
         /// Delete a folder
         /// </summary>
         /// <param name="userId">UserId</param>
-        /// <param name="folderId"></param>
+        /// <param name="folderId">The folder identifier.</param>
+        /// <returns>Task.</returns>
         Task DeleteFolder(UserId userId, long folderId);
 
         /// <summary>
         /// Get all folders by UserId and query and page parameters asynchronously
         /// </summary>
         /// <param name="userId">UserId</param>
+        /// <param name="page">The page number to show</param>
         /// <param name="perPage">Number of items to show on each page.</param>
         /// <param name="query">Search query</param>
         /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter</param>
-        /// <param name="page">The page number to show</param>
         /// <returns>Paginated Folders</returns>
         Task<Paginated<Folder>> GetUserFolders(UserId userId, int? page = null, int? perPage = null, string query = null, string[] fields = null);
 
@@ -535,11 +550,11 @@ namespace VimeoDotNet
         /// Get all root Items (videos, folders) by UserId and query and page parameters asynchronously
         /// </summary>
         /// <param name="userId">UserId</param>
-        /// <param name="folderId"></param>
+        /// <param name="folderId">The folder identifier.</param>
+        /// <param name="page">The page number to show</param>
         /// <param name="perPage">Number of items to show on each page.</param>
         /// <param name="query">Search query</param>
         /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter</param>
-        /// <param name="page">The page number to show</param>
         /// <returns>Paginated Items</returns>
         Task<Paginated<Item>> GetFolderItems(UserId userId, long folderId, int? page = null, int? perPage = null, string query = null,
             string[] fields = null);

@@ -11,6 +11,9 @@ namespace VimeoDotNet.Models
     /// </summary>
     public class Transcode
     {
+        /// <summary>
+        /// The status mappings
+        /// </summary>
         private static readonly IDictionary<string, string> StatusMappings = new Dictionary<string, string>
         {
             {"complete", "Complete"},
@@ -18,6 +21,10 @@ namespace VimeoDotNet.Models
             {"in_progress", "InProgress"}
         };
 
+        /// <summary>
+        /// Gets or sets the status.
+        /// </summary>
+        /// <value>The status.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "status")]
         public string Status { get; set; }
@@ -25,6 +32,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// State
         /// </summary>
+        /// <value>The transcode status.</value>
         [PublicAPI]
         public TranscodeStatusEnum TranscodeStatus
         {

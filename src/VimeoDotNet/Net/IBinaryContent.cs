@@ -11,16 +11,19 @@ namespace VimeoDotNet.Net
         /// <summary>
         /// Content type
         /// </summary>
+        /// <value>The type of the content.</value>
         string ContentType { get; set; }
 
         /// <summary>
         /// Content
         /// </summary>
+        /// <value>The data.</value>
         Stream Data { get; }
 
         /// <summary>
         /// Original file name
         /// </summary>
+        /// <value>The name of the original file.</value>
         string OriginalFileName { get; set; }
 
         /// <summary>

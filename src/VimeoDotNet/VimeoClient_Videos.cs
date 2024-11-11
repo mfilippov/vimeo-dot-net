@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -13,6 +12,11 @@ using VimeoDotNet.Net;
 
 namespace VimeoDotNet
 {
+    /// <summary>
+    /// Class VimeoClient.
+    /// Implements the <see cref="VimeoDotNet.IVimeoClient" />
+    /// </summary>
+    /// <seealso cref="VimeoDotNet.IVimeoClient" />
     public partial class VimeoClient
     {
         /// <inheritdoc />
@@ -150,6 +154,19 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Allow embed video on domain as an asynchronous operation.
+        /// </summary>
+        /// <param name="clipId">ClipId</param>
+        /// <param name="domain">Domain</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoApiException">Error allowing domain for embedding video.</exception>
+        /// <seealso cref="DisallowEmbedVideoOnDomainAsync(long, string)" />
+        /// <seealso cref="GetAllowedDomainsForEmbeddingVideoAsync(long)" />
+        /// <remarks>The call is valid only when video embed privacy is set to
+        /// <see cref="VideoEmbedPrivacyEnum.Whitelist" />.
+        /// Use <see cref="UpdateVideoMetadataAsync(long, VideoUpdateMetadata)" /> and
+        /// <see cref="VideoUpdateMetadata.EmbedPrivacy" /> property to change this setting.</remarks>
         public async Task AllowEmbedVideoOnDomainAsync(long clipId, string domain)
         {
             try
@@ -170,6 +187,19 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Disallow embed video on domain as an asynchronous operation.
+        /// </summary>
+        /// <param name="clipId">ClipId</param>
+        /// <param name="domain">Domain</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoApiException">Error disallowing domain for embedding video.</exception>
+        /// <seealso cref="AllowEmbedVideoOnDomainAsync(long, string)" />
+        /// <seealso cref="GetAllowedDomainsForEmbeddingVideoAsync(long)" />
+        /// <remarks>The call is valid only when video embed privacy is set to
+        /// <see cref="VideoEmbedPrivacyEnum.Whitelist" />.
+        /// Use <see cref="UpdateVideoMetadataAsync(long, VideoUpdateMetadata)" /> and
+        /// <see cref="VideoUpdateMetadata.EmbedPrivacy" /> property to change this setting.</remarks>
         public async Task DisallowEmbedVideoOnDomainAsync(long clipId, string domain)
         {
             try
@@ -190,6 +220,18 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Get allowed domains for embedding video as an asynchronous operation.
+        /// </summary>
+        /// <param name="clipId">ClipId</param>
+        /// <returns>A Task&lt;Paginated`1&gt; representing the asynchronous operation.</returns>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoApiException">Error retrieving allowed domain for embedding video.</exception>
+        /// <seealso cref="AllowEmbedVideoOnDomainAsync(long, string)" />
+        /// <seealso cref="DisallowEmbedVideoOnDomainAsync(long, string)" />
+        /// <remarks>The call is valid only when video embed privacy is set to
+        /// <see cref="VideoEmbedPrivacyEnum.Whitelist" />.
+        /// Use <see cref="UpdateVideoMetadataAsync(long, VideoUpdateMetadata)" /> and
+        /// <see cref="VideoUpdateMetadata.EmbedPrivacy" /> property to change this setting.</remarks>
         public async Task<Paginated<DomainForEmbedding>> GetAllowedDomainsForEmbeddingVideoAsync(long clipId)
         {
             try
@@ -217,6 +259,16 @@ namespace VimeoDotNet
             return AllowEmbedVideoOnDomainAsync(clipId, domain);
         }
 
+        /// <summary>
+        /// Generates the videos request.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <param name="page">The page.</param>
+        /// <param name="perPage">The per page.</param>
+        /// <param name="query">The query.</param>
+        /// <param name="fields">The fields.</param>
+        /// <returns>IApiRequest.</returns>
         private IApiRequest GenerateVideosRequest(UserId userId = null, long? clipId = null, int? page = null,
             int? perPage = null, string query = null, string[] fields = null)
         {
@@ -281,6 +333,18 @@ namespace VimeoDotNet
             return request;
         }
 
+        /// <summary>
+        /// Generates the album videos request.
+        /// </summary>
+        /// <param name="albumId">The album identifier.</param>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <param name="page">The page.</param>
+        /// <param name="perPage">The per page.</param>
+        /// <param name="sort">The sort.</param>
+        /// <param name="direction">The direction.</param>
+        /// <param name="fields">The fields.</param>
+        /// <returns>IApiRequest.</returns>
         private IApiRequest GenerateAlbumVideosRequest(long albumId, UserId userId = null, long? clipId = null,
             int? page = null, int? perPage = null, string sort = null, string direction = null, string[] fields = null)
         {
@@ -333,6 +397,11 @@ namespace VimeoDotNet
             return request;
         }
 
+        /// <summary>
+        /// Generates the video delete request.
+        /// </summary>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <returns>IApiRequest.</returns>
         private IApiRequest GenerateVideoDeleteRequest(long clipId)
         {
             ThrowIfUnauthorized();
@@ -346,6 +415,12 @@ namespace VimeoDotNet
             return request;
         }
 
+        /// <summary>
+        /// Generates the video patch request.
+        /// </summary>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <param name="metaData">The meta data.</param>
+        /// <returns>IApiRequest.</returns>
         private IApiRequest GenerateVideoPatchRequest(long clipId, VideoUpdateMetadata metaData)
         {
             ThrowIfUnauthorized();
@@ -362,6 +437,13 @@ namespace VimeoDotNet
             return request;
         }
 
+        /// <summary>
+        /// Generates the video allowed domain request.
+        /// </summary>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <param name="domain">The domain.</param>
+        /// <param name="allow">if set to <c>true</c> [allow].</param>
+        /// <returns>IApiRequest.</returns>
         private IApiRequest GenerateVideoAllowedDomainRequest(long clipId, string domain, bool allow)
         {
             ThrowIfUnauthorized();
@@ -376,6 +458,11 @@ namespace VimeoDotNet
             return request;
         }
 
+        /// <summary>
+        /// Generates the video allowed domains request.
+        /// </summary>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <returns>IApiRequest.</returns>
         private IApiRequest GenerateVideoAllowedDomainsRequest(long clipId)
         {
             ThrowIfUnauthorized();
@@ -451,7 +538,10 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="fileContent">fileContent</param>
         /// <param name="clipId">Clip Id</param>
-        /// <returns>upload pic </returns>
+        /// <returns>upload pic</returns>
+        /// <exception cref="System.ArgumentException">fileContent should be readable</exception>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoApiException">Error getting thumbnail link or uri.</exception>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoUploadException">Error Uploading picture. - null</exception>
         private async Task<string> UploadPictureAsync(IBinaryContent fileContent, long clipId)
         {
             try
@@ -521,6 +611,8 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="timeOffset">Time offset for the thumbnail in seconds</param>
         /// <param name="clipId">Clip Id</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoUploadException">Error setting thumbnail. - null</exception>
         public async Task SetThumbnailAsync(long timeOffset, long clipId)
         {
             try
@@ -555,7 +647,8 @@ namespace VimeoDotNet
         /// set thumbnail picture asynchronously
         /// </summary>
         /// <param name="link">link</param>
-        /// <returns>Set thumbnail pic </returns>
+        /// <returns>Set thumbnail pic</returns>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoUploadException">Error Setting thumbnail image active. - null</exception>
         private async Task SetThumbnailActiveAsync(string link)
         {
             try
@@ -585,6 +678,13 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Assign embed preset to video as an asynchronous operation.
+        /// </summary>
+        /// <param name="clipId">Clip ID</param>
+        /// <param name="presetId">Preset ID</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoApiException">Error assigning embed preset to video.</exception>
         public async Task AssignEmbedPresetToVideoAsync(long clipId, long presetId)
         {
             try
@@ -604,6 +704,13 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Unassign embed preset from video as an asynchronous operation.
+        /// </summary>
+        /// <param name="clipId">Clip ID</param>
+        /// <param name="presetId">Preset ID</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoApiException">Error unassigning embed preset from video.</exception>
         public async Task UnassignEmbedPresetFromVideoAsync(long clipId, long presetId)
         {
             try
@@ -634,6 +741,13 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Generates the video preset request.
+        /// </summary>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <param name="presetId">The preset identifier.</param>
+        /// <param name="assign">if set to <c>true</c> [assign].</param>
+        /// <returns>IApiRequest.</returns>
         private IApiRequest GenerateVideoPresetRequest(long clipId, long presetId, bool assign)
         {
             ThrowIfUnauthorized();
@@ -653,6 +767,8 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="projectId">Folder Id (called project in Vimeo)</param>
         /// <param name="clipId">Clip Id</param>
+        /// <returns>Task.</returns>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoUploadException">Error moving  video to folder. - null</exception>
         public async Task MoveVideoToFolder(long projectId, long clipId)
         {
             try
@@ -715,6 +831,19 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Generates the videos folder request.
+        /// </summary>
+        /// <param name="projectId">The project identifier.</param>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <param name="page">The page.</param>
+        /// <param name="perPage">The per page.</param>
+        /// <param name="sort">The sort.</param>
+        /// <param name="direction">The direction.</param>
+        /// <param name="query">The query.</param>
+        /// <param name="fields">The fields.</param>
+        /// <returns>IApiRequest.</returns>
         private IApiRequest GenerateVideosFolderRequest(long projectId, UserId userId, long? clipId = null,
             int? page = null,
             int? perPage = null, string sort = null, string direction = null, string query = null,
@@ -788,6 +917,13 @@ namespace VimeoDotNet
             return request;
         }
 
+        /// <summary>
+        /// Delete thumbnail video as an asynchronous operation.
+        /// </summary>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <param name="pictureId">The picture identifier.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoApiException">Error deleting user video thumbnail metadata.</exception>
         public async Task DeleteThumbnailVideoAsync(long clipId, long pictureId)
         {
             try
@@ -808,6 +944,12 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Generates the thumbnail delete request.
+        /// </summary>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <param name="pictureId">The picture identifier.</param>
+        /// <returns>IApiRequest.</returns>
         private IApiRequest GenerateThumbnailDeleteRequest(long clipId, long pictureId)
         {
             ThrowIfUnauthorized();

@@ -66,7 +66,7 @@ namespace VimeoDotNet.Parameters
     }
 
     /// <summary>
-    ///Edit user privacy embed option
+    /// Edit user privacy embed option
     /// </summary>
     [PublicAPI]
     public enum EditUserPrivacyEmbedOption
@@ -93,18 +93,21 @@ namespace VimeoDotNet.Parameters
         /// <summary>
         /// Sets the default download setting for all future videos uploaded by this user. If true, the video can be downloaded by any user.
         /// </summary>
+        /// <value><c>null</c> if [videos privacy download] contains no value, <c>true</c> if [videos privacy download]; otherwise, <c>false</c>.</value>
         [PublicAPI]
         public bool? VideosPrivacyDownload { get; set; }
 
         /// <summary>
         /// Sets the default add setting for all future videos uploaded by this user. If true, anyone can add the video to an album, channel, or group.
         /// </summary>
+        /// <value><c>null</c> if [videos privacy add] contains no value, <c>true</c> if [videos privacy add]; otherwise, <c>false</c>.</value>
         [PublicAPI]
         public bool? VideosPrivacyAdd { get; set; }
 
         /// <summary>
         /// Sets the default comment setting for all future videos uploaded by this user. It specifies who can comment on the video.
         /// </summary>
+        /// <value>The videos privacy comments.</value>
         [PublicAPI]
         [JsonConverter(typeof(StringEnumConverter))]
         public EditUserPrivacyCommentOption? VideosPrivacyComments { get; set; }
@@ -112,6 +115,7 @@ namespace VimeoDotNet.Parameters
         /// <summary>
         /// Sets the default view setting for all future videos uploaded by this user. It specifies who can view the video.
         /// </summary>
+        /// <value>The videos privacy view.</value>
         [PublicAPI]
         [JsonConverter(typeof(StringEnumConverter))]
         public EditUserPrivacyViewOption? VideosPrivacyView { get; set; }
@@ -119,6 +123,7 @@ namespace VimeoDotNet.Parameters
         /// <summary>
         /// Sets the default embed setting for all future videos uploaded by this user. Whitelist allows you to define all valid embed domains.
         /// </summary>
+        /// <value>The videos privacy embed.</value>
         [PublicAPI]
         [JsonConverter(typeof(StringEnumConverter))]
         public EditUserPrivacyEmbedOption? VideosPrivacyEmbed { get; set; }
@@ -126,18 +131,21 @@ namespace VimeoDotNet.Parameters
         /// <summary>
         /// The user's display name
         /// </summary>
+        /// <value>The name.</value>
         [PublicAPI]
         public string Name { get; set; }
 
         /// <summary>
         /// The user's location
         /// </summary>
+        /// <value>The location.</value>
         [PublicAPI]
         public string Location { get; set; }
 
         /// <summary>
         /// The user's bio
         /// </summary>
+        /// <value>The bio.</value>
         [PublicAPI]
         public string Bio { get; set; }
 

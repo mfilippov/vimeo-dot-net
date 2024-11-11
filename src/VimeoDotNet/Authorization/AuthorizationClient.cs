@@ -23,11 +23,13 @@ namespace VimeoDotNet.Authorization
         /// <summary>
         /// Client Id
         /// </summary>
+        /// <value>The client identifier.</value>
         private string ClientId { get; }
 
         /// <summary>
         /// Client secret
         /// </summary>
+        /// <value>The client secret.</value>
         private string ClientSecret { get; }
 
         #endregion
@@ -116,6 +118,13 @@ namespace VimeoDotNet.Authorization
 
         #region Private Methods
 
+        /// <summary>
+        /// Builds the unauthenticated token request.
+        /// </summary>
+        /// <param name="scopes">The scopes.</param>
+        /// <returns>ApiRequest.</returns>
+        /// <exception cref="System.InvalidOperationException">Authorization.ClientId should be a non-null, non-whitespace string</exception>
+        /// <exception cref="System.InvalidOperationException">Authorization.ClientSecret should be a non-null, non-whitespace string</exception>
         private ApiRequest BuildUnauthenticatedTokenRequest(IReadOnlyCollection<string> scopes = null)
         {
             if (string.IsNullOrWhiteSpace(ClientId))
@@ -145,8 +154,10 @@ namespace VimeoDotNet.Authorization
         /// <param name="authorizationCode">AuthorizationCode</param>
         /// <param name="redirectUri">RedirectUri</param>
         /// <returns>Access token request</returns>
-        /// <exception cref="InvalidOperationException">Empty ClientId</exception>
-        /// <exception cref="ArgumentException">Empty ClientSecret</exception>
+        /// <exception cref="System.InvalidOperationException">Authorization.ClientId should be a non-null, non-whitespace string</exception>
+        /// <exception cref="System.InvalidOperationException">Authorization.ClientSecret should be a non-null, non-whitespace string</exception>
+        /// <exception cref="System.ArgumentException">authorizationCode should be a non-null, non-whitespace string</exception>
+        /// <exception cref="System.ArgumentException">redirectUri should be a valid Uri</exception>
         private ApiRequest BuildAccessTokenRequest(string authorizationCode, string redirectUri)
         {
             if (string.IsNullOrWhiteSpace(ClientId))
@@ -186,6 +197,11 @@ namespace VimeoDotNet.Authorization
             return request;
         }
 
+        /// <summary>
+        /// Generates the verify request.
+        /// </summary>
+        /// <param name="accessToken">The access token.</param>
+        /// <returns>IApiRequest.</returns>
         private static IApiRequest GenerateVerifyRequest(string accessToken)
         {
             IApiRequest request = new ApiRequest(accessToken);
@@ -258,6 +274,13 @@ namespace VimeoDotNet.Authorization
 
         #region Helper Functions
 
+        /// <summary>
+        /// Checks the status code error.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="validStatusCodes">The valid status codes.</param>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoApiException"></exception>
         private static void CheckStatusCodeError(IApiResponse response, string message,
             params HttpStatusCode[] validStatusCodes)
         {
@@ -269,6 +292,11 @@ namespace VimeoDotNet.Authorization
             }
         }
 
+        /// <summary>
+        /// Determines whether [is success status code] [the specified status code].
+        /// </summary>
+        /// <param name="statusCode">The status code.</param>
+        /// <returns><c>true</c> if [is success status code] [the specified status code]; otherwise, <c>false</c>.</returns>
         private static bool IsSuccessStatusCode(HttpStatusCode statusCode)
         {
             var code = (int) statusCode;

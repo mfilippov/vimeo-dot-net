@@ -11,6 +11,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Comments
         /// </summary>
+        /// <value>The comments.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "comments")]
         public VideoConnectionsEntry Comments { get; set; }
@@ -18,6 +19,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Credits
         /// </summary>
+        /// <value>The credits.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "credits")]
         public VideoConnectionsEntry Credits { get; set; }
@@ -25,6 +27,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Likes
         /// </summary>
+        /// <value>The likes.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "likes")]
         public VideoConnectionsEntry Likes { get; set; }
@@ -32,6 +35,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Pictures
         /// </summary>
+        /// <value>The pictures.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "pictures")]
         public VideoConnectionsEntry Pictures { get; set; }
@@ -39,6 +43,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Text tracks
         /// </summary>
+        /// <value>The text tracks.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "texttracks")]
         public TextTracks TextTracks { get; set; }

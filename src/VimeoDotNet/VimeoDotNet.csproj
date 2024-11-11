@@ -10,6 +10,9 @@
     <LangVersion>latest</LangVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>vimeodotnet Tuzes Version</Title>
+    <Description>vimeodotnet Tuzes Version</Description>
+    <PackageReleaseNotes>vimeodotnet Tuzes Version</PackageReleaseNotes>
+    <Version>1.0.4</Version>
   </PropertyGroup>
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>

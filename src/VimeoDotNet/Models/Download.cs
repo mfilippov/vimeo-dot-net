@@ -12,6 +12,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Quality
         /// </summary>
+        /// <value>The quality.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "quality")]
         public string Quality { get; set; }
@@ -19,6 +20,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Type
         /// </summary>
+        /// <value>The type.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "type")]
         public string Type { get; set; }
@@ -26,6 +28,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Width
         /// </summary>
+        /// <value>The width.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "width")]
         public int Width { get; set; }
@@ -33,6 +36,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Height
         /// </summary>
+        /// <value>The height.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "height")]
         public int Height { get; set; }
@@ -40,6 +44,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// File size
         /// </summary>
+        /// <value>The size.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "size")]
         public long Size { get; set; }
@@ -47,6 +52,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Expires
         /// </summary>
+        /// <value>The expires.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "expires")]
         public DateTime? Expires { get; set; }
@@ -54,6 +60,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Link
         /// </summary>
+        /// <value>The link.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "link")]
         public string Link { get; set; }

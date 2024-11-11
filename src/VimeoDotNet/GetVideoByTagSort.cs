@@ -25,6 +25,9 @@ namespace VimeoDotNet
         Name
     }
 
+    /// <summary>
+    /// Class GetVideoByTagSortEx.
+    /// </summary>
     internal static class GetVideoByTagSortEx
     {
         /// <summary>
@@ -32,7 +35,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="sort">Value</param>
         /// <returns>String representation</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Throw if value not handled.</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">sort - null</exception>
         public static string GetStringValue(this GetVideoByTagSort sort)
         {
             switch (sort)
