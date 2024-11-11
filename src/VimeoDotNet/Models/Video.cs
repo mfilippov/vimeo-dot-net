@@ -346,14 +346,14 @@ namespace VimeoDotNet.Models
         public Transcode Transcode { get; set; }
 
 
-        /// <summary>
-        /// Gets or sets the upload.
-        /// </summary>
-        /// <value>The upload.</value>
-        [PublicAPI]
-        [CanBeNull]
-        [JsonProperty(PropertyName = "upload")]
-        public Upload Upload { get; set; }
+        ///// <summary>
+        ///// Gets or sets the upload.
+        ///// </summary>
+        ///// <value>The upload.</value>
+        //[PublicAPI]
+        //[CanBeNull]
+        //[JsonProperty(PropertyName = "upload")]
+        //public Upload Upload { get; set; }
 
 
         /// <summary>
