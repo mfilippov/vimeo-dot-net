@@ -9,6 +9,11 @@ using VimeoDotNet.Net;
 
 namespace VimeoDotNet
 {
+    /// <summary>
+    /// Class VimeoClient.
+    /// Implements the <see cref="VimeoDotNet.IVimeoClient" />
+    /// </summary>
+    /// <seealso cref="VimeoDotNet.IVimeoClient" />
     public partial class VimeoClient
     {
         /// <inheritdoc />
@@ -55,6 +60,15 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Generates the embed presets request.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="presetId">The preset identifier.</param>
+        /// <param name="page">The page.</param>
+        /// <param name="perPage">The per page.</param>
+        /// <param name="fields">The fields.</param>
+        /// <returns>IApiRequest.</returns>
         private IApiRequest GenerateEmbedPresetsRequest(UserId userId, long? presetId = null, int? page = null,
             int? perPage = null, string[] fields = null)
         {

@@ -20,7 +20,13 @@ namespace VimeoDotNet.Parameters
         IDictionary<string, string> GetParameterValues();
     }
 
-    /// <inheritdoc cref="IParameterProvider" />
+    /// <summary>
+    /// Class ParameterDictionary.
+    /// Implements the <see cref="System.Collections.Generic.Dictionary{System.String, System.String}" />
+    /// Implements the <see cref="VimeoDotNet.Parameters.IParameterProvider" />
+    /// </summary>
+    /// <seealso cref="System.Collections.Generic.Dictionary{System.String, System.String}" />
+    /// <seealso cref="VimeoDotNet.Parameters.IParameterProvider" />
     public class ParameterDictionary : Dictionary<string, string>, IParameterProvider
     {
         /// <inheritdoc />

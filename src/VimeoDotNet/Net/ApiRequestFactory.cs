@@ -76,6 +76,7 @@ namespace VimeoDotNet.Net
         /// Validates an IParameterProvider and throws an exception if an error is present.
         /// </summary>
         /// <param name="parameters">IParameterProvider being validated.</param>
+        /// <exception cref="System.InvalidOperationException">API Argument Error: {errorMessage}</exception>
         private static void VerifyParameters(IParameterProvider parameters)
         {
             // if there are no parameters, there are no errors

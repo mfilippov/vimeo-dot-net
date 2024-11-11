@@ -11,6 +11,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Next
         /// </summary>
+        /// <value>The next.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "next")]
         public string Next { get; set; }
@@ -18,6 +19,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Previous
         /// </summary>
+        /// <value>The previous.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "previous")]
         public string Previous { get; set; }
@@ -25,6 +27,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// First
         /// </summary>
+        /// <value>The first.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "first")]
         public string First { get; set; }
@@ -32,6 +35,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Last
         /// </summary>
+        /// <value>The last.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "last")]
         public string Last { get; set; }

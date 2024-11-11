@@ -13,6 +13,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// URI
         /// </summary>
+        /// <value>The URI.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "uri")]
         public string Uri { get; set; }
@@ -20,6 +21,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// User
         /// </summary>
+        /// <value>The user.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "user")]
         public User User { get; set; }
@@ -27,6 +29,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Description
         /// </summary>
+        /// <value>The description.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "description")]
         public string Description { get; set; }
@@ -34,6 +37,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Link
         /// </summary>
+        /// <value>The link.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "link")]
         public string Link { get; set; }
@@ -41,6 +45,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Created time
         /// </summary>
+        /// <value>The created time.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "created_time")]
         public DateTime CreatedTime { get; set; }
@@ -48,6 +53,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Comments
         /// </summary>
+        /// <value>The comments.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "comments")]
         public List<Comment> Comments { get; set; }

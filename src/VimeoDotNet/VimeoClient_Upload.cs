@@ -15,6 +15,11 @@ using VimeoDotNet.Parameters;
 
 namespace VimeoDotNet
 {
+    /// <summary>
+    /// Class VimeoClient.
+    /// Implements the <see cref="VimeoDotNet.IVimeoClient" />
+    /// </summary>
+    /// <seealso cref="VimeoDotNet.IVimeoClient" />
     public partial class VimeoClient
     {
         /// <inheritdoc />
@@ -171,7 +176,8 @@ namespace VimeoDotNet
         /// <param name="fileContent">FileContent</param>
         /// <param name="chunkSize">ChunkSize</param>
         /// <param name="replaceVideoId">ReplaceVideoId</param>
-        /// <returns></returns>
+        /// <returns>A Task&lt;VimeoDotNet.Net.IUploadRequest&gt; representing the asynchronous operation.</returns>
+        /// <exception cref="ArgumentException">fileContent should be readable</exception>
         private async Task<IUploadRequest> StartUploadFileAsync(IBinaryContent fileContent,
             long chunkSize = DefaultUploadChunkSize,
             long? replaceVideoId = null)
@@ -208,6 +214,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="uploadRequest">UploadRequest</param>
         /// <returns>Verification upload response</returns>
+        /// <exception cref="VimeoUploadException">Error uploading file chunk, uploadRequest, ex</exception>
         private async Task<VerifyUploadResponse> ContinueUploadFileAsync(IUploadRequest uploadRequest)
         {
             if (uploadRequest.FileLength == uploadRequest.BytesWritten)
@@ -261,6 +268,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="uploadRequest">UploadRequest</param>
         /// <returns>Verification response</returns>
+        /// <exception cref="VimeoUploadException">Error verifying file upload., uploadRequest, ex</exception>
         private async Task<VerifyUploadResponse> VerifyUploadFileAsync(IUploadRequest uploadRequest)
         {
             try
@@ -316,6 +324,19 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Generates the file stream request.
+        /// </summary>
+        /// <param name="fileContent">Content of the file.</param>
+        /// <param name="ticket">The ticket.</param>
+        /// <param name="chunkSize">Size of the chunk.</param>
+        /// <param name="written">The written.</param>
+        /// <param name="verifyOnly">The verify only.</param>
+        /// <returns>VimeoDotNet.Net.IApiRequest.</returns>
+        /// <exception cref="InvalidOperationException">User does not have enough free space to upload this video. " +
+        ///                         $"Remaining space: {ticket.User.UploadQuota.Space.Free} bytes.</exception>
+        /// <exception cref="InvalidOperationException">User does not have enough free quota to upload this video. " +
+        ///                         $"Remaining video count: {ticket.User.UploadQuota.Space.Free}</exception>
         private async Task<IApiRequest> GenerateFileStreamRequest(IBinaryContent fileContent, UploadTicket ticket,
             long chunkSize, long written = 0, bool verifyOnly = false)
         {
@@ -334,7 +355,7 @@ namespace VimeoDotNet
             }
 
             var request = _apiRequestFactory.GetApiRequest();
-            request.Path = ticket.Upload.UploadLink;
+            request.Path = ticket.Upload?.UploadLink;
             if (verifyOnly)
             {
                 request.Method = HttpMethod.Head;
@@ -359,6 +380,11 @@ namespace VimeoDotNet
             return request;
         }
 
+        /// <summary>
+        /// Generates the upload ticket request.
+        /// </summary>
+        /// <param name="size">The size.</param>
+        /// <returns>VimeoDotNet.Net.IApiRequest.</returns>
         private IApiRequest GenerateUploadTicketRequest(long size)
         {
             ThrowIfUnauthorized();
@@ -371,6 +397,13 @@ namespace VimeoDotNet
             return request;
         }
 
+        /// <summary>
+        /// Generates the replace video upload ticket request.
+        /// </summary>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="size">The size.</param>
+        /// <returns>VimeoDotNet.Net.IApiRequest.</returns>
         private IApiRequest GenerateReplaceVideoUploadTicketRequest(long clipId, string fileName, long size)
         {
             ThrowIfUnauthorized();

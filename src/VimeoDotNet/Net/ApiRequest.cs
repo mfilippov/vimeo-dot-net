@@ -19,18 +19,30 @@ namespace VimeoDotNet.Net
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
         }
 #endif
-        
+
         #region Private Fields
 
+        /// <summary>
+        /// The query string
+        /// </summary>
         private readonly Dictionary<string, string> _queryString = new Dictionary<string, string>();
+        /// <summary>
+        /// The URL segments
+        /// </summary>
         private readonly Dictionary<string, string> _urlSegments = new Dictionary<string, string>();
 
+        /// <summary>
+        /// The date format settings
+        /// </summary>
         private static readonly JsonSerializerSettings DateFormatSettings = new JsonSerializerSettings
         {
             DateFormatString = "yyyy-MM-ddTHH:mm:sszzz",
             DateTimeZoneHandling = DateTimeZoneHandling.Utc
         };
 
+        /// <summary>
+        /// The path
+        /// </summary>
         private string _path;
 
         #endregion
@@ -85,6 +97,10 @@ namespace VimeoDotNet.Net
         /// <inheritdoc />
         public IDictionary<string, string> UrlSegments => _urlSegments;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is add tus header.
+        /// </summary>
+        /// <value><c>true</c> if this instance is add tus header; otherwise, <c>false</c>.</value>
         public bool IsAddTusHeader { get; set; }
 
         /// <inheritdoc />
@@ -105,15 +121,18 @@ namespace VimeoDotNet.Net
         /// <summary>
         /// Client Id
         /// </summary>
+        /// <value>The client identifier.</value>
         private string ClientId { get; }
 
         /// <summary>
         /// Client secret
         /// </summary>
+        /// <value>The client secret.</value>
         private string ClientSecret { get; }
         /// <summary>
         /// Access token
         /// </summary>
+        /// <value>The access token.</value>
         private string AccessToken { get; }
 
         #endregion
@@ -209,6 +228,7 @@ namespace VimeoDotNet.Net
         /// <summary>
         /// Set authentication
         /// </summary>
+        /// <param name="request">The request.</param>
         private void SetAuth(HttpRequestMessage request)
         {
             if (!string.IsNullOrWhiteSpace(AccessToken))

@@ -8,6 +8,9 @@ namespace VimeoDotNet.Net
     {
         #region Private Fields
 
+        /// <summary>
+        /// The file
+        /// </summary>
         private IBinaryContent _file;
 
         #endregion

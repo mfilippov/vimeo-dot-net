@@ -11,6 +11,11 @@ using VimeoDotNet.Net;
 
 namespace VimeoDotNet
 {
+    /// <summary>
+    /// Class VimeoClient.
+    /// Implements the <see cref="VimeoDotNet.IVimeoClient" />
+    /// </summary>
+    /// <seealso cref="VimeoDotNet.IVimeoClient" />
     public partial class VimeoClient
     {
         /// <inheritdoc />
@@ -130,6 +135,13 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Get upload text track ticket as an asynchronous operation.
+        /// </summary>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <param name="track">The track.</param>
+        /// <returns>A Task&lt;TextTrack&gt; representing the asynchronous operation.</returns>
+        /// <exception cref="VimeoDotNet.Exceptions.VimeoUploadException">Error generating upload text track ticket. - null</exception>
         private async Task<TextTrack> GetUploadTextTrackTicketAsync(long clipId, TextTrack track)
         {
             try
@@ -152,6 +164,12 @@ namespace VimeoDotNet
             }
         }
 
+        /// <summary>
+        /// Generates the upload text track ticket request.
+        /// </summary>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <param name="track">The track.</param>
+        /// <returns>IApiRequest.</returns>
         private IApiRequest GenerateUploadTextTrackTicketRequest(long clipId, TextTrack track)
         {
             var request = _apiRequestFactory.GetApiRequest(AccessToken);
@@ -171,6 +189,13 @@ namespace VimeoDotNet
             return request;
         }
 
+        /// <summary>
+        /// Generates the update text track request.
+        /// </summary>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <param name="trackId">The track identifier.</param>
+        /// <param name="track">The track.</param>
+        /// <returns>IApiRequest.</returns>
         private IApiRequest GenerateUpdateTextTrackRequest(long clipId, long trackId, [NotNull] TextTrack track)
         {
             ThrowIfUnauthorized();
@@ -201,6 +226,12 @@ namespace VimeoDotNet
             return request;
         }
 
+        /// <summary>
+        /// Generates the text tracks request.
+        /// </summary>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <param name="trackId">The track identifier.</param>
+        /// <returns>IApiRequest.</returns>
         private IApiRequest GenerateTextTracksRequest(long clipId, long? trackId = null)
         {
             ThrowIfUnauthorized();
@@ -219,6 +250,12 @@ namespace VimeoDotNet
             return request;
         }
 
+        /// <summary>
+        /// Generates the delete text track request.
+        /// </summary>
+        /// <param name="clipId">The clip identifier.</param>
+        /// <param name="trackId">The track identifier.</param>
+        /// <returns>IApiRequest.</returns>
         private IApiRequest GenerateDeleteTextTrackRequest(long clipId, long trackId)
         {
             ThrowIfUnauthorized();

@@ -11,6 +11,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Videos
         /// </summary>
+        /// <value>The videos.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "videos")]
         public int Videos { get; set; }
@@ -18,6 +19,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Contacts
         /// </summary>
+        /// <value>The contacts.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "contacts")]
         public int Contacts { get; set; }
@@ -25,6 +27,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Likes
         /// </summary>
+        /// <value>The likes.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "likes")]
         public int Likes { get; set; }
@@ -32,6 +35,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Albums
         /// </summary>
+        /// <value>The albums.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "albums")]
         public int Albums { get; set; }
@@ -39,6 +43,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Channels
         /// </summary>
+        /// <value>The channels.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "channels")]
         public int Channels { get; set; }
@@ -46,6 +51,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Followers
         /// </summary>
+        /// <value>The followers.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "followers")]
         public int Followers { get; set; }
@@ -53,6 +59,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Following
         /// </summary>
+        /// <value>The following.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "following")]
         public int Following { get; set; }

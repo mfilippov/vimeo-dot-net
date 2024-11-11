@@ -3,10 +3,19 @@ using System.IO;
 
 namespace VimeoDotNet.Helpers
 {
+    /// <summary>
+    /// Class MimeHelpers.
+    /// </summary>
     internal static class MimeHelpers
     {
+        /// <summary>
+        /// The default content type
+        /// </summary>
         private const string DefaultContentType = "application/octet-stream";
 
+        /// <summary>
+        /// The MIME mappings
+        /// </summary>
         private static readonly IDictionary<string, string> MimeMappings = new Dictionary<string, string>
         {
             {".flv", "video/x-flv"},
@@ -27,6 +36,11 @@ namespace VimeoDotNet.Helpers
             {".mk3d", "video/matroska"}
         };
 
+        /// <summary>
+        /// Gets the MIME mapping.
+        /// </summary>
+        /// <param name="videoFileName">Name of the video file.</param>
+        /// <returns>System.String.</returns>
         public static string GetMimeMapping(string videoFileName)
         {
             if (string.IsNullOrEmpty(videoFileName))

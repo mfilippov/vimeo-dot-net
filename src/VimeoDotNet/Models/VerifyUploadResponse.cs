@@ -12,11 +12,13 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Status
         /// </summary>
+        /// <value>The status.</value>
         public UploadStatusEnum Status { get; set; }
 
         /// <summary>
         /// Bytes written
         /// </summary>
+        /// <value>The bytes written.</value>
         public long BytesWritten { get; set; }
     }
 }

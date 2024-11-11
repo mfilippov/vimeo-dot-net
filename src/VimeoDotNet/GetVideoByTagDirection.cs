@@ -29,7 +29,7 @@ namespace VimeoDotNet
         /// </summary>
         /// <param name="direction">Value</param>
         /// <returns>String representation</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Throw if value not handled.</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">direction - null</exception>
         public static string GetStringValue(this GetVideoByTagDirection direction)
         {
             switch (direction)

@@ -13,6 +13,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Connections
         /// </summary>
+        /// <value>The connections.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "connections")]
         public AlbumConnections Connections { get; set; }

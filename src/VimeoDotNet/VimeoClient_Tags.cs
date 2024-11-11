@@ -9,6 +9,11 @@ using VimeoDotNet.Models;
 
 namespace VimeoDotNet
 {
+    /// <summary>
+    /// Class VimeoClient.
+    /// Implements the <see cref="VimeoDotNet.IVimeoClient" />
+    /// </summary>
+    /// <seealso cref="VimeoDotNet.IVimeoClient" />
     public partial class VimeoClient
     {
         /// <inheritdoc />

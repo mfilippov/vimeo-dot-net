@@ -80,18 +80,21 @@ namespace VimeoDotNet.Parameters
         /// <summary>
         /// Name
         /// </summary>
+        /// <value>The name.</value>
         [PublicAPI]
         public string Name { get; set; }
 
         /// <summary>
         /// Description
         /// </summary>
+        /// <value>The description.</value>
         [PublicAPI]
         public string Description { get; set; }
 
         /// <summary>
         /// Privacy
         /// </summary>
+        /// <value>The privacy.</value>
         [PublicAPI]
         [JsonConverter(typeof(StringEnumConverter))]
         public EditAlbumPrivacyOption? Privacy { get; set; }
@@ -99,12 +102,14 @@ namespace VimeoDotNet.Parameters
         /// <summary>
         /// Password
         /// </summary>
+        /// <value>The password.</value>
         [PublicAPI]
         public string Password { get; set; }
 
         /// <summary>
         /// Sort
         /// </summary>
+        /// <value>The sort.</value>
         [PublicAPI]
         public EditAlbumSortOption? Sort { get; set; }
 

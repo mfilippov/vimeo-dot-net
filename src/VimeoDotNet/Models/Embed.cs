@@ -12,6 +12,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// URI
         /// </summary>
+        /// <value>The URI.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "uri")]
         public string Uri { get; set; }
@@ -19,6 +20,7 @@ namespace VimeoDotNet.Models
         /// <summary>
         /// Html
         /// </summary>
+        /// <value>The HTML.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "html")]
         public string Html { get; set; }
