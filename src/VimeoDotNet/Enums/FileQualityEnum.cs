@@ -28,6 +28,14 @@
         /// <summary>
         /// Streaming
         /// </summary>
-        Streaming
+        Streaming,
+        /// <summary>
+        /// The ultra hd
+        /// </summary>
+        UltraHd,
+        /// <summary>
+        /// The source
+        /// </summary>
+        Source
     }
 }
