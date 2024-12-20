@@ -183,11 +183,22 @@ namespace VimeoDotNet.Net
         /// <inheritdoc />
         public async Task<IApiResponse<T>> ExecuteRequestAsync<T>() where T : new()
         {
-            var request = PrepareRequest();
-            var response = await Client.SendAsync(request).ConfigureAwait(false);
-            var text = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            return new ApiResponse<T>(response.StatusCode, response.Headers, text,
-                JsonConvert.DeserializeObject<T>(text, DateFormatSettings));
+            var text = "";
+            try
+
+            {
+                var request = PrepareRequest();
+                var response = await Client.SendAsync(request).ConfigureAwait(false);
+                text = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                return new ApiResponse<T>(response.StatusCode, response.Headers, text,
+                    JsonConvert.DeserializeObject<T>(text, DateFormatSettings));
+            }
+            catch (Exception e)
+            {
+                
+                throw new Exception($"Received error. text was {text}");
+            }
         }
 
         #endregion

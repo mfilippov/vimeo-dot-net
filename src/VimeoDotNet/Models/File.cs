@@ -20,7 +20,9 @@ namespace VimeoDotNet.Models
             {"mobile", "Mobile"},
             {"hd", "HighDefinition"},
             {"sd", "Standard"},
-            {"hls", "Streaming"}
+            {"hls", "Streaming"},
+            {"uhd", "UltraHd"},
+            {"source", "Source"}
         };
 
         /// <summary>
@@ -30,6 +32,14 @@ namespace VimeoDotNet.Models
         [PublicAPI]
         [JsonProperty(PropertyName = "quality")]
         public string Quality { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rendition.
+        /// </summary>
+        /// <value>The rendition.</value>
+        [PublicAPI]
+        [JsonProperty(PropertyName = "rendition")]
+        public string Rendition { get; set; }
 
         /// <summary>
         /// Type
