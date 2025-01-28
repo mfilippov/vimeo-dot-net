@@ -130,7 +130,7 @@ namespace VimeoDotNet.Models
         /// <value>The duration.</value>
         [PublicAPI]
         [JsonProperty(PropertyName = "duration")]
-        public int Duration { get; set; }
+        public int? Duration { get; set; }
 
         /// <summary>
         /// Width
