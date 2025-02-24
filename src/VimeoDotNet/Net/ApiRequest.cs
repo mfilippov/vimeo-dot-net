@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -196,8 +196,7 @@ namespace VimeoDotNet.Net
             }
             catch (Exception e)
             {
-                
-                throw new Exception($"Received error. text was {text}");
+                throw new Exception($"Received error. text was {text}", e);
             }
         }
 
