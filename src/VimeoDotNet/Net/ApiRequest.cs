@@ -185,7 +185,6 @@ namespace VimeoDotNet.Net
         {
             var text = "";
             try
-
             {
                 var request = PrepareRequest();
                 var response = await Client.SendAsync(request).ConfigureAwait(false);
