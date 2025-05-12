@@ -1,0 +1,452 @@
+﻿{
+  "uri": "/videos/1058205490:6f1a3055de",
+  "name": "Test-Video",
+  "description": null,
+  "type": "video",
+  "link": "https://vimeo.com/1058205490/6f1a3055de",
+  "player_embed_url": "https://player.vimeo.com/video/1058205490?h=6f1a3055de",
+  "duration": 11,
+  "width": 1080,
+  "language": "de",
+  "height": 1920,
+  "embed": {
+    "html": "<iframe src=\"https://player.vimeo.com/video/1058205490?h=6f1a3055de&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=146456\" width=\"1080\" height=\"1920\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media\" title=\"Test-Video\"></iframe>",
+    "badges": {
+      "hdr": false,
+      "live": {
+        "streaming": false,
+        "archived": false
+      },
+      "staff_pick": {
+        "normal": false,
+        "best_of_the_month": false,
+        "best_of_the_year": false,
+        "premiere": false
+      },
+      "vod": false,
+      "weekend_challenge": false
+    },
+    "interactive": false,
+    "speed": true,
+    "buttons": {
+      "like": true
+    }
+  },
+  "created_time": "2025-02-19T13:05:13+00:00",
+  "modified_time": "2025-02-27T16:47:43+00:00",
+  "release_time": "2025-02-19T13:05:13+00:00",
+  "content_rating": [
+    "unrated"
+  ],
+  "content_rating_class": "unrated",
+  "rating_mod_locked": false,
+  "license": null,
+  "privacy": {
+    "view": "unlisted",
+    "embed": "public",
+    "download": false,
+    "add": true,
+    "comments": "anybody"
+  },
+  "pictures": {
+    "uri": "/videos/1058205490:6f1a3055de/pictures/1984314710",
+    "active": true,
+    "type": "custom",
+    "base_link": "https://i.vimeocdn.com/video/1984314710-de6025b34cd62b7d94f10f1a9a07a067cace9cec61468c77528036c2b7b85869-d?region=us",
+    "sizes": [
+      {
+        "width": 100,
+        "height": 75,
+        "link": "https://i.vimeocdn.com/video/1984314710-de6025b34cd62b7d94f10f1a9a07a067cace9cec61468c77528036c2b7b85869-d_100x75?&r=pad&region=us",
+        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F1984314710-de6025b34cd62b7d94f10f1a9a07a067cace9cec61468c77528036c2b7b85869-d_100x75%3F%26region%3Dus&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+      },
+      {
+        "width": 200,
+        "height": 150,
+        "link": "https://i.vimeocdn.com/video/1984314710-de6025b34cd62b7d94f10f1a9a07a067cace9cec61468c77528036c2b7b85869-d_200x150?&r=pad&region=us",
+        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F1984314710-de6025b34cd62b7d94f10f1a9a07a067cace9cec61468c77528036c2b7b85869-d_200x150%3F%26region%3Dus&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+      },
+      {
+        "width": 295,
+        "height": 166,
+        "link": "https://i.vimeocdn.com/video/1984314710-de6025b34cd62b7d94f10f1a9a07a067cace9cec61468c77528036c2b7b85869-d_295x166?&r=pad&region=us",
+        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F1984314710-de6025b34cd62b7d94f10f1a9a07a067cace9cec61468c77528036c2b7b85869-d_295x166%3F%26region%3Dus&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+      },
+      {
+        "width": 640,
+        "height": 360,
+        "link": "https://i.vimeocdn.com/video/1984314710-de6025b34cd62b7d94f10f1a9a07a067cace9cec61468c77528036c2b7b85869-d_640x360?&r=pad&region=us",
+        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F1984314710-de6025b34cd62b7d94f10f1a9a07a067cace9cec61468c77528036c2b7b85869-d_640x360%3F%26region%3Dus&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+      },
+      {
+        "width": 960,
+        "height": 540,
+        "link": "https://i.vimeocdn.com/video/1984314710-de6025b34cd62b7d94f10f1a9a07a067cace9cec61468c77528036c2b7b85869-d_960x540?&r=pad&region=us",
+        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F1984314710-de6025b34cd62b7d94f10f1a9a07a067cace9cec61468c77528036c2b7b85869-d_960x540%3F%26region%3Dus&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+      },
+      {
+        "width": 1280,
+        "height": 720,
+        "link": "https://i.vimeocdn.com/video/1984314710-de6025b34cd62b7d94f10f1a9a07a067cace9cec61468c77528036c2b7b85869-d_1280x720?&r=pad&region=us",
+        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F1984314710-de6025b34cd62b7d94f10f1a9a07a067cace9cec61468c77528036c2b7b85869-d_1280x720%3F%26region%3Dus&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+      },
+      {
+        "width": 1920,
+        "height": 1080,
+        "link": "https://i.vimeocdn.com/video/1984314710-de6025b34cd62b7d94f10f1a9a07a067cace9cec61468c77528036c2b7b85869-d_1920x1080?&r=pad&region=us",
+        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F1984314710-de6025b34cd62b7d94f10f1a9a07a067cace9cec61468c77528036c2b7b85869-d_1920x1080%3F%26region%3Dus&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+      }
+    ],
+    "resource_key": "1e2b674d4675e51b815691c90d2a1c465afefda9",
+    "default_picture": false
+  },
+  "tags": [],
+  "stats": {
+    "plays": null
+  },
+  "categories": [],
+  "uploader": {
+    "pictures": {
+      "uri": null,
+      "active": false,
+      "type": "default",
+      "base_link": "https://i.vimeocdn.com/portrait/defaults-blue",
+      "sizes": [
+        {
+          "width": 30,
+          "height": 30,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_30x30?"
+        },
+        {
+          "width": 72,
+          "height": 72,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_72x72?"
+        },
+        {
+          "width": 75,
+          "height": 75,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_75x75?"
+        },
+        {
+          "width": 100,
+          "height": 100,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_100x100?"
+        },
+        {
+          "width": 144,
+          "height": 144,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_144x144?"
+        },
+        {
+          "width": 216,
+          "height": 216,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_216x216?"
+        },
+        {
+          "width": 288,
+          "height": 288,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_288x288?"
+        },
+        {
+          "width": 300,
+          "height": 300,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_300x300?"
+        },
+        {
+          "width": 360,
+          "height": 360,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_360x360?"
+        }
+      ],
+      "resource_key": "06cd312fcc3908e2d839aeb00ccaaf434acb0859",
+      "default_picture": true
+    }
+  },
+  "metadata": {
+    "connections": {
+      "comments": {
+        "uri": "/videos/1058205490:6f1a3055de/comments",
+        "options": [
+          "GET"
+        ],
+        "total": 0
+      },
+      "credits": null,
+      "likes": {
+        "uri": "/videos/1058205490:6f1a3055de/likes",
+        "options": [
+          "GET"
+        ],
+        "total": 0
+      },
+      "pictures": {
+        "uri": "/videos/1058205490:6f1a3055de/pictures",
+        "options": [
+          "GET",
+          "POST"
+        ],
+        "total": 1
+      },
+      "texttracks": {
+        "uri": "/videos/1058205490:6f1a3055de/texttracks",
+        "options": [
+          "GET",
+          "POST"
+        ],
+        "total": 0
+      },
+      "related": null,
+      "recommendations": null
+    },
+    "interactions": {
+      "report": {
+        "uri": "/videos/1058205490/report",
+        "options": [
+          "POST"
+        ],
+        "reason": [
+          "pornographic",
+          "harassment",
+          "ripoff",
+          "incorrect rating",
+          "spam",
+          "causes harm",
+          "csam",
+          "voting misinformation"
+        ]
+      },
+      "can_update_privacy_to_public": {
+        "uri": "/videos/1058205490:6f1a3055de",
+        "options": [
+          "PATCH"
+        ]
+      }
+    },
+    "is_vimeo_create": false,
+    "is_screen_record": false
+  },
+  "user": {
+    "uri": "/users/235657455",
+    "name": "Erik Kipf",
+    "link": "https://vimeo.com/user235657455",
+    "capabilities": {
+      "hasLiveSubscription": false,
+      "hasEnterpriseLihp": false,
+      "hasSvvTimecodedComments": false,
+      "hasSimplifiedEnterpriseAccount": false,
+      "hasMSTeamsEnabled": false,
+      "hasManagementCapabilitiesForComments": true,
+      "canViewSimplifiedCommentMentions": true
+    },
+    "location": "",
+    "gender": "",
+    "bio": null,
+    "short_bio": null,
+    "created_time": "2025-02-19T12:28:59+00:00",
+    "pictures": {
+      "uri": null,
+      "active": false,
+      "type": "default",
+      "base_link": "https://i.vimeocdn.com/portrait/defaults-blue",
+      "sizes": [
+        {
+          "width": 30,
+          "height": 30,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_30x30?"
+        },
+        {
+          "width": 72,
+          "height": 72,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_72x72?"
+        },
+        {
+          "width": 75,
+          "height": 75,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_75x75?"
+        },
+        {
+          "width": 100,
+          "height": 100,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_100x100?"
+        },
+        {
+          "width": 144,
+          "height": 144,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_144x144?"
+        },
+        {
+          "width": 216,
+          "height": 216,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_216x216?"
+        },
+        {
+          "width": 288,
+          "height": 288,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_288x288?"
+        },
+        {
+          "width": 300,
+          "height": 300,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_300x300?"
+        },
+        {
+          "width": 360,
+          "height": 360,
+          "link": "https://i.vimeocdn.com/portrait/defaults-blue_360x360?"
+        }
+      ],
+      "resource_key": "06cd312fcc3908e2d839aeb00ccaaf434acb0859",
+      "default_picture": true
+    },
+    "websites": [],
+    "metadata": {
+      "connections": {
+        "albums": {
+          "uri": "/users/235657455/albums",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "appearances": {
+          "uri": "/users/235657455/appearances",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "channels": {
+          "uri": "/users/235657455/channels",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "feed": {
+          "uri": "/users/235657455/feed",
+          "options": [
+            "GET"
+          ]
+        },
+        "followers": {
+          "uri": "/users/235657455/followers",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "following": {
+          "uri": "/users/235657455/following",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "groups": {
+          "uri": "/users/235657455/groups",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "likes": {
+          "uri": "/users/235657455/likes",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "membership": {
+          "uri": "/users/235657455/membership/",
+          "options": [
+            "PATCH"
+          ]
+        },
+        "moderated_channels": {
+          "uri": "/users/235657455/channels?filter=moderated",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "portfolios": {
+          "uri": "/users/235657455/portfolios",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "videos": {
+          "uri": "/users/235657455/videos",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "shared": {
+          "uri": "/users/235657455/shared/videos",
+          "options": [
+            "GET"
+          ],
+          "total": 0
+        },
+        "pictures": {
+          "uri": "/users/235657455/pictures",
+          "options": [
+            "GET",
+            "POST"
+          ],
+          "total": 0
+        },
+        "folders_root": {
+          "uri": "/users/235657455/folders/root",
+          "options": [
+            "GET"
+          ]
+        },
+        "teams": {
+          "uri": "/users/235657455/teams",
+          "options": [
+            "GET"
+          ],
+          "total": 1
+        }
+      }
+    },
+    "location_details": {
+      "formatted_address": "",
+      "latitude": null,
+      "longitude": null,
+      "city": null,
+      "state": null,
+      "neighborhood": null,
+      "sub_locality": null,
+      "state_iso_code": null,
+      "country": null,
+      "country_iso_code": null
+    },
+    "skills": [],
+    "available_for_hire": false,
+    "can_work_remotely": false,
+    "resource_key": "3b4a01d507be8b27f2c86262752bdd0d23d1787b",
+    "account": "free"
+  },
+  "review_page": {
+    "active": false,
+    "link": "https://vimeo.com/user235657455/review/1058205490/7a2eabbd19",
+    "is_shareable": true
+  },
+  "app": {
+    "name": "Vimeo Site",
+    "uri": "/apps/58479"
+  },
+  "play": {
+    "status": "playable"
+  },
+  "status": "available",
+  "resource_key": "09b5393181f1e02f746e7fbf5570a40ff6e2e92b",
+  "upload": null,
+  "transcode": null,
+  "is_playable": true,
+  "has_audio": true
+}

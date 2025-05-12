@@ -53,9 +53,10 @@ namespace VimeoDotNet
         /// Get video by ClipId asynchronously
         /// </summary>
         /// <param name="clipId">ClipId</param>
+        /// /// <param name="secret">ClipId</param>
         /// <param name="fields">JSON filter, as per https://developer.vimeo.com/api/common-formats#json-filter</param>
         /// <returns>Video</returns>
-        Task<Video> GetVideoAsync(long clipId, string[] fields = null);
+        Task<Video> GetVideoAsync(long clipId, string[] fields = null, string secret = null);
 
         /// <summary>
         /// Get videos by UserId and query and page parameters asynchronously
