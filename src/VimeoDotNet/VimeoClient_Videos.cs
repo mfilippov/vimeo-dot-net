@@ -20,11 +20,11 @@ namespace VimeoDotNet
     public partial class VimeoClient
     {
         /// <inheritdoc />
-        public async Task<Video> GetVideoAsync(long clipId, string[] fields = null)
+        public async Task<Video> GetVideoAsync(long clipId, string[] fields = null, string secret = null)
         {
             try
             {
-                var request = GenerateVideosRequest(clipId: clipId, fields: fields);
+                var request = GenerateVideosRequest(clipId: clipId, fields: fields, secret: secret);
                 var response = await request.ExecuteRequestAsync<Video>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving account video.", HttpStatusCode.NotFound);
@@ -43,13 +43,13 @@ namespace VimeoDotNet
         }
 
         /// <inheritdoc />
-        public async Task<Paginated<Video>> GetVideosAsync(UserId userId, int? page, int? perPage, string query = null,
+        public async Task<Paginated<Video>> GetVideosAsync(UserId userId, int? page = null, int? perPage = null, string query = null,
             string[] fields = null)
         {
             try
             {
                 var request = GenerateVideosRequest(userId, page: page, perPage: perPage, query: query,
-                    fields: fields);
+                    fields: fields, secret: null);
                 var response = await request.ExecuteRequestAsync<Paginated<Video>>().ConfigureAwait(false);
                 UpdateRateLimit(response);
                 CheckStatusCodeError(response, "Error retrieving user videos.", HttpStatusCode.NotFound);
@@ -269,66 +269,56 @@ namespace VimeoDotNet
         /// <param name="query">The query.</param>
         /// <param name="fields">The fields.</param>
         /// <returns>IApiRequest.</returns>
-        private IApiRequest GenerateVideosRequest(UserId userId = null, long? clipId = null, int? page = null,
-            int? perPage = null, string query = null, string[] fields = null)
+        private IApiRequest GenerateVideosRequest(
+            UserId userId = null,
+            long? clipId = null,
+            int? page = null,
+            int? perPage = null,
+            string query = null,
+            string[] fields = null,
+            string secret = null
+            )
         {
             ThrowIfUnauthorized();
-
             var request = _apiRequestFactory.GetApiRequest(AccessToken);
+
+            if (clipId.HasValue && !string.IsNullOrEmpty(secret))
+            {
+                request.Method = HttpMethod.Get;
+                request.Path = Endpoints.VideoWithSecret;
+                request.UrlSegments.Add("clipId", clipId.Value.ToString());
+                request.UrlSegments.Add("secret", secret);
+
+                if (fields != null) foreach (var f in fields) request.Fields.Add(f);
+                if (page.HasValue) request.Query.Add("page", page.ToString());
+                if (perPage.HasValue) request.Query.Add("per_page", perPage.ToString());
+                if (!string.IsNullOrEmpty(query)) request.Query.Add("query", query);
+
+                return request;
+            }
             string endpoint;
             if (userId == null)
-            {
                 endpoint = clipId.HasValue ? Endpoints.Video : Endpoints.Videos;
-            }
+            else if (userId == UserId.Me)
+                endpoint = clipId.HasValue
+                    ? Endpoints.GetCurrentUserEndpoint(Endpoints.UserVideo)
+                    : Endpoints.GetCurrentUserEndpoint(Endpoints.UserVideos);
             else
-            {
-                if (userId == UserId.Me)
-                {
-                    endpoint = clipId.HasValue
-                        ? Endpoints.GetCurrentUserEndpoint(Endpoints.UserVideo)
-                        : Endpoints.GetCurrentUserEndpoint(Endpoints.UserVideos);
-                }
-                else
-                {
-                    endpoint = clipId.HasValue ? Endpoints.UserVideo : Endpoints.UserVideos;
-                }
-            }
+                endpoint = clipId.HasValue ? Endpoints.UserVideo : Endpoints.UserVideos;
 
             request.Method = HttpMethod.Get;
             request.Path = endpoint;
 
             if (userId != null && userId != UserId.Me)
-            {
                 request.UrlSegments.Add("userId", userId.ToString());
-            }
-
             if (clipId.HasValue)
-            {
-                request.UrlSegments.Add("clipId", clipId.ToString());
-            }
+                request.UrlSegments.Add("clipId", clipId.Value.ToString());
 
-            if (fields != null)
-            {
-                foreach (var field in fields)
-                {
-                    request.Fields.Add(field);
-                }
-            }
 
-            if (page.HasValue)
-            {
-                request.Query.Add("page", page.ToString());
-            }
-
-            if (perPage.HasValue)
-            {
-                request.Query.Add("per_page", perPage.ToString());
-            }
-
-            if (!string.IsNullOrEmpty(query))
-            {
-                request.Query.Add("query", query);
-            }
+            if (fields != null) foreach (var f in fields) request.Fields.Add(f);
+            if (page.HasValue) request.Query.Add("page", page.ToString());
+            if (perPage.HasValue) request.Query.Add("per_page", perPage.ToString());
+            if (!string.IsNullOrEmpty(query)) request.Query.Add("query", query);
 
             return request;
         }
@@ -797,7 +787,7 @@ namespace VimeoDotNet
         /// <inheritdoc />
         public async Task<Paginated<Video>> GetAllVideosFromFolderAsync(long projectId, UserId userId,
             long? clipId = null, int? page = null,
-            int? perPage = null, string query = null,string direction = null, string[] fields = null)
+            int? perPage = null, string query = null, string direction = null, string[] fields = null)
         {
             try
             {

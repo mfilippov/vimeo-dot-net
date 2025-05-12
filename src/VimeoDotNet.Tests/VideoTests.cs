@@ -25,6 +25,23 @@ namespace VimeoDotNet.Tests
         }
 
         [Fact]
+        public async Task ShouldCorrectlyRetrievesVideosByIdAndSecret()
+        {
+            const int clipId = 1058205490;
+            const string secret = "6f1a3055de";
+
+            MockHttpRequest(new RequestSettings
+            {
+                UrlSuffix = $"/videos/{clipId}:{secret}",
+                ResponseJsonFile = "Video.video-1058205490.json"
+            });
+
+            var video = await AuthenticatedClient.GetVideoAsync(clipId, fields: null, secret: secret);
+            video.ShouldNotBeNull();
+            video.Id.ShouldBe(clipId);
+        }
+
+        [Fact]
         public async Task ShouldCorrectlyRetrievesVideosByUserId()
         {
             const long userId = 2433258;

@@ -269,6 +269,10 @@
         /// </summary>
         public const string Video = "/videos/{clipId}";
         /// <summary>
+        /// The video with secret
+        /// </summary>
+        public const string VideoWithSecret = "/videos/{clipId}:{secret}";
+        /// <summary>
         /// The video comments
         /// </summary>
         public const string VideoComments = "/videos/{clipId}/comments";
