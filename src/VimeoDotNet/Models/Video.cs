@@ -197,6 +197,13 @@ namespace VimeoDotNet.Models
         public List<File> Files { get; set; }
 
         /// <summary>
+        /// The total combined file size for all versions of the video, and the file size type.
+        /// </summary>
+        [PublicAPI]
+        [JsonProperty(PropertyName = "files_size")]
+        public VideoVersionsSize FilesSize { get; set; }
+
+        /// <summary>
         /// Download
         /// </summary>
         /// <value>The download.</value>
@@ -543,6 +550,5 @@ namespace VimeoDotNet.Models
         [JsonProperty(PropertyName = "password")]
         public string Password { get; set; }
 
-        //edit_session, files_size,
     }
 }
